@@ -1,0 +1,11 @@
+{
+  "entryPoints": [
+    "./src/modules/**/*.{slice,payload}.ts{,x}"  // Match both .ts and .tsx files
+  ],
+  "out": "docs",
+  "includeVersion": true,
+  "exclude": ["**/*.test.tsx", "**/*.stories.tsx"],  // Exclude test and story files
+  "excludePrivate": true,
+  "plugin": ["typedoc-plugin-markdown"],
+  "tsconfig": "./tsconfig.json"
+}
