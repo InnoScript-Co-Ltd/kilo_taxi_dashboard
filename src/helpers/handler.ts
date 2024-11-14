@@ -157,7 +157,8 @@ export const httpResponseHandler = (result: any) => {
  */
 export const httpServiceHandler = async (
   dispatch: Dispatch,
-  result: { status: number; notification?: string | any; error?: string }
+  result: { status: number; notification?: string | any; error?: string },
+  noti? : any
 ) => {
   await dispatch(updateError(null));
   if (
@@ -168,13 +169,10 @@ export const httpServiceHandler = async (
     result.status === 403 ||
     result.status === 405
   ) {
-    
-    await dispatch(updateNotification({
-        msg: result.notification?.msg,
-        variant: "error",
-        show: true
-    }));
-    // await dispatch(updateNotification(result.notification));
+    noti?.show(result.notification?.msg, {
+      severity : "error",
+      autoHideDuration: 3000,
+    });
   }
 
   if (result.status === 422) {
