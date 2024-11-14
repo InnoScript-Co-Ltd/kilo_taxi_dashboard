@@ -67,6 +67,20 @@ export interface COUNTRY_PAYLOAD {
     SortDir: any;
     SearchTerm: string;
   };
+
+
+  /** Payload structure for creating a country */
+  create: {
+    name: string;
+    code: string;
+  };
+
+  /** Payload structure for updating a country */
+  update: {
+    id: number;
+    name: string;
+    code: string;
+  };
 }
 
 /**
@@ -88,5 +102,14 @@ export const countryPayload: COUNTRY_PAYLOAD = {
     SortField: "name",
     SortDir: 0,
     SearchTerm: ""
+  },
+  create: {
+    name: "",
+    code: "",
+  },
+  update: {
+    id: 0,
+    name: "",
+    code: "",
   }
 };
