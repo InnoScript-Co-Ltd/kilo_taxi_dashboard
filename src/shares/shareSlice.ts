@@ -1,8 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { NotificationOptions, notificationOptions } from "../constants/config";
 
 export interface SHARE_SLICE {
-    notification: NotificationOptions,
       errors: null | any,
       showSidebar: boolean,
       statusFilter: string,
@@ -11,9 +9,6 @@ export interface SHARE_SLICE {
 }
 
 const initialState: SHARE_SLICE = {
-    notification: {
-      ...notificationOptions,
-    },
     errors: null,
     showSidebar: false,
     statusFilter: "ALL",
@@ -25,22 +20,22 @@ const shareSlice = createSlice({
   name: "share",
   initialState,
   reducers: {
-    updateNotification: (state, action) => {
-      switch (action.payload.show) {        
-        case true:    
-          state.notification.variant = action.payload.variant;
-          state.notification.msg = action.payload.msg;
-          state.notification.show = action.payload.show;
-          return state;
-        case false:
-          return {
-            ...state,
-            show: false,
-          };
-        default:
-          return state;
-      }
-    },
+    // updateNotification: (state, action) => {
+    //   switch (action.payload.show) {        
+    //     case true:    
+    //       state.notification.variant = action.payload.variant;
+    //       state.notification.msg = action.payload.msg;
+    //       state.notification.show = action.payload.show;
+    //       return state;
+    //     case false:
+    //       return {
+    //         ...state,
+    //         show: false,
+    //       };
+    //     default:
+    //       return state;
+    //   }
+    // },
     updateError: (state, action) => {
       state.errors = { ...action.payload };
       return state;
@@ -62,7 +57,7 @@ const shareSlice = createSlice({
 });
 
 export const {
-  updateNotification,
+  // updateNotification,
   updateError,
   sidebarToggle,
   setStatusFilter,

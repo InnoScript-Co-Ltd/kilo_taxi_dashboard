@@ -40,7 +40,7 @@ function FileUploadWithPreview({
           <img
             src={preview}
             alt="Preview"
-            style={{ width: "100%", maxWidth: "300px" }}
+            style={{ width: "100%", maxWidth: "300px", height: "150px" }}
           />
         </div>
       )}

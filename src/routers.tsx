@@ -5,6 +5,8 @@ import BlankTemplate from "./layouts/default/pages/BlankTemplate";
 import { CountryRoute } from "./modules/country/country.route";
 import { StateRoute } from "./modules/state/state.route";
 import { DashboardRoute } from "./modules/dashboard/dashboard.route";
+import { AdminRoute } from "./modules/admin/admin.route";
+import { CustomerRoute } from "./modules/customer/customer.route";
 
 
 export const routers = createBrowserRouter([
@@ -16,6 +18,8 @@ export const routers = createBrowserRouter([
             ...DashboardRoute,
             ...CountryRoute,
             ...StateRoute,
+            ...AdminRoute,
+            ...CustomerRoute,
         ]
     },
     {

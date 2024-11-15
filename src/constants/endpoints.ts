@@ -4,11 +4,14 @@ import { env } from "./config"
 export const baseURL = env[0];
 
 export const endpoints = {
-    login: "auth/login",
+    admin: "Admin",
+    customer: "Customer",
     country: "Country",
     city: "City",
     state:"State",
     merchant: "Merchant",
+
+    login: "auth/login",
     image: `${baseURL}/storage/images`,
     status: "status",
 }

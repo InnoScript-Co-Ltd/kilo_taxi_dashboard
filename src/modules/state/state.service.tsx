@@ -2,7 +2,6 @@ import { Dispatch } from 'redux';
 import { endpoints } from "../../constants/endpoints";
 import { getRequest, postRequest, putRequest } from "../../helpers/api";
 import { httpServiceHandler } from "../../helpers/handler";
-import { updateNotification } from "../../shares/shareSlice";
 import { StateFormInputs } from "./state.payload";
 import { index, show, update } from "./state.slice"
 

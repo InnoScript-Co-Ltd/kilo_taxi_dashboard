@@ -1,7 +1,6 @@
 import { useEffect } from "react";
 import BrandLayout from "./components/BrandLayout";
-// import Notification from "../../components/Notification";
-import { SnackbarProvider } from "notistack";
+// import Notification from "../../components/Notification"
 
 const DefaultLayout: React.FC = () => {
   useEffect(() => {
@@ -10,11 +9,7 @@ const DefaultLayout: React.FC = () => {
 
   return (
     <>
-      {/* <AppSideBar /> */}
-      {/* <Notification /> */}
-      <SnackbarProvider maxSnack={5}>
         <BrandLayout />
-      </SnackbarProvider>
     </>
   );
 };
