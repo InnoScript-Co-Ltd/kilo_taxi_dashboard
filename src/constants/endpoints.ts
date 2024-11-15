@@ -9,6 +9,10 @@ export const endpoints = {
     city: "City",
     state:"State",
     merchant: "Merchant",
+    driver:"Driver",
+    vehicle:"Vehicle",
+    wallet:"Wallet",
+    customer:"Customer",    
     image: `${baseURL}/storage/images`,
     status: "status",
 }
