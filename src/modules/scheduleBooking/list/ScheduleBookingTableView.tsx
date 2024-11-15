@@ -7,12 +7,12 @@ import TableHead from "@mui/material/TableHead";
 import TablePagination from "@mui/material/TablePagination";
 import TableRow from "@mui/material/TableRow";
 import {
-  stateColumns,
-  statePayload,
-} from "../state.payload"; 
+  scheduleColumns,
+  schedulePayload,
+} from "../scheduleBooking.payload"; 
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, AppRootState } from "../../../stores";
-import { stateService } from "../state.service";
+import { scheduleBookingService } from "../scheduleBooking.service";
 import { paginateOptions } from "../../../constants/config";
 import { NavigateId } from "../../../shares/NavigateId";
 import { paths } from "../../../constants/paths";
@@ -23,21 +23,23 @@ import {
   InputAdornment,
   TableSortLabel,
 } from "@mui/material";
-import { setPaginate } from "../state.slice"; 
+import { setPaginate } from "../scheduleBooking.slice"; 
 import SearchIcon from "@mui/icons-material/Search";
 import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
 import RestartAltIcon from "@mui/icons-material/RestartAlt";
 import { useNavigate } from "react-router";
 import UpAndDel from "../../../components/UpAndDel";
 import { StyledTableCell, StyledTableRow } from "../../../components/TableCommon";
+import { useNotifications } from "@toolpad/core";
 
-const StateTableView = () => {
+const ScheduleBookingTableView = () => {
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
   const dispatch = useDispatch<AppDispatch>();
   const { data, pagingParams } = useSelector(
-    (state: AppRootState) => state.state 
+    (state: AppRootState) => state.promotion 
   );
+  const notifications = useNotifications();
   const navigate = useNavigate();
   const [loading, setLoading] = React.useState(false);
 
@@ -55,28 +57,26 @@ const StateTableView = () => {
   const handleChangeRowsPerPage = (
     event: React.ChangeEvent<HTMLInputElement>
   ) => {
-    setRowsPerPage(+event.target.value);
-    setPage(0);
     dispatch(
       setPaginate({
         ...pagingParams,
-        RowsPerPage: +event.target.value,
         CurrentPage: 1,
+        PageSize: event.target.value,
       })
     );
+    setRowsPerPage(+event.target.value);
+    setPage(0);
   };
 
   const loadingData = React.useCallback(async () => {
     setLoading(true);
-    await stateService.index(dispatch, pagingParams);
+    await scheduleBookingService.index(dispatch, pagingParams, notifications);
     setLoading(false);
   }, [dispatch, pagingParams]);
 
   React.useEffect(() => {
     loadingData();
-  }, [loadingData]);
-  
-
+  }, [pagingParams]);
   return (
     <Paper sx={{ width: "100%", overflow: "hidden" }}>
       <Box
@@ -117,14 +117,14 @@ const StateTableView = () => {
         >
           <Button
             startIcon={<AddCircleOutlineIcon />}
-            onClick={() => navigate(paths.stateCreate)}
+            onClick={() => navigate(paths.scheduleBookingCreate)}
           >
             Create
           </Button>
 
           <Button
             onClick={() => {
-              dispatch(setPaginate(statePayload.pagingParams));
+              dispatch(setPaginate(schedulePayload.pagingParams));
               setPage(0);
               setRowsPerPage(10);
             }}
@@ -140,7 +140,7 @@ const StateTableView = () => {
         <Table stickyHeader aria-label="sticky table">
           <TableHead>
             <TableRow>
-              {stateColumns.map((column) => (
+              {scheduleColumns.map((column) => (
                 <StyledTableCell
                   key={column.id}
                   style={{ minWidth: column.minWidth }}
@@ -171,34 +171,34 @@ const StateTableView = () => {
             </TableRow>
           </TableHead>
           <TableBody>
-            {data.states?.map((row: any) => (
+            {data.promotions?.map((row: any) => (
               <StyledTableRow
                 hover
                 role="checkbox"
                 tabIndex={-1}
                 key={row.id}
               >
-                {stateColumns.map((column) => {
+                {scheduleColumns.map((column) => {
                   const value = row[column.id];
                   return (
                     <StyledTableCell key={column.id} align={column.align}>
                       {(() => {
                         switch (column.label) {
-                          case "State Name":
+                          case "Customer Name":
                             return (
                               <NavigateId
-                                url={`${paths.state}/${row.id}`} 
+                                url={`${paths.promotion}/${row.id}`} 
                                 value={value}
                               />
                             );
-                          case "Zip Code":
+                          case "Promo Code":
                             return value;
-                          case "City Name":
+                          case "ExpiredAt":
                             return value; 
                           case "Action":
                             return (
                               <UpAndDel
-                                url={`${paths.state}/${row.id}`} 
+                                url={`${paths.promotion}/${row.id}`} 
                                 fn={loadingData}
                               />
                             );
@@ -228,4 +228,4 @@ const StateTableView = () => {
   );
 };
 
-export default StateTableView;
+export default ScheduleBookingTableView;

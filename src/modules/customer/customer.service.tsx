@@ -2,17 +2,17 @@ import { Dispatch } from 'redux';
 import { endpoints } from "../../constants/endpoints"
 import { getRequest, postRequest, putRequest } from "../../helpers/api"
 import { httpServiceHandler } from "../../helpers/handler";
-import { CountryFormInputs } from "./country.payload";
-import { index, show, update } from "./country.slice";
+import { CustomerFormInputs } from "./customer.payload";
+import { index, show, update } from "./customer.slice";
 
-export const countryService = {
+export const customerService = {
     store: async (payload: any, dispatch: Dispatch, notifications:any) => {
-        const response : any = await postRequest(endpoints.country, payload);
+        const response : any = await postRequest(endpoints.customer, payload);
         await httpServiceHandler(dispatch, response);
 
         if(response.status === 201) {
             //'info' | 'success' | 'warning' | 'error'
-            notifications.show('Country is created successfully', {
+            notifications.show('Customer is created successfully', {
                 severity : "success",
                 autoHideDuration: 3000,
               });
@@ -21,11 +21,11 @@ export const countryService = {
     },
 
     index: async (dispatch: Dispatch, params: any, notifications: any) => {
-        const response: any = await getRequest(endpoints.country, params);
+        const response: any = await getRequest(endpoints.customer, params);
         await httpServiceHandler(dispatch, response, notifications);
         if(response.status === 200) { 
             //'info' | 'success' | 'warning' | 'error'
-            notifications.show('Country list is successfully retrieved!', {
+            notifications.show('Customer list is successfully retrieved!', {
                 severity : "info",
                 autoHideDuration: 3000,
               });
@@ -34,13 +34,13 @@ export const countryService = {
         return response;
     },
 
-    update: async (dispatch: Dispatch, id: number, payload: CountryFormInputs, notifications? : any) => {
-        const response: any = await putRequest(`${endpoints.country}/${id}`, payload);
+    update: async (dispatch: Dispatch, id: number, payload: CustomerFormInputs, notifications? : any) => {
+        const response: any = await putRequest(`${endpoints.customer}/${id}`, payload);
         await httpServiceHandler(dispatch, response);
 
         if(response.status === 200) {
             //'info' | 'success' | 'warning' | 'error'
-            notifications?.show('Country is updated successfully', {
+            notifications?.show('Customer is updated successfully', {
                 severity : "success",
                 autoHideDuration: 3000,
               });
@@ -50,7 +50,7 @@ export const countryService = {
     },
 
     show: async (dispatch: Dispatch, id : number) => {
-        const response: any = await getRequest(`${endpoints.country}/${id}`, null);
+        const response: any = await getRequest(`${endpoints.customer}/${id}`, null);
         await httpServiceHandler(dispatch, response);
 
         if(response.status === 200) {

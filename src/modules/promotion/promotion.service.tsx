@@ -2,17 +2,17 @@ import { Dispatch } from 'redux';
 import { endpoints } from "../../constants/endpoints";
 import { getRequest, postRequest, putRequest } from "../../helpers/api";
 import { httpServiceHandler } from "../../helpers/handler";
-import { StateFormInputs } from "./state.payload";
-import { index, show, update } from "./state.slice"
+import { PromotionFormInputs } from "./promotion.payload";
+import { index, show, update } from "./promotion.slice"
 
-export const stateService = {
+export const promotionService = {
     // Method to create a new state
-    store: async (payload: StateFormInputs, dispatch: Dispatch, notifications? : any) => {
-        const response: any = await postRequest(endpoints.state, payload);
+    store: async (payload: PromotionFormInputs, dispatch: Dispatch, notifications? : any) => {
+        const response: any = await postRequest(endpoints.promotion, payload);
         await httpServiceHandler(dispatch, response);
 
         if (response.status === 200) {
-            notifications.show('State is created successfully', {
+            notifications.show('Promotion is created successfully', {
                 severity : "success",
                 autoHideDuration: 3000,
               });
@@ -21,13 +21,11 @@ export const stateService = {
     },
 
     index: async (dispatch: Dispatch, params: any, notifications? : any) => {
-        const response: any = await getRequest(endpoints.state, params);
-        console.log(response);
-        
+        const response: any = await getRequest(endpoints.promotion, params);
         await httpServiceHandler(dispatch, response);
         if(response.status === 200) { 
             //'info' | 'success' | 'warning' | 'error'
-            notifications.show('Country list is successfully retrieved!', {
+            notifications.show('Promotion list is successfully retrieved!', {
                 severity : "info",
                 autoHideDuration: 3000,
               });
@@ -37,12 +35,12 @@ export const stateService = {
     },
 
     // Method to update an existing state by ID
-    update: async (dispatch: Dispatch, id: number, payload: StateFormInputs, notifications? : any) => {
-        const response: any = await putRequest(`${endpoints.state}/${id}`, payload);
+    update: async (dispatch: Dispatch, id: number, payload: PromotionFormInputs, notifications? : any) => {
+        const response: any = await putRequest(`${endpoints.promotion}/${id}`, payload);
         await httpServiceHandler(dispatch, response);
 
         if (response.status === 200) {
-            notifications?.show('Country is updated successfully', {
+            notifications?.show('Promotion is updated successfully', {
                 severity : "success",
                 autoHideDuration: 3000,
               });
@@ -53,7 +51,7 @@ export const stateService = {
 
     // Method to fetch details of a specific state by ID
     show: async (dispatch: Dispatch, id: number) => {
-        const response: any = await getRequest(`${endpoints.state}/${id}`, null);
+        const response: any = await getRequest(`${endpoints.promotion}/${id}`, null);
         await httpServiceHandler(dispatch, response);
 
         if (response.status === 200) {
