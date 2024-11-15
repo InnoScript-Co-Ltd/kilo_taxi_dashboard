@@ -1,5 +1,5 @@
 import { HTTPErrorResponse, HTTPResponse, keys } from "../constants/config";
-import { updateError, updateNotification } from "../shares/shareSlice";
+import { updateError } from "../shares/shareSlice";
 import { removeData } from "./localStorage";
 import { Dispatch } from "redux";
 

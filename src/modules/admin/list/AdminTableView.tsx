@@ -2,17 +2,15 @@ import * as React from "react";
 import Paper from "@mui/material/Paper";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
+
 import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TablePagination from "@mui/material/TablePagination";
 import TableRow from "@mui/material/TableRow";
-import {
-  stateColumns,
-  statePayload,
-} from "../state.payload"; 
+import { columns, adminPayload } from "../admin.payload";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, AppRootState } from "../../../stores";
-import { stateService } from "../state.service";
+import { adminService } from "../admin.service";
 import { paginateOptions } from "../../../constants/config";
 import { NavigateId } from "../../../shares/NavigateId";
 import { paths } from "../../../constants/paths";
@@ -23,21 +21,28 @@ import {
   InputAdornment,
   TableSortLabel,
 } from "@mui/material";
-import { setPaginate } from "../state.slice"; 
+import { setPaginate } from "../admin.slice";
 import SearchIcon from "@mui/icons-material/Search";
 import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
 import RestartAltIcon from "@mui/icons-material/RestartAlt";
 import { useNavigate } from "react-router";
 import UpAndDel from "../../../components/UpAndDel";
-import { StyledTableCell, StyledTableRow } from "../../../components/TableCommon";
+import {
+  StyledTableCell,
+  StyledTableRow,
+} from "../../../components/TableCommon";
+import TAvatar from "../../../components/TAvatar";
+import { useNotifications } from '@toolpad/core/useNotifications';
 
-const StateTableView = () => {
+const AdminTableView = () => {
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
   const dispatch = useDispatch<AppDispatch>();
   const { data, pagingParams } = useSelector(
-    (state: AppRootState) => state.state 
+    (state: AppRootState) => state.country
   );
+  const notifications = useNotifications();
+
   const navigate = useNavigate();
   const [loading, setLoading] = React.useState(false);
 
@@ -55,27 +60,28 @@ const StateTableView = () => {
   const handleChangeRowsPerPage = (
     event: React.ChangeEvent<HTMLInputElement>
   ) => {
-    setRowsPerPage(+event.target.value);
-    setPage(0);
     dispatch(
       setPaginate({
         ...pagingParams,
-        RowsPerPage: +event.target.value,
         CurrentPage: 1,
+        PageSize: event.target.value,
       })
     );
+    setRowsPerPage(+event.target.value);
+    setPage(0);
   };
 
   const loadingData = React.useCallback(async () => {
     setLoading(true);
-    await stateService.index(dispatch, pagingParams);
+    await adminService.index(dispatch, pagingParams, notifications);
     setLoading(false);
   }, [dispatch, pagingParams]);
 
   React.useEffect(() => {
     loadingData();
-  }, [loadingData]);
-  
+  }, [pagingParams]);
+
+  console.log(data);
 
   return (
     <Paper sx={{ width: "100%", overflow: "hidden" }}>
@@ -90,7 +96,7 @@ const StateTableView = () => {
       >
         <Input
           id="input-with-icon-search"
-          placeholder="Search State"
+          placeholder="Search Country"
           value={pagingParams.SearchTerm}
           onChange={(e) => {
             dispatch(
@@ -117,16 +123,14 @@ const StateTableView = () => {
         >
           <Button
             startIcon={<AddCircleOutlineIcon />}
-            onClick={() => navigate(paths.stateCreate)}
+            onClick={() => navigate(paths.adminCreate)}
           >
             Create
           </Button>
 
           <Button
             onClick={() => {
-              dispatch(setPaginate(statePayload.pagingParams));
-              setPage(0);
-              setRowsPerPage(10);
+              dispatch(setPaginate(adminPayload.pagingParams));
             }}
             startIcon={<RestartAltIcon />}
             color="secondary"
@@ -140,28 +144,29 @@ const StateTableView = () => {
         <Table stickyHeader aria-label="sticky table">
           <TableHead>
             <TableRow>
-              {stateColumns.map((column) => (
+              {columns.map((column) => (
                 <StyledTableCell
                   key={column.id}
                   style={{ minWidth: column.minWidth }}
                   align={column.numeric ? "right" : "left"}
                   padding={column.disablePadding ? "none" : "normal"}
-                  sortDirection={column.sort === true && pagingParams.SortDir === column.id ? pagingParams.SortField : false}
+                  sortDirection={
+                    pagingParams.SortDir === column.id
+                      ? pagingParams.SortField
+                      : false
+                  }
                 >
                   <TableSortLabel
-                    hideSortIcon={column.sort === false ? true : false}
-                    active={column.sort === true ? pagingParams.SortDir === column.id : false}
-                    direction={column.sort === true && pagingParams.SortDir === 0 ? "asc" : "desc"}
+                    active={pagingParams.SortDir === column.id}
+                    direction={pagingParams.SortDir === 0 ? "asc" : "desc"}
                     onClick={() => {
-                      if(column.sort) {
-                        dispatch(
-                          setPaginate({
-                            ...pagingParams,
-                            SortField: column.id,
-                            SortDir: pagingParams.SortDir === 0 ? 1 : 0,
-                          })
-                        );
-                      }
+                      dispatch(
+                        setPaginate({
+                          ...pagingParams,
+                          SortField: column.id,
+                          SortDir: pagingParams.SortDir === 0 ? 1 : 0,
+                        })
+                      );
                     }}
                   >
                     {column.label}
@@ -170,47 +175,54 @@ const StateTableView = () => {
               ))}
             </TableRow>
           </TableHead>
+
           <TableBody>
-            {data.states?.map((row: any) => (
-              <StyledTableRow
-                hover
-                role="checkbox"
-                tabIndex={-1}
-                key={row.id}
-              >
-                {stateColumns.map((column) => {
-                  const value = row[column.id];
-                  return (
-                    <StyledTableCell key={column.id} align={column.align}>
-                      {(() => {
-                        switch (column.label) {
-                          case "State Name":
-                            return (
-                              <NavigateId
-                                url={`${paths.state}/${row.id}`} 
-                                value={value}
-                              />
-                            );
-                          case "Zip Code":
-                            return value;
-                          case "City Name":
-                            return value; 
-                          case "Action":
-                            return (
-                              <UpAndDel
-                                url={`${paths.state}/${row.id}`} 
-                                fn={loadingData}
-                              />
-                            );
-                          default:
-                            return value; // Fallback case
-                        }
-                      })()}
-                    </StyledTableCell>
-                  );
-                })}
-              </StyledTableRow>
-            ))}
+            {data.countries.map((row: any) => {
+              return (
+                <StyledTableRow
+                  hover
+                  role="checkbox"
+                  tabIndex={-1}
+                  key={row.id}
+                >
+                  {columns.map((column) => {
+                    const value = row[column.id];
+                    return (
+                      <StyledTableCell key={column.id} align={column.align}>
+                        {/* {column.format && typeof value === 'number'
+                            ? column.format(value)
+                            : value} */}
+                        {(() => {
+                          switch (column.label) {
+                            case "Name":
+                              return (
+                                <NavigateId
+                                  url={`${paths.country}/${row.id}`}
+                                  value={value}
+                                />
+                              );
+                            case "Mobile Prefix":
+                              return value; // Render the mobile prefix as-is
+                            case "FlagIcon":
+                              return <TAvatar src={value} />; // Render the flag icon as-is
+                            case "Action":
+                              return (
+                                <UpAndDel
+                                  url={`${paths.country}/${row.id}`}
+                                  fn={loadingData}
+                                  priority={true}
+                                />
+                              );
+                            default:
+                              return value; // Fallback case
+                          }
+                        })()}
+                      </StyledTableCell>
+                    );
+                  })}
+                </StyledTableRow>
+              );
+            })}
           </TableBody>
         </Table>
       </TableContainer>
@@ -228,4 +240,4 @@ const StateTableView = () => {
   );
 };
 
-export default StateTableView;
+export default AdminTableView;

@@ -5,18 +5,20 @@ export const paths = {
     dashboard: "/dashboard",
 
     admin: "/admin",
+    adminList: "/admin/list",
     adminCreate: "/admin/new",
+    adminDetail: "/admin/:id",
     adminLogout: "/auth/login",
+
+    customer: "/customer",
+    customerList: "/customer/list",
+    customerCreate: "/customer/new",
+    customerDetail: "/customer/:id",
 
     country: "/country",
     countryList: "/country/list",
     countryCreate: "/country/new",
     countryDetail: "/country/:id",
-
-    city: "/city",
-    cityList: "/city/list",
-    cityCreate: "/city/new",
-    cityDetail: "/city/:id",
   
     state: "/state",
     stateList: "/state/list",

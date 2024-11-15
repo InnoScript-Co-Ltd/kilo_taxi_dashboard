@@ -5,6 +5,8 @@ import stateSlice, { STATE_SLICE } from './modules/state/state.slice';
 import driverSlice, { DRIVER_SLICE } from './modules/driver/driver.slice';
 import vehicleSlice, { VEHICLE_SLICE } from './modules/vehicle/vehicle.slice';
 import walletSlice, { WALLET_SLICE } from './modules/wallet/wallet.slice';
+import adminSlice, { ADMIN_SLICE } from './modules/admin/admin.slice';
+import customerSlice ,{ CUSTOMER_SLICE } from './modules/customer/customer.slice';
 
 interface RootState {
     share: SHARE_SLICE;
@@ -13,6 +15,9 @@ interface RootState {
     driver: DRIVER_SLICE;
     vehicle: VEHICLE_SLICE;
     wallet: WALLET_SLICE;
+    admin: ADMIN_SLICE;
+    customer: CUSTOMER_SLICE;
+    // other slices of state...
   }
 
 export const stores = configureStore({
@@ -23,6 +28,8 @@ export const stores = configureStore({
     driver: driverSlice,
     vehicle: vehicleSlice,
     wallet:walletSlice,
+    admin: adminSlice,
+    customer: customerSlice,
   },
 })
 

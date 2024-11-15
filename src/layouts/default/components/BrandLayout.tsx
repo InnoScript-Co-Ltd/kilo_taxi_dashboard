@@ -6,15 +6,13 @@ import { DashboardLayout } from "@toolpad/core/DashboardLayout";
 import type { Router } from "@toolpad/core";
 import { navigationList } from "../defaultPaths";
 import { Outlet, useNavigate } from "react-router";
-import { blue, green, orange } from "@mui/material/colors";
-import { useDispatch, useSelector } from "react-redux";
-import { AppDispatch, AppRootState } from "../../../stores";
-import { useSnackbar } from "notistack";
-import { updateNotification } from "../../../shares/shareSlice";
-import { IconButton, Typography } from "@mui/material";
+import { green, orange } from "@mui/material/colors";
+import { IconButton } from "@mui/material";
 import NotificationsIcon from "@mui/icons-material/Notifications";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import { NotificationsProvider } from "@toolpad/core/useNotifications";
+import { LocalizationProvider } from "@mui/x-date-pickers";
+import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 
 const demoTheme = createTheme({
   cssVariables: {
@@ -68,39 +66,19 @@ function Main({ pathname }: { pathname: string }) {
   const formatted = pathname.split("/").filter(Boolean); // Split by '/' and filter out empty values
   list.push(...formatted); // Push the elements into the array
 
-  const { enqueueSnackbar } = useSnackbar();
-
-  const dispatch = useDispatch<AppDispatch>();
-  const { variant, msg } = useSelector(
-    (state: AppRootState) => state.share.notification
-  );
-
-  React.useEffect(() => {
-    // Check if there's a message to show
-    if (msg) {
-      enqueueSnackbar(msg, { variant }); // Pass options object
-
-      dispatch(
-        updateNotification({
-          msg: "",
-          variant: "",
-          show: false,
-        })
-      );
-    }
-  }, [msg, variant]);
-
   return (
     <Box sx={{ width: "100%", padding: "20px" }}>
       <NotificationsProvider>
-        <Outlet />
+        <LocalizationProvider dateAdapter={AdapterDateFns}>
+          <Outlet />
+        </LocalizationProvider>
       </NotificationsProvider>
     </Box>
   );
 }
 
 const BRANDING = {
-  title: '',
+  title: "",
   logo: <img src="/logo.png" alt="Logo" />,
 };
 

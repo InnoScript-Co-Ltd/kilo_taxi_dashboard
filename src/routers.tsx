@@ -8,6 +8,8 @@ import { DashboardRoute } from "./modules/dashboard/dashboard.route";
 import { DriverRoute } from "./modules/driver/driver.route";
 import { VehicleRoute } from "./modules/vehicle/vehicle.route";
 import { WalletRoute } from "./modules/wallet/wallet.route";
+import { AdminRoute } from "./modules/admin/admin.route";
+import { CustomerRoute } from "./modules/customer/customer.route";
 
 
 export const routers = createBrowserRouter([
@@ -23,6 +25,8 @@ export const routers = createBrowserRouter([
             ...VehicleRoute,
             ...WalletRoute,
             
+            ...AdminRoute,
+            ...CustomerRoute,
         ]
     },
     {
