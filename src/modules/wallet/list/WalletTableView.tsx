@@ -29,18 +29,18 @@ import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
 import RestartAltIcon from "@mui/icons-material/RestartAlt";
 import { useNavigate } from "react-router";
 import UpAndDel from "../../../components/UpAndDel";
-import { useSnackbar } from "notistack";
 import { StyledTableCell, StyledTableRow } from "../../../components/TableCommon";
+import { useNotifications } from '@toolpad/core/useNotifications';
 
 const WalletTableView = () => {
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
   const dispatch = useDispatch<AppDispatch>();
   const { data, pagingParams } = useSelector(
-    (state: AppRootState) => state.wallet // Adjust the state slice if necessary
+    (state: AppRootState) => state.wallet
   );
 
-  const { enqueueSnackbar } = useSnackbar();
+  const notifications = useNotifications();
   const navigate = useNavigate();
   const [loading, setLoading] = React.useState(false);
 
@@ -71,7 +71,7 @@ const WalletTableView = () => {
 
   const loadingData = React.useCallback(async () => {
     setLoading(true);
-    await walletService.index(dispatch, pagingParams); // Assuming walletService handles fetching wallet data
+    await walletService.index(dispatch, pagingParams,notifications);
     setLoading(false);
   }, [dispatch, pagingParams]);
 

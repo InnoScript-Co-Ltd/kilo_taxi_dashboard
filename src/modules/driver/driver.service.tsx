@@ -11,11 +11,12 @@ export const driverService = {
         const response: any = await getRequest(endpoints.driver, params);
         await httpServiceHandler(dispatch, response);
 
-        if (response.status === 200) {
-            notifications?.show('Driver list retrieved successfully!', {
-                severity: "info",
+        if(response.status === 200) { 
+            //'info' | 'success' | 'warning' | 'error'
+            notifications.show('Driver list is successfully retrieved!', {
+                severity : "info",
                 autoHideDuration: 3000,
-            });
+              });
             dispatch(index(response.data ? response.data : response.data));
         }
         return response;

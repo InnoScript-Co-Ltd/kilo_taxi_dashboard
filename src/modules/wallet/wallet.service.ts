@@ -11,11 +11,12 @@ export const walletService = {
         const response: any = await postRequest(endpoints.wallet, payload);
         await httpServiceHandler(dispatch, response);
 
-        if (response.status === 200) {
-            notifications?.show('Wallet is created successfully', {
-                severity: "success",
+        if(response.status === 201) {
+            //'info' | 'success' | 'warning' | 'error'
+            notifications.show('Wallet is created successfully', {
+                severity : "success",
                 autoHideDuration: 3000,
-            });
+              });
         }
         return response;
     },
@@ -25,12 +26,13 @@ export const walletService = {
         const response: any = await getRequest(endpoints.wallet, params);
         await httpServiceHandler(dispatch, response);
         
-        if (response.status === 200) {
-            notifications?.show('Wallet list is successfully retrieved!', {
-                severity: "info",
+        if(response.status === 200) { 
+            //'info' | 'success' | 'warning' | 'error'
+            notifications.show('Wallet list is successfully retrieved!', {
+                severity : "info",
                 autoHideDuration: 3000,
-            });
-            dispatch(index(response.data || response.data));
+              });
+            dispatch(index(response.data ? response.data : response.data));
         }
         return response;
     },
@@ -40,11 +42,12 @@ export const walletService = {
         const response: any = await putRequest(`${endpoints.wallet}/${id}`, payload);
         await httpServiceHandler(dispatch, response);
 
-        if (response.status === 200) {
+        if(response.status === 200) {
+            //'info' | 'success' | 'warning' | 'error'
             notifications?.show('Wallet is updated successfully', {
-                severity: "success",
+                severity : "success",
                 autoHideDuration: 3000,
-            });
+              });
             dispatch(update(response.data));
         }
         return response;

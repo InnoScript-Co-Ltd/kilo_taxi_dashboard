@@ -25,8 +25,8 @@ import SearchIcon from "@mui/icons-material/Search";
 import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
 import RestartAltIcon from "@mui/icons-material/RestartAlt";
 import { useNavigate } from "react-router";
-import { useSnackbar } from "notistack";
 import { StyledTableCell, StyledTableRow } from "../../../components/TableCommon";
+import { useNotifications } from '@toolpad/core/useNotifications';
 
 const DriverTableView = () => {
   const [page, setPage] = React.useState(0);
@@ -36,7 +36,7 @@ const DriverTableView = () => {
     (state: AppRootState) => state.driver // Adjust to your driver slice state
   );
 
-  const { enqueueSnackbar } = useSnackbar();
+  const notifications = useNotifications();
   const navigate = useNavigate();
   const [loading, setLoading] = React.useState(false);
 
@@ -66,7 +66,7 @@ const DriverTableView = () => {
 
   const loadingData = React.useCallback(async () => {
     setLoading(true);
-    await driverService.index(dispatch, pagingParams); // Fetch driver data
+    await driverService.index(dispatch, pagingParams,notifications);
     setLoading(false);
   }, [dispatch, pagingParams]);
 

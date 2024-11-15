@@ -12,12 +12,13 @@ export const vehicleService = {
         const response: any = await getRequest(endpoints.vehicle, params);
         await httpServiceHandler(dispatch, response);
 
-        if (response.status === 200) {
-            notifications?.show('Vehicle list is successfully retrieved!', {
-                severity: "info",
+        if(response.status === 200) { 
+            //'info' | 'success' | 'warning' | 'error'
+            notifications.show('Vehicle list is successfully retrieved!', {
+                severity : "info",
                 autoHideDuration: 3000,
-            });
-            dispatch(index(response.data || response.data));
+              });
+            dispatch(index(response.data ? response.data : response.data));
         }
         return response;
     },
@@ -27,11 +28,12 @@ export const vehicleService = {
         const response: any = await putRequest(`${endpoints.vehicle}/${id}`, payload);
         await httpServiceHandler(dispatch, response);
 
-        if (response.status === 200) {
+        if(response.status === 200) {
+            //'info' | 'success' | 'warning' | 'error'
             notifications?.show('Vehicle is updated successfully', {
-                severity: "success",
+                severity : "success",
                 autoHideDuration: 3000,
-            });
+              });
             dispatch(update(response.data));
         }
         return response;

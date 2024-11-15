@@ -29,8 +29,8 @@ import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
 import RestartAltIcon from "@mui/icons-material/RestartAlt";
 import { useNavigate } from "react-router";
 import UpAndDel from "../../../components/UpAndDel";
-import { useSnackbar } from "notistack";
 import { StyledTableCell, StyledTableRow } from "../../../components/TableCommon";
+import { useNotifications } from '@toolpad/core/useNotifications';
 
 const VehicleTableView = () => {
   const [page, setPage] = React.useState(0);
@@ -40,7 +40,7 @@ const VehicleTableView = () => {
     (state: AppRootState) => state.vehicle // Replace with your vehicle state slice
   );
 
-  const { enqueueSnackbar } = useSnackbar();
+  const notifications = useNotifications();
   const navigate = useNavigate();
   const [loading, setLoading] = React.useState(false);
 
@@ -71,7 +71,7 @@ const VehicleTableView = () => {
 
   const loadingData = React.useCallback(async () => {
     setLoading(true);
-    await vehicleService.index(dispatch, pagingParams); // Fetch vehicle data
+    await vehicleService.index(dispatch, pagingParams,notifications);
     setLoading(false);
   }, [dispatch, pagingParams]);
 
