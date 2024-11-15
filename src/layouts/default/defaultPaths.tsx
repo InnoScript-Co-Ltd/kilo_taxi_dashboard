@@ -17,59 +17,6 @@ export const navigationList = [
     icon: <DashboardIcon />,
   },
   {
-    segment: 'admin',
-    title: 'Admin',
-    isParent: true,
-    icon: <AdminPanelSettingsIcon />,
-    children: [
-      {
-        segment: 'list',
-        title: 'List',
-        icon: <FormatListBulletedIcon />,
-      },
-    ],
-  },
-
-  {
-    segment: 'customer',
-    title: 'Customer',
-    isParent: true,
-    icon: <RecentActorsIcon />,
-    children: [
-      {
-        segment: 'list',
-        title: 'List',
-        icon: <FormatListBulletedIcon />,
-      },
-    ],
-  },
-  {
-    segment: 'country',
-    title: 'Country',
-    isParent: true,
-    icon: <FlagCircle />,
-    children: [
-      {
-        segment: 'list',
-        title: 'List',
-        icon: <FormatListBulletedIcon />,
-      },
-    ],
-  },
-  {
-    segment: 'state',
-    title: 'State',
-    isParent: true,
-    icon: <PublicIcon  />,
-    children: [
-      {
-        segment: 'list',
-        title: 'List',
-        icon: <FormatListBulletedIcon />,
-      },
-    ],
-  },
-  {
     segment: 'driver',
     title: 'Driver',
     isParent: true,

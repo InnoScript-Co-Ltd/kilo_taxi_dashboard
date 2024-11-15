@@ -5,15 +5,10 @@ export const baseURL = env[0];
 
 export const endpoints = {
     admin: "Admin",
-    customer: "Customer",
-    country: "Country",
-    city: "City",
-    state:"State",
-    merchant: "Merchant",
     driver:"Driver",
     vehicle:"Vehicle",
     wallet:"Wallet",  
-
+    customer:"Customer",
     login: "auth/login",
     image: `${baseURL}/storage/images`,
     status: "status",
