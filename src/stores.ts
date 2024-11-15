@@ -4,6 +4,8 @@ import countrySlice, { COUNTRY_SLICE } from "../src/modules/country/country.slic
 import stateSlice, { STATE_SLICE } from './modules/state/state.slice';
 import adminSlice, { ADMIN_SLICE } from './modules/admin/admin.slice';
 import customerSlice ,{ CUSTOMER_SLICE } from './modules/customer/customer.slice';
+import promotionSlice ,{ PROMOTION_SLICE } from './modules/promotion/promotion.slice';
+import scheduleSlice ,{ SCHEDULE_SLICE } from './modules/scheduleBooking/scheduleBooking.slice';
 
 interface RootState {
     share: SHARE_SLICE;
@@ -11,6 +13,8 @@ interface RootState {
     state: STATE_SLICE;
     admin: ADMIN_SLICE;
     customer: CUSTOMER_SLICE;
+    promotion: PROMOTION_SLICE;
+    schedule: SCHEDULE_SLICE
     // other slices of state...
   }
 
@@ -21,6 +25,8 @@ export const stores = configureStore({
     state: stateSlice,
     admin: adminSlice,
     customer: customerSlice,
+    promotion: promotionSlice,
+    schedule: scheduleSlice
   },
 })
 

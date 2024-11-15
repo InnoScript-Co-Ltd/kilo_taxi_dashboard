@@ -39,7 +39,7 @@ const AdminTableView = () => {
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
   const dispatch = useDispatch<AppDispatch>();
   const { data, pagingParams } = useSelector(
-    (state: AppRootState) => state.country
+    (state: AppRootState) => state.admin
   );
   const notifications = useNotifications();
 
@@ -177,7 +177,7 @@ const AdminTableView = () => {
           </TableHead>
 
           <TableBody>
-            {data.countries.map((row: any) => {
+            {data.admins.map((row: any) => {
               return (
                 <StyledTableRow
                   hover
@@ -197,18 +197,18 @@ const AdminTableView = () => {
                             case "Name":
                               return (
                                 <NavigateId
-                                  url={`${paths.country}/${row.id}`}
+                                  url={`${paths.admin}/${row.id}`}
                                   value={value}
                                 />
                               );
-                            case "Mobile Prefix":
+                            case "Phone":
                               return value; // Render the mobile prefix as-is
-                            case "FlagIcon":
+                            case "Email":
                               return <TAvatar src={value} />; // Render the flag icon as-is
                             case "Action":
                               return (
                                 <UpAndDel
-                                  url={`${paths.country}/${row.id}`}
+                                  url={`${paths.admin}/${row.id}`}
                                   fn={loadingData}
                                   priority={true}
                                 />

@@ -7,6 +7,8 @@ import { StateRoute } from "./modules/state/state.route";
 import { DashboardRoute } from "./modules/dashboard/dashboard.route";
 import { AdminRoute } from "./modules/admin/admin.route";
 import { CustomerRoute } from "./modules/customer/customer.route";
+import { PromotionRoute } from "./modules/promotion/promotion.route";
+import { ScheduleBookingRoute } from "./modules/scheduleBooking/scheduleBooking.route";
 
 
 export const routers = createBrowserRouter([
@@ -20,6 +22,8 @@ export const routers = createBrowserRouter([
             ...StateRoute,
             ...AdminRoute,
             ...CustomerRoute,
+            ...PromotionRoute,
+            ...ScheduleBookingRoute
         ]
     },
     {

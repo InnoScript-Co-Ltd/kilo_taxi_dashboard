@@ -2,15 +2,17 @@ import * as React from "react";
 import Paper from "@mui/material/Paper";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
-
 import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TablePagination from "@mui/material/TablePagination";
 import TableRow from "@mui/material/TableRow";
-import { columns, customerPayload } from "../customer.payload";
+import {
+  promotionColumns,
+  promotionPayload,
+} from "../promotion.payload"; 
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, AppRootState } from "../../../stores";
-import { customerService } from "../customer.service";
+import { promotionService } from "../promotion.service";
 import { paginateOptions } from "../../../constants/config";
 import { NavigateId } from "../../../shares/NavigateId";
 import { paths } from "../../../constants/paths";
@@ -21,28 +23,23 @@ import {
   InputAdornment,
   TableSortLabel,
 } from "@mui/material";
-import { setPaginate } from "../customer.slice";
+import { setPaginate } from "../promotion.slice"; 
 import SearchIcon from "@mui/icons-material/Search";
 import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
 import RestartAltIcon from "@mui/icons-material/RestartAlt";
 import { useNavigate } from "react-router";
 import UpAndDel from "../../../components/UpAndDel";
-import {
-  StyledTableCell,
-  StyledTableRow,
-} from "../../../components/TableCommon";
-import TAvatar from "../../../components/TAvatar";
-import { useNotifications } from '@toolpad/core/useNotifications';
+import { StyledTableCell, StyledTableRow } from "../../../components/TableCommon";
+import { useNotifications } from "@toolpad/core";
 
-const CustomerTableView = () => {
+const PromotionTableView = () => {
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
   const dispatch = useDispatch<AppDispatch>();
   const { data, pagingParams } = useSelector(
-    (state: AppRootState) => state.customer
+    (state: AppRootState) => state.promotion 
   );
   const notifications = useNotifications();
-
   const navigate = useNavigate();
   const [loading, setLoading] = React.useState(false);
 
@@ -73,14 +70,13 @@ const CustomerTableView = () => {
 
   const loadingData = React.useCallback(async () => {
     setLoading(true);
-    await customerService.index(dispatch, pagingParams, notifications);
+    await promotionService.index(dispatch, pagingParams, notifications);
     setLoading(false);
   }, [dispatch, pagingParams]);
 
   React.useEffect(() => {
     loadingData();
   }, [pagingParams]);
-
   return (
     <Paper sx={{ width: "100%", overflow: "hidden" }}>
       <Box
@@ -94,7 +90,7 @@ const CustomerTableView = () => {
       >
         <Input
           id="input-with-icon-search"
-          placeholder="Search Country"
+          placeholder="Search State"
           value={pagingParams.SearchTerm}
           onChange={(e) => {
             dispatch(
@@ -121,14 +117,16 @@ const CustomerTableView = () => {
         >
           <Button
             startIcon={<AddCircleOutlineIcon />}
-            onClick={() => navigate(paths.customerCreate)}
+            onClick={() => navigate(paths.promotionCreate)}
           >
             Create
           </Button>
 
           <Button
             onClick={() => {
-              dispatch(setPaginate(customerPayload.pagingParams));
+              dispatch(setPaginate(promotionPayload.pagingParams));
+              setPage(0);
+              setRowsPerPage(10);
             }}
             startIcon={<RestartAltIcon />}
             color="secondary"
@@ -142,29 +140,28 @@ const CustomerTableView = () => {
         <Table stickyHeader aria-label="sticky table">
           <TableHead>
             <TableRow>
-              {columns.map((column) => (
+              {promotionColumns.map((column) => (
                 <StyledTableCell
                   key={column.id}
                   style={{ minWidth: column.minWidth }}
                   align={column.numeric ? "right" : "left"}
                   padding={column.disablePadding ? "none" : "normal"}
-                  sortDirection={
-                    pagingParams.SortDir === column.id
-                      ? pagingParams.SortField
-                      : false
-                  }
+                  sortDirection={column.sort === true && pagingParams.SortDir === column.id ? pagingParams.SortField : false}
                 >
                   <TableSortLabel
-                    active={pagingParams.SortDir === column.id}
-                    direction={pagingParams.SortDir === 0 ? "asc" : "desc"}
+                    hideSortIcon={column.sort === false ? true : false}
+                    active={column.sort === true ? pagingParams.SortDir === column.id : false}
+                    direction={column.sort === true && pagingParams.SortDir === 0 ? "asc" : "desc"}
                     onClick={() => {
-                      dispatch(
-                        setPaginate({
-                          ...pagingParams,
-                          SortField: column.id,
-                          SortDir: pagingParams.SortDir === 0 ? 1 : 0,
-                        })
-                      );
+                      if(column.sort) {
+                        dispatch(
+                          setPaginate({
+                            ...pagingParams,
+                            SortField: column.id,
+                            SortDir: pagingParams.SortDir === 0 ? 1 : 0,
+                          })
+                        );
+                      }
                     }}
                   >
                     {column.label}
@@ -173,54 +170,47 @@ const CustomerTableView = () => {
               ))}
             </TableRow>
           </TableHead>
-
           <TableBody>
-            {data.customers.map((row: any) => {
-              return (
-                <StyledTableRow
-                  hover
-                  role="checkbox"
-                  tabIndex={-1}
-                  key={row.id}
-                >
-                  {columns.map((column) => {
-                    const value = row[column.id];
-                    return (
-                      <StyledTableCell key={column.id} align={column.align}>
-                        {/* {column.format && typeof value === 'number'
-                            ? column.format(value)
-                            : value} */}
-                        {(() => {
-                          switch (column.label) {
-                            case "Name":
-                              return (
-                                <NavigateId
-                                  url={`${paths.customer}/${row.id}`}
-                                  value={value}
-                                />
-                              );
-                            case "Phone":
-                              return value; // Render the mobile prefix as-is
-                            case "Email":
-                              return <TAvatar src={value} />; // Render the flag icon as-is
-                            case "Action":
-                              return (
-                                <UpAndDel
-                                  url={`${paths.customer}/${row.id}`}
-                                  fn={loadingData}
-                                  priority={true}
-                                />
-                              );
-                            default:
-                              return value; // Fallback case
-                          }
-                        })()}
-                      </StyledTableCell>
-                    );
-                  })}
-                </StyledTableRow>
-              );
-            })}
+            {data.promotions?.map((row: any) => (
+              <StyledTableRow
+                hover
+                role="checkbox"
+                tabIndex={-1}
+                key={row.id}
+              >
+                {promotionColumns.map((column) => {
+                  const value = row[column.id];
+                  return (
+                    <StyledTableCell key={column.id} align={column.align}>
+                      {(() => {
+                        switch (column.label) {
+                          case "Customer Name":
+                            return (
+                              <NavigateId
+                                url={`${paths.promotion}/${row.id}`} 
+                                value={value}
+                              />
+                            );
+                          case "Promo Code":
+                            return value;
+                          case "ExpiredAt":
+                            return value; 
+                          case "Action":
+                            return (
+                              <UpAndDel
+                                url={`${paths.promotion}/${row.id}`} 
+                                fn={loadingData}
+                              />
+                            );
+                          default:
+                            return value; // Fallback case
+                        }
+                      })()}
+                    </StyledTableCell>
+                  );
+                })}
+              </StyledTableRow>
+            ))}
           </TableBody>
         </Table>
       </TableContainer>
@@ -238,4 +228,4 @@ const CustomerTableView = () => {
   );
 };
 
-export default CustomerTableView;
+export default PromotionTableView;

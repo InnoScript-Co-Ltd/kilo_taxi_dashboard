@@ -15,6 +15,16 @@ export const paths = {
     customerCreate: "/customer/new",
     customerDetail: "/customer/:id",
 
+    promotion: "/promotion",
+    promotionList: "/promotion/list",
+    promotionCreate: "/promotion/new",
+    promotionDetail: "/promotion/:id",
+
+    scheduleBooking: "/schedule",
+    scheduleBookingList: "/schedule/list",
+    scheduleBookingCreate: "/schedule/new",
+    scheduleBookingDetail: "/schedule/:id",
+
     country: "/country",
     countryList: "/country/list",
     countryCreate: "/country/new",

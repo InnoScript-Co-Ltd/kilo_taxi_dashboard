@@ -6,6 +6,8 @@ export const baseURL = env[0];
 export const endpoints = {
     admin: "Admin",
     customer: "Customer",
+    promotion: "Promotion",
+    scheduleBooking: "scheduleBooking",
     country: "Country",
     city: "City",
     state:"State",

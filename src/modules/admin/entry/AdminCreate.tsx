@@ -133,6 +133,7 @@ const AdminCreate = () => {
                     <Select
                       id="gender"
                       aria-describedby="gender_text"
+                      size="small"
                       disabled={loading}
                       label="Gender"
                       {...field}
@@ -162,6 +163,7 @@ const AdminCreate = () => {
                     <Select
                       id="status"
                       aria-describedby="status_text"
+                      size="small"
                       disabled={loading}
                       label="Status"
                       {...field}
