@@ -2,6 +2,8 @@ import { paths } from "../../constants/paths"; // Ensure this path is correct
 // import DriverCreate from "./entry/DriverCreate"; // Adjust the import path as necessary
 // import DriverUpdate from "./entry/DriverUpdate"; // Adjust the import path as necessary
 import DriverList from "./view/DriverList"; // Adjust the import path as necessary
+import DriverDetail from "./view/DriverDetail"; // Adjust the import path as necessary
+
 
 export const DriverRoute = [
     {
@@ -31,18 +33,18 @@ export const DriverRoute = [
     //         };
     //     },
     // },
-    // {
-    //     id: "driver-detail",
-    //     path: paths.driverDetail, // Ensure this is defined in your paths constant
-    //     element: <DriverUpdate />,
-    //     loader: () => {
-    //         return {
-    //             breadcrumbs: [
-    //                 { label: "Dashboard", url: paths.dashboard },
-    //                 { label: "Drivers", url: paths.driverList },
-    //                 { label: "Update", url: paths.driverDetail },
-    //             ],
-    //         };
-    //     },
-    // },
+    {
+        id: "driver-detail",
+        path: paths.driverDetail, // Ensure this is defined in your paths constant
+        element: <DriverDetail />,
+        loader: () => {
+            return {
+                breadcrumbs: [
+                    { label: "Dashboard", url: paths.dashboard },
+                    { label: "Drivers", url: paths.driverList },
+                    { label: "Update", url: paths.driverDetail },
+                ],
+            };
+        },
+    },
 ];

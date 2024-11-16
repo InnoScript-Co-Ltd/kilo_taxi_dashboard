@@ -85,12 +85,12 @@ export interface DRIVER_PAYLOAD {
   }
 
 export const driverColumns: readonly DriverColumn[] = [
-  { id: "name", label: "Name", minWidth: 130, numeric: false, disablePadding: false, sort: true },
+  { id: "name", label: "Driver Name", minWidth: 130, numeric: false, disablePadding: false, sort: true },
   { id: "phone", label: "Phone", minWidth: 125, numeric: false, disablePadding: false, sort: true },
   { id: "email", label: "Email", minWidth: 200, numeric: false, disablePadding: false, sort: true },
   { id: "status", label: "Status", minWidth: 90, numeric: false, disablePadding: false, sort: true },
   { id: "kycStatus", label: "KYC Status", minWidth: 100, numeric: false, disablePadding: false, sort: false },
-  { id: "auditColumn", label: "Audit Column", minWidth: 130, numeric: false, disablePadding: false, sort: false },
+  // { id: "auditColumn", label: "Audit Column", minWidth: 130, numeric: false, disablePadding: false, sort: false },
 ];
 
 

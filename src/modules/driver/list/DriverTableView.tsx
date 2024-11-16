@@ -163,6 +163,7 @@ const DriverTableView = () => {
           </TableHead>
           <TableBody>
             {data.drivers?.map((row: any) => (
+
               <StyledTableRow
                 hover
                 role="checkbox"
@@ -176,6 +177,7 @@ const DriverTableView = () => {
                       {(() => {
                         switch (column.label) {
                           case "Driver Name":
+                            console.log(value)
                             return (
                               <NavigateId
                                 url={`${paths.driver}/${row.id}`} // Driver detail path
