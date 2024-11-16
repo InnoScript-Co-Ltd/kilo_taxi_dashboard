@@ -12,6 +12,9 @@ export const endpoints = {
     city: "City",
     state:"State",
     merchant: "Merchant",
+    driver:"Driver",
+    vehicle:"Vehicle",
+    wallet:"Wallet", 
 
     login: "auth/login",
     image: `${baseURL}/storage/images`,
