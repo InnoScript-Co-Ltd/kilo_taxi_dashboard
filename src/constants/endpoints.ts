@@ -8,7 +8,6 @@ export const endpoints = {
     driver:"Driver",
     vehicle:"Vehicle",
     wallet:"Wallet",  
-    customer:"Customer",
     login: "auth/login",
     image: `${baseURL}/storage/images`,
     status: "status",
