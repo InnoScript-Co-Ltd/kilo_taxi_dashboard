@@ -162,7 +162,7 @@ const DriverTableView = () => {
             </TableRow>
           </TableHead>
           <TableBody>
-            {data.drivers?.map((row: any) => (
+            {[{ id: 1, name : "Mg Mg" }]?.map((row: any) => (
 
               <StyledTableRow
                 hover
