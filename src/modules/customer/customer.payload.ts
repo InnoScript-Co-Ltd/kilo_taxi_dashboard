@@ -4,7 +4,7 @@ import { z } from "zod";
 export const customerSchema = z.object({
   id: z.number().min(0, { message: "id" }).default(0),
   Name: z.string().min(2, { message: "Country Name must be at least 2 characters long" }),
-  // zipCode: z.string().min(2, { message: "Zip Code is required" }),
+  Profile: z.string(),
   Email: z.string().email(),
   Phone: z.string().min(8, { message : "phone number is at least 8 digit" }),
   Password: z.string()
@@ -16,6 +16,8 @@ export const customerSchema = z.object({
   MobilePrefix: z.string(),
   Dob: z.date().nullable(), // Date validation
   Nrc: z.string().nullable(),
+  NrcImageFront: z.string(),
+  NrcImageBack: z.string(),
   Address: z.string(),
   State: z.string(),
   City: z.string(),
@@ -38,10 +40,13 @@ export interface CUSTOMER {
   id: string;
   name: string;
   phone: string;
+  profile: string;
   mobilePrefix: string;
   email: string;
   dob: Date | null;
   nrc: string | null;
+  nrcImageFront: string;
+  nrcImageBack: string;
   emailVerifiedAt: Date | null;
   phoneVerifiedAt: Date | null;
   password: string;

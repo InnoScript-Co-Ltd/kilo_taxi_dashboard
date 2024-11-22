@@ -177,7 +177,7 @@ const AdminTableView = () => {
           </TableHead>
 
           <TableBody>
-            {data.admins.map((row: any) => {
+            {data.admins?.map((row: any) => {
               return (
                 <StyledTableRow
                   hover
@@ -185,7 +185,7 @@ const AdminTableView = () => {
                   tabIndex={-1}
                   key={row.id}
                 >
-                  {columns.map((column) => {
+                  {columns?.map((column) => {
                     const value = row[column.id];
                     return (
                       <StyledTableCell key={column.id} align={column.align}>

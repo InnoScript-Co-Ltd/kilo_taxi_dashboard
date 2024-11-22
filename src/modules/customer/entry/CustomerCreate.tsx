@@ -25,7 +25,7 @@ import { Controller, useForm } from "react-hook-form";
 import { CustomerFormInputs, customerSchema } from "../customer.payload";
 import { formBuilder } from "../../../helpers/formBuilder";
 import { useNotifications } from "@toolpad/core/useNotifications";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   generalLists,
   kycStatusLists,
@@ -54,13 +54,12 @@ const CustomerCreate = () => {
     handleSubmit,
     control,
     formState: { errors },
+    setValue
   } = useForm<CustomerFormInputs>({
     resolver: zodResolver(customerSchema),
   });
 
   const onSubmit = async (data: CustomerFormInputs) => {
-    console.log(data);
-
     try {
       const formData = formBuilder(data, customerSchema);
       const response = await customerService.store(
@@ -77,6 +76,7 @@ const CustomerCreate = () => {
       setLoading(false);
     }
   };
+
 
   return (
     <Box>
@@ -159,12 +159,13 @@ const CustomerCreate = () => {
                 <Controller
                   name="Dob"
                   control={control}
-                  render={({ field }) => (
-                    <DatePicker
+                  render={({ field }) => {
+                    return (
+                      <DatePicker
                       label="Dob"
                       value={field.value}
                       onChange={(date) => field.onChange(date)}
-                      disabled={loading}
+                      disabled={loading} 
                       slotProps={{
                         textField: {
                           error: !!errors.Dob,
@@ -172,7 +173,8 @@ const CustomerCreate = () => {
                         },
                       }}
                     />
-                  )}
+                    )
+                  }}
                 />
                 <FormHelperText>
                   {errors.Dob?.message}
