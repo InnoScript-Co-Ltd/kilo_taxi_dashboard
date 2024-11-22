@@ -44,7 +44,9 @@ const CustomerCreate = () => {
   const [showPassword, setShowPassword] = useState(false);
 
   const handleClickShowPassword = () => setShowPassword((show) => !show);
-  const handleMouseDownPassword = (event : React.MouseEvent<HTMLButtonElement>) => event.preventDefault();
+  const handleMouseDownPassword = (
+    event: React.MouseEvent<HTMLButtonElement>
+  ) => event.preventDefault();
 
   // Set up React Hook Form with Zod schema
   const {
@@ -57,21 +59,22 @@ const CustomerCreate = () => {
   });
 
   const onSubmit = async (data: CustomerFormInputs) => {
-    const formdata = formBuilder(data, customerSchema);
-    // Use forEach to log each key-value pair in the FormData
-    // for (const [key, value] of formdata.entries()) {
-    //   console.log(key, value);
-    // }
+    console.log(data);
 
-    // return;
-
-    const response = await customerService.store(
-      formdata,
-      dispatch,
-      notifications
-    );
-    if (response.status === 201) {
-      navigate(paths.countryList);
+    try {
+      const formData = formBuilder(data, customerSchema);
+      const response = await customerService.store(
+        formData,
+        dispatch,
+        notifications
+      );
+      if (response.status === 201) {
+        navigate(`${paths.customerList}`);
+      }
+    } catch (error) {
+      console.error("Error submitting form:", error);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -86,14 +89,18 @@ const CustomerCreate = () => {
             <Grid2 size={{ xs: 6, md: 3 }}>
               <FormControl variant="filled" fullWidth error={!!errors.Name}>
                 <InputLabel htmlFor="admin_name">Name</InputLabel>
-                <Input id="admin_name" {...register("Name")} />
+                <FilledInput
+                  size="small"
+                  id="admin_name"
+                  {...register("Name")}
+                />
                 <FormHelperText>{errors.Name?.message}</FormHelperText>
               </FormControl>
             </Grid2>
             <Grid2 size={{ xs: 6, md: 3 }}>
               <FormControl variant="filled" fullWidth error={!!errors.Email}>
                 <InputLabel htmlFor="email">Email</InputLabel>
-                <Input id="email" {...register("Email")} />
+                <FilledInput size="small" id="email" {...register("Email")} />
                 <FormHelperText>{errors.Email?.message}</FormHelperText>
               </FormControl>
             </Grid2>
@@ -101,7 +108,7 @@ const CustomerCreate = () => {
             <Grid2 size={{ xs: 6, md: 3 }}>
               <FormControl variant="filled" fullWidth error={!!errors.Phone}>
                 <InputLabel htmlFor="phone">Phone</InputLabel>
-                <Input id="phone" {...register("Phone")} />
+                <FilledInput size="small" id="phone" {...register("Phone")} />
                 <FormHelperText>{errors.Phone?.message}</FormHelperText>
               </FormControl>
             </Grid2>
@@ -113,7 +120,11 @@ const CustomerCreate = () => {
                 error={!!errors.MobilePrefix}
               >
                 <InputLabel htmlFor="MobilePrefix">Mobile Prefix</InputLabel>
-                <Input id="MobilePrefix" {...register("MobilePrefix")} />
+                <FilledInput
+                  size="small"
+                  id="MobilePrefix"
+                  {...register("MobilePrefix")}
+                />
                 <FormHelperText>{errors.MobilePrefix?.message}</FormHelperText>
               </FormControl>
             </Grid2>
@@ -122,6 +133,7 @@ const CustomerCreate = () => {
               <FormControl variant="filled" fullWidth error={!!errors.Password}>
                 <InputLabel htmlFor="password">Password</InputLabel>
                 <FilledInput
+                  size="small"
                   id="password"
                   type={showPassword ? "text" : "password"}
                   {...register("Password")}
@@ -141,13 +153,6 @@ const CustomerCreate = () => {
                 <FormHelperText>{errors.Password?.message}</FormHelperText>
               </FormControl>
             </Grid2>
-            <Grid2 size={{ xs: 6, md: 3 }}>
-              <FormControl variant="filled" fullWidth error={!!errors.Email}>
-                <InputLabel htmlFor="email">Email</InputLabel>
-                <Input id="email" {...register("Email")} />
-                <FormHelperText>{errors.Email?.message}</FormHelperText>
-              </FormControl>
-            </Grid2>
 
             <Grid2 size={{ xs: 6, md: 3 }}>
               <FormControl fullWidth error={!!errors.Dob}>
@@ -156,7 +161,7 @@ const CustomerCreate = () => {
                   control={control}
                   render={({ field }) => (
                     <DatePicker
-                      label="Date of Birth"
+                      label="Dob"
                       value={field.value}
                       onChange={(date) => field.onChange(date)}
                       disabled={loading}
@@ -169,27 +174,41 @@ const CustomerCreate = () => {
                     />
                   )}
                 />
-                <FormHelperText>{errors.Dob?.message}</FormHelperText>
+                <FormHelperText>
+                  {errors.Dob?.message}
+                </FormHelperText>
               </FormControl>
             </Grid2>
 
-            <Grid2 size={{ xs: 6, md: 6, xl: 6 }}>
-              <FormControl variant="filled" fullWidth error={!!errors.NrcFront}>
+            <Grid2 size={{ xs: 6, md: 3 }}>
+              <FormControl variant="filled" fullWidth error={!!errors.Nrc}>
+                <InputLabel htmlFor="Nrc">Nrc</InputLabel>
+                <FilledInput size="small" id="Nrc" {...register("Nrc")} />
+                <FormHelperText>{errors.Nrc?.message}</FormHelperText>
+              </FormControl>
+            </Grid2>
+
+            <Grid2 size={{ xs: 6, md: 3, xl: 3 }}>
+              <FormControl
+                variant="filled"
+                fullWidth
+                error={!!errors.file_NrcImageFront}
+              >
                 <Controller
-                  name="NrcFront"
+                  name="file_NrcImageFront"
                   control={control}
                   defaultValue={undefined} // Set initial state to null
                   rules={{ required: "NRC front is required" }} // Only use required here
                   render={({ field: { onChange, value } }) => (
                     <FileUploadWithPreview
                       onFileChange={(file) => {
-                        console.log("Selected file:", file); // Debugging log
                         onChange(file); // Update the field with the selected file
                       }}
                       error={
-                        errors.NrcFront
-                          ? typeof errors.NrcFront.message === "string"
-                            ? errors.NrcFront.message
+                        errors.file_NrcImageFront
+                          ? typeof errors.file_NrcImageFront.message ===
+                            "string"
+                            ? errors.file_NrcImageFront.message
                             : undefined
                           : undefined
                       }
@@ -201,23 +220,26 @@ const CustomerCreate = () => {
               </FormControl>
             </Grid2>
 
-            <Grid2 size={{ xs: 6, md: 6, xl: 6 }}>
-              <FormControl variant="filled" fullWidth error={!!errors.NrcBack}>
+            <Grid2 size={{ xs: 6, md: 3, xl: 3 }}>
+              <FormControl
+                variant="filled"
+                fullWidth
+                error={!!errors.file_NrcImageBack}
+              >
                 <Controller
-                  name="NrcBack"
+                  name="file_NrcImageBack"
                   control={control}
                   defaultValue={undefined} // Set initial state to null
                   rules={{ required: "NRC front is required" }} // Only use required here
                   render={({ field: { onChange, value } }) => (
                     <FileUploadWithPreview
                       onFileChange={(file) => {
-                        console.log("Selected file:", file); // Debugging log
                         onChange(file); // Update the field with the selected file
                       }}
                       error={
-                        errors.NrcBack
-                          ? typeof errors.NrcBack.message === "string"
-                            ? errors.NrcBack.message
+                        errors.file_NrcImageBack
+                          ? typeof errors.file_NrcImageBack.message === "string"
+                            ? errors.file_NrcImageBack.message
                             : undefined
                           : undefined
                       }
@@ -229,10 +251,45 @@ const CustomerCreate = () => {
               </FormControl>
             </Grid2>
 
+            <Grid2 size={{ xs: 6, md: 3, xl: 3 }}>
+              <FormControl
+                variant="filled"
+                fullWidth
+                error={!!errors.file_Profile}
+              >
+                <Controller
+                  name="file_Profile"
+                  control={control}
+                  defaultValue={undefined} // Set initial state to null
+                  rules={{ required: "Profile is required" }} // Only use required here
+                  render={({ field: { onChange, value } }) => (
+                    <FileUploadWithPreview
+                      onFileChange={(file) => {
+                        onChange(file); // Update the field with the selected file
+                      }}
+                      error={
+                        errors.file_Profile
+                          ? typeof errors.file_Profile.message === "string"
+                            ? errors.file_Profile.message
+                            : undefined
+                          : undefined
+                      }
+                      // Correctly extracting the error message
+                      field="Profile" // Label for the upload button
+                    />
+                  )}
+                />
+              </FormControl>
+            </Grid2>
+
             <Grid2 size={{ xs: 6, md: 3 }}>
               <FormControl variant="filled" fullWidth error={!!errors.Address}>
                 <InputLabel htmlFor="address">Address</InputLabel>
-                <Input id="address" {...register("Address")} />
+                <FilledInput
+                  size="small"
+                  id="address"
+                  {...register("Address")}
+                />
                 <FormHelperText>{errors.Address?.message}</FormHelperText>
               </FormControl>
             </Grid2>
@@ -240,7 +297,7 @@ const CustomerCreate = () => {
             <Grid2 size={{ xs: 6, md: 3 }}>
               <FormControl variant="filled" fullWidth error={!!errors.State}>
                 <InputLabel htmlFor="state">State</InputLabel>
-                <Input id="state" {...register("State")} />
+                <FilledInput size="small" id="state" {...register("State")} />
                 <FormHelperText>{errors.State?.message}</FormHelperText>
               </FormControl>
             </Grid2>
@@ -248,7 +305,7 @@ const CustomerCreate = () => {
             <Grid2 size={{ xs: 6, md: 3 }}>
               <FormControl variant="filled" fullWidth error={!!errors.City}>
                 <InputLabel htmlFor="city">City</InputLabel>
-                <Input id="city" {...register("City")} />
+                <FilledInput size="small" id="city" {...register("City")} />
                 <FormHelperText>{errors.City?.message}</FormHelperText>
               </FormControl>
             </Grid2>
@@ -256,7 +313,11 @@ const CustomerCreate = () => {
             <Grid2 size={{ xs: 6, md: 3 }}>
               <FormControl variant="filled" fullWidth error={!!errors.Township}>
                 <InputLabel htmlFor="township">Township</InputLabel>
-                <Input id="township" {...register("Township")} />
+                <FilledInput
+                  size="small"
+                  id="township"
+                  {...register("Township")}
+                />
                 <FormHelperText>{errors.Township?.message}</FormHelperText>
               </FormControl>
             </Grid2>
@@ -275,11 +336,11 @@ const CustomerCreate = () => {
                       disabled={loading}
                       label="Gender"
                       {...field}
-                      value={String(field.value)} // Convert field value to a string
+                      value={field.value} // Convert field value to a string
                       onChange={(event) => field.onChange(event.target.value)} // Ensure onChange value is a string
                     >
                       {generalLists?.map((general: any) => (
-                        <MenuItem key={general.id} value={String(general.id)}>
+                        <MenuItem key={general.id} value={general.id}>
                           {general.value}
                         </MenuItem>
                       ))}
@@ -287,29 +348,29 @@ const CustomerCreate = () => {
                   )}
                 />
 
-                <FormHelperText>{errors.Gender?.message}</FormHelperText>
+                <FormHelperText>{errors?.Gender?.message}</FormHelperText>
               </FormControl>
             </Grid2>
 
             <Grid2 size={{ xs: 6, md: 3 }}>
               <FormControl variant="filled" fullWidth error={!!errors.Status}>
-                <InputLabel htmlFor="status">Status</InputLabel>
+                <InputLabel htmlFor="KycStatus">Status</InputLabel>
                 <Controller
                   name="Status"
                   control={control}
                   render={({ field }) => (
                     <Select
-                      id="status"
-                      aria-describedby="status_text"
                       size="small"
+                      id="Status"
+                      aria-describedby="status_text"
                       disabled={loading}
                       label="Status"
                       {...field}
-                      value={String(field.value)} // Convert field value to a string
+                      value={field.value} // Convert field value to a string
                       onChange={(event) => field.onChange(event.target.value)} // Ensure onChange value is a string
                     >
                       {statusLists?.map((status: any) => (
-                        <MenuItem key={status.id} value={String(status.id)}>
+                        <MenuItem key={status.id} value={status.id}>
                           {status.value}
                         </MenuItem>
                       ))}
@@ -333,16 +394,17 @@ const CustomerCreate = () => {
                   control={control}
                   render={({ field }) => (
                     <Select
+                      size="small"
                       id="KycStatus"
                       aria-describedby="kyc_status_text"
                       disabled={loading}
                       label="KycStatus"
                       {...field}
-                      value={String(field.value)} // Convert field value to a string
+                      value={field.value} // Convert field value to a string
                       onChange={(event) => field.onChange(event.target.value)} // Ensure onChange value is a string
                     >
                       {kycStatusLists?.map((status: any) => (
-                        <MenuItem key={status.id} value={String(status.id)}>
+                        <MenuItem key={status.id} value={status.id}>
                           {status.value}
                         </MenuItem>
                       ))}

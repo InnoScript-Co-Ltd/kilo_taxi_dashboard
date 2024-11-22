@@ -2,6 +2,7 @@ import {
   Box,
   Button,
   Card,
+  FilledInput,
   FormControl,
   FormHelperText,
   Grid2,
@@ -12,15 +13,16 @@ import {
   SelectChangeEvent,
 } from "@mui/material";
 import { useCallback, useEffect, useState } from "react";
-import { PromotionFormInputs, promotionPayload, promotionSchema } from "../promotion.payload"; // Similar to cityPayload but for states
+import {
+  PromotionFormInputs,
+  promotionPayload,
+  promotionSchema,
+} from "../promotion.payload"; // Similar to cityPayload but for states
 import { useNavigate, useParams } from "react-router";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, AppRootState } from "../../../stores";
 import { promotionService } from "../promotion.service"; // Service for handling state API requests
-import {
-  httpErrorHandler,
-  httpServiceHandler,
-} from "../../../helpers/handler";
+import { httpErrorHandler, httpServiceHandler } from "../../../helpers/handler";
 import { paths } from "../../../constants/paths";
 import { Breadcrumb } from "../../../components/Breadcrumb";
 import { getRequest } from "../../../helpers/api";
@@ -33,7 +35,7 @@ import { statusLists } from "../../../constants/config";
 
 const PromotionUpdate = () => {
   const [loading, setLoading] = useState(false);
-  const [countryLists, setCountryLists] = useState<Array<any>>([]);
+  const [customerLists, setCustomerLists] = useState<Array<any>>([]);
 
   const params: any = useParams();
   const navigate = useNavigate();
@@ -50,25 +52,26 @@ const PromotionUpdate = () => {
   } = useForm<PromotionFormInputs>({
     resolver: zodResolver(promotionSchema),
     defaultValues: {
-      CustomerId: "",
+      id: 0,
+      CustomerId: 0,
       PromoCode: "",
       ExpiredAt: new Date(),
       FixAmount: "",
       Percentage: "",
-      Status: ""
-    }
+      Status: 0,
+    },
   });
 
   // Function to handle form submission and state update
-  const submitPromotionUpdate = async (data : PromotionFormInputs) => {
+  const submitPromotionUpdate = async (data: PromotionFormInputs) => {
     setLoading(true);
     const response: any = await promotionService.update(
       dispatch,
       params.id,
       data
     );
-    if (response.status === 204) {
-      navigate(`${paths.stateList}`); // Navigate to the state list page on success
+    if (response.status === 200) {
+      navigate(`${paths.promotionList}`); // Navigate to the state list page on success
     }
     setLoading(false);
   };
@@ -77,41 +80,56 @@ const PromotionUpdate = () => {
   const loadingData = useCallback(async () => {
     setLoading(true);
     try {
-      await promotionService.show(dispatch, params.id); // Fetch state data to populate the form
-      const response: any = await getRequest(`${endpoints.country}`, null);
+      const response: any = await getRequest(`${endpoints.customer}`, null);
       await httpServiceHandler(dispatch, response);
       if (response && "data" in response && response.status === 200) {
-        setCountryLists(response.data.countries);
+        setCustomerLists(response.data.customers);
       }
     } catch (error) {
       await httpErrorHandler(error);
     }
+
     setLoading(false);
-  }, [dispatch, params.id]);
+  }, []);
 
   useEffect(() => {
     loadingData();
-  }, [loadingData]);
+  }, []);
 
   useEffect(() => {
     if (promotion) {
-      setValue("CustomerId", promotion.countryId || "");
-      setValue("PromoCode", promotion.promo_code || "");
-      setValue("ExpiredAt", promotion.expired_at ? new Date(promotion.expired_at) : new Date())
-      setValue("FixAmount", promotion.fix_amount || "")
-      setValue("Percentage", promotion.percentage || "")
-      setValue("Status", promotion.status || "")
+      setValue("id", Number(promotion.id) || 0);
+      setValue("CustomerId", promotion.customerId || 0);
+      setValue("PromoCode", promotion.promoCode || "");
+      setValue(
+        "ExpiredAt",
+        promotion.expiredAt ? new Date(promotion.expiredAt) : new Date()
+      );
+      setValue("FixAmount", String(promotion.fixAmount) || "");
+      setValue("Percentage", String(promotion.percentage) || "");
+      setValue("Status", promotion.status || 0);
     }
   }, [promotion]);
+
+    // Load data into form fields on component mount
+    const loadingDataDetail = useCallback(async () => {
+      setLoading(true);
+      await promotionService.show(dispatch, params.id);
+      setLoading(false);
+    }, [dispatch, params.id]);
+  
+    useEffect(() => {
+      loadingDataDetail();
+    }, [loadingDataDetail]);
 
   return (
     <Box>
       <Breadcrumb />
       <Card sx={{ marginTop: "20px", padding: "20px" }}>
-        <h2>State Update</h2>
+        <h2>Promotion Update</h2>
 
         <form onSubmit={handleSubmit(submitPromotionUpdate)}>
-        <Grid2 container spacing={2}>
+          <Grid2 container spacing={2}>
             <Grid2 size={{ xs: 6, md: 3 }}>
               <FormControl
                 variant="filled"
@@ -124,18 +142,18 @@ const PromotionUpdate = () => {
                   control={control}
                   render={({ field }) => (
                     <Select
+                      size="small"
                       id="customer_name"
                       aria-describedby="customer_name_text"
-                      size="small"
                       disabled={loading}
                       label="Customer"
                       {...field}
-                      value={String(field.value)} // Convert field value to a string
+                      value={field.value} // Convert field value to a string
                       onChange={(event) => field.onChange(event.target.value)} // Ensure onChange value is a string
                     >
-                      {[{ id : 1, value : "New Customer" }].map((customer: any) => (
-                        <MenuItem key={customer.id} value={String(customer.id)}>
-                          {customer.value}
+                      {customerLists.map((customer: any) => (
+                        <MenuItem key={customer.id} value={customer.id}>
+                          {customer.name}
                         </MenuItem>
                       ))}
                     </Select>
@@ -147,9 +165,17 @@ const PromotionUpdate = () => {
             </Grid2>
 
             <Grid2 size={{ xs: 6, md: 3 }}>
-              <FormControl variant="filled" fullWidth error={!!errors.PromoCode}>
+              <FormControl
+                variant="filled"
+                fullWidth
+                error={!!errors.PromoCode}
+              >
                 <InputLabel htmlFor="promo_code">Promo Code</InputLabel>
-                <Input id="promo_code" {...register("PromoCode")} />
+                <FilledInput
+                  size="small"
+                  id="promo_code"
+                  {...register("PromoCode")}
+                />
                 <FormHelperText>{errors.PromoCode?.message}</FormHelperText>
               </FormControl>
             </Grid2>
@@ -178,17 +204,33 @@ const PromotionUpdate = () => {
               </FormControl>
             </Grid2>
             <Grid2 size={{ xs: 6, md: 3 }}>
-              <FormControl variant="filled" fullWidth error={!!errors.FixAmount}>
+              <FormControl
+                variant="filled"
+                fullWidth
+                error={!!errors.FixAmount}
+              >
                 <InputLabel htmlFor="fix_amount">Fix Amount</InputLabel>
-                <Input id="fix_amount" {...register("FixAmount")} />
+                <FilledInput
+                  size="small"
+                  id="fix_amount"
+                  {...register("FixAmount")}
+                />
                 <FormHelperText>{errors.FixAmount?.message}</FormHelperText>
               </FormControl>
             </Grid2>
 
             <Grid2 size={{ xs: 6, md: 3 }}>
-              <FormControl variant="filled" fullWidth error={!!errors.Percentage}>
+              <FormControl
+                variant="filled"
+                fullWidth
+                error={!!errors.Percentage}
+              >
                 <InputLabel htmlFor="Percentage">Percentage</InputLabel>
-                <Input id="Percentage" {...register("Percentage")} />
+                <FilledInput
+                  size="small"
+                  id="Percentage"
+                  {...register("Percentage")}
+                />
                 <FormHelperText>{errors.Percentage?.message}</FormHelperText>
               </FormControl>
             </Grid2>
@@ -207,11 +249,11 @@ const PromotionUpdate = () => {
                       disabled={loading}
                       label="Status"
                       {...field}
-                      value={String(field.value)} // Convert field value to a string
+                      value={field.value} // Convert field value to a string
                       onChange={(event) => field.onChange(event.target.value)} // Ensure onChange value is a string
                     >
                       {statusLists?.map((status: any) => (
-                        <MenuItem key={status.id} value={String(status.id)}>
+                        <MenuItem key={status.id} value={status.id}>
                           {status.value}
                         </MenuItem>
                       ))}
@@ -222,26 +264,28 @@ const PromotionUpdate = () => {
                 <FormHelperText>{errors.Status?.message}</FormHelperText>
               </FormControl>
             </Grid2>
-
           </Grid2>
 
           {/* footer */}
-        <Box
-          sx={{
-            display: "flex",
-            justifyContent: "end",
-            alignItems: "center",
-            gap: "20px",
-            marginTop: "20px",
-          }}
-        >
-          <Button variant="outlined" onClick={() => navigate(paths.promotionList)}>
-            Cancle
-          </Button>
-          <Button variant="contained" type="submit">
-            Submit
-          </Button>
-        </Box>
+          <Box
+            sx={{
+              display: "flex",
+              justifyContent: "end",
+              alignItems: "center",
+              gap: "20px",
+              marginTop: "20px",
+            }}
+          >
+            <Button
+              variant="outlined"
+              onClick={() => navigate(paths.promotionList)}
+            >
+              Cancle
+            </Button>
+            <Button disabled={loading} variant="contained" type="submit">
+              Update
+            </Button>
+          </Box>
         </form>
       </Card>
     </Box>

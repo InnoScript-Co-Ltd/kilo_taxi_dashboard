@@ -7,7 +7,7 @@ import { index, show, update } from "./promotion.slice"
 
 export const promotionService = {
     // Method to create a new state
-    store: async (payload: PromotionFormInputs, dispatch: Dispatch, notifications? : any) => {
+    store: async (payload: any, dispatch: Dispatch, notifications? : any) => {
         const response: any = await postRequest(endpoints.promotion, payload);
         await httpServiceHandler(dispatch, response);
 

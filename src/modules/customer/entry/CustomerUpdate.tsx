@@ -43,8 +43,8 @@ const CustomerUpdate = () => {
       Email: "",
       Phone: "",
       Password: "",
-      Gender: "",
-      Status: ""
+      Gender: 0,
+      Status: 0
       // flagIcon: undefined,
       // zipCode: ""
     },
@@ -68,8 +68,8 @@ const CustomerUpdate = () => {
       setValue("Phone", admin.phone || "");
       setValue("Email", admin.email || "");
       setValue("Password", admin.password || "");
-      setValue("Gender", admin.gender || "");
-      setValue("Status", admin.status || "");
+      setValue("Gender", admin.gender || 0);
+      setValue("Status", admin.status || 0);
     }
   }, [admin, setValue]);
 
@@ -163,7 +163,7 @@ const CustomerUpdate = () => {
               </FormControl>
             </Grid2>
 
-            <Grid2 size={{ xs: 6, md: 3 }}>
+            {/* <Grid2 size={{ xs: 6, md: 3 }}>
               <FormControl
                 variant="filled"
                 fullWidth
@@ -194,10 +194,10 @@ const CustomerUpdate = () => {
                 />
 
                 <FormHelperText>{errors.Gender?.message}</FormHelperText>
-              </FormControl>
-            </Grid2>
+              </FormControl> */}
+            {/* </Grid2> */}
 
-            <Grid2 size={{ xs: 6, md: 3 }}>
+            {/* <Grid2 size={{ xs: 6, md: 3 }}>
               <FormControl
                 variant="filled"
                 fullWidth
@@ -229,7 +229,7 @@ const CustomerUpdate = () => {
 
                 <FormHelperText>{errors.Status?.message}</FormHelperText>
               </FormControl>
-            </Grid2>
+            </Grid2> */}
  
           </Grid2>
 

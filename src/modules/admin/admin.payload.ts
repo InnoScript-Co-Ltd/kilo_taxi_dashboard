@@ -13,8 +13,11 @@ export const adminSchema = z.object({
   .regex(/[a-z]/, { message: "Password must contain at least one lowercase letter" })  // Lowercase letter
   .regex(/[0-9]/, { message: "Password must contain at least one number" })  // Number
   .regex(/[^a-zA-Z0-9]/, { message: "Password must contain at least one special character" }),  // Special character
-  gender: z.string(),
-  status: z.string()
+  gender: z.number(),
+  status: z.number(),
+  address: z.string(),
+  emailVerifiedAt: z.date().nullable(),
+  phoneVerifiedAt: z.date().nullable()
 });
 
 export type AdminFormInputs = z.infer<typeof adminSchema>;
@@ -24,16 +27,17 @@ export type AdminFormInputs = z.infer<typeof adminSchema>;
  * Interface representing the shape of a country object.
  */
 export interface ADMIN {
-  id: string;
+  id: number;
   name: string;
   phone: string;
   email: string;
-  email_verified_at: Date | null;
-  phone_verified_at: Date | null;
+  emailVerifiedAt: Date;
+  phoneVerifiedAt: Date;
   password: string;
-  gender: string;
+  gender: number;
   address: string;
-  status: string;
+  status: number;
+  action: any
   // Add other country properties as necessary
 }
 
@@ -83,10 +87,11 @@ export const columns: readonly Admin_Column[] = [
   { id: "name", label: "Name", minWidth: 170, maxWidth: 300, numeric: false, disablePadding: false },
   { id: "phone", label: "Phone", minWidth: 200, maxWidth: 250, numeric: false, disablePadding: false },
   { id: "email", label: "email", minWidth: 100, maxWidth: 150, numeric: false, disablePadding: false },
-  { id: "email_verified_at", label: "Email Verified", minWidth: 50, maxWidth: 50, numeric: false, disablePadding: false },
-  { id: "phone_verified_at", label: "Phone Verified", minWidth: 50, maxWidth: 50, numeric: false, disablePadding: false },
+  { id: "emailVerifiedAt", label: "Email Verified", minWidth: 50, maxWidth: 50, numeric: false, disablePadding: false },
+  { id: "phoneVerifiedAt", label: "Phone Verified", minWidth: 50, maxWidth: 50, numeric: false, disablePadding: false },
   { id: "gender", label: "Gender", minWidth: 50, maxWidth: 50, numeric: false, disablePadding: false },
-  { id: "status", label: "Status", minWidth: 50, maxWidth: 50, numeric: false, disablePadding: false }
+  { id: "status", label: "Status", minWidth: 50, maxWidth: 50, numeric: false, disablePadding: false },
+  { id: "action", label: "Action", minWidth: 50, maxWidth: 50, numeric: false, disablePadding: false }
 ];
 /**
  * Default payload object for country operations.

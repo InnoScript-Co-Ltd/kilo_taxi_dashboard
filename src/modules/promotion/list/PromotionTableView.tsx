@@ -31,6 +31,7 @@ import { useNavigate } from "react-router";
 import UpAndDel from "../../../components/UpAndDel";
 import { StyledTableCell, StyledTableRow } from "../../../components/TableCommon";
 import { useNotifications } from "@toolpad/core";
+import { formatDate } from "../../../helpers/common";
 
 const PromotionTableView = () => {
   const [page, setPage] = React.useState(0);
@@ -194,7 +195,7 @@ const PromotionTableView = () => {
                           case "Promo Code":
                             return value;
                           case "ExpiredAt":
-                            return value; 
+                            return formatDate(value); 
                           case "Action":
                             return (
                               <UpAndDel

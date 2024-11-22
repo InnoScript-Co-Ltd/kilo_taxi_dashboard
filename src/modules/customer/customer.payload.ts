@@ -14,18 +14,18 @@ export const customerSchema = z.object({
   .regex(/[0-9]/, { message: "Password must contain at least one number" })  // Number
   .regex(/[^a-zA-Z0-9]/, { message: "Password must contain at least one special character" }),  // Special character
   MobilePrefix: z.string(),
-  Dob: z.date().nullable(),
+  Dob: z.date().nullable(), // Date validation
   Nrc: z.string().nullable(),
-  NrcFront: z.string().nullable(),
-  NrcBack: z.string().nullable(),
   Address: z.string(),
   State: z.string(),
   City: z.string(),
   Township: z.string(),
-  Gender: z.string(),
-  Status: z.string(),
-  KycStatus: z.string()
-
+  Gender: z.number(),
+  Status: z.number(),
+  KycStatus: z.number(),
+  file_NrcImageFront: z.instanceof(File).nullable(),
+  file_NrcImageBack: z.instanceof(File).nullable(),
+  file_Profile: z.instanceof(File).nullable(),
 });
 
 export type CustomerFormInputs = z.infer<typeof customerSchema>;
@@ -38,22 +38,23 @@ export interface CUSTOMER {
   id: string;
   name: string;
   phone: string;
-  mobile_prefix: string;
+  mobilePrefix: string;
   email: string;
   dob: Date | null;
   nrc: string | null;
-  nrc_front: string | null;
-  nrc_back: string | null;
-  email_verified_at: Date | null;
-  phone_verified_at: Date | null;
+  emailVerifiedAt: Date | null;
+  phoneVerifiedAt: Date | null;
   password: string;
   address: string;
   state: string;
   city: string;
   township: string;
-  gender: string;
-  status: string;
-  kyc_status: string;
+  gender: number;
+  status: number;
+  kycStatus: number;
+  file_NrcImageFront: string;
+  file_NrcImageBack: string;
+  file_profile: string
   // Add other country properties as necessary
 }
 
@@ -103,8 +104,8 @@ export const columns: readonly Customer_Column[] = [
   { id: "name", label: "Name", minWidth: 170, maxWidth: 300, numeric: false, disablePadding: false },
   { id: "phone", label: "Phone", minWidth: 200, maxWidth: 250, numeric: false, disablePadding: false },
   { id: "email", label: "email", minWidth: 100, maxWidth: 150, numeric: false, disablePadding: false },
-  { id: "email_verified_at", label: "Email Verified", minWidth: 50, maxWidth: 50, numeric: false, disablePadding: false },
-  { id: "phone_verified_at", label: "Phone Verified", minWidth: 50, maxWidth: 50, numeric: false, disablePadding: false },
+  { id: "emailVerifiedAt", label: "Email Verified", minWidth: 50, maxWidth: 50, numeric: false, disablePadding: false },
+  { id: "phoneVerifiedAt", label: "Phone Verified", minWidth: 50, maxWidth: 50, numeric: false, disablePadding: false },
   { id: "gender", label: "Gender", minWidth: 50, maxWidth: 50, numeric: false, disablePadding: false },
   { id: "status", label: "Status", minWidth: 50, maxWidth: 50, numeric: false, disablePadding: false }
 ];

@@ -3,6 +3,7 @@ import {
   Box,
   Button,
   Card,
+  FilledInput,
   FormControl,
   FormHelperText,
   Grid2,
@@ -28,10 +29,11 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { CUSTOMER } from "../../customer/customer.payload";
 import { DatePicker } from "@mui/x-date-pickers";
 import { statusLists } from "../../../constants/config";
+import { formBuilder } from "../../../helpers/formBuilder";
 
 const PromotionCreate = () => {
   const [loading, setLoading] = useState(false);
-  const [countryLists, setCountryLists] = useState<Array<any>>([]);
+  const [customerLists, setCustomerLists] = useState<Array<any>>([]);
 
   const navigate = useNavigate();
   const dispatch = useDispatch<AppDispatch>();
@@ -50,7 +52,7 @@ const PromotionCreate = () => {
     setLoading(true);
     const response = await promotionService.store(data, dispatch);
     if (response.status === 201) {
-      navigate(`${paths.stateList}`);
+      navigate(`${paths.promotionList}`);
     }
     setLoading(false);
   };
@@ -58,10 +60,12 @@ const PromotionCreate = () => {
   const loadingData = React.useCallback(async () => {
     setLoading(true);
     try {
-      const response: any = await getRequest(`${endpoints.country}`, null);
+      const response: any = await getRequest(`${endpoints.customer}`, null);
+      console.log(response);
+      
       await httpServiceHandler(dispatch, response);
       if (response && "data" in response && response.status === 200) {
-        setCountryLists(response.data.countries);
+        setCustomerLists(response.data.customers);
       }
     } catch (error) {
       await httpErrorHandler(error);
@@ -93,18 +97,18 @@ const PromotionCreate = () => {
                   control={control}
                   render={({ field }) => (
                     <Select
+                      size="small"
                       id="customer_name"
                       aria-describedby="customer_name_text"
                       disabled={loading}
-                      size="small"
                       label="Customer"
                       {...field}
-                      value={String(field.value)} // Convert field value to a string
+                      value={field.value} // Convert field value to a string
                       onChange={(event) => field.onChange(event.target.value)} // Ensure onChange value is a string
                     >
-                      {[{ id : 1, value : "New Customer" }].map((customer: any) => (
-                        <MenuItem key={customer.id} value={String(customer.id)}>
-                          {customer.value}
+                      {customerLists.map((customer: any) => (
+                        <MenuItem key={customer.id} value={customer.id}>
+                          {customer.name}
                         </MenuItem>
                       ))}
                     </Select>
@@ -118,7 +122,7 @@ const PromotionCreate = () => {
             <Grid2 size={{ xs: 6, md: 3 }}>
               <FormControl variant="filled" fullWidth error={!!errors.PromoCode}>
                 <InputLabel htmlFor="promo_code">Promo Code</InputLabel>
-                <Input id="promo_code" {...register("PromoCode")} />
+                <FilledInput size="small" id="promo_code" {...register("PromoCode")} />
                 <FormHelperText>{errors.PromoCode?.message}</FormHelperText>
               </FormControl>
             </Grid2>
@@ -149,7 +153,7 @@ const PromotionCreate = () => {
             <Grid2 size={{ xs: 6, md: 3 }}>
               <FormControl variant="filled" fullWidth error={!!errors.FixAmount}>
                 <InputLabel htmlFor="fix_amount">Fix Amount</InputLabel>
-                <Input id="fix_amount" {...register("FixAmount")} />
+                <FilledInput size="small" id="fix_amount" {...register("FixAmount")} />
                 <FormHelperText>{errors.FixAmount?.message}</FormHelperText>
               </FormControl>
             </Grid2>
@@ -157,7 +161,7 @@ const PromotionCreate = () => {
             <Grid2 size={{ xs: 6, md: 3 }}>
               <FormControl variant="filled" fullWidth error={!!errors.Percentage}>
                 <InputLabel htmlFor="Percentage">Percentage</InputLabel>
-                <Input id="Percentage" {...register("Percentage")} />
+                <FilledInput size="small" id="Percentage" {...register("Percentage")} />
                 <FormHelperText>{errors.Percentage?.message}</FormHelperText>
               </FormControl>
             </Grid2>
@@ -176,11 +180,11 @@ const PromotionCreate = () => {
                       disabled={loading}
                       label="Status"
                       {...field}
-                      value={String(field.value)} // Convert field value to a string
+                      value={field.value} // Convert field value to a string
                       onChange={(event) => field.onChange(event.target.value)} // Ensure onChange value is a string
                     >
                       {statusLists?.map((status: any) => (
-                        <MenuItem key={status.id} value={String(status.id)}>
+                        <MenuItem key={status.id} value={status.id}>
                           {status.value}
                         </MenuItem>
                       ))}
@@ -210,7 +214,7 @@ const PromotionCreate = () => {
             >
               Cancle
             </Button>
-            <Button variant="contained" type="submit">
+            <Button disabled={loading} variant="contained" type="submit">
               Submit
             </Button>
           </Box>

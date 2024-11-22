@@ -19,6 +19,8 @@ function FileUploadWithPreview({
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
     if (file) {
+      console.log(file);
+      
         const blobURL = URL.createObjectURL(file);
         setPreview(blobURL);
         onFileChange(file); // Pass file to parent component (Controller)

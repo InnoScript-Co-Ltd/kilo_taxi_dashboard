@@ -32,7 +32,8 @@ import {
   StyledTableRow,
 } from "../../../components/TableCommon";
 import TAvatar from "../../../components/TAvatar";
-import { useNotifications } from '@toolpad/core/useNotifications';
+import { useNotifications } from "@toolpad/core/useNotifications";
+import { formatDate } from "../../../helpers/common";
 
 const CustomerTableView = () => {
   const [page, setPage] = React.useState(0);
@@ -175,7 +176,7 @@ const CustomerTableView = () => {
           </TableHead>
 
           <TableBody>
-            {data.customers.map((row: any) => {
+            {data?.customers?.map((row: any) => {
               return (
                 <StyledTableRow
                   hover
@@ -203,6 +204,11 @@ const CustomerTableView = () => {
                               return value; // Render the mobile prefix as-is
                             case "Email":
                               return <TAvatar src={value} />; // Render the flag icon as-is
+
+                            case "Email Verified":
+                              return formatDate(value);
+                            case "Phone Verified":
+                              return formatDate(value);
                             case "Action":
                               return (
                                 <UpAndDel
