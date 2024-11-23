@@ -4,8 +4,8 @@ import { paginateOptions } from "../../constants/config"; // Assuming paginateOp
 // Define Wallet Schema
 export const walletSchema = z.object({
   walletName: z.string().min(2, { message: "wallet Name must be at least 2 characters long" }),
-  createDate: z.date(),
-  updateDate: z.date(),
+  createDate: z.date().nullable(),
+  updateDate: z.date().nullable(),
 });
 
 export type WalletFormInputs = z.infer<typeof walletSchema>;
@@ -16,8 +16,8 @@ export type WalletFormInputs = z.infer<typeof walletSchema>;
 export interface WALLET {
   id: string;
   walletName: string;
-  createDate: Date;
-  updateDate: Date;
+  createDate: Date | null;
+  updateDate: Date | null;
 }
 
 // Define columns for wallet table

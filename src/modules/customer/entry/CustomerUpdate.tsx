@@ -6,7 +6,6 @@ import {
   FormHelperText,
   Grid2,
   InputLabel,
-  Input,
   Select,
   MenuItem,
   FilledInput,
@@ -24,9 +23,14 @@ import { useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { paths } from "../../../constants/paths";
 import FileUploadWithPreview from "../../../components/FileUploadWithPreview";
-import { generalLists, kycStatusLists, statusLists } from "../../../constants/config";
+import {
+  genderStatuslists,
+  kycStatusLists,
+  generalStatusLists,
+} from "../../../constants/config";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
 import { DatePicker } from "@mui/x-date-pickers";
+import Loading from "../../../components/Loading";
 
 const CustomerUpdate = () => {
   const [loading, setLoading] = useState(false);
@@ -57,6 +61,8 @@ const CustomerUpdate = () => {
       Password: "",
       Gender: 0,
       Status: 0,
+      KycStatus: 0,
+      Dob: null
       // flagIcon: undefined,
       // zipCode: ""
     },
@@ -64,11 +70,23 @@ const CustomerUpdate = () => {
 
   // Load data into form fields on component mount
   const loadingData = useCallback(async () => {
-    setLoading(true);
-    await customerService.show(dispatch, params.id);
-    setLoading(false);
-  }, [dispatch, params.id]);
+    setLoading(true); // Set loading to true
 
+    // Simulate a delay (for testing purposes, set it to a large value to test loading state)
+    const delay = 400000; // 2 seconds artificial delay
+    const timeout = setTimeout(() => setLoading(false), delay); // Ensure the spinner stays on for the delay duration
+
+    try {
+      // Simulate network request with a delayed response (adjust as necessary for testing)
+      //await new Promise((resolve) => setTimeout(resolve, delay)); // Simulated delay (simulate slow network)
+
+      // Simulate a successful data fetch
+      await customerService.show(dispatch, params.id);
+    } finally {
+      clearTimeout(timeout); // Clear timeout if the data is fetched before the delay ends
+      setLoading(false); // Set loading to false after the operation completes
+    }
+  }, [dispatch, params.id]);
   useEffect(() => {
     loadingData();
   }, [loadingData]);
@@ -78,10 +96,11 @@ const CustomerUpdate = () => {
     if (customer) {
       setValue("Name", customer.name || "");
       setValue("Phone", customer.phone || "");
+      setValue("Nrc", customer.nrc || "");
       setValue("Email", customer.email || "");
       setValue("Password", customer.password || "");
       setValue("MobilePrefix", customer.mobilePrefix || "");
-      setValue("Dob", customer.dob || new Date());
+      setValue("Dob", (customer?.dob && new Date(customer.dob)) || new Date());
       setValue("Address", customer.address || "");
       setValue("State", customer.state || "");
       setValue("City", customer.city || "");
@@ -89,10 +108,9 @@ const CustomerUpdate = () => {
       setValue("Gender", customer.gender || 0);
       setValue("Status", customer.status || 0);
       setValue("KycStatus", customer.kycStatus || 0);
-      setValue("Profile", customer.profile || "");
-      setValue("NrcImageFront", customer.nrcImageFront || "");
-      setValue("NrcImageBack", customer.nrcImageBack || "");
-
+      // setValue("Profile", customer.profile || "");
+      // setValue("NrcImageFront", customer.nrcImageFront || "");
+      // setValue("NrcImageBack", customer.nrcImageBack || "");
     }
   }, [customer, setValue]);
 
@@ -106,14 +124,16 @@ const CustomerUpdate = () => {
     setLoading(false);
   };
 
-  console.log(customer?.nrcImageBack);
-  
-
   return (
     <Box>
       <Breadcrumb />
 
-      <Card sx={{ marginTop: "20px", padding: "20px" }}>
+      <Card
+        sx={{ marginTop: "20px", padding: "20px" }}
+        className=" form-container"
+      >
+        <Loading loading={loading} />
+
         <h2>Customer Update</h2>
         <form onSubmit={handleSubmit(onSubmit)}>
           <Grid2 container spacing={2}>
@@ -131,7 +151,7 @@ const CustomerUpdate = () => {
             <Grid2 size={{ xs: 6, md: 3 }}>
               <FormControl variant="filled" fullWidth error={!!errors.Email}>
                 <InputLabel htmlFor="email">Email</InputLabel>
-                <FilledInput size="small" id="email" {...register("Email")} />
+                <FilledInput size="small" disabled={loading} id="email" {...register("Email")} />
                 <FormHelperText>{errors.Email?.message}</FormHelperText>
               </FormControl>
             </Grid2>
@@ -139,7 +159,7 @@ const CustomerUpdate = () => {
             <Grid2 size={{ xs: 6, md: 3 }}>
               <FormControl variant="filled" fullWidth error={!!errors.Phone}>
                 <InputLabel htmlFor="phone">Phone</InputLabel>
-                <FilledInput size="small" id="phone" {...register("Phone")} />
+                <FilledInput size="small" disabled={loading} id="phone" {...register("Phone")} />
                 <FormHelperText>{errors.Phone?.message}</FormHelperText>
               </FormControl>
             </Grid2>
@@ -154,6 +174,7 @@ const CustomerUpdate = () => {
                 <FilledInput
                   size="small"
                   id="MobilePrefix"
+                  disabled={loading}
                   {...register("MobilePrefix")}
                 />
                 <FormHelperText>{errors.MobilePrefix?.message}</FormHelperText>
@@ -166,12 +187,14 @@ const CustomerUpdate = () => {
                 <FilledInput
                   size="small"
                   id="password"
+                  disabled={loading}
                   type={showPassword ? "text" : "password"}
                   {...register("Password")}
                   endAdornment={
                     <InputAdornment position="end">
                       <IconButton
                         aria-label="toggle password visibility"
+                        disabled={loading}
                         onClick={handleClickShowPassword}
                         onMouseDown={handleMouseDownPassword}
                         edge="end"
@@ -214,7 +237,7 @@ const CustomerUpdate = () => {
             <Grid2 size={{ xs: 6, md: 3 }}>
               <FormControl variant="filled" fullWidth error={!!errors.Nrc}>
                 <InputLabel htmlFor="Nrc">Nrc</InputLabel>
-                <FilledInput size="small" id="Nrc" {...register("Nrc")} />
+                <FilledInput size="small" disabled={loading} id="Nrc" {...register("Nrc")} />
                 <FormHelperText>{errors.Nrc?.message}</FormHelperText>
               </FormControl>
             </Grid2>
@@ -246,6 +269,7 @@ const CustomerUpdate = () => {
                       // Correctly extracting the error message
                       field="NRC Front" // Label for the upload button
                       src={customer?.nrcImageFront}
+                      disabled={loading}
                     />
                   )}
                 />
@@ -277,6 +301,8 @@ const CustomerUpdate = () => {
                       }
                       // Correctly extracting the error message
                       field="NRC Back" // Label for the upload button
+                      src={customer?.nrcImageBack}
+                      disabled={loading}
                     />
                   )}
                 />
@@ -308,6 +334,8 @@ const CustomerUpdate = () => {
                       }
                       // Correctly extracting the error message
                       field="Profile" // Label for the upload button
+                      src={customer?.profile}
+                      disabled={loading}
                     />
                   )}
                 />
@@ -320,6 +348,7 @@ const CustomerUpdate = () => {
                 <FilledInput
                   size="small"
                   id="address"
+                  disabled={loading}
                   {...register("Address")}
                 />
                 <FormHelperText>{errors.Address?.message}</FormHelperText>
@@ -329,7 +358,7 @@ const CustomerUpdate = () => {
             <Grid2 size={{ xs: 6, md: 3 }}>
               <FormControl variant="filled" fullWidth error={!!errors.State}>
                 <InputLabel htmlFor="state">State</InputLabel>
-                <FilledInput size="small" id="state" {...register("State")} />
+                <FilledInput size="small" disabled={loading} id="state" {...register("State")} />
                 <FormHelperText>{errors.State?.message}</FormHelperText>
               </FormControl>
             </Grid2>
@@ -337,7 +366,7 @@ const CustomerUpdate = () => {
             <Grid2 size={{ xs: 6, md: 3 }}>
               <FormControl variant="filled" fullWidth error={!!errors.City}>
                 <InputLabel htmlFor="city">City</InputLabel>
-                <FilledInput size="small" id="city" {...register("City")} />
+                <FilledInput size="small" disabled={loading} id="city" {...register("City")} />
                 <FormHelperText>{errors.City?.message}</FormHelperText>
               </FormControl>
             </Grid2>
@@ -348,6 +377,7 @@ const CustomerUpdate = () => {
                 <FilledInput
                   size="small"
                   id="township"
+                  disabled={loading}
                   {...register("Township")}
                 />
                 <FormHelperText>{errors.Township?.message}</FormHelperText>
@@ -368,10 +398,10 @@ const CustomerUpdate = () => {
                       disabled={loading}
                       label="Gender"
                       {...field}
-                      value={field.value} // Convert field value to a string
+                      value={field.value || ''} // Convert field value to a string
                       onChange={(event) => field.onChange(event.target.value)} // Ensure onChange value is a string
                     >
-                      {generalLists?.map((general: any) => (
+                      {genderStatuslists?.map((general: any) => (
                         <MenuItem key={general.id} value={general.id}>
                           {general.value}
                         </MenuItem>
@@ -386,7 +416,7 @@ const CustomerUpdate = () => {
 
             <Grid2 size={{ xs: 6, md: 3 }}>
               <FormControl variant="filled" fullWidth error={!!errors.Status}>
-                <InputLabel htmlFor="KycStatus">Status</InputLabel>
+                <InputLabel htmlFor="Status">Status</InputLabel>
                 <Controller
                   name="Status"
                   control={control}
@@ -398,10 +428,10 @@ const CustomerUpdate = () => {
                       disabled={loading}
                       label="Status"
                       {...field}
-                      value={field.value} // Convert field value to a string
+                      value={field.value || ''} // Convert field value to a string
                       onChange={(event) => field.onChange(event.target.value)} // Ensure onChange value is a string
                     >
-                      {statusLists?.map((status: any) => (
+                      {generalStatusLists?.map((status: any) => (
                         <MenuItem key={status.id} value={status.id}>
                           {status.value}
                         </MenuItem>
@@ -420,7 +450,7 @@ const CustomerUpdate = () => {
                 fullWidth
                 error={!!errors.KycStatus}
               >
-                <InputLabel htmlFor="KycStatus">KYC Status</InputLabel>
+                <InputLabel htmlFor="KycStatus">Kyc Status</InputLabel>
                 <Controller
                   name="KycStatus"
                   control={control}
@@ -428,11 +458,11 @@ const CustomerUpdate = () => {
                     <Select
                       size="small"
                       id="KycStatus"
-                      aria-describedby="kyc_status_text"
+                      aria-describedby="KycStatus"
                       disabled={loading}
                       label="KycStatus"
                       {...field}
-                      value={field.value} // Convert field value to a string
+                      value={field.value || ''} // Convert field value to a string
                       onChange={(event) => field.onChange(event.target.value)} // Ensure onChange value is a string
                     >
                       {kycStatusLists?.map((status: any) => (
@@ -444,7 +474,7 @@ const CustomerUpdate = () => {
                   )}
                 />
 
-                <FormHelperText>{errors.KycStatus?.message}</FormHelperText>
+                <FormHelperText>{errors.Status?.message}</FormHelperText>
               </FormControl>
             </Grid2>
           </Grid2>
@@ -465,7 +495,7 @@ const CustomerUpdate = () => {
             >
               Cancel
             </Button>
-            <Button type="submit" variant="contained">
+            <Button type="submit" disabled={loading} variant="contained">
               Submit
             </Button>
           </Box>

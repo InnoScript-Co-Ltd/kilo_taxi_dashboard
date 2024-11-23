@@ -6,7 +6,6 @@ import {
   FormHelperText,
   Grid2,
   InputLabel,
-  Input,
   Select,
   MenuItem,
   FilledInput,
@@ -23,10 +22,13 @@ import { Breadcrumb } from "../../../components/Breadcrumb";
 import { useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { paths } from "../../../constants/paths";
-import FileUploadWithPreview from "../../../components/FileUploadWithPreview";
-import { generalLists, statusLists } from "../../../constants/config";
+import {
+  genderStatuslists,
+  generalStatusLists,
+} from "../../../constants/config";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
 import { DatePicker } from "@mui/x-date-pickers";
+import Loading from "../../../components/Loading";
 
 const AdminUpdate = () => {
   const [loading, setLoading] = useState(false);
@@ -57,6 +59,8 @@ const AdminUpdate = () => {
       Password: "",
       gender: 0,
       status: 0,
+      emailVerifiedAt: null,
+      phoneVerifiedAt: null
       // flagIcon: undefined,
       // zipCode: ""
     },
@@ -76,12 +80,18 @@ const AdminUpdate = () => {
   // Populate form values when country data is available
   useEffect(() => {
     if (admin) {
-      setValue("id", admin.id || 0)
+      setValue("id", admin.id || 0);
       setValue("Name", admin.name || "");
       setValue("Phone", admin.phone || "");
       setValue("Email", admin.email || "");
-      setValue("emailVerifiedAt", new Date(admin.emailVerifiedAt) || new Date());
-      setValue("phoneVerifiedAt", new Date(admin.phoneVerifiedAt) || new Date());
+      setValue(
+        "emailVerifiedAt",
+        new Date(admin.emailVerifiedAt) || new Date()
+      );
+      setValue(
+        "phoneVerifiedAt",
+        new Date(admin.phoneVerifiedAt) || new Date()
+      );
       setValue("Password", admin.password || "");
       setValue("address", admin.address || "");
       setValue("gender", Number(admin.gender) || 0);
@@ -91,33 +101,46 @@ const AdminUpdate = () => {
 
   // Submit form data
   const onSubmit = async (data: AdminFormInputs) => {
-    setLoading(true);
-    const response = await adminService.update(dispatch, params.id, data);
-    if (response.status === 200) {
-      navigate(`${paths.adminList}`);
+    try {
+      setLoading(true);
+      const response = await adminService.update(dispatch, params.id, data);
+      if (response.status === 200) {
+        setLoading(false);
+        navigate(`${paths.adminList}`);
+      }
+      setLoading(false);
+    } catch (error) {
+      console.error("Admin Update Error :", error);
     }
-    setLoading(false);
   };
-  
 
   return (
     <Box>
       <Breadcrumb />
-      <Card sx={{ marginTop: "20px", padding: "20px" }}>
+      <Card
+        sx={{ marginTop: "20px", padding: "20px" }}
+        className=" form-container"
+      >
+        <Loading loading={loading} />
         <h2>Admin Update</h2>
         <form onSubmit={handleSubmit(onSubmit)}>
           <Grid2 container spacing={2}>
             <Grid2 size={{ xs: 6, md: 3 }}>
               <FormControl variant="filled" fullWidth error={!!errors.Name}>
                 <InputLabel htmlFor="admin_name">Name</InputLabel>
-                <FilledInput size="small" id="admin_name" {...register("Name")} />
+                <FilledInput
+                  disabled={loading}
+                  size="small"
+                  id="admin_name"
+                  {...register("Name")}
+                />
                 <FormHelperText>{errors.Name?.message}</FormHelperText>
               </FormControl>
             </Grid2>
             <Grid2 size={{ xs: 6, md: 3 }}>
               <FormControl variant="filled" fullWidth error={!!errors.Email}>
                 <InputLabel htmlFor="email">Email</InputLabel>
-                <FilledInput size="small" id="email" {...register("Email")} />
+                <FilledInput size="small" disabled={loading} id="email" {...register("Email")} />
                 <FormHelperText>{errors.Email?.message}</FormHelperText>
               </FormControl>
             </Grid2>
@@ -125,7 +148,7 @@ const AdminUpdate = () => {
             <Grid2 size={{ xs: 6, md: 3 }}>
               <FormControl variant="filled" fullWidth error={!!errors.Phone}>
                 <InputLabel htmlFor="phone">Phone</InputLabel>
-                <FilledInput size="small" id="phone" {...register("Phone")} />
+                <FilledInput size="small" disabled={loading} id="phone" {...register("Phone")} />
                 <FormHelperText>{errors.Phone?.message}</FormHelperText>
               </FormControl>
             </Grid2>
@@ -134,6 +157,7 @@ const AdminUpdate = () => {
               <FormControl variant="filled" fullWidth error={!!errors.Password}>
                 <InputLabel htmlFor="password">Password</InputLabel>
                 <FilledInput
+                  disabled={loading}
                   size="small"
                   id="password"
                   type={showPassword ? "text" : "password"}
@@ -141,6 +165,7 @@ const AdminUpdate = () => {
                   endAdornment={
                     <InputAdornment position="end">
                       <IconButton
+                        disabled={loading}
                         aria-label="toggle password visibility"
                         onClick={handleClickShowPassword}
                         onMouseDown={handleMouseDownPassword}
@@ -158,7 +183,12 @@ const AdminUpdate = () => {
             <Grid2 size={{ xs: 6, md: 3 }}>
               <FormControl variant="filled" fullWidth error={!!errors.address}>
                 <InputLabel htmlFor="address">Address</InputLabel>
-                <FilledInput size="small" id="address" {...register("address")} />
+                <FilledInput
+                  disabled={loading}
+                  size="small"
+                  id="address"
+                  {...register("address")}
+                />
                 <FormHelperText>{errors.address?.message}</FormHelperText>
               </FormControl>
             </Grid2>
@@ -230,14 +260,11 @@ const AdminUpdate = () => {
                       disabled={loading}
                       label="Gender"
                       {...field}
-                      value={field.value} // Convert field value to a string
+                      value={field.value || ''} // Convert field value to a string
                       onChange={(event) => field.onChange(event.target.value)} // Ensure onChange value is a string
                     >
-                      {generalLists?.map((general: any) => (
-                        <MenuItem
-                          key={general.id}
-                          value={general.id}
-                        >
+                      {genderStatuslists?.map((general: any) => (
+                        <MenuItem key={general.id} value={general.id}>
                           {general.value}
                         </MenuItem>
                       ))}
@@ -263,10 +290,10 @@ const AdminUpdate = () => {
                       disabled={loading}
                       label="Status"
                       {...field}
-                      value={field.value} // Convert field value to a string
+                      value={field.value || ''} // Convert field value to a string
                       onChange={(event) => field.onChange(event.target.value)} // Ensure onChange value is a string
                     >
-                      {statusLists?.map((status: any) => (
+                      {generalStatusLists?.map((status: any) => (
                         <MenuItem key={status.id} value={status.id}>
                           {status.value}
                         </MenuItem>
@@ -296,7 +323,7 @@ const AdminUpdate = () => {
             >
               Cancel
             </Button>
-            <Button type="submit" variant="contained">
+            <Button type="submit" disabled={loading} variant="contained">
               Submit
             </Button>
           </Box>
