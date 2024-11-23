@@ -6,7 +6,7 @@ import { DashboardLayout } from "@toolpad/core/DashboardLayout";
 import type { Router } from "@toolpad/core";
 import { navigationList } from "../defaultPaths";
 import { Outlet, useNavigate } from "react-router";
-import { green, orange } from "@mui/material/colors";
+import { green, grey, indigo, orange, red, yellow } from "@mui/material/colors";
 import { IconButton } from "@mui/material";
 import NotificationsIcon from "@mui/icons-material/Notifications";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
@@ -27,8 +27,11 @@ const demoTheme = createTheme({
         primary: {
           main: orange[400],
         },
+        success: {
+          main: green[500]
+        },
         secondary: {
-          main: green[500],
+          main: grey[500],
         },
         background: {
           default: "#121212", // Dark background color
@@ -55,8 +58,20 @@ const demoTheme = createTheme({
     primary: {
       main: orange[400],
     },
+    success: {
+      main: green[500]
+    },
     secondary: {
-      main: green[500],
+      main: grey[500],
+    },
+    error: {
+      main: red[500]
+    },
+    info: {
+      main: indigo[500]
+    },
+    warning: {
+      main: yellow[500]
     },
   },
 });

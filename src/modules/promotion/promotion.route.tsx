@@ -33,7 +33,7 @@ export const PromotionRoute = [
     },
     {
         id: "promotion-detail",
-        path: paths.stateDetail, // Ensure this is defined in your paths constant
+        path: paths.promotionDetail, // Ensure this is defined in your paths constant
         element: <PromotionUpdate />,
         loader: () => {
             return {

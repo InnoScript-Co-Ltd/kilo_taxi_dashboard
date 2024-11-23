@@ -32,7 +32,8 @@ import {
   StyledTableRow,
 } from "../../../components/TableCommon";
 import TAvatar from "../../../components/TAvatar";
-import { useNotifications } from '@toolpad/core/useNotifications';
+import { useNotifications } from "@toolpad/core/useNotifications";
+import { formatDate } from "../../../helpers/common";
 
 const CustomerTableView = () => {
   const [page, setPage] = React.useState(0);
@@ -142,7 +143,7 @@ const CustomerTableView = () => {
         <Table stickyHeader aria-label="sticky table">
           <TableHead>
             <TableRow>
-              {columns.map((column) => (
+              {columns?.map((column) => (
                 <StyledTableCell
                   key={column.id}
                   style={{ minWidth: column.minWidth }}
@@ -175,7 +176,7 @@ const CustomerTableView = () => {
           </TableHead>
 
           <TableBody>
-            {data.customers.map((row: any) => {
+            {data?.customers?.map((row: any) => {
               return (
                 <StyledTableRow
                   hover
@@ -183,7 +184,7 @@ const CustomerTableView = () => {
                   tabIndex={-1}
                   key={row.id}
                 >
-                  {columns.map((column) => {
+                  {columns?.map((column) => {
                     const value = row[column.id];
                     return (
                       <StyledTableCell key={column.id} align={column.align}>
@@ -203,6 +204,11 @@ const CustomerTableView = () => {
                               return value; // Render the mobile prefix as-is
                             case "Email":
                               return <TAvatar src={value} />; // Render the flag icon as-is
+
+                            case "Email Verified":
+                              return formatDate(value);
+                            case "Phone Verified":
+                              return formatDate(value);
                             case "Action":
                               return (
                                 <UpAndDel

@@ -27,6 +27,7 @@ import { useNotifications } from "@toolpad/core/useNotifications";
 import { useState } from "react";
 import { generalLists, statusLists } from "../../../constants/config";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
+import { DatePicker } from "@mui/x-date-pickers";
 
 const AdminCreate = () => {
   const [loading, setLoading] = useState(false);
@@ -37,7 +38,9 @@ const AdminCreate = () => {
   const [showPassword, setShowPassword] = useState(false);
 
   const handleClickShowPassword = () => setShowPassword((show) => !show);
-  const handleMouseDownPassword = (event : React.MouseEvent<HTMLButtonElement>) => event.preventDefault();
+  const handleMouseDownPassword = (
+    event: React.MouseEvent<HTMLButtonElement>
+  ) => event.preventDefault();
 
   // Set up React Hook Form with Zod schema
   const {
@@ -50,21 +53,13 @@ const AdminCreate = () => {
   });
 
   const onSubmit = async (data: AdminFormInputs) => {
-    const formdata = formBuilder(data, adminSchema);
-    // Use forEach to log each key-value pair in the FormData
-    // for (const [key, value] of formdata.entries()) {
-    //   console.log(key, value);
-    // }
-
-    // return;
-
     const response = await adminService.store(
-      formdata,
+      data,
       dispatch,
       notifications
     );
     if (response.status === 201) {
-      navigate(paths.countryList);
+      navigate(paths.adminList);
     }
   };
 
@@ -77,16 +72,16 @@ const AdminCreate = () => {
         <form onSubmit={handleSubmit(onSubmit)}>
           <Grid2 container spacing={2}>
             <Grid2 size={{ xs: 6, md: 3 }}>
-              <FormControl variant="filled" fullWidth error={!!errors.Name}>
+              <FormControl variant="outlined" fullWidth error={!!errors.Name}>
                 <InputLabel htmlFor="admin_name">Name</InputLabel>
-                <Input id="admin_name" {...register("Name")} />
+                <FilledInput size="small" id="admin_name" {...register("Name")} />
                 <FormHelperText>{errors.Name?.message}</FormHelperText>
               </FormControl>
             </Grid2>
             <Grid2 size={{ xs: 6, md: 3 }}>
               <FormControl variant="filled" fullWidth error={!!errors.Email}>
                 <InputLabel htmlFor="email">Email</InputLabel>
-                <Input id="email" {...register("Email")} />
+                <FilledInput size="small" id="email" {...register("Email")} />
                 <FormHelperText>{errors.Email?.message}</FormHelperText>
               </FormControl>
             </Grid2>
@@ -94,7 +89,7 @@ const AdminCreate = () => {
             <Grid2 size={{ xs: 6, md: 3 }}>
               <FormControl variant="filled" fullWidth error={!!errors.Phone}>
                 <InputLabel htmlFor="phone">Phone</InputLabel>
-                <Input id="phone" {...register("Phone")} />
+                <FilledInput size="small" id="phone" {...register("Phone")} />
                 <FormHelperText>{errors.Phone?.message}</FormHelperText>
               </FormControl>
             </Grid2>
@@ -103,6 +98,7 @@ const AdminCreate = () => {
               <FormControl variant="filled" fullWidth error={!!errors.Password}>
                 <InputLabel htmlFor="password">Password</InputLabel>
                 <FilledInput
+                  size="small"
                   id="password"
                   type={showPassword ? "text" : "password"}
                   {...register("Password")}
@@ -124,6 +120,62 @@ const AdminCreate = () => {
             </Grid2>
 
             <Grid2 size={{ xs: 6, md: 3 }}>
+              <FormControl variant="filled" fullWidth error={!!errors.address}>
+                <InputLabel htmlFor="address">Address</InputLabel>
+                <FilledInput size="small" id="address" {...register("address")} />
+                <FormHelperText>{errors.address?.message}</FormHelperText>
+              </FormControl>
+            </Grid2>
+
+            <Grid2 size={{ xs: 6, md: 3 }}>
+              <FormControl fullWidth error={!!errors.emailVerifiedAt}>
+                <Controller
+                  name="emailVerifiedAt"
+                  control={control}
+                  render={({ field }) => (
+                    <DatePicker
+                      label="Email verified at"
+                      value={field.value}
+                      onChange={(date) => field.onChange(date)}
+                      disabled={loading}
+                      slotProps={{
+                        textField: {
+                          error: !!errors.emailVerifiedAt,
+                          helperText: errors.emailVerifiedAt?.message,
+                        },
+                      }}
+                    />
+                  )}
+                />
+                <FormHelperText>{errors.emailVerifiedAt?.message}</FormHelperText>
+              </FormControl>
+            </Grid2>
+
+            <Grid2 size={{ xs: 6, md: 3 }}>
+              <FormControl fullWidth error={!!errors.phoneVerifiedAt}>
+                <Controller
+                  name="phoneVerifiedAt"
+                  control={control}
+                  render={({ field }) => (
+                    <DatePicker
+                      label="Phone verified at"
+                      value={field.value}
+                      onChange={(date) => field.onChange(date)}
+                      disabled={loading}
+                      slotProps={{
+                        textField: {
+                          error: !!errors.phoneVerifiedAt,
+                          helperText: errors.phoneVerifiedAt?.message,
+                        },
+                      }}
+                    />
+                  )}
+                />
+                <FormHelperText>{errors.phoneVerifiedAt?.message}</FormHelperText>
+              </FormControl>
+            </Grid2>
+
+            <Grid2 size={{ xs: 6, md: 3 }}>
               <FormControl variant="filled" fullWidth error={!!errors.gender}>
                 <InputLabel htmlFor="gender">Gender</InputLabel>
                 <Controller
@@ -137,11 +189,11 @@ const AdminCreate = () => {
                       disabled={loading}
                       label="Gender"
                       {...field}
-                      value={String(field.value)} // Convert field value to a string
+                      value={field.value} // Convert field value to a string
                       onChange={(event) => field.onChange(event.target.value)} // Ensure onChange value is a string
                     >
                       {generalLists?.map((general: any) => (
-                        <MenuItem key={general.id} value={String(general.id)}>
+                        <MenuItem key={general.id} value={general.id}>
                           {general.value}
                         </MenuItem>
                       ))}
@@ -167,11 +219,11 @@ const AdminCreate = () => {
                       disabled={loading}
                       label="Status"
                       {...field}
-                      value={String(field.value)} // Convert field value to a string
+                      value={field.value} // Convert field value to a string
                       onChange={(event) => field.onChange(event.target.value)} // Ensure onChange value is a string
                     >
                       {statusLists?.map((status: any) => (
-                        <MenuItem key={status.id} value={String(status.id)}>
+                        <MenuItem key={status.id} value={status.id}>
                           {status.value}
                         </MenuItem>
                       ))}
