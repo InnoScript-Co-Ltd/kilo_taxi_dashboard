@@ -89,3 +89,20 @@ export const kycStatusLists = [
     { id: 2, value: "PENDING" },
     { id: 3, value: "DISABLED" },
   ];
+
+  export const driverStatusLists = [
+    { id: 1, value: "ACTIVE" },
+    { id: 2, value: "PENDING" },
+    { id: 3, value: "DEACTIVATE" },
+    { id: 4, value: "SUSPENDED" },
+  ];
+
+  export const vehicleStatusLists = [
+    { id: 1, value: "ACTIVE" },
+    { id: 2, value: "SUSPENDED" },
+  ];
+
+  export const walletStatusLists = [
+    { id: 1, value: "ACTIVE" },
+    { id: 2, value: "DISABLED" },
+  ];

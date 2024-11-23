@@ -2,6 +2,7 @@ import {
     Box,
     Button,
     Card,
+    FilledInput,
     FormControl,
     FormHelperText,
     Grid2,
@@ -26,11 +27,12 @@ import { getRequest } from "../../../helpers/api";
 import { endpoints } from "../../../constants/endpoints";
 import { Controller, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { vehicleStatusLists } from "../../../constants/config";
+import FileUploadWithPreview from "../../../components/FileUploadWithPreview";
 
 const VehicleUpdate = () => {
     const [loading, setLoading] = useState(false);
     const [driversList, setDriversList] = useState<Array<any>>([]);
-    const [vehicleTypes, setVehicleTypes] = useState<Array<string>>(["Sedan", "SUV", "Truck", "Van"]);
   
     const params: any = useParams();
     const navigate = useNavigate();
@@ -47,12 +49,11 @@ const VehicleUpdate = () => {
     } = useForm<VehicleFormInputs>({
         resolver: zodResolver(vehicleSchema),
         defaultValues: {
-            driverId: "",
-            vehicleNo: "",
-            vehicleType: "",
-            model: "",
-            fuelType: "",
-            status: "",
+            VehicleNo: "",
+            VehicleType: "",
+            Model: "",
+            FuelType: "",
+            Status: "",
         },
     });
 
@@ -76,17 +77,15 @@ const VehicleUpdate = () => {
         try {
             await vehicleService.show(dispatch, params.id); // Fetch vehicle data to populate the form
             const driverResponse: any = await getRequest(endpoints.driver, null);
-            const vehicleTypeResponse: any = await getRequest(endpoints.vehicle, null); // Example endpoint for vehicle types
+            
 
             await httpServiceHandler(dispatch, driverResponse);
-            await httpServiceHandler(dispatch, vehicleTypeResponse);
+            
 
             if (driverResponse && "data" in driverResponse && driverResponse.status === 200) {
                 setDriversList(driverResponse.data.drivers);
             }
-            if (vehicleTypeResponse && "data" in vehicleTypeResponse && vehicleTypeResponse.status === 200) {
-                setVehicleTypes(vehicleTypeResponse.data.vehicleTypes);
-            }
+    
         } catch (error) {
             await httpErrorHandler(error);
         }
@@ -99,12 +98,15 @@ const VehicleUpdate = () => {
 
     useEffect(() => {
         if (vehicle) {
-            setValue("driverId", vehicle.driverId || "");
-            setValue("vehicleNo", vehicle.vehicleNo || "");
-            setValue("vehicleType", vehicle.vehicleType || "");
-            setValue("model", vehicle.model || "");
-            setValue("fuelType", vehicle.fuelType || "");
-            setValue("status", vehicle.status || "");
+            setValue("DriverId", vehicle.driverId || 0);
+            setValue("VehicleNo", vehicle.vehicleNo || "");
+            setValue("VehicleType", vehicle.vehicleType || "");
+            setValue("Model", vehicle.model || "");
+            setValue("FuelType", vehicle.fuelType || "");
+            setValue("Status", vehicle.status || "");
+            setValue("file_BusinessLicenseImage", vehicle.file_BusinessLicenseImage || "");
+            setValue("file_VehicleLicenseFront", vehicle.file_VehicleLicenseFront || "");
+            setValue("file_VehicleLicenseBack", vehicle.file_VehicleLicenseBack || "");
         }
     }, [vehicle, setValue]);
 
@@ -116,15 +118,53 @@ const VehicleUpdate = () => {
 
                 <form onSubmit={handleSubmit(submitVehicleUpdate)}>
                     <Grid2 container spacing={2}>
+                        
+
+                        {/* Vehicle Number */}
+                        <Grid2 size={{ xs: 6, md: 3 }}>
+                            <FormControl variant="filled" fullWidth error={!!errors.VehicleNo}>
+                                <InputLabel htmlFor="vehicle_no">Vehicle Number</InputLabel>
+                                <FilledInput size="small" id="vehicle_no" {...register("VehicleNo")} />
+                                <FormHelperText>{errors.VehicleNo?.message}</FormHelperText>
+                            </FormControl>
+                        </Grid2>
+
+                        {/* Vehicle Type */}
+                        <Grid2 size={{ xs: 6, md: 3 }}>
+                            <FormControl variant="filled" fullWidth error={!!errors.VehicleType}>
+                                <InputLabel htmlFor="vehicle_type">Vehicle Type</InputLabel>
+                                <FilledInput size="small" id="vehicle_type" {...register("VehicleType")} />
+                                <FormHelperText>{errors.VehicleType?.message}</FormHelperText>
+                            </FormControl>
+                        </Grid2>
+
+                        {/* Model */}
+                        <Grid2 size={{ xs: 6, md: 3 }}>
+                            <FormControl variant="filled" fullWidth error={!!errors.Model}>
+                                <InputLabel htmlFor="Model">Model</InputLabel>
+                                <FilledInput size="small" id="Model" {...register("Model")} />
+                                <FormHelperText>{errors.Model?.message}</FormHelperText>
+                            </FormControl>
+                        </Grid2>
+
+                         {/* Fuel Type */}
+                         <Grid2 size={{ xs: 6, md: 3 }}>
+                            <FormControl variant="filled" fullWidth error={!!errors.FuelType}>
+                                <InputLabel htmlFor="FuelType">Fuel Type</InputLabel>
+                                <FilledInput size="small" id="FuelType" {...register("FuelType")} />
+                                <FormHelperText>{errors.FuelType?.message}</FormHelperText>
+                            </FormControl>
+                        </Grid2>
+
                         {/* Driver Select */}
                         <Grid2 size={{ xs: 6, md: 3 }}>
-                            <FormControl variant="filled" fullWidth error={!!errors.driverId}>
+                            <FormControl variant="filled" fullWidth error={!!errors.DriverId}>
                                 <InputLabel htmlFor="driver_id">Driver</InputLabel>
                                 <Controller
-                                    name="driverId"
+                                    name="DriverId"
                                     control={control}
                                     render={({ field }) => (
-                                        <Select
+                                        <Select size="small"
                                             id="driver_id"
                                             label="Driver"
                                             {...field}
@@ -140,73 +180,129 @@ const VehicleUpdate = () => {
                                         </Select>
                                     )}
                                 />
-                                <FormHelperText>{errors.driverId?.message}</FormHelperText>
+                                <FormHelperText>{errors.DriverId?.message}</FormHelperText>
                             </FormControl>
-                        </Grid2>
+                        </Grid2>                      
 
-                        {/* Vehicle Number */}
-                        <Grid2 size={{ xs: 6, md: 3 }}>
-                            <FormControl variant="filled" fullWidth error={!!errors.vehicleNo}>
-                                <InputLabel htmlFor="vehicle_no">Vehicle Number</InputLabel>
-                                <Input id="vehicle_no" {...register("vehicleNo")} />
-                                <FormHelperText>{errors.vehicleNo?.message}</FormHelperText>
-                            </FormControl>
-                        </Grid2>
+                        
 
-                        {/* Vehicle Type */}
+                        {/* Status */}
+                        {/* Status Select */}
                         <Grid2 size={{ xs: 6, md: 3 }}>
-                            <FormControl variant="filled" fullWidth error={!!errors.vehicleType}>
-                                <InputLabel htmlFor="vehicle_type">Vehicle Type</InputLabel>
+                            <FormControl variant="filled" fullWidth error={!!errors.Status}>
+                                <InputLabel htmlFor="status">Status</InputLabel>
                                 <Controller
-                                    name="vehicleType"
+                                    name="Status"
                                     control={control}
                                     render={({ field }) => (
-                                        <Select
-                                            id="vehicle_type"
-                                            label="Vehicle Type"
+                                        <Select size="small"
+                                            id="status"
+                                            label="Driver"
                                             {...field}
                                             value={field.value || ""}
                                             onChange={field.onChange}
                                             disabled={loading}
                                         >
-                                            {vehicleTypes?.map((type) => (
-                                                <MenuItem key={type} value={type}>
-                                                    {type}
+                                            {vehicleStatusLists?.map((Status: any) => (
+                                                <MenuItem key={Status.id} value={String(Status.id)}>
+                                                    {Status.value}
                                                 </MenuItem>
                                             ))}
                                         </Select>
                                     )}
                                 />
-                                <FormHelperText>{errors.vehicleType?.message}</FormHelperText>
+                                <FormHelperText>{errors.Status?.message}</FormHelperText>
                             </FormControl>
-                        </Grid2>
+                        </Grid2> 
 
-                        {/* Model */}
-                        <Grid2 size={{ xs: 6, md: 3 }}>
-                            <FormControl variant="filled" fullWidth error={!!errors.model}>
-                                <InputLabel htmlFor="model">Model</InputLabel>
-                                <Input id="model" {...register("model")} />
-                                <FormHelperText>{errors.model?.message}</FormHelperText>
-                            </FormControl>
-                        </Grid2>
 
-                        {/* Fuel Type */}
-                        <Grid2 size={{ xs: 6, md: 3 }}>
-                            <FormControl variant="filled" fullWidth error={!!errors.fuelType}>
-                                <InputLabel htmlFor="fuel_type">Fuel Type</InputLabel>
-                                <Input id="fuel_type" {...register("fuelType")} />
-                                <FormHelperText>{errors.fuelType?.message}</FormHelperText>
-                            </FormControl>
-                        </Grid2>
+                        <Grid2 size={{ xs: 3, md: 3, xl: 3 }}>
+              <FormControl variant="filled" fullWidth error={!!errors.file_BusinessLicenseImage}>
+                <Controller
+                  name="file_BusinessLicenseImage"
+                  control={control}
+                  defaultValue={undefined} // Set initial state to null
+                  rules={{ required: "Business License Image front is required" }} // Only use required here
+                  render={({ field: { onChange, value } }) => (
+                    <FileUploadWithPreview
+                      onFileChange={(file) => {
+                        console.log("Selected file:", file); // Debugging log
+                        onChange(file); // Update the field with the selected file
+                      }}
+                      error={
+                        errors.file_BusinessLicenseImage
+                          ? typeof errors.file_BusinessLicenseImage.message === "string"
+                            ? errors.file_BusinessLicenseImage.message
+                            : undefined
+                          : undefined
+                      }
+                      // Correctly extracting the error message
+                      field="Business License Image" // Label for the upload button
+                    />
+                  )}
+                />
+              </FormControl>
+            </Grid2>
 
-                        {/* Status */}
-                        <Grid2 size={{ xs: 6, md: 3 }}>
-                            <FormControl variant="filled" fullWidth error={!!errors.status}>
-                                <InputLabel htmlFor="status">Status</InputLabel>
-                                <Input id="status" {...register("status")} />
-                                <FormHelperText>{errors.status?.message}</FormHelperText>
-                            </FormControl>
-                        </Grid2>
+
+            <Grid2 size={{ xs: 3, md: 3, xl: 3 }}>
+              <FormControl variant="filled" fullWidth error={!!errors.file_VehicleLicenseFront}>
+                <Controller
+                  name="file_VehicleLicenseFront"
+                  control={control}
+                  defaultValue={undefined} // Set initial state to null
+                  rules={{ required: "Vehicle License Image front is required" }} // Only use required here
+                  render={({ field: { onChange, value } }) => (
+                    <FileUploadWithPreview
+                      onFileChange={(file) => {
+                        console.log("Selected file:", file); // Debugging log
+                        onChange(file); // Update the field with the selected file
+                      }}
+                      error={
+                        errors.file_VehicleLicenseFront
+                          ? typeof errors.file_VehicleLicenseFront.message === "string"
+                            ? errors.file_VehicleLicenseFront.message
+                            : undefined
+                          : undefined
+                      }
+                      // Correctly extracting the error message
+                      field="Vehicle License Image Front" // Label for the upload button
+                    />
+                  )}
+                />
+              </FormControl>
+            </Grid2>
+
+            <Grid2 size={{ xs: 3, md: 3, xl: 3 }}>
+              <FormControl variant="filled" fullWidth error={!!errors.file_VehicleLicenseBack}>
+                <Controller
+                  name="file_VehicleLicenseBack"
+                  control={control}
+                  defaultValue={undefined} // Set initial state to null
+                  rules={{ required: "Vehicle License Image Back is required" }} // Only use required here
+                  render={({ field: { onChange, value } }) => (
+                    <FileUploadWithPreview
+                      onFileChange={(file) => {
+                        console.log("Selected file:", file); // Debugging log
+                        onChange(file); // Update the field with the selected file
+                      }}
+                      error={
+                        errors.file_VehicleLicenseBack
+                          ? typeof errors.file_VehicleLicenseBack.message === "string"
+                            ? errors.file_VehicleLicenseBack.message
+                            : undefined
+                          : undefined
+                      }
+                      // Correctly extracting the error message
+                      field="Vehicle License Image Back" // Label for the upload button
+                    />
+                  )}
+                />
+              </FormControl>
+            </Grid2>
+
+
+
                     </Grid2>
 
                     {/* Footer */}
