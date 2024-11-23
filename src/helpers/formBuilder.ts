@@ -24,7 +24,7 @@ export const formBuilder = <T extends ZodSchema<any>>(
     } else if (value instanceof Date) {
       formData.append(key, value.toISOString()); // Convert Date to ISO string
     } else if (value != null) {
-      formData.append(key, String(value)); // Append other types as string
+      formData.append(key, value); // Append other types as string
     }
   }
 

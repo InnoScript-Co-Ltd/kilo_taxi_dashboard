@@ -22,9 +22,12 @@ export const customerSchema = z.object({
   Gender: z.number(),
   Status: z.number(),
   KycStatus: z.number(),
-  file_NrcImageFront: z.instanceof(File).nullable(),
-  file_NrcImageBack: z.instanceof(File).nullable(),
-  file_Profile: z.instanceof(File).nullable(),
+  // file_NrcImageFront: z.instanceof(File).nullable(),
+  // file_NrcImageBack: z.instanceof(File).nullable(),
+  // file_Profile: z.instanceof(File).nullable(),
+  file_NrcImageFront: z.any().nullable(),
+  file_NrcImageBack: z.any().nullable(),
+  file_Profile: z.any().nullable()
 });
 
 export type CustomerFormInputs = z.infer<typeof customerSchema>;

@@ -34,7 +34,7 @@ export const customerService = {
         return response;
     },
 
-    update: async (dispatch: Dispatch, id: number, payload: CustomerFormInputs, notifications? : any) => {
+    update: async (dispatch: Dispatch, id: number, payload: any, notifications? : any) => {
         const response: any = await putRequest(`${endpoints.customer}/${id}`, payload);
         await httpServiceHandler(dispatch, response);
 
