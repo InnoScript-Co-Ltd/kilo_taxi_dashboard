@@ -31,6 +31,7 @@ import {
 import { Visibility, VisibilityOff } from "@mui/icons-material";
 import { DatePicker } from "@mui/x-date-pickers";
 import Loading from "../../../components/Loading";
+import { formBuilder } from "../../../helpers/formBuilder";
 
 const CustomerUpdate = () => {
   const [loading, setLoading] = useState(false);
@@ -94,6 +95,7 @@ const CustomerUpdate = () => {
   // Populate form values when country data is available
   useEffect(() => {
     if (customer) {
+      setValue("id", Number(customer.id) || 0)
       setValue("Name", customer.name || "");
       setValue("Phone", customer.phone || "");
       setValue("Nrc", customer.nrc || "");
@@ -117,9 +119,10 @@ const CustomerUpdate = () => {
   // Submit form data
   const onSubmit = async (data: CustomerFormInputs) => {
     setLoading(true);
-    const response = await customerService.update(dispatch, params.id, data);
-    if (response.data) {
-      navigate(`${paths.adminList}`);
+    const formData = formBuilder(data, customerSchema)
+    const response = await customerService.update(dispatch, params.id, formData);
+    if (response.status === 200) {
+      navigate(`${paths.customerList}`);
     }
     setLoading(false);
   };
