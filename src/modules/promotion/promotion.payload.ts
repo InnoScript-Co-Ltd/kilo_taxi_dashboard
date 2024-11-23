@@ -2,12 +2,13 @@ import { paginateOptions } from "../../constants/config";
 import { z } from "zod";
 
 export const promotionSchema = z.object({
-  CustomerId : z.string(),
+  id: z.number().min(0, { message: "id" }).default(0),
+  CustomerId: z.number().nullable(),
   PromoCode: z.string(),
   ExpiredAt: z.date(),
   FixAmount: z.string(),
   Percentage: z.string(),
-  Status: z.string()
+  Status: z.number().nullable()
 });
 
 export type PromotionFormInputs = z.infer<typeof promotionSchema>;
@@ -17,13 +18,13 @@ export type PromotionFormInputs = z.infer<typeof promotionSchema>;
  */
 export interface PROMOTION {
   id: string;
-  countryId?: string;
-  countryName: string;
-  promo_code: string;
-  expired_at: null | Date;
-  fix_amount: string;
+  customerId?: number;
+  customerName: string;
+  promoCode: string;
+  expiredAt: null | Date;
+  fixAmount: string;
   percentage: string;
-  status: string;
+  status: number;
   action?: null
 }
 
@@ -55,11 +56,12 @@ export interface PROMOTION_PAYLOAD {
 
 // Define columns structure for the state table
 export const promotionColumns: readonly Column[] = [
-  { id: "promo_code", label: "Promo Code", minWidth: 170 , numeric: false, disablePadding: false, sort: true },
-  { id: "expired_at", label: "Expired At", minWidth: 150, numeric: false, disablePadding: false, sort: true },
-  { id: "fix_amount", label: "Fix Amount", minWidth: 150, numeric: false, disablePadding: false, sort: true },
-  { id: "countryName", label: "Country Name", minWidth: 150, numeric: false, disablePadding: false, sort: false },
+  { id: "promoCode", label: "Promo Code", minWidth: 170 , numeric: false, disablePadding: false, sort: true },
+  { id: "expiredAt", label: "Expired At", minWidth: 150, numeric: false, disablePadding: false, sort: true },
+  { id: "fixAmount", label: "Fix Amount", minWidth: 150, numeric: false, disablePadding: false, sort: true },
+  { id: "customerName", label: "Customer Name", minWidth: 150, numeric: false, disablePadding: false, sort: false },
   { id: "percentage", label: "Percantage", minWidth: 50, numeric: false, disablePadding: false, sort: false },
+  { id: "status", label: "Status", minWidth: 50, numeric: false, disablePadding: false, sort: false },
   { id: "action", label: "Action", minWidth: 50, maxWidth: 50, numeric: false, disablePadding: false }
 ];
 
@@ -68,7 +70,7 @@ export const promotionPayload: PROMOTION_PAYLOAD = {
   pagingParams: {
     PageSize: paginateOptions.rows,
     CurrentPage: 1,
-    SortField: "promo_code",
+    SortField: "promoCode",
     SortDir: 0,
     SearchTerm: ""
   }

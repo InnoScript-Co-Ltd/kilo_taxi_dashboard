@@ -7,12 +7,12 @@ import TableHead from "@mui/material/TableHead";
 import TablePagination from "@mui/material/TablePagination";
 import TableRow from "@mui/material/TableRow";
 import {
-  promotionColumns,
-  promotionPayload,
-} from "../promotion.payload"; 
+  walletColumns,
+  walletPayload,
+} from "../wallet.payload"; // Replace with your wallet columns and payload
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, AppRootState } from "../../../stores";
-import { promotionService } from "../promotion.service";
+import { walletService } from "../wallet.service";
 import { paginateOptions } from "../../../constants/config";
 import { NavigateId } from "../../../shares/NavigateId";
 import { paths } from "../../../constants/paths";
@@ -23,23 +23,23 @@ import {
   InputAdornment,
   TableSortLabel,
 } from "@mui/material";
-import { setPaginate } from "../promotion.slice"; 
+import { setPaginate } from "../wallet.slice"; // Adjust the slice if needed
 import SearchIcon from "@mui/icons-material/Search";
 import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
 import RestartAltIcon from "@mui/icons-material/RestartAlt";
 import { useNavigate } from "react-router";
 import UpAndDel from "../../../components/UpAndDel";
 import { StyledTableCell, StyledTableRow } from "../../../components/TableCommon";
-import { useNotifications } from "@toolpad/core";
-import { formatDate } from "../../../helpers/common";
+import { useNotifications } from '@toolpad/core/useNotifications';
 
-const PromotionTableView = () => {
+const WalletTableView = () => {
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
   const dispatch = useDispatch<AppDispatch>();
   const { data, pagingParams } = useSelector(
-    (state: AppRootState) => state.promotion 
+    (state: AppRootState) => state.wallet
   );
+
   const notifications = useNotifications();
   const navigate = useNavigate();
   const [loading, setLoading] = React.useState(false);
@@ -58,26 +58,27 @@ const PromotionTableView = () => {
   const handleChangeRowsPerPage = (
     event: React.ChangeEvent<HTMLInputElement>
   ) => {
+    setRowsPerPage(+event.target.value);
+    setPage(0);
     dispatch(
       setPaginate({
         ...pagingParams,
+        RowsPerPage: +event.target.value,
         CurrentPage: 1,
-        PageSize: event.target.value,
       })
     );
-    setRowsPerPage(+event.target.value);
-    setPage(0);
   };
 
   const loadingData = React.useCallback(async () => {
     setLoading(true);
-    await promotionService.index(dispatch, pagingParams, notifications);
+    await walletService.index(dispatch, pagingParams,notifications);
     setLoading(false);
   }, [dispatch, pagingParams]);
 
   React.useEffect(() => {
     loadingData();
-  }, [pagingParams]);
+  }, [loadingData]);
+
   return (
     <Paper sx={{ width: "100%", overflow: "hidden" }}>
       <Box
@@ -91,7 +92,7 @@ const PromotionTableView = () => {
       >
         <Input
           id="input-with-icon-search"
-          placeholder="Search State"
+          placeholder="Search Wallet"
           value={pagingParams.SearchTerm}
           onChange={(e) => {
             dispatch(
@@ -118,14 +119,14 @@ const PromotionTableView = () => {
         >
           <Button
             startIcon={<AddCircleOutlineIcon />}
-            onClick={() => navigate(paths.promotionCreate)}
+            onClick={() => navigate(paths.walletCreate)} // Adjust path for wallet create page
           >
             Create
           </Button>
 
           <Button
             onClick={() => {
-              dispatch(setPaginate(promotionPayload.pagingParams));
+              dispatch(setPaginate(walletPayload.pagingParams)); // Adjust the reset payload
               setPage(0);
               setRowsPerPage(10);
             }}
@@ -141,7 +142,7 @@ const PromotionTableView = () => {
         <Table stickyHeader aria-label="sticky table">
           <TableHead>
             <TableRow>
-              {promotionColumns.map((column) => (
+              {walletColumns.map((column) => (
                 <StyledTableCell
                   key={column.id}
                   style={{ minWidth: column.minWidth }}
@@ -172,34 +173,34 @@ const PromotionTableView = () => {
             </TableRow>
           </TableHead>
           <TableBody>
-            {data.promotions?.map((row: any) => (
+            {data.wallets?.map((row: any) => (
               <StyledTableRow
                 hover
                 role="checkbox"
                 tabIndex={-1}
                 key={row.id}
               >
-                {promotionColumns.map((column) => {
+                {walletColumns.map((column) => {
                   const value = row[column.id];
                   return (
                     <StyledTableCell key={column.id} align={column.align}>
                       {(() => {
                         switch (column.label) {
-                          case "Customer Name":
+                          case "Wallet Name":
                             return (
                               <NavigateId
-                                url={`${paths.promotion}/${row.id}`} 
+                                url={`${paths.wallet}/${row.id}`} // Adjust the path for wallet detail
                                 value={value}
                               />
                             );
-                          case "Promo Code":
+                          case "Create Date":
                             return value;
-                          case "ExpiredAt":
-                            return formatDate(value); 
+                          case "Update Date":
+                            return value;                          
                           case "Action":
                             return (
                               <UpAndDel
-                                url={`${paths.promotion}/${row.id}`} 
+                                url={`${paths.wallet}/${row.id}`} // Adjust for wallet delete
                                 fn={loadingData}
                               />
                             );
@@ -229,4 +230,4 @@ const PromotionTableView = () => {
   );
 };
 
-export default PromotionTableView;
+export default WalletTableView;

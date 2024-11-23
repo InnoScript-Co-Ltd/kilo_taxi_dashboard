@@ -6,13 +6,10 @@ import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TablePagination from "@mui/material/TablePagination";
 import TableRow from "@mui/material/TableRow";
-import {
-  promotionColumns,
-  promotionPayload,
-} from "../promotion.payload"; 
+import { driverColumns, driverPayload } from "../driver.payload"; // Your driver columns and payload
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, AppRootState } from "../../../stores";
-import { promotionService } from "../promotion.service";
+import { driverService } from "../driver.service"; // Assuming you have a driver service
 import { paginateOptions } from "../../../constants/config";
 import { NavigateId } from "../../../shares/NavigateId";
 import { paths } from "../../../constants/paths";
@@ -23,30 +20,28 @@ import {
   InputAdornment,
   TableSortLabel,
 } from "@mui/material";
-import { setPaginate } from "../promotion.slice"; 
+import { setPaginate } from "../driver.slice"; // Your driver slice
 import SearchIcon from "@mui/icons-material/Search";
 import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
 import RestartAltIcon from "@mui/icons-material/RestartAlt";
 import { useNavigate } from "react-router";
-import UpAndDel from "../../../components/UpAndDel";
 import { StyledTableCell, StyledTableRow } from "../../../components/TableCommon";
-import { useNotifications } from "@toolpad/core";
-import { formatDate } from "../../../helpers/common";
+import { useNotifications } from '@toolpad/core/useNotifications';
 
-const PromotionTableView = () => {
+const DriverTableView = () => {
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
   const dispatch = useDispatch<AppDispatch>();
   const { data, pagingParams } = useSelector(
-    (state: AppRootState) => state.promotion 
+    (state: AppRootState) => state.driver // Adjust to your driver slice state
   );
+
   const notifications = useNotifications();
   const navigate = useNavigate();
   const [loading, setLoading] = React.useState(false);
 
   const handleChangePage = (event: unknown, newPage: number) => {
     setPage(newPage);
-
     dispatch(
       setPaginate({
         ...pagingParams,
@@ -58,26 +53,27 @@ const PromotionTableView = () => {
   const handleChangeRowsPerPage = (
     event: React.ChangeEvent<HTMLInputElement>
   ) => {
+    setRowsPerPage(+event.target.value);
+    setPage(0);
     dispatch(
       setPaginate({
         ...pagingParams,
+        RowsPerPage: +event.target.value,
         CurrentPage: 1,
-        PageSize: event.target.value,
       })
     );
-    setRowsPerPage(+event.target.value);
-    setPage(0);
   };
 
   const loadingData = React.useCallback(async () => {
     setLoading(true);
-    await promotionService.index(dispatch, pagingParams, notifications);
+    await driverService.index(dispatch, pagingParams,notifications);
     setLoading(false);
   }, [dispatch, pagingParams]);
 
   React.useEffect(() => {
     loadingData();
-  }, [pagingParams]);
+  }, [loadingData]);
+
   return (
     <Paper sx={{ width: "100%", overflow: "hidden" }}>
       <Box
@@ -91,7 +87,7 @@ const PromotionTableView = () => {
       >
         <Input
           id="input-with-icon-search"
-          placeholder="Search State"
+          placeholder="Search Driver"
           value={pagingParams.SearchTerm}
           onChange={(e) => {
             dispatch(
@@ -116,16 +112,10 @@ const PromotionTableView = () => {
             gap: 3,
           }}
         >
-          <Button
-            startIcon={<AddCircleOutlineIcon />}
-            onClick={() => navigate(paths.promotionCreate)}
-          >
-            Create
-          </Button>
 
           <Button
             onClick={() => {
-              dispatch(setPaginate(promotionPayload.pagingParams));
+              dispatch(setPaginate(driverPayload.pagingParams)); // Reset the paginate
               setPage(0);
               setRowsPerPage(10);
             }}
@@ -141,18 +131,18 @@ const PromotionTableView = () => {
         <Table stickyHeader aria-label="sticky table">
           <TableHead>
             <TableRow>
-              {promotionColumns.map((column) => (
+              {driverColumns.map((column) => (
                 <StyledTableCell
                   key={column.id}
                   style={{ minWidth: column.minWidth }}
                   align={column.numeric ? "right" : "left"}
                   padding={column.disablePadding ? "none" : "normal"}
-                  sortDirection={column.sort === true && pagingParams.SortDir === column.id ? pagingParams.SortField : false}
+                  sortDirection={column.sort && pagingParams.SortDir === column.id ? pagingParams.SortField : false}
                 >
                   <TableSortLabel
-                    hideSortIcon={column.sort === false ? true : false}
-                    active={column.sort === true ? pagingParams.SortDir === column.id : false}
-                    direction={column.sort === true && pagingParams.SortDir === 0 ? "asc" : "desc"}
+                    hideSortIcon={!column.sort}
+                    active={column.sort && pagingParams.SortDir === column.id}
+                    direction={pagingParams.SortDir === 0 ? "asc" : "desc"}
                     onClick={() => {
                       if(column.sort) {
                         dispatch(
@@ -172,39 +162,36 @@ const PromotionTableView = () => {
             </TableRow>
           </TableHead>
           <TableBody>
-            {data.promotions?.map((row: any) => (
+          {data.drivers?.map((row: any) => (
+          
+
               <StyledTableRow
                 hover
                 role="checkbox"
                 tabIndex={-1}
                 key={row.id}
               >
-                {promotionColumns.map((column) => {
+                {driverColumns.map((column) => {
                   const value = row[column.id];
                   return (
                     <StyledTableCell key={column.id} align={column.align}>
                       {(() => {
                         switch (column.label) {
-                          case "Customer Name":
+                          case "Driver Name":                            
                             return (
                               <NavigateId
-                                url={`${paths.promotion}/${row.id}`} 
+                                url={`${paths.driver}/${row.id}`} // Driver detail path
                                 value={value}
                               />
                             );
-                          case "Promo Code":
+                          case "Audit Column":
                             return value;
-                          case "ExpiredAt":
-                            return formatDate(value); 
-                          case "Action":
-                            return (
-                              <UpAndDel
-                                url={`${paths.promotion}/${row.id}`} 
-                                fn={loadingData}
-                              />
-                            );
+                          case "License":
+                            return value;
+                          case "Driver ID":
+                            return value; // Optionally link to a driver detail page
                           default:
-                            return value; // Fallback case
+                            return value; // Fallback for other columns
                         }
                       })()}
                     </StyledTableCell>
@@ -229,4 +216,4 @@ const PromotionTableView = () => {
   );
 };
 
-export default PromotionTableView;
+export default DriverTableView;

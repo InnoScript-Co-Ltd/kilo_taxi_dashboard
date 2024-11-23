@@ -179,5 +179,9 @@ export const httpServiceHandler = async (
     await dispatch(updateError(result.error));
   }
 
+  if (result.status === 204) {
+    return null
+  }
+
   return;
 };

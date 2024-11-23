@@ -7,12 +7,12 @@ import TableHead from "@mui/material/TableHead";
 import TablePagination from "@mui/material/TablePagination";
 import TableRow from "@mui/material/TableRow";
 import {
-  promotionColumns,
-  promotionPayload,
-} from "../promotion.payload"; 
+  vehicleColumns, // Replace with your actual vehicle columns
+  vehiclePayload, // Replace with your default vehicle payload for pagination
+} from "../vehicle.payload";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, AppRootState } from "../../../stores";
-import { promotionService } from "../promotion.service";
+import { vehicleService } from "../vehicle.service"; // Service to handle API requests
 import { paginateOptions } from "../../../constants/config";
 import { NavigateId } from "../../../shares/NavigateId";
 import { paths } from "../../../constants/paths";
@@ -23,23 +23,23 @@ import {
   InputAdornment,
   TableSortLabel,
 } from "@mui/material";
-import { setPaginate } from "../promotion.slice"; 
+import { setPaginate } from "../vehicle.slice"; // Adjust for your vehicle slice
 import SearchIcon from "@mui/icons-material/Search";
 import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
 import RestartAltIcon from "@mui/icons-material/RestartAlt";
 import { useNavigate } from "react-router";
 import UpAndDel from "../../../components/UpAndDel";
 import { StyledTableCell, StyledTableRow } from "../../../components/TableCommon";
-import { useNotifications } from "@toolpad/core";
-import { formatDate } from "../../../helpers/common";
+import { useNotifications } from '@toolpad/core/useNotifications';
 
-const PromotionTableView = () => {
+const VehicleTableView = () => {
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
   const dispatch = useDispatch<AppDispatch>();
   const { data, pagingParams } = useSelector(
-    (state: AppRootState) => state.promotion 
+    (state: AppRootState) => state.vehicle // Replace with your vehicle state slice
   );
+
   const notifications = useNotifications();
   const navigate = useNavigate();
   const [loading, setLoading] = React.useState(false);
@@ -58,26 +58,27 @@ const PromotionTableView = () => {
   const handleChangeRowsPerPage = (
     event: React.ChangeEvent<HTMLInputElement>
   ) => {
+    setRowsPerPage(+event.target.value);
+    setPage(0);
     dispatch(
       setPaginate({
         ...pagingParams,
+        RowsPerPage: +event.target.value,
         CurrentPage: 1,
-        PageSize: event.target.value,
       })
     );
-    setRowsPerPage(+event.target.value);
-    setPage(0);
   };
 
   const loadingData = React.useCallback(async () => {
     setLoading(true);
-    await promotionService.index(dispatch, pagingParams, notifications);
+    await vehicleService.index(dispatch, pagingParams,notifications);
     setLoading(false);
   }, [dispatch, pagingParams]);
 
   React.useEffect(() => {
     loadingData();
-  }, [pagingParams]);
+  }, [loadingData]);
+
   return (
     <Paper sx={{ width: "100%", overflow: "hidden" }}>
       <Box
@@ -91,7 +92,7 @@ const PromotionTableView = () => {
       >
         <Input
           id="input-with-icon-search"
-          placeholder="Search State"
+          placeholder="Search Vehicle"
           value={pagingParams.SearchTerm}
           onChange={(e) => {
             dispatch(
@@ -116,16 +117,10 @@ const PromotionTableView = () => {
             gap: 3,
           }}
         >
-          <Button
-            startIcon={<AddCircleOutlineIcon />}
-            onClick={() => navigate(paths.promotionCreate)}
-          >
-            Create
-          </Button>
 
           <Button
             onClick={() => {
-              dispatch(setPaginate(promotionPayload.pagingParams));
+              dispatch(setPaginate(vehiclePayload.pagingParams)); // Reset to default paging params
               setPage(0);
               setRowsPerPage(10);
             }}
@@ -141,20 +136,32 @@ const PromotionTableView = () => {
         <Table stickyHeader aria-label="sticky table">
           <TableHead>
             <TableRow>
-              {promotionColumns.map((column) => (
+              {vehicleColumns.map((column) => (
                 <StyledTableCell
                   key={column.id}
                   style={{ minWidth: column.minWidth }}
                   align={column.numeric ? "right" : "left"}
                   padding={column.disablePadding ? "none" : "normal"}
-                  sortDirection={column.sort === true && pagingParams.SortDir === column.id ? pagingParams.SortField : false}
+                  sortDirection={
+                    column.sort === true && pagingParams.SortDir === column.id
+                      ? pagingParams.SortField
+                      : false
+                  }
                 >
                   <TableSortLabel
-                    hideSortIcon={column.sort === false ? true : false}
-                    active={column.sort === true ? pagingParams.SortDir === column.id : false}
-                    direction={column.sort === true && pagingParams.SortDir === 0 ? "asc" : "desc"}
+                    hideSortIcon={column.sort === false}
+                    active={
+                      column.sort === true
+                        ? pagingParams.SortDir === column.id
+                        : false
+                    }
+                    direction={
+                      column.sort === true && pagingParams.SortDir === 0
+                        ? "asc"
+                        : "desc"
+                    }
                     onClick={() => {
-                      if(column.sort) {
+                      if (column.sort) {
                         dispatch(
                           setPaginate({
                             ...pagingParams,
@@ -172,39 +179,35 @@ const PromotionTableView = () => {
             </TableRow>
           </TableHead>
           <TableBody>
-            {data.promotions?.map((row: any) => (
-              <StyledTableRow
-                hover
-                role="checkbox"
-                tabIndex={-1}
-                key={row.id}
-              >
-                {promotionColumns.map((column) => {
+            {data.vehicles?.map((row: any) => (
+              <StyledTableRow hover role="checkbox" tabIndex={-1} key={row.id}>
+                {vehicleColumns.map((column) => {
                   const value = row[column.id];
                   return (
                     <StyledTableCell key={column.id} align={column.align}>
                       {(() => {
                         switch (column.label) {
-                          case "Customer Name":
+                          case "Vehicle Name":
                             return (
                               <NavigateId
-                                url={`${paths.promotion}/${row.id}`} 
+                                url={`${paths.vehicle}/${row.id}`} // Path to vehicle details
                                 value={value}
                               />
                             );
-                          case "Promo Code":
+                          case "Audit Column":
+                          case "License Plate":
+                          case "Driver":
+                          case "Status":
                             return value;
-                          case "ExpiredAt":
-                            return formatDate(value); 
                           case "Action":
                             return (
                               <UpAndDel
-                                url={`${paths.promotion}/${row.id}`} 
+                                url={`${paths.vehicle}/${row.id}`} // Path for vehicle deletion
                                 fn={loadingData}
                               />
                             );
                           default:
-                            return value; // Fallback case
+                            return value;
                         }
                       })()}
                     </StyledTableCell>
@@ -229,4 +232,4 @@ const PromotionTableView = () => {
   );
 };
 
-export default PromotionTableView;
+export default VehicleTableView;
