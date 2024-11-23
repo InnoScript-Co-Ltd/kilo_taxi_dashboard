@@ -7,7 +7,6 @@ import {
   FormControl,
   FormHelperText,
   Grid2,
-  Input,
   InputLabel,
   MenuItem,
   Select,
@@ -23,13 +22,10 @@ import { Breadcrumb } from "../../../components/Breadcrumb";
 import { paths } from "../../../constants/paths";
 import { getRequest } from "../../../helpers/api";
 import { endpoints } from "../../../constants/endpoints";
-import { COUNTRY } from "../../country/country.payload";
 import { useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { CUSTOMER } from "../../customer/customer.payload";
 import { DatePicker } from "@mui/x-date-pickers";
-import { statusLists } from "../../../constants/config";
-import { formBuilder } from "../../../helpers/formBuilder";
+import { generalStatusLists } from "../../../constants/config";
 
 const PromotionCreate = () => {
   const [loading, setLoading] = useState(false);
@@ -72,11 +68,11 @@ const PromotionCreate = () => {
     }
 
     setLoading(false);
-  }, []);
+  }, [dispatch]);
 
   React.useEffect(() => {
     loadingData();
-  }, []);
+  }, [loadingData]);
 
   return (
     <Box>
@@ -180,10 +176,10 @@ const PromotionCreate = () => {
                       disabled={loading}
                       label="Status"
                       {...field}
-                      value={field.value} // Convert field value to a string
+                      value={field.value || ''} // Convert field value to a string
                       onChange={(event) => field.onChange(event.target.value)} // Ensure onChange value is a string
                     >
-                      {statusLists?.map((status: any) => (
+                      {generalStatusLists?.map((status: any) => (
                         <MenuItem key={status.id} value={status.id}>
                           {status.value}
                         </MenuItem>

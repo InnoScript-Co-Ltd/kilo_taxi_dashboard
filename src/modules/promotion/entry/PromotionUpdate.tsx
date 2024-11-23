@@ -6,16 +6,13 @@ import {
   FormControl,
   FormHelperText,
   Grid2,
-  Input,
   InputLabel,
   MenuItem,
   Select,
-  SelectChangeEvent,
 } from "@mui/material";
 import { useCallback, useEffect, useState } from "react";
 import {
   PromotionFormInputs,
-  promotionPayload,
   promotionSchema,
 } from "../promotion.payload"; // Similar to cityPayload but for states
 import { useNavigate, useParams } from "react-router";
@@ -27,11 +24,10 @@ import { paths } from "../../../constants/paths";
 import { Breadcrumb } from "../../../components/Breadcrumb";
 import { getRequest } from "../../../helpers/api";
 import { endpoints } from "../../../constants/endpoints";
-import { COUNTRY } from "../../country/country.payload";
 import { Controller, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { DatePicker } from "@mui/x-date-pickers";
-import { statusLists } from "../../../constants/config";
+import { generalStatusLists} from "../../../constants/config";
 
 const PromotionUpdate = () => {
   const [loading, setLoading] = useState(false);
@@ -90,11 +86,11 @@ const PromotionUpdate = () => {
     }
 
     setLoading(false);
-  }, []);
+  }, [dispatch]);
 
   useEffect(() => {
     loadingData();
-  }, []);
+  }, [loadingData]);
 
   useEffect(() => {
     if (promotion) {
@@ -109,7 +105,7 @@ const PromotionUpdate = () => {
       setValue("Percentage", String(promotion.percentage) || "");
       setValue("Status", promotion.status || 0);
     }
-  }, [promotion]);
+  }, [promotion, setValue]);
 
     // Load data into form fields on component mount
     const loadingDataDetail = useCallback(async () => {
@@ -249,10 +245,10 @@ const PromotionUpdate = () => {
                       disabled={loading}
                       label="Status"
                       {...field}
-                      value={field.value} // Convert field value to a string
+                      value={field.value || ''} // Convert field value to a string
                       onChange={(event) => field.onChange(event.target.value)} // Ensure onChange value is a string
                     >
-                      {statusLists?.map((status: any) => (
+                      {generalStatusLists?.map((status: any) => (
                         <MenuItem key={status.id} value={status.id}>
                           {status.value}
                         </MenuItem>

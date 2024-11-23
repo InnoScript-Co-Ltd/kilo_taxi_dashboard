@@ -7,12 +7,10 @@ import {
   FormHelperText,
   Grid2,
   IconButton,
-  Input,
   InputAdornment,
   InputLabel,
   MenuItem,
   Select,
-  TextField,
 } from "@mui/material";
 import { useNavigate } from "react-router";
 import { useDispatch } from "react-redux";
@@ -25,15 +23,16 @@ import { Controller, useForm } from "react-hook-form";
 import { CustomerFormInputs, customerSchema } from "../customer.payload";
 import { formBuilder } from "../../../helpers/formBuilder";
 import { useNotifications } from "@toolpad/core/useNotifications";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import {
-  generalLists,
+  genderStatuslists,
   kycStatusLists,
-  statusLists,
+  generalStatusLists,
 } from "../../../constants/config";
 import { DatePicker } from "@mui/x-date-pickers";
 import FileUploadWithPreview from "../../../components/FileUploadWithPreview";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
+import Loading from "../../../components/Loading";
 
 const CustomerCreate = () => {
   const [loading, setLoading] = useState(false);
@@ -54,7 +53,6 @@ const CustomerCreate = () => {
     handleSubmit,
     control,
     formState: { errors },
-    setValue
   } = useForm<CustomerFormInputs>({
     resolver: zodResolver(customerSchema),
   });
@@ -77,12 +75,16 @@ const CustomerCreate = () => {
     }
   };
 
-
   return (
     <Box>
       <Breadcrumb />
 
-      <Card sx={{ marginTop: "20px", padding: "20px" }}>
+      <Card
+        sx={{ marginTop: "20px", padding: "20px" }}
+        className=" form-container"
+      >
+        <Loading loading={loading} />
+
         <h2>Customer Create</h2>
         <form onSubmit={handleSubmit(onSubmit)}>
           <Grid2 container spacing={2}>
@@ -92,6 +94,7 @@ const CustomerCreate = () => {
                 <FilledInput
                   size="small"
                   id="admin_name"
+                  disabled={loading}
                   {...register("Name")}
                 />
                 <FormHelperText>{errors.Name?.message}</FormHelperText>
@@ -100,7 +103,12 @@ const CustomerCreate = () => {
             <Grid2 size={{ xs: 6, md: 3 }}>
               <FormControl variant="filled" fullWidth error={!!errors.Email}>
                 <InputLabel htmlFor="email">Email</InputLabel>
-                <FilledInput size="small" id="email" {...register("Email")} />
+                <FilledInput
+                  size="small"
+                  disabled={loading}
+                  id="email"
+                  {...register("Email")}
+                />
                 <FormHelperText>{errors.Email?.message}</FormHelperText>
               </FormControl>
             </Grid2>
@@ -108,7 +116,12 @@ const CustomerCreate = () => {
             <Grid2 size={{ xs: 6, md: 3 }}>
               <FormControl variant="filled" fullWidth error={!!errors.Phone}>
                 <InputLabel htmlFor="phone">Phone</InputLabel>
-                <FilledInput size="small" id="phone" {...register("Phone")} />
+                <FilledInput
+                  size="small"
+                  disabled={loading}
+                  id="phone"
+                  {...register("Phone")}
+                />
                 <FormHelperText>{errors.Phone?.message}</FormHelperText>
               </FormControl>
             </Grid2>
@@ -123,6 +136,7 @@ const CustomerCreate = () => {
                 <FilledInput
                   size="small"
                   id="MobilePrefix"
+                  disabled={loading}
                   {...register("MobilePrefix")}
                 />
                 <FormHelperText>{errors.MobilePrefix?.message}</FormHelperText>
@@ -135,11 +149,13 @@ const CustomerCreate = () => {
                 <FilledInput
                   size="small"
                   id="password"
+                  disabled={loading}
                   type={showPassword ? "text" : "password"}
                   {...register("Password")}
                   endAdornment={
                     <InputAdornment position="end">
                       <IconButton
+                        disabled={loading}
                         aria-label="toggle password visibility"
                         onClick={handleClickShowPassword}
                         onMouseDown={handleMouseDownPassword}
@@ -162,30 +178,33 @@ const CustomerCreate = () => {
                   render={({ field }) => {
                     return (
                       <DatePicker
-                      label="Dob"
-                      value={field.value}
-                      onChange={(date) => field.onChange(date)}
-                      disabled={loading} 
-                      slotProps={{
-                        textField: {
-                          error: !!errors.Dob,
-                          helperText: errors.Dob?.message,
-                        },
-                      }}
-                    />
-                    )
+                        label="Dob"
+                        value={field.value}
+                        onChange={(date) => field.onChange(date)}
+                        disabled={loading}
+                        slotProps={{
+                          textField: {
+                            error: !!errors.Dob,
+                            helperText: errors.Dob?.message,
+                          },
+                        }}
+                      />
+                    );
                   }}
                 />
-                <FormHelperText>
-                  {errors.Dob?.message}
-                </FormHelperText>
+                <FormHelperText>{errors.Dob?.message}</FormHelperText>
               </FormControl>
             </Grid2>
 
             <Grid2 size={{ xs: 6, md: 3 }}>
               <FormControl variant="filled" fullWidth error={!!errors.Nrc}>
                 <InputLabel htmlFor="Nrc">Nrc</InputLabel>
-                <FilledInput size="small" id="Nrc" {...register("Nrc")} />
+                <FilledInput
+                  size="small"
+                  disabled={loading}
+                  id="Nrc"
+                  {...register("Nrc")}
+                />
                 <FormHelperText>{errors.Nrc?.message}</FormHelperText>
               </FormControl>
             </Grid2>
@@ -216,6 +235,7 @@ const CustomerCreate = () => {
                       }
                       // Correctly extracting the error message
                       field="NRC Front" // Label for the upload button
+                      disabled={loading}
                     />
                   )}
                 />
@@ -247,6 +267,7 @@ const CustomerCreate = () => {
                       }
                       // Correctly extracting the error message
                       field="NRC Back" // Label for the upload button
+                      disabled={loading}
                     />
                   )}
                 />
@@ -278,6 +299,7 @@ const CustomerCreate = () => {
                       }
                       // Correctly extracting the error message
                       field="Profile" // Label for the upload button
+                      disabled={loading}
                     />
                   )}
                 />
@@ -290,6 +312,7 @@ const CustomerCreate = () => {
                 <FilledInput
                   size="small"
                   id="address"
+                  disabled={loading}
                   {...register("Address")}
                 />
                 <FormHelperText>{errors.Address?.message}</FormHelperText>
@@ -299,7 +322,12 @@ const CustomerCreate = () => {
             <Grid2 size={{ xs: 6, md: 3 }}>
               <FormControl variant="filled" fullWidth error={!!errors.State}>
                 <InputLabel htmlFor="state">State</InputLabel>
-                <FilledInput size="small" id="state" {...register("State")} />
+                <FilledInput
+                  size="small"
+                  disabled={loading}
+                  id="state"
+                  {...register("State")}
+                />
                 <FormHelperText>{errors.State?.message}</FormHelperText>
               </FormControl>
             </Grid2>
@@ -307,7 +335,12 @@ const CustomerCreate = () => {
             <Grid2 size={{ xs: 6, md: 3 }}>
               <FormControl variant="filled" fullWidth error={!!errors.City}>
                 <InputLabel htmlFor="city">City</InputLabel>
-                <FilledInput size="small" id="city" {...register("City")} />
+                <FilledInput
+                  size="small"
+                  disabled={loading}
+                  id="city"
+                  {...register("City")}
+                />
                 <FormHelperText>{errors.City?.message}</FormHelperText>
               </FormControl>
             </Grid2>
@@ -318,6 +351,7 @@ const CustomerCreate = () => {
                 <FilledInput
                   size="small"
                   id="township"
+                  disabled={loading}
                   {...register("Township")}
                 />
                 <FormHelperText>{errors.Township?.message}</FormHelperText>
@@ -338,10 +372,10 @@ const CustomerCreate = () => {
                       disabled={loading}
                       label="Gender"
                       {...field}
-                      value={field.value} // Convert field value to a string
+                      value={field.value || ''} // Convert field value to a string
                       onChange={(event) => field.onChange(event.target.value)} // Ensure onChange value is a string
                     >
-                      {generalLists?.map((general: any) => (
+                      {genderStatuslists?.map((general: any) => (
                         <MenuItem key={general.id} value={general.id}>
                           {general.value}
                         </MenuItem>
@@ -368,10 +402,10 @@ const CustomerCreate = () => {
                       disabled={loading}
                       label="Status"
                       {...field}
-                      value={field.value} // Convert field value to a string
+                      value={field.value || ''} // Convert field value to a string
                       onChange={(event) => field.onChange(event.target.value)} // Ensure onChange value is a string
                     >
-                      {statusLists?.map((status: any) => (
+                      {generalStatusLists?.map((status: any) => (
                         <MenuItem key={status.id} value={status.id}>
                           {status.value}
                         </MenuItem>
@@ -402,7 +436,7 @@ const CustomerCreate = () => {
                       disabled={loading}
                       label="KycStatus"
                       {...field}
-                      value={field.value} // Convert field value to a string
+                      value={field.value || ''} // Convert field value to a string
                       onChange={(event) => field.onChange(event.target.value)} // Ensure onChange value is a string
                     >
                       {kycStatusLists?.map((status: any) => (
@@ -435,7 +469,7 @@ const CustomerCreate = () => {
             >
               Cancel
             </Button>
-            <Button type="submit" variant="contained">
+            <Button type="submit" disabled={loading} variant="contained">
               Submit
             </Button>
           </Box>
