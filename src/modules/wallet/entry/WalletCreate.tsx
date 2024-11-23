@@ -3,9 +3,11 @@ import {
   Box,
   Button,
   Card,
+  FilledInput,
   FormControl,
   FormHelperText,
   Grid,
+  Grid2,
   Input,
   InputLabel,
   MenuItem,
@@ -24,6 +26,7 @@ import { getRequest } from "../../../helpers/api";
 import { endpoints } from "../../../constants/endpoints";
 import { useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { DatePicker } from "@mui/x-date-pickers";
 
 const WalletCreate = () => {
   const [loading, setLoading] = useState(false);
@@ -31,8 +34,6 @@ const WalletCreate = () => {
   const [customers, setCustomers] = useState<Array<any>>([]);
   const [drivers, setDrivers] = useState<Array<any>>([]);
 
-  // Status dropdown options
-  const statusOptions = ["Active", "Inactive"];
 
   const navigate = useNavigate();
   const dispatch = useDispatch<AppDispatch>();
@@ -103,140 +104,66 @@ const WalletCreate = () => {
       <Card sx={{ marginTop: "20px", padding: "20px" }}>
         <h2>Wallet Create</h2>
         <form onSubmit={handleSubmit(submitWalletCreate)}>
-          <Grid container spacing={2}>
-            <Grid item xs={6} md={3}>
-              <FormControl variant="filled" fullWidth error={!!errors.userName}>
-                <InputLabel htmlFor="user_name">User Name</InputLabel>
-                <Input id="user_name" {...register("userName")} />
-                <FormHelperText>{errors.userName?.message}</FormHelperText>
+          <Grid2 container spacing={2}>
+          <Grid2 size={{ xs: 6, md: 3 }}>
+              <FormControl variant="filled" fullWidth error={!!errors.walletName}>
+                <InputLabel htmlFor="wallet_name">Wallet Name</InputLabel>
+                <FilledInput size="small" id="wallet_name" {...register("walletName")} />
+                <FormHelperText>{errors.walletName?.message}</FormHelperText>
               </FormControl>
-            </Grid>
+            </Grid2>
 
-            <Grid item xs={6} md={3}>
-              <FormControl variant="filled" fullWidth error={!!errors.phoneNo}>
-                <InputLabel htmlFor="phone_no">Phone Number</InputLabel>
-                <Input id="phone_no" {...register("phoneNo")} />
-                <FormHelperText>{errors.phoneNo?.message}</FormHelperText>
-              </FormControl>
-            </Grid>
 
-            <Grid item xs={6} md={3}>
-              <FormControl variant="filled" fullWidth error={!!errors.email}>
-                <InputLabel htmlFor="email">Email</InputLabel>
-                <Input id="email" {...register("email")} />
-                <FormHelperText>{errors.email?.message}</FormHelperText>
-              </FormControl>
-            </Grid>
 
-            <Grid item xs={6} md={3}>
-              <FormControl variant="filled" fullWidth error={!!errors.balance}>
-                <InputLabel htmlFor="balance">Balance</InputLabel>
-                <Input id="balance" {...register("balance")} />
-                <FormHelperText>{errors.balance?.message}</FormHelperText>
-              </FormControl>
-            </Grid>
-
-            {/* Status Field */}
-            <Grid item xs={6} md={3}>
-              <FormControl variant="filled" fullWidth error={!!errors.status}>
-                <InputLabel htmlFor="status">Status</InputLabel>
+            <Grid2 size={{ xs: 6, md: 3 }}>
+              <FormControl fullWidth error={!!errors.createDate}>
                 <Controller
-                  name="status"
+                  name="createDate"
                   control={control}
                   render={({ field }) => (
-                    <Select
-                      id="status"
-                      {...field}
-                      label="Status"
+                    <DatePicker
+                      label="Expired At"
+                      value={field.value}
+                      onChange={(date) => field.onChange(date)}
                       disabled={loading}
-                    >
-                      {statusOptions.map((status) => (
-                        <MenuItem key={status} value={status}>
-                          {status}
-                        </MenuItem>
-                      ))}
-                    </Select>
+                      slotProps={{
+                        textField: {
+                          error: !!errors.createDate,
+                          helperText: errors.createDate?.message,
+                        },
+                      }}
+                    />
                   )}
                 />
-                <FormHelperText>{errors.status?.message}</FormHelperText>
+                <FormHelperText>{errors.createDate?.message}</FormHelperText>
               </FormControl>
-            </Grid>
+            </Grid2>
 
-            <Grid item xs={6} md={3}>
-              <FormControl variant="filled" fullWidth error={!!errors.walletType}>
-                <InputLabel htmlFor="wallet_type">Wallet Type</InputLabel>
+
+            <Grid2 size={{ xs: 6, md: 3 }}>
+              <FormControl fullWidth error={!!errors.updateDate}>
                 <Controller
-                  name="walletType"
+                  name="updateDate"
                   control={control}
                   render={({ field }) => (
-                    <Select
-                      id="wallet_type"
-                      {...field}
-                      label="Wallet Type"
+                    <DatePicker
+                      label="Expired At"
+                      value={field.value}
+                      onChange={(date) => field.onChange(date)}
                       disabled={loading}
-                    >
-                      {walletTypes.map((type) => (
-                        <MenuItem key={type} value={type}>
-                          {type}
-                        </MenuItem>
-                      ))}
-                    </Select>
+                      slotProps={{
+                        textField: {
+                          error: !!errors.updateDate,
+                          helperText: errors.updateDate?.message,
+                        },
+                      }}
+                    />
                   )}
                 />
-                <FormHelperText>{errors.walletType?.message}</FormHelperText>
+                <FormHelperText>{errors.updateDate?.message}</FormHelperText>
               </FormControl>
-            </Grid>
-
-            <Grid item xs={6} md={3}>
-              <FormControl variant="filled" fullWidth error={!!errors.customerId}>
-                <InputLabel htmlFor="customer_id">Customer</InputLabel>
-                <Controller
-                  name="customerId"
-                  control={control}
-                  render={({ field }) => (
-                    <Select
-                      id="customer_id"
-                      {...field}
-                      label="Customer"
-                      disabled={loading}
-                    >
-                      {customers.map((customer) => (
-                        <MenuItem key={customer.id} value={customer.id}>
-                          {customer.name}
-                        </MenuItem>
-                      ))}
-                    </Select>
-                  )}
-                />
-                <FormHelperText>{errors.customerId?.message}</FormHelperText>
-              </FormControl>
-            </Grid>
-
-            <Grid item xs={6} md={3}>
-              <FormControl variant="filled" fullWidth error={!!errors.driverId}>
-                <InputLabel htmlFor="driver_id">Driver</InputLabel>
-                <Controller
-                  name="driverId"
-                  control={control}
-                  render={({ field }) => (
-                    <Select
-                      id="driver_id"
-                      {...field}
-                      label="Driver"
-                      disabled={loading}
-                    >
-                      {drivers.map((driver) => (
-                        <MenuItem key={driver.id} value={driver.id}>
-                          {driver.name}
-                        </MenuItem>
-                      ))}
-                    </Select>
-                  )}
-                />
-                <FormHelperText>{errors.driverId?.message}</FormHelperText>
-              </FormControl>
-            </Grid>
-          </Grid>
+            </Grid2>
+          </Grid2>
 
           {/* Footer with Cancel and Submit buttons */}
           <Box
