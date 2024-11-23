@@ -13,7 +13,7 @@ import {
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, AppRootState } from "../../../stores";
 import { vehicleService } from "../vehicle.service"; // Service to handle API requests
-import { paginateOptions } from "../../../constants/config";
+import { generalStatusLists, paginateOptions } from "../../../constants/config";
 import { NavigateId } from "../../../shares/NavigateId";
 import { paths } from "../../../constants/paths";
 import {
@@ -25,12 +25,11 @@ import {
 } from "@mui/material";
 import { setPaginate } from "../vehicle.slice"; // Adjust for your vehicle slice
 import SearchIcon from "@mui/icons-material/Search";
-import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
 import RestartAltIcon from "@mui/icons-material/RestartAlt";
-import { useNavigate } from "react-router";
 import UpAndDel from "../../../components/UpAndDel";
 import { StyledTableCell, StyledTableRow } from "../../../components/TableCommon";
 import { useNotifications } from '@toolpad/core/useNotifications';
+import Status from "../../../components/Status";
 
 const VehicleTableView = () => {
   const [page, setPage] = React.useState(0);
@@ -41,7 +40,6 @@ const VehicleTableView = () => {
   );
 
   const notifications = useNotifications();
-  const navigate = useNavigate();
   const [loading, setLoading] = React.useState(false);
 
   const handleChangePage = (event: unknown, newPage: number) => {
@@ -73,7 +71,7 @@ const VehicleTableView = () => {
     setLoading(true);
     await vehicleService.index(dispatch, pagingParams,notifications);
     setLoading(false);
-  }, [dispatch, pagingParams]);
+  }, [dispatch, pagingParams, notifications]);
 
   React.useEffect(() => {
     loadingData();
@@ -198,7 +196,7 @@ const VehicleTableView = () => {
                           case "License Plate":
                           case "Driver":
                           case "Status":
-                            return value;
+                            return <Status status={value} lists={generalStatusLists} />;
                           case "Action":
                             return (
                               <UpAndDel

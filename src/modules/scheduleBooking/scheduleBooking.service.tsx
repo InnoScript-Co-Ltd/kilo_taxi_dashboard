@@ -8,7 +8,7 @@ import { index, show, update } from "./scheduleBooking.slice"
 export const scheduleBookingService = {
     // Method to create a new state
     store: async (payload: ScheduleBookingFormInputs, dispatch: Dispatch, notifications? : any) => {
-        const response: any = await postRequest(endpoints.promotion, payload);
+        const response: any = await postRequest(endpoints.scheduleBooking, payload);
         await httpServiceHandler(dispatch, response);
 
         if (response.status === 200) {
@@ -21,7 +21,7 @@ export const scheduleBookingService = {
     },
 
     index: async (dispatch: Dispatch, params: any, notifications? : any) => {
-        const response: any = await getRequest(endpoints.promotion, params);
+        const response: any = await getRequest(endpoints.scheduleBooking, params);
         await httpServiceHandler(dispatch, response);
         if(response.status === 200) { 
             //'info' | 'success' | 'warning' | 'error'
@@ -36,7 +36,7 @@ export const scheduleBookingService = {
 
     // Method to update an existing state by ID
     update: async (dispatch: Dispatch, id: number, payload: ScheduleBookingFormInputs, notifications? : any) => {
-        const response: any = await putRequest(`${endpoints.promotion}/${id}`, payload);
+        const response: any = await putRequest(`${endpoints.scheduleBooking}/${id}`, payload);
         await httpServiceHandler(dispatch, response);
 
         if (response.status === 200) {
@@ -51,7 +51,7 @@ export const scheduleBookingService = {
 
     // Method to fetch details of a specific state by ID
     show: async (dispatch: Dispatch, id: number) => {
-        const response: any = await getRequest(`${endpoints.promotion}/${id}`, null);
+        const response: any = await getRequest(`${endpoints.scheduleBooking}/${id}`, null);
         await httpServiceHandler(dispatch, response);
 
         if (response.status === 200) {

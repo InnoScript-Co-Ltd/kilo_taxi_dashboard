@@ -6,12 +6,8 @@ import {
   FilledInput,
   FormControl,
   FormHelperText,
-  Grid,
   Grid2,
-  Input,
   InputLabel,
-  MenuItem,
-  Select,
 } from "@mui/material";
 import { useState } from "react";
 import { WalletFormInputs, walletSchema } from "../wallet.payload"; // Import wallet schema
@@ -19,22 +15,14 @@ import { useNavigate } from "react-router";
 import { useDispatch } from "react-redux";
 import { AppDispatch } from "../../../stores";
 import { walletService } from "../wallet.service"; // Import wallet service
-import { httpErrorHandler, httpServiceHandler } from "../../../helpers/handler";
 import { Breadcrumb } from "../../../components/Breadcrumb";
 import { paths } from "../../../constants/paths";
-import { getRequest } from "../../../helpers/api";
-import { endpoints } from "../../../constants/endpoints";
 import { useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { DatePicker } from "@mui/x-date-pickers";
 
 const WalletCreate = () => {
   const [loading, setLoading] = useState(false);
-  const [walletTypes, setWalletTypes] = useState<Array<string>>([]);
-  const [customers, setCustomers] = useState<Array<any>>([]);
-  const [drivers, setDrivers] = useState<Array<any>>([]);
-
-
   const navigate = useNavigate();
   const dispatch = useDispatch<AppDispatch>();
 
@@ -56,47 +44,6 @@ const WalletCreate = () => {
     }
     setLoading(false);
   };
-
-  const loadingData = React.useCallback(async () => {
-    setLoading(true);
-    try {
-      const response: any = await getRequest(`${endpoints.wallet}`, null);
-      await httpServiceHandler(dispatch, response);
-      if (response && "data" in response && response.status === 200) {
-        setWalletTypes(response.data.wallets);
-      }
-    } catch (error) {
-      await httpErrorHandler(error);
-    }
-
-    try {
-      const response: any = await getRequest(`${endpoints.customer}`, null);
-      await httpServiceHandler(dispatch, response);
-      if (response && "data" in response && response.status === 200) {
-        setCustomers(response.data.customers);
-      }
-    } catch (error) {
-      await httpErrorHandler(error);
-    }
-
-    try {
-      const response: any = await getRequest(`${endpoints.driver}`, null);
-      await httpServiceHandler(dispatch, response);
-      if (response && "data" in response && response.status === 200) {
-        setDrivers(response.data.drivers);
-      }
-    } catch (error) {
-      await httpErrorHandler(error);
-    }
-
-    setLoading(false);
-  }, []);
-  
-  React.useEffect(() => {
-    loadingData();
-  }, [loadingData]);
-
-  
 
   return (
     <Box>

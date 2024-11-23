@@ -6,13 +6,15 @@ interface FileUploadWithPreviewProps {
   error?: string;
   field?: string;
   src?: string;
+  disabled: boolean
 }
 
 function FileUploadWithPreview({
   onFileChange,
   error,
   field,
-  src
+  src,
+  disabled
 }: FileUploadWithPreviewProps) {
   const [preview, setPreview] = useState<string | null>(null);
 
@@ -31,7 +33,8 @@ function FileUploadWithPreview({
 
   useEffect(() => {
     if (src) {
-      setPreview(src)
+      setPreview(`${src}?t=${new Date().getTime()}`);
+
     }
   }, [src])
 
@@ -48,6 +51,7 @@ function FileUploadWithPreview({
       )}
 
       <Button
+        disabled={disabled}
         component="label"
         variant="outlined"
         startIcon={<CloudUploadIcon />}

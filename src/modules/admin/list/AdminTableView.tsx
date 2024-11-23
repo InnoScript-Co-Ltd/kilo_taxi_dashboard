@@ -11,7 +11,7 @@ import { columns, adminPayload } from "../admin.payload";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, AppRootState } from "../../../stores";
 import { adminService } from "../admin.service";
-import { paginateOptions } from "../../../constants/config";
+import { genderStatuslists, generalStatusLists, paginateOptions } from "../../../constants/config";
 import { NavigateId } from "../../../shares/NavigateId";
 import { paths } from "../../../constants/paths";
 import {
@@ -77,11 +77,11 @@ const AdminTableView = () => {
     setLoading(true);
     await adminService.index(dispatch, pagingParams, notifications);
     setLoading(false);
-  }, [dispatch, pagingParams]);
+  }, [dispatch, pagingParams, notifications]);
 
   React.useEffect(() => {
     loadingData();
-  }, [pagingParams]);
+  }, [pagingParams, loadingData]);
 
   return (
     <Paper sx={{ width: "100%", overflow: "hidden" }}>
@@ -207,9 +207,9 @@ const AdminTableView = () => {
                             case "Phone Verified":
                               return formatDate(value);
                             case "Status":
-                              return <Status status={value} />
+                              return <Status status={value} lists={generalStatusLists} />
                             case "Gender":
-                              return <Status status={value} />
+                              return <Status status={value} lists={genderStatuslists} />
                             case "Action":
                               return (
                                 <UpAndDel

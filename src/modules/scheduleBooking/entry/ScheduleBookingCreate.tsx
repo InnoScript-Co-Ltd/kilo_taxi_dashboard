@@ -25,7 +25,7 @@ import { endpoints } from "../../../constants/endpoints";
 import { useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { DatePicker } from "@mui/x-date-pickers";
-import { statusLists } from "../../../constants/config";
+import { generalStatusLists, kiloTypeLists } from "../../../constants/config";
 
 const ScheduleBookingCreate = () => {
   const [loading, setLoading] = useState(false);
@@ -211,7 +211,7 @@ const ScheduleBookingCreate = () => {
                       value={String(field.value)} // Convert field value to a string
                       onChange={(event) => field.onChange(event.target.value)} // Ensure onChange value is a string
                     >
-                      {statusLists?.map((kilo: any) => (
+                      {kiloTypeLists?.map((kilo: any) => (
                         <MenuItem key={kilo.id} value={String(kilo.id)}>
                           {kilo.value}
                         </MenuItem>
@@ -241,7 +241,7 @@ const ScheduleBookingCreate = () => {
                       value={String(field.value)} // Convert field value to a string
                       onChange={(event) => field.onChange(event.target.value)} // Ensure onChange value is a string
                     >
-                      {statusLists?.map((status: any) => (
+                      {generalStatusLists?.map((status: any) => (
                         <MenuItem key={status.id} value={String(status.id)}>
                           {status.value}
                         </MenuItem>

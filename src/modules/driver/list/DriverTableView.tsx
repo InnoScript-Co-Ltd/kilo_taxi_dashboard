@@ -10,7 +10,7 @@ import { driverColumns, driverPayload } from "../driver.payload"; // Your driver
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, AppRootState } from "../../../stores";
 import { driverService } from "../driver.service"; // Assuming you have a driver service
-import { paginateOptions } from "../../../constants/config";
+import { generalStatusLists, kycStatusLists, paginateOptions } from "../../../constants/config";
 import { NavigateId } from "../../../shares/NavigateId";
 import { paths } from "../../../constants/paths";
 import {
@@ -22,11 +22,10 @@ import {
 } from "@mui/material";
 import { setPaginate } from "../driver.slice"; // Your driver slice
 import SearchIcon from "@mui/icons-material/Search";
-import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
 import RestartAltIcon from "@mui/icons-material/RestartAlt";
-import { useNavigate } from "react-router";
 import { StyledTableCell, StyledTableRow } from "../../../components/TableCommon";
 import { useNotifications } from '@toolpad/core/useNotifications';
+import Status from "../../../components/Status";
 
 const DriverTableView = () => {
   const [page, setPage] = React.useState(0);
@@ -37,7 +36,6 @@ const DriverTableView = () => {
   );
 
   const notifications = useNotifications();
-  const navigate = useNavigate();
   const [loading, setLoading] = React.useState(false);
 
   const handleChangePage = (event: unknown, newPage: number) => {
@@ -68,7 +66,7 @@ const DriverTableView = () => {
     setLoading(true);
     await driverService.index(dispatch, pagingParams,notifications);
     setLoading(false);
-  }, [dispatch, pagingParams]);
+  }, [dispatch, pagingParams, notifications]);
 
   React.useEffect(() => {
     loadingData();
@@ -190,6 +188,10 @@ const DriverTableView = () => {
                             return value;
                           case "Driver ID":
                             return value; // Optionally link to a driver detail page
+                          case "Status":
+                            return <Status status={value} lists={generalStatusLists} />
+                          case "kycStatus":
+                            return <Status status={value} lists={kycStatusLists} />
                           default:
                             return value; // Fallback for other columns
                         }

@@ -6,14 +6,11 @@ import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TablePagination from "@mui/material/TablePagination";
 import TableRow from "@mui/material/TableRow";
-import {
-  promotionColumns,
-  promotionPayload,
-} from "../promotion.payload"; 
+import { promotionColumns, promotionPayload } from "../promotion.payload";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, AppRootState } from "../../../stores";
 import { promotionService } from "../promotion.service";
-import { paginateOptions } from "../../../constants/config";
+import { generalStatusLists, paginateOptions } from "../../../constants/config";
 import { NavigateId } from "../../../shares/NavigateId";
 import { paths } from "../../../constants/paths";
 import {
@@ -23,22 +20,26 @@ import {
   InputAdornment,
   TableSortLabel,
 } from "@mui/material";
-import { setPaginate } from "../promotion.slice"; 
+import { setPaginate } from "../promotion.slice";
 import SearchIcon from "@mui/icons-material/Search";
 import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
 import RestartAltIcon from "@mui/icons-material/RestartAlt";
 import { useNavigate } from "react-router";
 import UpAndDel from "../../../components/UpAndDel";
-import { StyledTableCell, StyledTableRow } from "../../../components/TableCommon";
+import {
+  StyledTableCell,
+  StyledTableRow,
+} from "../../../components/TableCommon";
 import { useNotifications } from "@toolpad/core";
 import { formatDate } from "../../../helpers/common";
+import Status from "../../../components/Status";
 
 const PromotionTableView = () => {
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
   const dispatch = useDispatch<AppDispatch>();
   const { data, pagingParams } = useSelector(
-    (state: AppRootState) => state.promotion 
+    (state: AppRootState) => state.promotion
   );
   const notifications = useNotifications();
   const navigate = useNavigate();
@@ -73,11 +74,11 @@ const PromotionTableView = () => {
     setLoading(true);
     await promotionService.index(dispatch, pagingParams, notifications);
     setLoading(false);
-  }, [dispatch, pagingParams]);
+  }, [dispatch, pagingParams, notifications]);
 
   React.useEffect(() => {
     loadingData();
-  }, [pagingParams]);
+  }, [pagingParams, loadingData]);
   return (
     <Paper sx={{ width: "100%", overflow: "hidden" }}>
       <Box
@@ -147,14 +148,26 @@ const PromotionTableView = () => {
                   style={{ minWidth: column.minWidth }}
                   align={column.numeric ? "right" : "left"}
                   padding={column.disablePadding ? "none" : "normal"}
-                  sortDirection={column.sort === true && pagingParams.SortDir === column.id ? pagingParams.SortField : false}
+                  sortDirection={
+                    column.sort === true && pagingParams.SortDir === column.id
+                      ? pagingParams.SortField
+                      : false
+                  }
                 >
                   <TableSortLabel
                     hideSortIcon={column.sort === false ? true : false}
-                    active={column.sort === true ? pagingParams.SortDir === column.id : false}
-                    direction={column.sort === true && pagingParams.SortDir === 0 ? "asc" : "desc"}
+                    active={
+                      column.sort === true
+                        ? pagingParams.SortDir === column.id
+                        : false
+                    }
+                    direction={
+                      column.sort === true && pagingParams.SortDir === 0
+                        ? "asc"
+                        : "desc"
+                    }
                     onClick={() => {
-                      if(column.sort) {
+                      if (column.sort) {
                         dispatch(
                           setPaginate({
                             ...pagingParams,
@@ -173,12 +186,7 @@ const PromotionTableView = () => {
           </TableHead>
           <TableBody>
             {data.promotions?.map((row: any) => (
-              <StyledTableRow
-                hover
-                role="checkbox"
-                tabIndex={-1}
-                key={row.id}
-              >
+              <StyledTableRow hover role="checkbox" tabIndex={-1} key={row.id}>
                 {promotionColumns.map((column) => {
                   const value = row[column.id];
                   return (
@@ -188,18 +196,20 @@ const PromotionTableView = () => {
                           case "Customer Name":
                             return (
                               <NavigateId
-                                url={`${paths.promotion}/${row.id}`} 
+                                url={`${paths.promotion}/${row.id}`}
                                 value={value}
                               />
                             );
                           case "Promo Code":
                             return value;
                           case "ExpiredAt":
-                            return formatDate(value); 
+                            return formatDate(value);
+                          case "Status":
+                            return <Status status={value} lists={generalStatusLists} />;
                           case "Action":
                             return (
                               <UpAndDel
-                                url={`${paths.promotion}/${row.id}`} 
+                                url={`${paths.promotion}/${row.id}`}
                                 fn={loadingData}
                               />
                             );

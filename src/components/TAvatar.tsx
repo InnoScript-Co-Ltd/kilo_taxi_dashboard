@@ -1,14 +1,17 @@
 import { Avatar } from '@mui/material'
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 
-const TAvatar = ({ src } : { src : string }) => {
-    console.log(src);
-    
-  return (
-    <div>
-        <Avatar alt="Remy Sharp" src={src} />    
-    </div>
-  )
+const TAvatar = ({ src } : { src : string }) => {   
+  
+  const [preview, setPreview] = useState<string>();
+
+  useEffect(() => {
+    if(src) {
+      setPreview(`${src}?t=${new Date().getTime()}`);
+    }
+  }, [src])
+
+  return (<Avatar alt="Remy Sharp" src={preview} />)
 }
 
 export default TAvatar

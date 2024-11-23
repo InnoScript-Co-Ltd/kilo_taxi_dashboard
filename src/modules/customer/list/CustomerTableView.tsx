@@ -11,7 +11,7 @@ import { columns, customerPayload } from "../customer.payload";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, AppRootState } from "../../../stores";
 import { customerService } from "../customer.service";
-import { paginateOptions } from "../../../constants/config";
+import { genderStatuslists, generalStatusLists, paginateOptions } from "../../../constants/config";
 import { NavigateId } from "../../../shares/NavigateId";
 import { paths } from "../../../constants/paths";
 import {
@@ -34,6 +34,7 @@ import {
 import TAvatar from "../../../components/TAvatar";
 import { useNotifications } from "@toolpad/core/useNotifications";
 import { formatDate } from "../../../helpers/common";
+import Status from "../../../components/Status";
 
 const CustomerTableView = () => {
   const [page, setPage] = React.useState(0);
@@ -76,11 +77,11 @@ const CustomerTableView = () => {
     setLoading(true);
     await customerService.index(dispatch, pagingParams, notifications);
     setLoading(false);
-  }, [dispatch, pagingParams]);
+  }, [dispatch, pagingParams, notifications]);
 
   React.useEffect(() => {
     loadingData();
-  }, [pagingParams]);
+  }, [pagingParams, loadingData]);
 
   return (
     <Paper sx={{ width: "100%", overflow: "hidden" }}>
@@ -188,9 +189,6 @@ const CustomerTableView = () => {
                     const value = row[column.id];
                     return (
                       <StyledTableCell key={column.id} align={column.align}>
-                        {/* {column.format && typeof value === 'number'
-                            ? column.format(value)
-                            : value} */}
                         {(() => {
                           switch (column.label) {
                             case "Name":
@@ -203,12 +201,18 @@ const CustomerTableView = () => {
                             case "Phone":
                               return value; // Render the mobile prefix as-is
                             case "Email":
+                              return value;
+                            case "Profile":
                               return <TAvatar src={value} />; // Render the flag icon as-is
 
                             case "Email Verified":
                               return formatDate(value);
                             case "Phone Verified":
                               return formatDate(value);
+                            case "Gender":
+                              return <Status status={value} lists={genderStatuslists} />;
+                            case "Status":
+                              return <Status status={value} lists={generalStatusLists} />
                             case "Action":
                               return (
                                 <UpAndDel
