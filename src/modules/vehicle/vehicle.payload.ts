@@ -2,23 +2,21 @@ import { z } from "zod";
 import { paginateOptions } from "../../constants/config"; // Assuming paginateOptions is available here
 
 export const vehicleSchema = z.object({
-  vehicleNo: z.string().min(1, { message: "Vehicle number is required" }),
-  vehicleType: z.string().min(1, { message: "Vehicle type is required" }),
-  model: z.string().min(1, { message: "Model is required" }),
-  fuelType: z.string().min(1, { message: "Fuel type is required" }),
-  businessLicenseImage: z.string().optional(),
-  vehicleLicenseFront: z.string().optional(),
-  vehicleLicenseBack: z.string().optional(),
-  status: z.string().min(1, { message: "Status is required" }),
-  auditColumn: z.string().optional(),
-  driverId: z.string().min(1, { message: "Driver ID is required" }),
+  VehicleNo: z.string().min(1, { message: "Vehicle number is required" }),
+  VehicleType: z.string().min(1, { message: "Vehicle type is required" }),
+  Model: z.string().min(1, { message: "Model is required" }),
+  FuelType: z.string().min(1, { message: "Fuel type is required" }),
+  Status: z.string().min(1, { message: "Status is required" }),
+  DriverId: z.number().min(1, { message: "Driver ID is required" }),
+  file_BusinessLicenseImage: z.instanceof(File).nullable(),
+  file_VehicleLicenseFront: z.instanceof(File).nullable(),
+  file_VehicleLicenseBack: z.instanceof(File).nullable(),
 });
 
 export type VehicleFormInputs = z.infer<typeof vehicleSchema>;
 
 export interface VEHICLE {
-    id: string;
-    driverId: string;
+    id: string;    
     vehicleNo: string;
     vehicleType: string;
     model: string;
@@ -27,12 +25,16 @@ export interface VEHICLE {
     vehicleLicenseFront: string;
     vehicleLicenseBack: string;
     status: string;
-    auditColumn: string;
+    driverId: number;
+    file_BusinessLicenseImage:File;
+    file_VehicleLicenseFront:File;
+    file_VehicleLicenseBack:File;
+
   }
 
   // Define columns for the vehicle table
 interface VehicleColumn {
-    id: "id" | "vehicleNo" | "vehicleType" | "model" | "fuelType" | "status" | "auditColumn" | "driverId" | "action";
+    id: "id" | "vehicleNo" | "vehicleType" | "model" | "fuelType" | "status" | "driverId" | "file_BusinessLicenseImage" | "file_VehicleLicenseImage" | "action";
     label: string;
     minWidth?: number;
     align?: "right" | "left";
@@ -47,8 +49,7 @@ interface VehicleColumn {
     { id: "model", label: "Model", minWidth: 150, numeric: false, disablePadding: false, sort: true },
     { id: "fuelType", label: "Fuel Type", minWidth: 100, numeric: false, disablePadding: false, sort: false },
     { id: "status", label: "Status", minWidth: 90, numeric: false, disablePadding: false, sort: true },
-    { id: "auditColumn", label: "Audit Column", minWidth: 130, numeric: false, disablePadding: false, sort: false },
-    { id: "driverId", label: "Driver ID", minWidth: 130, numeric: false, disablePadding: false, sort: false },
+    { id: "driverId", label: "Driver ID", minWidth: 1, numeric: true, disablePadding: false, sort: false },
     { id: "action", label: "Action", minWidth: 60, numeric: false, disablePadding: false, sort: false },
   ];
   

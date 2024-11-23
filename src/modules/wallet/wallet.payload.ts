@@ -3,15 +3,9 @@ import { paginateOptions } from "../../constants/config"; // Assuming paginateOp
 
 // Define Wallet Schema
 export const walletSchema = z.object({
-  userName: z.string().min(2, { message: "User Name must be at least 2 characters long" }),
-  phoneNo: z.string().min(10, { message: "Phone number must be at least 10 digits long" }),
-  email: z.string().email({ message: "Invalid email address" }),
-  balance: z.string(),
-  walletType: z.string(),
-  status: z.string(),
-  auditColumn: z.string().optional(),
-  customerId: z.string().optional(),
-  driverId: z.string().optional(),
+  walletName: z.string().min(2, { message: "wallet Name must be at least 2 characters long" }),
+  createDate: z.date(),
+  updateDate: z.date(),
 });
 
 export type WalletFormInputs = z.infer<typeof walletSchema>;
@@ -21,20 +15,14 @@ export type WalletFormInputs = z.infer<typeof walletSchema>;
  */
 export interface WALLET {
   id: string;
-  userName: string;
-  phoneNo: string;
-  email: string;
-  balance: string;
-  walletType: string;
-  status: string;
-  auditColumn: string;
-  customerId: string;
-  driverId: string;
+  walletName: string;
+  createDate: Date;
+  updateDate: Date;
 }
 
 // Define columns for wallet table
 interface WalletColumn {
-  id: "id" | "userName" | "phoneNo" | "email" | "balance" | "auditColumn" | "walletType" | "status" | "customerId" | "driverId" | "action";
+  id: "id" | "walletName" | "createDate" | "updateDate" |"action";
   label: string;
   minWidth?: number;
   align?: "right";
@@ -56,13 +44,9 @@ export interface WALLET_PAYLOAD {
 }
 
 export const walletColumns: readonly WalletColumn[] = [
-    { id: "userName", label: "User Name", minWidth: 130, numeric: false, disablePadding: false, sort: true },
-    { id: "phoneNo", label: "Phone Number", minWidth: 125, numeric: false, disablePadding: false, sort: true },
-    { id: "email", label: "Email", minWidth: 200, numeric: false, disablePadding: false, sort: true },
-    { id: "balance", label: "Balance", minWidth: 100, numeric: true, disablePadding: false, sort: true },
-    { id: "auditColumn", label: "Audit Column", minWidth: 130, numeric: false, disablePadding: false, sort: false },
-    { id: "walletType", label: "Wallet Type", minWidth: 110, numeric: false, disablePadding: false, sort: false },
-    { id: "status", label: "Status", minWidth: 90, numeric: false, disablePadding: false, sort: false },
+    { id: "walletName", label: "Wallet Name", minWidth: 130, numeric: false, disablePadding: false, sort: true },
+    { id: "createDate", label: "Create Date", minWidth: 125, numeric: false, disablePadding: false, sort: true },
+    { id: "updateDate", label: "Update Date", minWidth: 125, numeric: false, disablePadding: false, sort: true },
     { id: "action", label: "Action", minWidth: 60, numeric: false, disablePadding: false, sort: false },
   ];
 
@@ -71,7 +55,7 @@ export const walletPayload: WALLET_PAYLOAD = {
   pagingParams: {
     PageSize: paginateOptions.rows,
     CurrentPage: 1,
-    SortField: "userName",
+    SortField: "walletName",
     SortDir: 0,
     SearchTerm: "",
   },

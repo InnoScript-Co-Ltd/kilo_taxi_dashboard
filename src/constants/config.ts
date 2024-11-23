@@ -1,5 +1,5 @@
 export const env = [
-  "http://localhost:5205/api/v1",
+  "http://localhost:5112/api/v1",
   "https://api.gscexport.com",
 ];
 
@@ -76,4 +76,21 @@ export const kycStatusLists = [
     { id: 1, value: "ACTIVE" },
     { id: 2, value: "PENDING" },
     { id: 3, value: "DISABLED" },
+  ];
+
+  export const driverStatusLists = [
+    { id: 1, value: "ACTIVE" },
+    { id: 2, value: "PENDING" },
+    { id: 3, value: "DEACTIVATE" },
+    { id: 4, value: "SUSPENDED" },
+  ];
+
+  export const vehicleStatusLists = [
+    { id: 1, value: "ACTIVE" },
+    { id: 2, value: "SUSPENDED" },
+  ];
+
+  export const walletStatusLists = [
+    { id: 1, value: "ACTIVE" },
+    { id: 2, value: "DISABLED" },
   ];

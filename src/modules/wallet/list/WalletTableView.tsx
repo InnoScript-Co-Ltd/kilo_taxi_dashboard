@@ -193,12 +193,10 @@ const WalletTableView = () => {
                                 value={value}
                               />
                             );
-                          case "Audit Column":
+                          case "Create Date":
                             return value;
-                          case "Balance":
-                            return value;
-                          case "User ID":
-                            return value; // Can render the user detail if needed
+                          case "Update Date":
+                            return value;                          
                           case "Action":
                             return (
                               <UpAndDel

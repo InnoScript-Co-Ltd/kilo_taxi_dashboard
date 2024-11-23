@@ -162,7 +162,8 @@ const DriverTableView = () => {
             </TableRow>
           </TableHead>
           <TableBody>
-            {[{ id: 1, name : "Mg Mg" }]?.map((row: any) => (
+          {data.drivers?.map((row: any) => (
+          
 
               <StyledTableRow
                 hover
@@ -176,8 +177,7 @@ const DriverTableView = () => {
                     <StyledTableCell key={column.id} align={column.align}>
                       {(() => {
                         switch (column.label) {
-                          case "Driver Name":
-                            console.log(value)
+                          case "Driver Name":                            
                             return (
                               <NavigateId
                                 url={`${paths.driver}/${row.id}`} // Driver detail path
