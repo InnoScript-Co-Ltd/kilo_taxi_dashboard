@@ -71,9 +71,9 @@ export const statusOptions = [
 ];
 
 export const genderStatuslists = [
-  { id: 1, value: "Male", color: "success" },
-  { id: 2, value: "Female", color: "secondary" },
-  { id: 3, value: "Undefined", color: "primary" },
+  { id: "Male", value: "Male", color: "success" },
+  { id: "Female", value: "Female", color: "secondary" },
+  { id: "Undefined", value: "Undefined", color: "primary" },
 ];
 
 export const otpStatusLists = [
@@ -89,9 +89,9 @@ export const otpTypeStatusLists = [
 ];
 
 export const generalStatusLists = [
-  { id: 1, value: "ACTIVE", color: "success" },
-  { id: 2, value: "Disable", color: "secondary" },
-  { id: 3, value: "Deleted", color: "error" },
+  { id: "ACTIVE", value: "ACTIVE", color: "success" },
+  { id: "Disable", value: "Disable", color: "secondary" },
+  { id: "Suspended", value: "Suspended", color: "error" },
 ];
 
 export const paymentStatusLists = [
@@ -159,9 +159,9 @@ export const notiStatusLists = [
 ];
 
 export const kycStatusLists = [
-  { id: 1, value: "Pending", color: "secondary" },
-  { id: 2, value: "FullKyc", color: "success" },
-  { id: 3, value: "Reject", color: "error" },
+  { id: "Pending", value: "Pending", color: "secondary" },
+  { id: "FullKyc", value: "FullKyc", color: "success" },
+  { id: "Reject", value: "Reject", color: "error" },
 ];
 
 export const driverStatusLists = [

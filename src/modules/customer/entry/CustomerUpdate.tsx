@@ -60,9 +60,9 @@ const CustomerUpdate = () => {
       Email: "",
       Phone: "",
       Password: "",
-      Gender: 0,
-      Status: 0,
-      KycStatus: 0,
+      Gender: "",
+      Status: "",
+      KycStatus: "",
       Dob: null
       // flagIcon: undefined,
       // zipCode: ""
@@ -107,9 +107,9 @@ const CustomerUpdate = () => {
       setValue("State", customer.state || "");
       setValue("City", customer.city || "");
       setValue("Township", customer.township || "");
-      setValue("Gender", customer.gender || 0);
-      setValue("Status", customer.status || 0);
-      setValue("KycStatus", customer.kycStatus || 0);
+      setValue("Gender", customer.gender || "");
+      setValue("Status", customer.status || "");
+      setValue("KycStatus", customer.kycStatus || "");
       // setValue("Profile", customer.profile || "");
       // setValue("NrcImageFront", customer.nrcImageFront || "");
       // setValue("NrcImageBack", customer.nrcImageBack || "");

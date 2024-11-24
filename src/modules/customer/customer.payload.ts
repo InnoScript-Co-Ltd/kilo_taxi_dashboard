@@ -19,9 +19,9 @@ export const customerSchema = z.object({
   State: z.string(),
   City: z.string(),
   Township: z.string(),
-  Gender: z.number(),
-  Status: z.number(),
-  KycStatus: z.number(),
+  Gender: z.string(),
+  Status: z.string(),
+  KycStatus: z.string(),
   // file_NrcImageFront: z.instanceof(File).nullable(),
   // file_NrcImageBack: z.instanceof(File).nullable(),
   // file_Profile: z.instanceof(File).nullable(),
@@ -54,9 +54,9 @@ export interface CUSTOMER {
   state: string;
   city: string;
   township: string;
-  gender: number;
-  status: number;
-  kycStatus: number;
+  gender: string;
+  status: string;
+  kycStatus: string;
   file_NrcImageFront: string;
   file_NrcImageBack: string;
   file_profile: string
