@@ -1,13 +1,13 @@
 import { Chip } from "@mui/material";
 import { useCallback, useEffect, useState } from "react";
 
-const Status = ({ status, lists }: { status: any, lists: any }) => {
+const Status = ({ status, lists }: { status: any; lists: any }) => {
   const [data, setData] = useState<any>(null);
 
   const loadData = useCallback(() => {
     // Find the matching option in statusOptions
     const dataSource = lists.find(
-      (option : any) => String(option.id) === String(status) // Ensure proper comparison
+      (option: any) => String(option.value) === String(status) // Ensure proper comparison
     );
 
     setData(dataSource || null); // Fallback to null if no matching option

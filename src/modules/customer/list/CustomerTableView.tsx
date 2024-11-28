@@ -11,7 +11,13 @@ import { columns, customerPayload } from "../customer.payload";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, AppRootState } from "../../../stores";
 import { customerService } from "../customer.service";
-import { genderStatuslists, generalStatusLists, paginateOptions } from "../../../constants/config";
+import {
+  customerStatusLists,
+  genderStatuslists,
+  generalStatusLists,
+  kycStatusLists,
+  paginateOptions,
+} from "../../../constants/config";
 import { NavigateId } from "../../../shares/NavigateId";
 import { paths } from "../../../constants/paths";
 import {
@@ -192,27 +198,31 @@ const CustomerTableView = () => {
                         {(() => {
                           switch (column.label) {
                             case "Name":
-                              return (
-                                <NavigateId
-                                  url={`${paths.customer}/${row.id}`}
-                                  value={value}
-                                />
-                              );
+                              return value;
                             case "Phone":
                               return value; // Render the mobile prefix as-is
                             case "Email":
                               return value;
                             case "Profile":
                               return <TAvatar src={value} />; // Render the flag icon as-is
-
-                            case "Email Verified":
-                              return formatDate(value);
-                            case "Phone Verified":
-                              return formatDate(value);
                             case "Gender":
-                              return <Status status={value} lists={genderStatuslists} />;
+                              return (
+                                <Status
+                                  status={value}
+                                  lists={genderStatuslists}
+                                />
+                              );
                             case "Status":
-                              return <Status status={value} lists={generalStatusLists} />
+                              return (
+                                <Status
+                                  status={value}
+                                  lists={customerStatusLists}
+                                />
+                              );
+                            case "KycStatus":
+                              return (
+                                <Status status={value} lists={kycStatusLists} />
+                              );
                             case "Action":
                               return (
                                 <UpAndDel
