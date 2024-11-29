@@ -13,7 +13,7 @@ import {
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, AppRootState } from "../../../stores";
 import { vehicleService } from "../vehicle.service"; // Service to handle API requests
-import { generalStatusLists, paginateOptions } from "../../../constants/config";
+import { vehicleStatusLists, paginateOptions } from "../../../constants/config";
 import { NavigateId } from "../../../shares/NavigateId";
 import { paths } from "../../../constants/paths";
 import {
@@ -27,8 +27,11 @@ import { setPaginate } from "../vehicle.slice"; // Adjust for your vehicle slice
 import SearchIcon from "@mui/icons-material/Search";
 import RestartAltIcon from "@mui/icons-material/RestartAlt";
 import UpAndDel from "../../../components/UpAndDel";
-import { StyledTableCell, StyledTableRow } from "../../../components/TableCommon";
-import { useNotifications } from '@toolpad/core/useNotifications';
+import {
+  StyledTableCell,
+  StyledTableRow,
+} from "../../../components/TableCommon";
+import { useNotifications } from "@toolpad/core/useNotifications";
 import Status from "../../../components/Status";
 
 const VehicleTableView = () => {
@@ -69,7 +72,7 @@ const VehicleTableView = () => {
 
   const loadingData = React.useCallback(async () => {
     setLoading(true);
-    await vehicleService.index(dispatch, pagingParams,notifications);
+    await vehicleService.index(dispatch, pagingParams, notifications);
     setLoading(false);
   }, [dispatch, pagingParams, notifications]);
 
@@ -115,7 +118,6 @@ const VehicleTableView = () => {
             gap: 3,
           }}
         >
-
           <Button
             onClick={() => {
               dispatch(setPaginate(vehiclePayload.pagingParams)); // Reset to default paging params
@@ -192,16 +194,19 @@ const VehicleTableView = () => {
                                 value={value}
                               />
                             );
-                          case "Audit Column":
-                          case "License Plate":
-                          case "Driver":
                           case "Status":
-                            return <Status status={value} lists={generalStatusLists} />;
+                            return (
+                              <Status
+                                status={value}
+                                lists={vehicleStatusLists}
+                              />
+                            );
                           case "Action":
                             return (
                               <UpAndDel
                                 url={`${paths.vehicle}/${row.id}`} // Path for vehicle deletion
                                 fn={loadingData}
+                                priority={true}
                               />
                             );
                           default:

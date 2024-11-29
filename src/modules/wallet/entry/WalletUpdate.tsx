@@ -20,6 +20,7 @@ import { Breadcrumb } from "../../../components/Breadcrumb";
 import { Controller, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { DatePicker } from "@mui/x-date-pickers";
+import { useNotifications } from "@toolpad/core/useNotifications";
 
 const WalletUpdate = () => {
   const [loading, setLoading] = useState(false);
@@ -28,6 +29,7 @@ const WalletUpdate = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch<AppDispatch>();
   const { wallet } = useSelector((state: AppRootState) => state.wallet); // Selecting wallet data from the store
+  const notifications = useNotifications();
 
   // Set up React Hook Form with Zod schema
   const {
@@ -40,16 +42,19 @@ const WalletUpdate = () => {
     resolver: zodResolver(walletSchema),
     defaultValues: {
       walletName: "",
-      createDate: null,
-      updateDate: null,
     },
   });
 
   // Function to handle form submission and wallet update
   const submitWalletUpdate = async (data: WalletFormInputs) => {
     setLoading(true);
-    const response: any = await walletService.update(dispatch, params.id, data);
-    if (response.status === 204) {
+    const response: any = await walletService.update(
+      dispatch,
+      params.id,
+      data,
+      notifications
+    );
+    if (response.status === 200) {
       navigate(`${paths.walletList}`); // Navigate to the wallet list page on success
     }
     setLoading(false);
@@ -72,9 +77,8 @@ const WalletUpdate = () => {
 
   useEffect(() => {
     if (wallet) {
+      setValue("id", Number(wallet.id) || 0);
       setValue("walletName", wallet.walletName || "");
-      setValue("createDate", wallet.createDate ? new Date(wallet.createDate) : new Date());
-      setValue("updateDate", wallet.updateDate ? new Date(wallet.updateDate) : new Date());
     }
   }, [wallet, setValue]);
 
@@ -99,54 +103,6 @@ const WalletUpdate = () => {
                   {...register("walletName")}
                 />
                 <FormHelperText>{errors.walletName?.message}</FormHelperText>
-              </FormControl>
-            </Grid2>
-
-            <Grid2 size={{ xs: 6, md: 3 }}>
-              <FormControl fullWidth error={!!errors.createDate}>
-                <Controller
-                  name="createDate"
-                  control={control}
-                  render={({ field }) => (
-                    <DatePicker
-                      label="Expired At"
-                      value={field.value}
-                      onChange={(date) => field.onChange(date)}
-                      disabled={loading}
-                      slotProps={{
-                        textField: {
-                          error: !!errors.createDate,
-                          helperText: errors.createDate?.message,
-                        },
-                      }}
-                    />
-                  )}
-                />
-                <FormHelperText>{errors.createDate?.message}</FormHelperText>
-              </FormControl>
-            </Grid2>
-
-            <Grid2 size={{ xs: 6, md: 3 }}>
-              <FormControl fullWidth error={!!errors.updateDate}>
-                <Controller
-                  name="updateDate"
-                  control={control}
-                  render={({ field }) => (
-                    <DatePicker
-                      label="Expired At"
-                      value={field.value}
-                      onChange={(date) => field.onChange(date)}
-                      disabled={loading}
-                      slotProps={{
-                        textField: {
-                          error: !!errors.updateDate,
-                          helperText: errors.updateDate?.message,
-                        },
-                      }}
-                    />
-                  )}
-                />
-                <FormHelperText>{errors.updateDate?.message}</FormHelperText>
               </FormControl>
             </Grid2>
           </Grid2>

@@ -26,6 +26,8 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { vehicleStatusLists } from "../../../constants/config";
 import FileUploadWithPreview from "../../../components/FileUploadWithPreview";
 import Loading from "../../../components/Loading";
+import { getId } from "../../../helpers/updateHelper";
+import { formBuilder } from "../../../helpers/formBuilder";
 
 const VehicleUpdate = () => {
   const [loading, setLoading] = useState(false);
@@ -50,20 +52,17 @@ const VehicleUpdate = () => {
       VehicleType: "",
       Model: "",
       FuelType: "",
-      Status: "",
+      Status: 0,
     },
   });
 
   // Function to handle form submission and vehicle update
   const submitVehicleUpdate = async (data: VehicleFormInputs) => {
     setLoading(true);
-    const response: any = await vehicleService.update(
-      dispatch,
-      params.id,
-      data
-    );
-    if (response.status === 204) {
-      navigate(paths.vehicleList); // Navigate to the vehicle list page on success
+    const formData = formBuilder(data, vehicleSchema);
+    const response = await vehicleService.update(dispatch, params.id, formData);
+    if (response.status === 200) {
+      navigate(`${paths.vehicleList}`);
     }
     setLoading(false);
   };
@@ -96,12 +95,17 @@ const VehicleUpdate = () => {
 
   useEffect(() => {
     if (vehicle) {
+      console.log(vehicle.status);
+      setValue("id", Number(vehicle.id) || 0);
       setValue("DriverId", vehicle.driverId || 0);
       setValue("VehicleNo", vehicle.vehicleNo || "");
       setValue("VehicleType", vehicle.vehicleType || "");
       setValue("Model", vehicle.model || "");
       setValue("FuelType", vehicle.fuelType || "");
-      setValue("Status", vehicle.status || "");
+      setValue(
+        "Status",
+        getId({ lists: vehicleStatusLists, value: vehicle.status }) || 0
+      );
       setValue(
         "file_BusinessLicenseImage",
         vehicle.file_BusinessLicenseImage || ""
@@ -195,7 +199,7 @@ const VehicleUpdate = () => {
             </Grid2>
 
             {/* Driver Select */}
-            <Grid2 size={{ xs: 6, md: 3 }}>
+            {/* <Grid2 size={{ xs: 6, md: 3 }}>
               <FormControl variant="filled" fullWidth error={!!errors.DriverId}>
                 <InputLabel htmlFor="driver_id">Driver</InputLabel>
                 <Controller
@@ -212,7 +216,7 @@ const VehicleUpdate = () => {
                       disabled={loading}
                     >
                       {driversList?.map((driver: any) => (
-                        <MenuItem key={driver.id} value={String(driver.id)}>
+                        <MenuItem key={driver.id} value={driver.id}>
                           {driver.name}
                         </MenuItem>
                       ))}
@@ -221,7 +225,7 @@ const VehicleUpdate = () => {
                 />
                 <FormHelperText>{errors.DriverId?.message}</FormHelperText>
               </FormControl>
-            </Grid2>
+            </Grid2> */}
 
             {/* Status */}
             {/* Status Select */}
@@ -235,14 +239,14 @@ const VehicleUpdate = () => {
                     <Select
                       size="small"
                       id="status"
-                      label="Driver"
+                      label="Status"
                       {...field}
-                      value={field.value || ""}
+                      value={field.value || 0}
                       onChange={field.onChange}
                       disabled={loading}
                     >
                       {vehicleStatusLists?.map((Status: any) => (
-                        <MenuItem key={Status.id} value={String(Status.id)}>
+                        <MenuItem key={Status.id} value={Status.id}>
                           {Status.value}
                         </MenuItem>
                       ))}

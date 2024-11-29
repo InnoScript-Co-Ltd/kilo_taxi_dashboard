@@ -33,6 +33,7 @@ import { Visibility, VisibilityOff } from "@mui/icons-material";
 import { DatePicker } from "@mui/x-date-pickers";
 import Loading from "../../../components/Loading";
 import { formBuilder } from "../../../helpers/formBuilder";
+import { getId } from "../../../helpers/updateHelper";
 
 const CustomerUpdate = () => {
   const [loading, setLoading] = useState(false);
@@ -90,13 +91,6 @@ const CustomerUpdate = () => {
   useEffect(() => {
     loadingData();
   }, [loadingData]);
-
-  const getId = ({ lists, value }: { lists: any; value: any }) => {
-    const result = lists.find(
-      (list: any) => String(list.value) === String(value) // Ensure proper comparison
-    );
-    return result.id;
-  };
 
   // Populate form values when country data is available
   useEffect(() => {

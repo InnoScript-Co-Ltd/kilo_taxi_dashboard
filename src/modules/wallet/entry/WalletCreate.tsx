@@ -20,11 +20,13 @@ import { paths } from "../../../constants/paths";
 import { useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { DatePicker } from "@mui/x-date-pickers";
+import { useNotifications } from "@toolpad/core/useNotifications";
 
 const WalletCreate = () => {
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
   const dispatch = useDispatch<AppDispatch>();
+  const notifications = useNotifications();
 
   // Set up React Hook Form with Zod schema
   const {
@@ -38,7 +40,7 @@ const WalletCreate = () => {
 
   const submitWalletCreate = async (data: WalletFormInputs) => {
     setLoading(true);
-    const response = await walletService.store(data, dispatch);
+    const response = await walletService.store(data, dispatch, notifications);
     if (response.status === 201) {
       navigate(`${paths.walletList}`);
     }
@@ -52,62 +54,19 @@ const WalletCreate = () => {
         <h2>Wallet Create</h2>
         <form onSubmit={handleSubmit(submitWalletCreate)}>
           <Grid2 container spacing={2}>
-          <Grid2 size={{ xs: 6, md: 3 }}>
-              <FormControl variant="filled" fullWidth error={!!errors.walletName}>
+            <Grid2 size={{ xs: 6, md: 3 }}>
+              <FormControl
+                variant="filled"
+                fullWidth
+                error={!!errors.walletName}
+              >
                 <InputLabel htmlFor="wallet_name">Wallet Name</InputLabel>
-                <FilledInput size="small" id="wallet_name" {...register("walletName")} />
+                <FilledInput
+                  size="small"
+                  id="wallet_name"
+                  {...register("walletName")}
+                />
                 <FormHelperText>{errors.walletName?.message}</FormHelperText>
-              </FormControl>
-            </Grid2>
-
-
-
-            <Grid2 size={{ xs: 6, md: 3 }}>
-              <FormControl fullWidth error={!!errors.createDate}>
-                <Controller
-                  name="createDate"
-                  control={control}
-                  render={({ field }) => (
-                    <DatePicker
-                      label="Expired At"
-                      value={field.value}
-                      onChange={(date) => field.onChange(date)}
-                      disabled={loading}
-                      slotProps={{
-                        textField: {
-                          error: !!errors.createDate,
-                          helperText: errors.createDate?.message,
-                        },
-                      }}
-                    />
-                  )}
-                />
-                <FormHelperText>{errors.createDate?.message}</FormHelperText>
-              </FormControl>
-            </Grid2>
-
-
-            <Grid2 size={{ xs: 6, md: 3 }}>
-              <FormControl fullWidth error={!!errors.updateDate}>
-                <Controller
-                  name="updateDate"
-                  control={control}
-                  render={({ field }) => (
-                    <DatePicker
-                      label="Expired At"
-                      value={field.value}
-                      onChange={(date) => field.onChange(date)}
-                      disabled={loading}
-                      slotProps={{
-                        textField: {
-                          error: !!errors.updateDate,
-                          helperText: errors.updateDate?.message,
-                        },
-                      }}
-                    />
-                  )}
-                />
-                <FormHelperText>{errors.updateDate?.message}</FormHelperText>
               </FormControl>
             </Grid2>
           </Grid2>
@@ -122,7 +81,10 @@ const WalletCreate = () => {
               marginTop: "20px",
             }}
           >
-            <Button variant="outlined" onClick={() => navigate(paths.walletList)}>
+            <Button
+              variant="outlined"
+              onClick={() => navigate(paths.walletList)}
+            >
               Cancel
             </Button>
             <Button variant="contained" type="submit">
