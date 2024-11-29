@@ -1,4 +1,4 @@
-export const env = ["http://localhost:5112/api/v1"];
+export const env = ["https://localhost:7181/api/v1"];
 
 export const drawerWidth: number = 300;
 
@@ -165,7 +165,7 @@ export const kycStatusLists = [
 ];
 
 export const driverStatusLists = [
-  { id: 1, value: "Pending", color : "secondary" },
+  { id: 1, value: "Pending", color: "secondary" },
   { id: 2, value: "Active", color: "success" },
   { id: 3, value: "Deactivate", color: "warning" },
   { id: 4, value: "Suspend", color: "error" },
@@ -182,14 +182,13 @@ export const walletStatusLists = [
 ];
 
 export const topUpTransactionStatus = [
-  { id: 1, value: "Pending", color : "secondary" },
+  { id: 1, value: "Pending", color: "secondary" },
   { id: 2, value: "Success", color: "success" },
   { id: 3, value: "Reject", color: "error" },
-]
+];
 
 export const orderStatusLists = [
   { id: 1, value: "Active", color: "info" },
   { id: 2, value: "Success", color: "success" },
   { id: 3, value: "Reject", color: "error" },
-
-]
+];
