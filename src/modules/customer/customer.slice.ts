@@ -1,6 +1,9 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { CUSTOMER, CUSTOMER_PAYLOAD, customerPayload } from "./customer.payload";
-
+import {
+  CUSTOMER,
+  CUSTOMER_PAYLOAD,
+  customerPayload,
+} from "./customer.payload";
 
 /**
  * Interface representing the shape of the country slice in Redux.
@@ -40,7 +43,7 @@ const initialState: CUSTOMER_SLICE = {
 
 // Create a slice of the Redux store for country data
 const customerSlice = createSlice({
-  name: "admin",
+  name: "customer",
   initialState,
   reducers: {
     /**
@@ -49,7 +52,10 @@ const customerSlice = createSlice({
      * @param action The action containing the payload.
      * @returns The updated state.
      */
-    index: (state, action: PayloadAction<{ customers: CUSTOMER[]; paging: any }>) => {
+    index: (
+      state,
+      action: PayloadAction<{ customers: CUSTOMER[]; paging: any }>
+    ) => {
       state.data = action.payload;
     },
     /**
@@ -76,7 +82,10 @@ const customerSlice = createSlice({
      * @param action The action containing the pagination parameters.
      * @returns The updated state.
      */
-    setPaginate: (state, action: PayloadAction<CUSTOMER_PAYLOAD["pagingParams"]>) => {
+    setPaginate: (
+      state,
+      action: PayloadAction<CUSTOMER_PAYLOAD["pagingParams"]>
+    ) => {
       state.pagingParams = action.payload; // Use the full type
     },
   },

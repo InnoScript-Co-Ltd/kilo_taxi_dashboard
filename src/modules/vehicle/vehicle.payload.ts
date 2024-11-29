@@ -2,11 +2,12 @@ import { z } from "zod";
 import { paginateOptions } from "../../constants/config"; // Assuming paginateOptions is available here
 
 export const vehicleSchema = z.object({
+  id: z.number().min(0, { message: "id" }).default(0),
   VehicleNo: z.string().min(1, { message: "Vehicle number is required" }),
   VehicleType: z.string().min(1, { message: "Vehicle type is required" }),
   Model: z.string().min(1, { message: "Model is required" }),
   FuelType: z.string().min(1, { message: "Fuel type is required" }),
-  Status: z.string().min(1, { message: "Status is required" }) || z.number,
+  Status: z.number(),
   DriverId: z.number().min(1, { message: "Driver ID is required" }),
   file_BusinessLicenseImage: z.instanceof(File).nullable(),
   file_VehicleLicenseFront: z.instanceof(File).nullable(),
@@ -24,7 +25,7 @@ export interface VEHICLE {
   businessLicenseImage: string;
   vehicleLicenseFront: string;
   vehicleLicenseBack: string;
-  status: string;
+  status: number;
   driverId: number;
   file_BusinessLicenseImage: File;
   file_VehicleLicenseFront: File;
