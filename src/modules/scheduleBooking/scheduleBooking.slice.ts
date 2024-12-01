@@ -1,10 +1,14 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { SCHEDULE, SCHEDULE_PAYLOAD, schedulePayload } from "./scheduleBooking.payload";
+import {
+  SCHEDULE,
+  SCHEDULE_PAYLOAD,
+  schedulePayload,
+} from "./scheduleBooking.payload";
 
 // Define a type for the state slice, similar to CITY_SLICE
 export interface SCHEDULE_SLICE {
   data: {
-    schedules: Array<any>;
+    scheduleBookings: Array<any>;
     paging: {
       totalCount: number;
       totalPages: number;
@@ -14,13 +18,13 @@ export interface SCHEDULE_SLICE {
       lastRowOnPage: number;
     };
   };
-  schedule: null | SCHEDULE;
+  scheduleBooking: null | SCHEDULE;
   pagingParams: SCHEDULE_PAYLOAD["pagingParams"];
 }
 
 const initialState: SCHEDULE_SLICE = {
   data: {
-    schedules: [],
+    scheduleBookings: [],
     paging: {
       totalCount: 0,
       totalPages: 0,
@@ -30,28 +34,34 @@ const initialState: SCHEDULE_SLICE = {
       lastRowOnPage: 0,
     },
   },
-  schedule: null,
+  scheduleBooking: null,
   pagingParams: schedulePayload.pagingParams,
 };
 
 // Create the state slice
 const scheduleSlice = createSlice({
-  name: "schedule",
+  name: "scheduleBooking",
   initialState: initialState,
   reducers: {
-    index: (state, action: PayloadAction<{ schedules: SCHEDULE[]; paging: any }>) => {
+    index: (
+      state,
+      action: PayloadAction<{ scheduleBookings: SCHEDULE[]; paging: any }>
+    ) => {
       state.data = action.payload;
       return state;
     },
     update: (state, action: PayloadAction<SCHEDULE>) => {
-      state.schedule = action.payload;
+      state.scheduleBooking = action.payload;
       return state;
     },
     show: (state, action: PayloadAction<SCHEDULE>) => {
-      state.schedule = action.payload;
+      state.scheduleBooking = action.payload;
       return state;
     },
-    setPaginate: (state, action: PayloadAction<SCHEDULE_PAYLOAD["pagingParams"]>) => {
+    setPaginate: (
+      state,
+      action: PayloadAction<SCHEDULE_PAYLOAD["pagingParams"]>
+    ) => {
       state.pagingParams = action.payload;
       return state;
     },

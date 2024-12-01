@@ -10,33 +10,34 @@ import { ScheduleBookingRoute } from "./modules/scheduleBooking/scheduleBooking.
 import { DriverRoute } from "./modules/driver/driver.route";
 import { VehicleRoute } from "./modules/vehicle/vehicle.route";
 import { WalletRoute } from "./modules/wallet/wallet.route";
-
+import { OrderRoute } from "./modules/order/order.route";
 
 export const routers = createBrowserRouter([
-    {
-        path: "/",
-        element: <DefaultLayout />,
-        errorElement: <NotFound />,
-        children: [
-            ...DashboardRoute,
-            ...AdminRoute,
-            ...CustomerRoute,
-            ...PromotionRoute,
-            ...ScheduleBookingRoute,
-            ...DriverRoute,
-            ...VehicleRoute,
-            ...WalletRoute,
-        ]
-    },
-    {
-        path: "auth",
-        element: <BlankTemplate />,
-        errorElement: <NotFound />,
-        children: [
-            // {
-            //     path: "login",
-            //     element: <Login />
-            // }
-        ]
-    }
-])
+  {
+    path: "/",
+    element: <DefaultLayout />,
+    errorElement: <NotFound />,
+    children: [
+      ...DashboardRoute,
+      ...AdminRoute,
+      ...CustomerRoute,
+      ...PromotionRoute,
+      ...ScheduleBookingRoute,
+      ...DriverRoute,
+      ...VehicleRoute,
+      ...WalletRoute,
+      ...OrderRoute,
+    ],
+  },
+  {
+    path: "auth",
+    element: <BlankTemplate />,
+    errorElement: <NotFound />,
+    children: [
+      // {
+      //     path: "login",
+      //     element: <Login />
+      // }
+    ],
+  },
+]);

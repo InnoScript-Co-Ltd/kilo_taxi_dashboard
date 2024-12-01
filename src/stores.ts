@@ -1,12 +1,13 @@
-import { configureStore } from '@reduxjs/toolkit'
+import { configureStore } from "@reduxjs/toolkit";
 import shareSlice from "./shares/shareSlice";
-import adminSlice from './modules/admin/admin.slice';
-import customerSlice from './modules/customer/customer.slice';
-import promotionSlice from './modules/promotion/promotion.slice';
-import scheduleSlice from './modules/scheduleBooking/scheduleBooking.slice';
-import driverSlice from './modules/driver/driver.slice';
-import vehicleSlice from './modules/vehicle/vehicle.slice';
-import walletSlice from './modules/wallet/wallet.slice';
+import adminSlice from "./modules/admin/admin.slice";
+import customerSlice from "./modules/customer/customer.slice";
+import promotionSlice from "./modules/promotion/promotion.slice";
+import scheduleSlice from "./modules/scheduleBooking/scheduleBooking.slice";
+import driverSlice from "./modules/driver/driver.slice";
+import vehicleSlice from "./modules/vehicle/vehicle.slice";
+import walletSlice from "./modules/wallet/wallet.slice";
+import orderSlice from "./modules/order/order.slice";
 
 // interface RootState {
 //     share: SHARE_SLICE;
@@ -26,12 +27,13 @@ export const stores = configureStore({
     admin: adminSlice,
     customer: customerSlice,
     promotion: promotionSlice,
-    schedule: scheduleSlice,
+    scheduleBookings: scheduleSlice,
     driver: driverSlice,
     vehicle: vehicleSlice,
-    wallet:walletSlice,
+    wallet: walletSlice,
+    order: orderSlice,
   },
-})
+});
 
 // Infer the RootState type from the store itself
 export type AppRootState = ReturnType<typeof stores.getState>;
