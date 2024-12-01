@@ -1,51 +1,51 @@
-import * as React from "react";
-import Paper from "@mui/material/Paper";
-import Table from "@mui/material/Table";
-import TableBody from "@mui/material/TableBody";
-import TableContainer from "@mui/material/TableContainer";
-import TableHead from "@mui/material/TableHead";
-import TablePagination from "@mui/material/TablePagination";
-import TableRow from "@mui/material/TableRow";
-import { scheduleColumns, schedulePayload } from "../scheduleBooking.payload";
+import React from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, AppRootState } from "../../../stores";
-import { scheduleBookingService } from "../scheduleBooking.service";
-import { paginateOptions } from "../../../constants/config";
-import { NavigateId } from "../../../shares/NavigateId";
-import { paths } from "../../../constants/paths";
+import { useNotifications } from "@toolpad/core";
 import {
   Box,
   Button,
+  Chip,
   Input,
   InputAdornment,
+  Paper,
+  Table,
+  TableBody,
+  TableContainer,
+  TableHead,
+  TablePagination,
+  TableRow,
   TableSortLabel,
 } from "@mui/material";
-import { setPaginate } from "../scheduleBooking.slice";
 import SearchIcon from "@mui/icons-material/Search";
-import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
 import RestartAltIcon from "@mui/icons-material/RestartAlt";
-import { useNavigate } from "react-router";
-import UpAndDel from "../../../components/UpAndDel";
+import LoginIcon from "@mui/icons-material/Login";
+import { orderService } from "../order.service";
+import { orderColumns, orderPayload } from "../order.payload";
 import {
   StyledTableCell,
   StyledTableRow,
 } from "../../../components/TableCommon";
-import { useNotifications } from "@toolpad/core";
+import Status from "../../../components/Status";
+import { orderStatusLists, paginateOptions } from "../../../constants/config";
+import { setPaginate } from "../order.slice";
+import UpAndDel from "../../../components/UpAndDel";
+import { paths } from "../../../constants/paths";
+import { NavigateId } from "../../../shares/NavigateId";
 
-const ScheduleBookingTableView = () => {
+const OrderTableView = () => {
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
   const dispatch = useDispatch<AppDispatch>();
   const { data, pagingParams } = useSelector(
-    (state: AppRootState) => state.scheduleBookings
+    (state: AppRootState) => state.order // Adjust to your order slice state
   );
+
   const notifications = useNotifications();
-  const navigate = useNavigate();
   const [loading, setLoading] = React.useState(false);
 
   const handleChangePage = (event: unknown, newPage: number) => {
     setPage(newPage);
-
     dispatch(
       setPaginate({
         ...pagingParams,
@@ -57,28 +57,27 @@ const ScheduleBookingTableView = () => {
   const handleChangeRowsPerPage = (
     event: React.ChangeEvent<HTMLInputElement>
   ) => {
+    setRowsPerPage(+event.target.value);
+    setPage(0);
     dispatch(
       setPaginate({
         ...pagingParams,
+        RowsPerPage: +event.target.value,
         CurrentPage: 1,
-        PageSize: event.target.value,
       })
     );
-    setRowsPerPage(+event.target.value);
-    setPage(0);
   };
 
   const loadingData = React.useCallback(async () => {
     setLoading(true);
-    await scheduleBookingService.index(dispatch, pagingParams, notifications);
+    await orderService.index(dispatch, pagingParams, notifications);
     setLoading(false);
-  }, [dispatch, pagingParams]);
+  }, [dispatch, pagingParams, notifications]);
 
   React.useEffect(() => {
     loadingData();
-  }, [pagingParams]);
+  }, [loadingData]);
 
-  console.log(data);
   return (
     <Paper sx={{ width: "100%", overflow: "hidden" }}>
       <Box
@@ -92,7 +91,7 @@ const ScheduleBookingTableView = () => {
       >
         <Input
           id="input-with-icon-search"
-          placeholder="Search State"
+          placeholder="Search Order"
           value={pagingParams.SearchTerm}
           onChange={(e) => {
             dispatch(
@@ -119,7 +118,7 @@ const ScheduleBookingTableView = () => {
         >
           <Button
             onClick={() => {
-              dispatch(setPaginate(schedulePayload.pagingParams));
+              dispatch(setPaginate(orderPayload.pagingParams)); // Reset the paginate
               setPage(0);
               setRowsPerPage(10);
             }}
@@ -135,30 +134,22 @@ const ScheduleBookingTableView = () => {
         <Table stickyHeader aria-label="sticky table">
           <TableHead>
             <TableRow>
-              {scheduleColumns.map((column) => (
+              {orderColumns.map((column) => (
                 <StyledTableCell
                   key={column.id}
                   style={{ minWidth: column.minWidth }}
                   align={column.numeric ? "right" : "left"}
                   padding={column.disablePadding ? "none" : "normal"}
                   sortDirection={
-                    column.sort === true && pagingParams.SortDir === column.id
+                    column.sort && pagingParams.SortDir === column.id
                       ? pagingParams.SortField
                       : false
                   }
                 >
                   <TableSortLabel
-                    hideSortIcon={column.sort === false ? true : false}
-                    active={
-                      column.sort === true
-                        ? pagingParams.SortDir === column.id
-                        : false
-                    }
-                    direction={
-                      column.sort === true && pagingParams.SortDir === 0
-                        ? "asc"
-                        : "desc"
-                    }
+                    // hideSortIcon={!column.sort}
+                    active={pagingParams.SortDir === column.id}
+                    direction={pagingParams.SortDir === 0 ? "asc" : "desc"}
                     onClick={() => {
                       if (column.sort) {
                         dispatch(
@@ -178,26 +169,34 @@ const ScheduleBookingTableView = () => {
             </TableRow>
           </TableHead>
           <TableBody>
-            {data.scheduleBookings?.map((row: any) => (
+            {data.orders?.map((row: any) => (
               <StyledTableRow hover role="checkbox" tabIndex={-1} key={row.id}>
-                {scheduleColumns.map((column) => {
+                {orderColumns.map((column) => {
                   const value = row[column.id];
                   return (
                     <StyledTableCell key={column.id} align={column.align}>
                       {(() => {
                         switch (column.label) {
-                          case "Pickup Address":
+                          case "Total Amount":
                             return value;
-                          case "Schedule Time":
+                          case "Status":
+                            return (
+                              <Status status={value} lists={orderStatusLists} />
+                            );
+                          case "Created Date":
                             return value;
-                          case "Destination":
+                          case "Wallet Transaction Id":
                             return value;
-                          case "Kilo Type":
+                          case "Customer Id":
+                            return value;
+                          case "Driver Id":
+                            return value;
+                          case "Schedule Booking Id":
                             return value;
                           case "Action":
                             return (
                               <NavigateId
-                                url={`${paths.scheduleBooking}/${row.id}`}
+                                url={`${paths.order}/${row.id}`}
                                 value={
                                   <>
                                     <Button startIcon={<></>} color="secondary">
@@ -208,7 +207,7 @@ const ScheduleBookingTableView = () => {
                               />
                             );
                           default:
-                            return value; // Fallback case
+                            return value; // Fallback for other columns
                         }
                       })()}
                     </StyledTableCell>
@@ -233,4 +232,4 @@ const ScheduleBookingTableView = () => {
   );
 };
 
-export default ScheduleBookingTableView;
+export default OrderTableView;

@@ -1,36 +1,37 @@
 import { paginateOptions } from "../../constants/config";
 import { z } from "zod";
+import { ORDER } from "../order/order.payload";
 
 export const scheduleBookingSchema = z.object({
-  CustomerId : z.string(),
-  DeliverId : z.string(),
-  PickUpAddress : z.string(),
-  Destination: z.string(),
+  id: z.number().min(0, { message: "id" }).default(0),
+  CustomerId: z.string(),
+  DeliverId: z.string(),
+  PickUpLocation: z.string(),
+  DropOffLocation: z.string(),
   ScheduleTime: z.date(),
-  Note: z.string(),
-  KiloType: z.string(),
-  Status: z.string()
+  CreatedDate: z.date(),
+  Status: z.string(),
 });
 
 export type ScheduleBookingFormInputs = z.infer<typeof scheduleBookingSchema>;
 
 /**
- * Interface representing the shape of a promotion object.
+ * Interface representing the shape of a schedule object.
  */
 export interface SCHEDULE {
   id: string;
   customerId?: string;
   deliverId?: string;
-  pickup_address: string;
-  destination: string;
-  schedule_time: Date | null;
-  note: string;
-  kilo_type: string;
+  pickUpLocation: string;
+  dropOffLocation: string;
+  scheduleTime: string;
+  createdDate: string;
+  orders: ORDER[]; // Use the order interface as an array
   status: string;
-  action?: null
+  action?: null;
 }
 
-type ScheduleColumnId = keyof SCHEDULE
+type ScheduleColumnId = keyof SCHEDULE;
 
 // Define columns for state table
 interface Column {
@@ -39,30 +40,66 @@ interface Column {
   minWidth?: number;
   maxWidth?: number;
   align?: "right";
-  numeric: boolean,
-  disablePadding: boolean,
-  sort?: boolean,
+  numeric: boolean;
+  disablePadding: boolean;
+  sort?: boolean;
   format?: (value: number) => string;
 }
 
 // Define State Payload
 export interface SCHEDULE_PAYLOAD {
   pagingParams: {
-    PageSize: number | string,
-    CurrentPage: number,
-    SortField: any,
-    SortDir: any,
-    SearchTerm: string
-  }
+    PageSize: number | string;
+    CurrentPage: number;
+    SortField: any;
+    SortDir: any;
+    SearchTerm: string;
+  };
 }
 
 // Define columns structure for the state table
 export const scheduleColumns: readonly Column[] = [
-  { id: "pickup_address", label: "Pickup Address", minWidth: 170 , numeric: false, disablePadding: false, sort: true },
-  { id: "schedule_time", label: "Schedule Time", minWidth: 150, numeric: false, disablePadding: false, sort: true },
-  { id: "destination", label: "Destination", minWidth: 150, numeric: false, disablePadding: false, sort: true },
-  { id: "kilo_type", label: "Kilo Type", minWidth: 50, numeric: false, disablePadding: false, sort: false },
-  { id: "action", label: "Action", minWidth: 50, maxWidth: 50, numeric: false, disablePadding: false }
+  {
+    id: "pickUpLocation",
+    label: "Pickup Location",
+    minWidth: 170,
+    numeric: false,
+    disablePadding: false,
+    sort: true,
+  },
+  {
+    id: "dropOffLocation",
+    label: "Drop Off Location",
+    minWidth: 150,
+    numeric: false,
+    disablePadding: false,
+    sort: true,
+  },
+  {
+    id: "scheduleTime",
+    label: "Schedule Time",
+    minWidth: 150,
+    numeric: false,
+    disablePadding: false,
+    sort: true,
+  },
+
+  {
+    id: "createdDate",
+    label: "Created Date",
+    minWidth: 150,
+    numeric: false,
+    disablePadding: false,
+    sort: false,
+  },
+  {
+    id: "action",
+    label: "Action",
+    minWidth: 200,
+    maxWidth: 300,
+    numeric: false,
+    disablePadding: false,
+  },
 ];
 
 // State payload example
@@ -70,8 +107,8 @@ export const schedulePayload: SCHEDULE_PAYLOAD = {
   pagingParams: {
     PageSize: paginateOptions.rows,
     CurrentPage: 1,
-    SortField: "pickup_address",
+    SortField: "id",
     SortDir: 0,
-    SearchTerm: ""
-  }
+    SearchTerm: "",
+  },
 };

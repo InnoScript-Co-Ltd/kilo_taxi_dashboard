@@ -1,4 +1,4 @@
-export const env = ["https://localhost:7181/api/v1"];
+export const env = ["http://localhost:5112/api/v1"];
 
 export const drawerWidth: number = 300;
 
@@ -188,7 +188,7 @@ export const topUpTransactionStatus = [
 ];
 
 export const orderStatusLists = [
-  { id: 0, value: "Active", color: "info" },
-  { id: 1, value: "Success", color: "success" },
-  { id: 2, value: "Reject", color: "error" },
+  { id: 0, value: "Completed", color: "success" },
+  { id: 1, value: "Cancelled", color: "error" },
+  { id: 2, value: "InProgress", color: "info" },
 ];
