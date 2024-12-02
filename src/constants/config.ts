@@ -1,4 +1,4 @@
-export const env = ["http://localhost:5112/api/v1"];
+export const env = ["https://localhost:7181/api/v1"];
 
 export const drawerWidth: number = 300;
 

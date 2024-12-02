@@ -11,7 +11,12 @@ import { columns, adminPayload } from "../admin.payload";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, AppRootState } from "../../../stores";
 import { adminService } from "../admin.service";
-import { genderStatuslists, generalStatusLists, paginateOptions } from "../../../constants/config";
+import {
+  customerStatusLists,
+  genderStatuslists,
+  generalStatusLists,
+  paginateOptions,
+} from "../../../constants/config";
 import { NavigateId } from "../../../shares/NavigateId";
 import { paths } from "../../../constants/paths";
 import {
@@ -207,9 +212,19 @@ const AdminTableView = () => {
                             case "Phone Verified":
                               return formatDate(value);
                             case "Status":
-                              return <Status status={value} lists={generalStatusLists} />
+                              return (
+                                <Status
+                                  status={value}
+                                  lists={customerStatusLists}
+                                />
+                              );
                             case "Gender":
-                              return <Status status={value} lists={genderStatuslists} />
+                              return (
+                                <Status
+                                  status={value}
+                                  lists={genderStatuslists}
+                                />
+                              );
                             case "Action":
                               return (
                                 <UpAndDel

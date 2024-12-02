@@ -10,7 +10,13 @@ import { driverColumns, driverPayload } from "../driver.payload"; // Your driver
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, AppRootState } from "../../../stores";
 import { driverService } from "../driver.service"; // Assuming you have a driver service
-import { generalStatusLists, kycStatusLists, paginateOptions } from "../../../constants/config";
+import UpAndDel from "../../../components/UpAndDel";
+
+import {
+  driverStatusLists,
+  kycStatusLists,
+  paginateOptions,
+} from "../../../constants/config";
 import { NavigateId } from "../../../shares/NavigateId";
 import { paths } from "../../../constants/paths";
 import {
@@ -23,8 +29,11 @@ import {
 import { setPaginate } from "../driver.slice"; // Your driver slice
 import SearchIcon from "@mui/icons-material/Search";
 import RestartAltIcon from "@mui/icons-material/RestartAlt";
-import { StyledTableCell, StyledTableRow } from "../../../components/TableCommon";
-import { useNotifications } from '@toolpad/core/useNotifications';
+import {
+  StyledTableCell,
+  StyledTableRow,
+} from "../../../components/TableCommon";
+import { useNotifications } from "@toolpad/core/useNotifications";
 import Status from "../../../components/Status";
 
 const DriverTableView = () => {
@@ -64,7 +73,7 @@ const DriverTableView = () => {
 
   const loadingData = React.useCallback(async () => {
     setLoading(true);
-    await driverService.index(dispatch, pagingParams,notifications);
+    await driverService.index(dispatch, pagingParams, notifications);
     setLoading(false);
   }, [dispatch, pagingParams, notifications]);
 
@@ -110,7 +119,6 @@ const DriverTableView = () => {
             gap: 3,
           }}
         >
-
           <Button
             onClick={() => {
               dispatch(setPaginate(driverPayload.pagingParams)); // Reset the paginate
@@ -135,14 +143,18 @@ const DriverTableView = () => {
                   style={{ minWidth: column.minWidth }}
                   align={column.numeric ? "right" : "left"}
                   padding={column.disablePadding ? "none" : "normal"}
-                  sortDirection={column.sort && pagingParams.SortDir === column.id ? pagingParams.SortField : false}
+                  sortDirection={
+                    column.sort && pagingParams.SortDir === column.id
+                      ? pagingParams.SortField
+                      : false
+                  }
                 >
                   <TableSortLabel
                     hideSortIcon={!column.sort}
                     active={column.sort && pagingParams.SortDir === column.id}
                     direction={pagingParams.SortDir === 0 ? "asc" : "desc"}
                     onClick={() => {
-                      if(column.sort) {
+                      if (column.sort) {
                         dispatch(
                           setPaginate({
                             ...pagingParams,
@@ -160,22 +172,15 @@ const DriverTableView = () => {
             </TableRow>
           </TableHead>
           <TableBody>
-          {data.drivers?.map((row: any) => (
-          
-
-              <StyledTableRow
-                hover
-                role="checkbox"
-                tabIndex={-1}
-                key={row.id}
-              >
+            {data.drivers?.map((row: any) => (
+              <StyledTableRow hover role="checkbox" tabIndex={-1} key={row.id}>
                 {driverColumns.map((column) => {
                   const value = row[column.id];
                   return (
                     <StyledTableCell key={column.id} align={column.align}>
                       {(() => {
                         switch (column.label) {
-                          case "Driver Name":                            
+                          case "Driver Name":
                             return (
                               <NavigateId
                                 url={`${paths.driver}/${row.id}`} // Driver detail path
@@ -189,9 +194,24 @@ const DriverTableView = () => {
                           case "Driver ID":
                             return value; // Optionally link to a driver detail page
                           case "Status":
-                            return <Status status={value} lists={generalStatusLists} />
+                            return (
+                              <Status
+                                status={value}
+                                lists={driverStatusLists}
+                              />
+                            );
                           case "kycStatus":
-                            return <Status status={value} lists={kycStatusLists} />
+                            return (
+                              <Status status={value} lists={kycStatusLists} />
+                            );
+                          case "Action":
+                            return (
+                              <UpAndDel
+                                url={`${paths.admin}/${row.id}`}
+                                fn={loadingData}
+                                priority={true}
+                              />
+                            );
                           default:
                             return value; // Fallback for other columns
                         }

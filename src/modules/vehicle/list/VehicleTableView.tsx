@@ -206,7 +206,6 @@ const VehicleTableView = () => {
                               <UpAndDel
                                 url={`${paths.vehicle}/${row.id}`} // Path for vehicle deletion
                                 fn={loadingData}
-                                priority={true}
                               />
                             );
                           default:

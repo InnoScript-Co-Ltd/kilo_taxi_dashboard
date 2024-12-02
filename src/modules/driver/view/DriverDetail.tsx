@@ -11,6 +11,7 @@ import ExpandmoreIcon from "@mui/icons-material/ExpandMore";
 import { Typography } from "@mui/material";
 import { getRequest } from "../../../helpers/api";
 import { endpoints } from "../../../constants/endpoints";
+import { index } from "../driver.slice";
 
 const DriverDetail = () => {
   const [loading, setLoading] = useState(false);
@@ -50,7 +51,7 @@ const DriverDetail = () => {
             >
               <Typography>Driver Info</Typography>
             </AccordionSummary>
-            <AccordionDetails>
+            <AccordionDetails key={driver.id}>
               <p>
                 <strong>ID:</strong> {driver.id}
               </p>
@@ -120,55 +121,86 @@ const DriverDetail = () => {
               <p>
                 <strong>KYC Status:</strong> {driver.kycStatus}
               </p>
+
+              {driver.vehicle.map((vehicle: any, index: number) => (
+                <div key={index}>
+                  <h3>Vehicle info</h3>
+                  <p>
+                    <strong>Vehicle No:</strong> {vehicle.vehicleNo}
+                  </p>
+                  <p>
+                    <strong>Vehicle LicenseFront:</strong>{" "}
+                    {vehicle.vehicleLicenseFront}
+                  </p>
+                  <p>
+                    <strong>Vehicle LicenseBack:</strong>{" "}
+                    {vehicle.vehicleLicenseBack}
+                  </p>
+                  <p>
+                    <strong>Vehicle BusinessLicenseImage:</strong>{" "}
+                    {vehicle.businessLicenseImage}
+                  </p>
+                  <p>
+                    <strong>Vehicle Type:</strong> {vehicle.vehicleType}
+                  </p>
+                  <p>
+                    <strong>Vehicle Status:</strong> {vehicle.status}
+                  </p>
+                  <p>
+                    <strong>Vehicle Model:</strong> {vehicle.model}
+                  </p>
+                  <hr />
+                </div>
+              ))}
             </AccordionDetails>
           </Accordion>
 
-          <Accordion
-            expanded={expanded === "panel2"}
-            onChange={(event, isExpanded) => handleChange(isExpanded, "panel2")}
-          >
-            <AccordionSummary
-              id="panel2-header"
-              aria-controls="panel2-content"
-              expandIcon={<ExpandmoreIcon />}
+          {/* <Accordion
+              expanded={expanded === "panel2"}
+              onChange={(event, isExpanded) => handleChange(isExpanded, "panel2")}
             >
-              <Typography>Vehicle Info</Typography>
-            </AccordionSummary>
-            {driver.vehicle?.map((vehicle: any) => (
-              <AccordionDetails>
-                <p>
-                  <strong>ID:</strong> {vehicle.id}
-                </p>
-                <p>
-                  <strong>Vehicle No:</strong> {vehicle.vehicleNo}
-                </p>
-                <p>
-                  <strong>Vehicle Type:</strong> {vehicle.vehicleType}
-                </p>
-                <p>
-                  <strong>Model:</strong> {vehicle.model}
-                </p>
-                <p>
-                  <strong>Fuel Type:</strong> {vehicle.fuelType}
-                </p>
-                <p>
-                  <strong>Business License Image:</strong>{" "}
-                  {vehicle.businessLicenseImage}
-                </p>
-                <p>
-                  <strong>Vehicle License Front:</strong>{" "}
-                  {vehicle.vehicleLicenseFront}
-                </p>
-                <p>
-                  <strong>Vehicle License Back:</strong>{" "}
-                  {vehicle.vehicleLicenseBack}
-                </p>
-                <p>
-                  <strong>Status:</strong> {vehicle.status}
-                </p>
-              </AccordionDetails>
-            ))}
-          </Accordion>
+              <AccordionSummary
+                id="panel2-header"
+                aria-controls="panel2-content"
+                expandIcon={<ExpandmoreIcon />}
+              >
+                <Typography>Vehicle Info</Typography>
+              </AccordionSummary>
+              {driver.vehicle?.map((vehicle: any) => (
+                <AccordionDetails>
+                  <p>
+                    <strong>ID:</strong> {vehicle.id}
+                  </p>
+                  <p>
+                    <strong>Vehicle No:</strong> {vehicle.vehicleNo}
+                  </p>
+                  <p>
+                    <strong>Vehicle Type:</strong> {vehicle.vehicleType}
+                  </p>
+                  <p>
+                    <strong>Model:</strong> {vehicle.model}
+                  </p>
+                  <p>
+                    <strong>Fuel Type:</strong> {vehicle.fuelType}
+                  </p>
+                  <p>
+                    <strong>Business License Image:</strong>{" "}
+                    {vehicle.businessLicenseImage}
+                  </p>
+                  <p>
+                    <strong>Vehicle License Front:</strong>{" "}
+                    {vehicle.vehicleLicenseFront}
+                  </p>
+                  <p>
+                    <strong>Vehicle License Back:</strong>{" "}
+                    {vehicle.vehicleLicenseBack}
+                  </p>
+                  <p>
+                    <strong>Status:</strong> {vehicle.status}
+                  </p>
+                </AccordionDetails>
+              ))}
+            </Accordion>
 
           <Accordion
             expanded={expanded === "panel3"}
@@ -197,7 +229,7 @@ const DriverDetail = () => {
                 </p>
               </AccordionDetails>
             ))}
-          </Accordion>
+          </Accordion> */}
         </div>
       ) : (
         <p>No driver details available.</p>

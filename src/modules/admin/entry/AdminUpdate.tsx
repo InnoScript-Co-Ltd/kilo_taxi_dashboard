@@ -24,11 +24,12 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { paths } from "../../../constants/paths";
 import {
   genderStatuslists,
-  generalStatusLists,
+  customerStatusLists,
 } from "../../../constants/config";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
 import { DatePicker } from "@mui/x-date-pickers";
 import Loading from "../../../components/Loading";
+import { getId } from "../../../helpers/updateHelper";
 
 const AdminUpdate = () => {
   const [loading, setLoading] = useState(false);
@@ -59,8 +60,8 @@ const AdminUpdate = () => {
       Password: "",
       gender: 0,
       status: 0,
-      emailVerifiedAt: null,
-      phoneVerifiedAt: null
+      // emailVerifiedAt: null,
+      // phoneVerifiedAt: null,
       // flagIcon: undefined,
       // zipCode: ""
     },
@@ -84,18 +85,24 @@ const AdminUpdate = () => {
       setValue("Name", admin.name || "");
       setValue("Phone", admin.phone || "");
       setValue("Email", admin.email || "");
-      setValue(
-        "emailVerifiedAt",
-        new Date(admin.emailVerifiedAt) || new Date()
-      );
-      setValue(
-        "phoneVerifiedAt",
-        new Date(admin.phoneVerifiedAt) || new Date()
-      );
+      // setValue(
+      //   "emailVerifiedAt",
+      //   new Date(admin.emailVerifiedAt) || new Date()
+      // );
+      // setValue(
+      //   "phoneVerifiedAt",
+      //   new Date(admin.phoneVerifiedAt) || new Date()
+      // );
       setValue("Password", admin.password || "");
       setValue("address", admin.address || "");
-      setValue("gender", Number(admin.gender) || 0);
-      setValue("status", Number(admin.status) || 0);
+      setValue(
+        "gender",
+        getId({ lists: genderStatuslists, value: admin.gender }) || 0
+      );
+      setValue(
+        "status",
+        getId({ lists: customerStatusLists, value: admin.status }) || 0
+      );
     }
   }, [admin, setValue]);
 
@@ -140,7 +147,12 @@ const AdminUpdate = () => {
             <Grid2 size={{ xs: 6, md: 3 }}>
               <FormControl variant="filled" fullWidth error={!!errors.Email}>
                 <InputLabel htmlFor="email">Email</InputLabel>
-                <FilledInput size="small" disabled={loading} id="email" {...register("Email")} />
+                <FilledInput
+                  size="small"
+                  disabled={loading}
+                  id="email"
+                  {...register("Email")}
+                />
                 <FormHelperText>{errors.Email?.message}</FormHelperText>
               </FormControl>
             </Grid2>
@@ -148,7 +160,12 @@ const AdminUpdate = () => {
             <Grid2 size={{ xs: 6, md: 3 }}>
               <FormControl variant="filled" fullWidth error={!!errors.Phone}>
                 <InputLabel htmlFor="phone">Phone</InputLabel>
-                <FilledInput size="small" disabled={loading} id="phone" {...register("Phone")} />
+                <FilledInput
+                  size="small"
+                  disabled={loading}
+                  id="phone"
+                  {...register("Phone")}
+                />
                 <FormHelperText>{errors.Phone?.message}</FormHelperText>
               </FormControl>
             </Grid2>
@@ -193,7 +210,7 @@ const AdminUpdate = () => {
               </FormControl>
             </Grid2>
 
-            <Grid2 size={{ xs: 6, md: 3 }}>
+            {/* <Grid2 size={{ xs: 6, md: 3 }}>
               <FormControl fullWidth error={!!errors.emailVerifiedAt}>
                 <Controller
                   name="emailVerifiedAt"
@@ -218,9 +235,9 @@ const AdminUpdate = () => {
                   {errors.emailVerifiedAt?.message}
                 </FormHelperText>
               </FormControl>
-            </Grid2>
+            </Grid2> */}
 
-            <Grid2 size={{ xs: 6, md: 3 }}>
+            {/* <Grid2 size={{ xs: 6, md: 3 }}>
               <FormControl fullWidth error={!!errors.phoneVerifiedAt}>
                 <Controller
                   name="phoneVerifiedAt"
@@ -244,7 +261,7 @@ const AdminUpdate = () => {
                   {errors.phoneVerifiedAt?.message}
                 </FormHelperText>
               </FormControl>
-            </Grid2>
+            </Grid2> */}
 
             <Grid2 size={{ xs: 6, md: 3 }}>
               <FormControl variant="filled" fullWidth error={!!errors.gender}>
@@ -260,7 +277,7 @@ const AdminUpdate = () => {
                       disabled={loading}
                       label="Gender"
                       {...field}
-                      value={field.value || ''} // Convert field value to a string
+                      value={field.value || ""} // Convert field value to a string
                       onChange={(event) => field.onChange(event.target.value)} // Ensure onChange value is a string
                     >
                       {genderStatuslists?.map((general: any) => (
@@ -290,10 +307,10 @@ const AdminUpdate = () => {
                       disabled={loading}
                       label="Status"
                       {...field}
-                      value={field.value || ''} // Convert field value to a string
+                      value={field.value || ""} // Convert field value to a string
                       onChange={(event) => field.onChange(event.target.value)} // Ensure onChange value is a string
                     >
-                      {generalStatusLists?.map((status: any) => (
+                      {customerStatusLists?.map((status: any) => (
                         <MenuItem key={status.id} value={status.id}>
                           {status.value}
                         </MenuItem>

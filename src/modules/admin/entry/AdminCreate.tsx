@@ -23,7 +23,10 @@ import { Controller, useForm } from "react-hook-form";
 import { AdminFormInputs, adminSchema } from "../admin.payload";
 import { useNotifications } from "@toolpad/core/useNotifications";
 import { useState } from "react";
-import { genderStatuslists } from "../../../constants/config";
+import {
+  genderStatuslists,
+  customerStatusLists,
+} from "../../../constants/config";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
 import { DatePicker } from "@mui/x-date-pickers";
 import Loading from "../../../components/Loading";
@@ -93,7 +96,12 @@ const AdminCreate = () => {
             <Grid2 size={{ xs: 6, md: 3 }}>
               <FormControl variant="filled" fullWidth error={!!errors.Email}>
                 <InputLabel htmlFor="email">Email</InputLabel>
-                <FilledInput size="small" disabled={loading} id="email" {...register("Email")} />
+                <FilledInput
+                  size="small"
+                  disabled={loading}
+                  id="email"
+                  {...register("Email")}
+                />
                 <FormHelperText>{errors.Email?.message}</FormHelperText>
               </FormControl>
             </Grid2>
@@ -101,7 +109,12 @@ const AdminCreate = () => {
             <Grid2 size={{ xs: 6, md: 3 }}>
               <FormControl variant="filled" fullWidth error={!!errors.Phone}>
                 <InputLabel htmlFor="phone">Phone</InputLabel>
-                <FilledInput size="small"  disabled={loading} id="phone" {...register("Phone")} />
+                <FilledInput
+                  size="small"
+                  disabled={loading}
+                  id="phone"
+                  {...register("Phone")}
+                />
                 <FormHelperText>{errors.Phone?.message}</FormHelperText>
               </FormControl>
             </Grid2>
@@ -110,7 +123,7 @@ const AdminCreate = () => {
               <FormControl variant="filled" fullWidth error={!!errors.Password}>
                 <InputLabel htmlFor="password">Password</InputLabel>
                 <FilledInput
-                 disabled={loading}
+                  disabled={loading}
                   size="small"
                   id="password"
                   type={showPassword ? "text" : "password"}
@@ -118,7 +131,7 @@ const AdminCreate = () => {
                   endAdornment={
                     <InputAdornment position="end">
                       <IconButton
-                         disabled={loading}
+                        disabled={loading}
                         aria-label="toggle password visibility"
                         onClick={handleClickShowPassword}
                         onMouseDown={handleMouseDownPassword}
@@ -146,7 +159,7 @@ const AdminCreate = () => {
               </FormControl>
             </Grid2>
 
-            <Grid2 size={{ xs: 6, md: 3 }}>
+            {/* <Grid2 size={{ xs: 6, md: 3 }}>
               <FormControl fullWidth error={!!errors.emailVerifiedAt}>
                 <Controller
                   name="emailVerifiedAt"
@@ -170,9 +183,9 @@ const AdminCreate = () => {
                   {errors.emailVerifiedAt?.message}
                 </FormHelperText>
               </FormControl>
-            </Grid2>
+            </Grid2> */}
 
-            <Grid2 size={{ xs: 6, md: 3 }}>
+            {/* <Grid2 size={{ xs: 6, md: 3 }}>
               <FormControl fullWidth error={!!errors.phoneVerifiedAt}>
                 <Controller
                   name="phoneVerifiedAt"
@@ -196,7 +209,7 @@ const AdminCreate = () => {
                   {errors.phoneVerifiedAt?.message}
                 </FormHelperText>
               </FormControl>
-            </Grid2>
+            </Grid2> */}
 
             <Grid2 size={{ xs: 6, md: 3 }}>
               <FormControl variant="filled" fullWidth error={!!errors.gender}>
@@ -212,12 +225,12 @@ const AdminCreate = () => {
                       disabled={loading}
                       label="Gender"
                       {...field}
-                      value={field.value || ''} // Convert field value to a string
+                      value={field.value || 0} // Convert field value to a string
                       onChange={(event) => field.onChange(event.target.value)} // Ensure onChange value is a string
                     >
-                      {genderStatuslists?.map((general: any) => (
-                        <MenuItem key={general.id} value={general.id}>
-                          {general.value}
+                      {genderStatuslists?.map((gender: any) => (
+                        <MenuItem key={gender.id} value={gender.id}>
+                          {gender.value}
                         </MenuItem>
                       ))}
                     </Select>
@@ -242,10 +255,10 @@ const AdminCreate = () => {
                       disabled={loading}
                       label="Status"
                       {...field}
-                      value={field.value || ''} // Convert field value to a string
+                      value={field.value || 0} // Convert field value to a string
                       onChange={(event) => field.onChange(event.target.value)} // Ensure onChange value is a string
                     >
-                      {genderStatuslists?.map((status: any) => (
+                      {customerStatusLists?.map((status: any) => (
                         <MenuItem key={status.id} value={status.id}>
                           {status.value}
                         </MenuItem>
@@ -275,7 +288,7 @@ const AdminCreate = () => {
             >
               Cancel
             </Button>
-            <Button type="submit"  disabled={loading} variant="contained">
+            <Button type="submit" disabled={loading} variant="contained">
               Submit
             </Button>
           </Box>
