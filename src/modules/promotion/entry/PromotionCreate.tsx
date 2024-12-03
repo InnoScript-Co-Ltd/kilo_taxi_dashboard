@@ -25,7 +25,10 @@ import { endpoints } from "../../../constants/endpoints";
 import { useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { DatePicker } from "@mui/x-date-pickers";
-import { generalStatusLists } from "../../../constants/config";
+import {
+  generalStatusLists,
+  promoStatusLists,
+} from "../../../constants/config";
 
 const PromotionCreate = () => {
   const [loading, setLoading] = useState(false);
@@ -58,7 +61,7 @@ const PromotionCreate = () => {
     try {
       const response: any = await getRequest(`${endpoints.customer}`, null);
       console.log(response);
-      
+
       await httpServiceHandler(dispatch, response);
       if (response && "data" in response && response.status === 200) {
         setCustomerLists(response.data.customers);
@@ -116,9 +119,17 @@ const PromotionCreate = () => {
             </Grid2>
 
             <Grid2 size={{ xs: 6, md: 3 }}>
-              <FormControl variant="filled" fullWidth error={!!errors.PromoCode}>
+              <FormControl
+                variant="filled"
+                fullWidth
+                error={!!errors.PromoCode}
+              >
                 <InputLabel htmlFor="promo_code">Promo Code</InputLabel>
-                <FilledInput size="small" id="promo_code" {...register("PromoCode")} />
+                <FilledInput
+                  size="small"
+                  id="promo_code"
+                  {...register("PromoCode")}
+                />
                 <FormHelperText>{errors.PromoCode?.message}</FormHelperText>
               </FormControl>
             </Grid2>
@@ -147,18 +158,42 @@ const PromotionCreate = () => {
               </FormControl>
             </Grid2>
             <Grid2 size={{ xs: 6, md: 3 }}>
-              <FormControl variant="filled" fullWidth error={!!errors.FixAmount}>
-                <InputLabel htmlFor="fix_amount">Fix Amount</InputLabel>
-                <FilledInput size="small" id="fix_amount" {...register("FixAmount")} />
-                <FormHelperText>{errors.FixAmount?.message}</FormHelperText>
+              <FormControl variant="filled" fullWidth error={!!errors.Value}>
+                <InputLabel htmlFor="value">Value</InputLabel>
+                <FilledInput size="small" id="value" {...register("Value")} />
+                <FormHelperText>{errors.Value?.message}</FormHelperText>
               </FormControl>
             </Grid2>
 
             <Grid2 size={{ xs: 6, md: 3 }}>
-              <FormControl variant="filled" fullWidth error={!!errors.Percentage}>
-                <InputLabel htmlFor="Percentage">Percentage</InputLabel>
-                <FilledInput size="small" id="Percentage" {...register("Percentage")} />
-                <FormHelperText>{errors.Percentage?.message}</FormHelperText>
+              <FormControl
+                variant="filled"
+                fullWidth
+                error={!!errors.PromotionType}
+              >
+                <InputLabel htmlFor="promo_type">Promotion Type</InputLabel>
+                <FilledInput
+                  size="small"
+                  id="promo_type"
+                  {...register("PromotionType")}
+                />
+                <FormHelperText>{errors.PromotionType?.message}</FormHelperText>
+              </FormControl>
+            </Grid2>
+
+            <Grid2 size={{ xs: 6, md: 3 }}>
+              <FormControl
+                variant="filled"
+                fullWidth
+                error={!!errors.ApplicableTo}
+              >
+                <InputLabel htmlFor="applicable_to">Applicable To</InputLabel>
+                <FilledInput
+                  size="small"
+                  id="applicable_to"
+                  {...register("ApplicableTo")}
+                />
+                <FormHelperText>{errors.ApplicableTo?.message}</FormHelperText>
               </FormControl>
             </Grid2>
 
@@ -176,10 +211,10 @@ const PromotionCreate = () => {
                       disabled={loading}
                       label="Status"
                       {...field}
-                      value={field.value || ''} // Convert field value to a string
+                      value={field.value || ""} // Convert field value to a string
                       onChange={(event) => field.onChange(event.target.value)} // Ensure onChange value is a string
                     >
-                      {generalStatusLists?.map((status: any) => (
+                      {promoStatusLists?.map((status: any) => (
                         <MenuItem key={status.id} value={status.id}>
                           {status.value}
                         </MenuItem>
@@ -191,7 +226,6 @@ const PromotionCreate = () => {
                 <FormHelperText>{errors.Status?.message}</FormHelperText>
               </FormControl>
             </Grid2>
-
           </Grid2>
 
           {/* footer */}

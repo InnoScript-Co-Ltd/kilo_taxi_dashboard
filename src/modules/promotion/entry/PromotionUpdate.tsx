@@ -11,10 +11,7 @@ import {
   Select,
 } from "@mui/material";
 import { useCallback, useEffect, useState } from "react";
-import {
-  PromotionFormInputs,
-  promotionSchema,
-} from "../promotion.payload"; // Similar to cityPayload but for states
+import { PromotionFormInputs, promotionSchema } from "../promotion.payload"; // Similar to cityPayload but for states
 import { useNavigate, useParams } from "react-router";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, AppRootState } from "../../../stores";
@@ -27,7 +24,11 @@ import { endpoints } from "../../../constants/endpoints";
 import { Controller, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { DatePicker } from "@mui/x-date-pickers";
-import { generalStatusLists} from "../../../constants/config";
+import {
+  generalStatusLists,
+  promoStatusLists,
+} from "../../../constants/config";
+import { getId } from "../../../helpers/updateHelper";
 
 const PromotionUpdate = () => {
   const [loading, setLoading] = useState(false);
@@ -52,8 +53,9 @@ const PromotionUpdate = () => {
       CustomerId: 0,
       PromoCode: "",
       ExpiredAt: new Date(),
-      FixAmount: "",
-      Percentage: "",
+      Value: "",
+      PromotionType: "",
+      ApplicableTo: "",
       Status: 0,
     },
   });
@@ -101,22 +103,26 @@ const PromotionUpdate = () => {
         "ExpiredAt",
         promotion.expiredAt ? new Date(promotion.expiredAt) : new Date()
       );
-      setValue("FixAmount", String(promotion.fixAmount) || "");
-      setValue("Percentage", String(promotion.percentage) || "");
-      setValue("Status", promotion.status || 0);
+      setValue("Value", String(promotion.value) || "");
+      setValue("PromotionType", String(promotion.promotionType) || "");
+      setValue("ApplicableTo", String(promotion.applicableTo) || "");
+      setValue(
+        "Status",
+        getId({ lists: promoStatusLists, value: promotion.status }) || 0
+      );
     }
   }, [promotion, setValue]);
 
-    // Load data into form fields on component mount
-    const loadingDataDetail = useCallback(async () => {
-      setLoading(true);
-      await promotionService.show(dispatch, params.id);
-      setLoading(false);
-    }, [dispatch, params.id]);
-  
-    useEffect(() => {
-      loadingDataDetail();
-    }, [loadingDataDetail]);
+  // Load data into form fields on component mount
+  const loadingDataDetail = useCallback(async () => {
+    setLoading(true);
+    await promotionService.show(dispatch, params.id);
+    setLoading(false);
+  }, [dispatch, params.id]);
+
+  useEffect(() => {
+    loadingDataDetail();
+  }, [loadingDataDetail]);
 
   return (
     <Box>
@@ -200,18 +206,10 @@ const PromotionUpdate = () => {
               </FormControl>
             </Grid2>
             <Grid2 size={{ xs: 6, md: 3 }}>
-              <FormControl
-                variant="filled"
-                fullWidth
-                error={!!errors.FixAmount}
-              >
-                <InputLabel htmlFor="fix_amount">Fix Amount</InputLabel>
-                <FilledInput
-                  size="small"
-                  id="fix_amount"
-                  {...register("FixAmount")}
-                />
-                <FormHelperText>{errors.FixAmount?.message}</FormHelperText>
+              <FormControl variant="filled" fullWidth error={!!errors.Value}>
+                <InputLabel htmlFor="value">Value</InputLabel>
+                <FilledInput size="small" id="value" {...register("Value")} />
+                <FormHelperText>{errors.Value?.message}</FormHelperText>
               </FormControl>
             </Grid2>
 
@@ -219,15 +217,31 @@ const PromotionUpdate = () => {
               <FormControl
                 variant="filled"
                 fullWidth
-                error={!!errors.Percentage}
+                error={!!errors.PromotionType}
               >
-                <InputLabel htmlFor="Percentage">Percentage</InputLabel>
+                <InputLabel htmlFor="promotion_type">Promotion Type</InputLabel>
                 <FilledInput
                   size="small"
-                  id="Percentage"
-                  {...register("Percentage")}
+                  id="promotion_type"
+                  {...register("PromotionType")}
                 />
-                <FormHelperText>{errors.Percentage?.message}</FormHelperText>
+                <FormHelperText>{errors.PromotionType?.message}</FormHelperText>
+              </FormControl>
+            </Grid2>
+
+            <Grid2 size={{ xs: 6, md: 3 }}>
+              <FormControl
+                variant="filled"
+                fullWidth
+                error={!!errors.ApplicableTo}
+              >
+                <InputLabel htmlFor="applicable_to">Applicable To</InputLabel>
+                <FilledInput
+                  size="small"
+                  id="applicable_to"
+                  {...register("ApplicableTo")}
+                />
+                <FormHelperText>{errors.ApplicableTo?.message}</FormHelperText>
               </FormControl>
             </Grid2>
 
@@ -245,10 +259,10 @@ const PromotionUpdate = () => {
                       disabled={loading}
                       label="Status"
                       {...field}
-                      value={field.value || ''} // Convert field value to a string
+                      value={field.value || ""} // Convert field value to a string
                       onChange={(event) => field.onChange(event.target.value)} // Ensure onChange value is a string
                     >
-                      {generalStatusLists?.map((status: any) => (
+                      {promoStatusLists?.map((status: any) => (
                         <MenuItem key={status.id} value={status.id}>
                           {status.value}
                         </MenuItem>
