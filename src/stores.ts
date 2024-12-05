@@ -3,6 +3,7 @@ import shareSlice from "./shares/shareSlice";
 import adminSlice from "./modules/admin/admin.slice";
 import customerSlice from "./modules/customer/customer.slice";
 import promotionSlice from "./modules/promotion/promotion.slice";
+import reviewSlice from "./modules/review/review.slice";
 import scheduleSlice from "./modules/scheduleBooking/scheduleBooking.slice";
 import driverSlice from "./modules/driver/driver.slice";
 import vehicleSlice from "./modules/vehicle/vehicle.slice";
@@ -27,6 +28,7 @@ export const stores = configureStore({
     admin: adminSlice,
     customer: customerSlice,
     promotion: promotionSlice,
+    review: reviewSlice,
     scheduleBookings: scheduleSlice,
     driver: driverSlice,
     vehicle: vehicleSlice,

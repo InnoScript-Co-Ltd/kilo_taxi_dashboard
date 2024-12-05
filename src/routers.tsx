@@ -11,6 +11,7 @@ import { DriverRoute } from "./modules/driver/driver.route";
 import { VehicleRoute } from "./modules/vehicle/vehicle.route";
 import { WalletRoute } from "./modules/wallet/wallet.route";
 import { OrderRoute } from "./modules/order/order.route";
+import { ReviewRoute } from "./modules/review/review.route";
 
 export const routers = createBrowserRouter([
   {
@@ -27,6 +28,7 @@ export const routers = createBrowserRouter([
       ...VehicleRoute,
       ...WalletRoute,
       ...OrderRoute,
+      ...ReviewRoute,
     ],
   },
   {

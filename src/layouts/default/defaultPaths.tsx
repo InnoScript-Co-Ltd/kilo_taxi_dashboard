@@ -118,6 +118,19 @@ export const navigationList = [
       },
     ],
   },
+  {
+    segment: "review",
+    title: "Review",
+    isParent: true,
+    icon: <AccountBalanceWalletIcon />,
+    children: [
+      {
+        segment: "list",
+        title: "List",
+        icon: <FormatListBulletedIcon />,
+      },
+    ],
+  },
   // {
   //   segment: 'country',
   //   title: 'Country',

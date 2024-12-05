@@ -7,6 +7,7 @@ export const endpoints = {
   admin: "Admin",
   customer: "Customer",
   promotion: "Promotion",
+  review: "Review",
   scheduleBooking: "scheduleBooking",
   country: "Country",
   city: "City",

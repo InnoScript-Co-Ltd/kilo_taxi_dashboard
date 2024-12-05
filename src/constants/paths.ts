@@ -47,4 +47,9 @@ export const paths = {
   order: "/order",
   orderList: "/order/list",
   orderDetail: "/order/:id",
+
+  review: "/review",
+  reviewList: "/review/list",
+  reviewCreate: "/review/new",
+  reviewDetail: "/review/:id",
 };
