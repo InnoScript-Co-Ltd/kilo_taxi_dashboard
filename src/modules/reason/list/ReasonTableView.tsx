@@ -6,18 +6,11 @@ import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TablePagination from "@mui/material/TablePagination";
 import TableRow from "@mui/material/TableRow";
-import { driverColumns, driverPayload } from "../driver.payload"; // Your driver columns and payload
+import { reasonColumns, reasonPayload } from "../reason.payload"; // Replace with your reason columns and payload
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, AppRootState } from "../../../stores";
-import { driverService } from "../driver.service"; // Assuming you have a driver service
-import UpAndDel from "../../../components/UpAndDel";
-
-import {
-  driverStatusLists,
-  genderStatuslists,
-  kycStatusLists,
-  paginateOptions,
-} from "../../../constants/config";
+import { reasonService } from "../reason.service";
+import { paginateOptions } from "../../../constants/config";
 import { NavigateId } from "../../../shares/NavigateId";
 import { paths } from "../../../constants/paths";
 import {
@@ -27,30 +20,33 @@ import {
   InputAdornment,
   TableSortLabel,
 } from "@mui/material";
-import { setPaginate } from "../driver.slice"; // Your driver slice
+import { setPaginate } from "../reason.slice"; // Adjust the slice if needed
 import SearchIcon from "@mui/icons-material/Search";
+import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
 import RestartAltIcon from "@mui/icons-material/RestartAlt";
+import { useNavigate } from "react-router";
+import UpAndDel from "../../../components/UpAndDel";
 import {
   StyledTableCell,
   StyledTableRow,
 } from "../../../components/TableCommon";
 import { useNotifications } from "@toolpad/core/useNotifications";
-import Status from "../../../components/Status";
-import TAvatar from "../../../components/TAvatar";
 
-const DriverTableView = () => {
+const ReasonTableView = () => {
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
   const dispatch = useDispatch<AppDispatch>();
   const { data, pagingParams } = useSelector(
-    (state: AppRootState) => state.driver // Adjust to your driver slice state
+    (state: AppRootState) => state.reason
   );
 
   const notifications = useNotifications();
+  const navigate = useNavigate();
   const [loading, setLoading] = React.useState(false);
 
   const handleChangePage = (event: unknown, newPage: number) => {
     setPage(newPage);
+
     dispatch(
       setPaginate({
         ...pagingParams,
@@ -75,9 +71,9 @@ const DriverTableView = () => {
 
   const loadingData = React.useCallback(async () => {
     setLoading(true);
-    await driverService.index(dispatch, pagingParams, notifications);
+    await reasonService.index(dispatch, pagingParams, notifications);
     setLoading(false);
-  }, [dispatch, pagingParams, notifications]);
+  }, [dispatch, pagingParams]);
 
   React.useEffect(() => {
     loadingData();
@@ -96,7 +92,7 @@ const DriverTableView = () => {
       >
         <Input
           id="input-with-icon-search"
-          placeholder="Search Driver"
+          placeholder="Search Reason"
           value={pagingParams.SearchTerm}
           onChange={(e) => {
             dispatch(
@@ -122,8 +118,15 @@ const DriverTableView = () => {
           }}
         >
           <Button
+            startIcon={<AddCircleOutlineIcon />}
+            onClick={() => navigate(paths.reasonCreate)} // Adjust path for reason create page
+          >
+            Create
+          </Button>
+
+          <Button
             onClick={() => {
-              dispatch(setPaginate(driverPayload.pagingParams)); // Reset the paginate
+              dispatch(setPaginate(reasonPayload.pagingParams)); // Adjust the reset payload
               setPage(0);
               setRowsPerPage(10);
             }}
@@ -139,22 +142,30 @@ const DriverTableView = () => {
         <Table stickyHeader aria-label="sticky table">
           <TableHead>
             <TableRow>
-              {driverColumns.map((column) => (
+              {reasonColumns.map((column) => (
                 <StyledTableCell
                   key={column.id}
                   style={{ minWidth: column.minWidth }}
                   align={column.numeric ? "right" : "left"}
                   padding={column.disablePadding ? "none" : "normal"}
                   sortDirection={
-                    column.sort && pagingParams.SortDir === column.id
+                    column.sort === true && pagingParams.SortDir === column.id
                       ? pagingParams.SortField
                       : false
                   }
                 >
                   <TableSortLabel
-                    hideSortIcon={!column.sort}
-                    active={column.sort && pagingParams.SortDir === column.id}
-                    direction={pagingParams.SortDir === 0 ? "asc" : "desc"}
+                    hideSortIcon={column.sort === false ? true : false}
+                    active={
+                      column.sort === true
+                        ? pagingParams.SortDir === column.id
+                        : false
+                    }
+                    direction={
+                      column.sort === true && pagingParams.SortDir === 0
+                        ? "asc"
+                        : "desc"
+                    }
                     onClick={() => {
                       if (column.sort) {
                         dispatch(
@@ -174,56 +185,35 @@ const DriverTableView = () => {
             </TableRow>
           </TableHead>
           <TableBody>
-            {data.drivers?.map((row: any) => (
+            {data.reasons?.map((row: any) => (
               <StyledTableRow hover role="checkbox" tabIndex={-1} key={row.id}>
-                {driverColumns.map((column) => {
+                {reasonColumns.map((column) => {
                   const value = row[column.id];
                   return (
                     <StyledTableCell key={column.id} align={column.align}>
                       {(() => {
                         switch (column.label) {
-                          case "Driver Name":
+                          case "Reason Name":
                             return (
                               <NavigateId
-                                url={`${paths.driver}/${row.id}`} // Driver detail path
+                                url={`${paths.reason}/${row.id}`} // Adjust the path for reason detail
                                 value={value}
                               />
                             );
-                          case "Audit Column":
+                          case "Create Date":
                             return value;
-                          case "Profile":
-                            return <TAvatar src={value} />;
-                          case "Status":
-                            return (
-                              <Status
-                                status={value}
-                                lists={driverStatusLists}
-                              />
-                            );
-                          case "Kyc Status":
-                            return (
-                              <Status 
-                                status={value} 
-                                lists={kycStatusLists} 
-                              />
-                            );
-                          case "Gender":
-                            return (
-                              <Status
-                                status={value}
-                                lists={genderStatuslists}
-                              />
-                            );
+                          case "Update Date":
+                            return value;
                           case "Action":
                             return (
                               <UpAndDel
-                                url={`${paths.driver}/${row.id}`}
+                                url={`${paths.reason}/${row.id}`} // Adjust for reason delete
                                 fn={loadingData}
                                 priority={true}
                               />
                             );
                           default:
-                            return value; // Fallback for other columns
+                            return value; // Fallback case
                         }
                       })()}
                     </StyledTableCell>
@@ -248,4 +238,4 @@ const DriverTableView = () => {
   );
 };
 
-export default DriverTableView;
+export default ReasonTableView;

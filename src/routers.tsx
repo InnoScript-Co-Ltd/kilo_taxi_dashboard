@@ -12,6 +12,8 @@ import { VehicleRoute } from "./modules/vehicle/vehicle.route";
 import { WalletRoute } from "./modules/wallet/wallet.route";
 import { OrderRoute } from "./modules/order/order.route";
 import { ReviewRoute } from "./modules/review/review.route";
+import { ReasonRoute } from "./modules/reason/reason.route";
+import { TopupTransactionRoute } from "./modules/topupTransaction/topupTransaction.route";
 
 export const routers = createBrowserRouter([
   {
@@ -29,6 +31,8 @@ export const routers = createBrowserRouter([
       ...WalletRoute,
       ...OrderRoute,
       ...ReviewRoute,
+      ...ReasonRoute,
+      ...TopupTransactionRoute
     ],
   },
   {

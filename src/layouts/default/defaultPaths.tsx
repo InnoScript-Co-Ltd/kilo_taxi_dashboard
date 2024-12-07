@@ -131,6 +131,32 @@ export const navigationList = [
       },
     ],
   },
+  {
+    segment: "reason",
+    title: "Reason",
+    isParent: true,
+    icon: <AccountBalanceWalletIcon />,
+    children: [
+      {
+        segment: "list",
+        title: "List",
+        icon: <FormatListBulletedIcon />,
+      },
+    ],
+  },
+  {
+    segment: "topupTransaction",
+    title: "TopupTransaction",
+    isParent: true,
+    icon: <AccountBalanceWalletIcon />,
+    children: [
+      {
+        segment: "list",
+        title: "List",
+        icon: <FormatListBulletedIcon />,
+      },
+    ],
+  },
   // {
   //   segment: 'country',
   //   title: 'Country',

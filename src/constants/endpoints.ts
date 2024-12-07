@@ -17,6 +17,10 @@ export const endpoints = {
   vehicle: "Vehicle",
   wallet: "Wallet",
   order: "Order",
+  topupTransaction: "TopupTransaction",
+  reason: "Reason",
+
+  paymentChannel: "PaymentChannel",
 
   login: "auth/login",
   image: `${baseURL}/storage/images`,
