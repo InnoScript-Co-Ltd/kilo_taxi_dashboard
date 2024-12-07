@@ -52,4 +52,12 @@ export const paths = {
   reviewList: "/review/list",
   reviewCreate: "/review/new",
   reviewDetail: "/review/:id",
+
+  sms: "/sms",
+  smsList: "/sms/list",
+  smsCreate: "/sms/new",
+  smsDetail: "/sms/:id",
+
+  simulation: "/simulation",
+  simulationOrderCreate: "/simulation/order",
 };

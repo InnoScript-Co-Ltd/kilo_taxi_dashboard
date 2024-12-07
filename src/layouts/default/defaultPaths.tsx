@@ -131,6 +131,32 @@ export const navigationList = [
       },
     ],
   },
+  {
+    segment: "sms",
+    title: "Sms",
+    isParent: true,
+    icon: <DashboardIcon />,
+    children: [
+      {
+        segment: "list",
+        title: "List",
+        icon: <FormatListBulletedIcon />,
+      },
+    ],
+  },
+  {
+    segment: "simulation",
+    title: "Simulation",
+    isParent: true,
+    icon: <DashboardIcon />,
+    children: [
+      {
+        segment: "order",
+        title: "Order Create",
+        icon: <FormatListBulletedIcon />,
+      },
+    ],
+  },
   // {
   //   segment: 'country',
   //   title: 'Country',
