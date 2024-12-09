@@ -12,6 +12,10 @@ import { VehicleRoute } from "./modules/vehicle/vehicle.route";
 import { WalletRoute } from "./modules/wallet/wallet.route";
 import { OrderRoute } from "./modules/order/order.route";
 import { PaymentChannelRoute } from "./modules/paymentchannel/paymentchannel.route";
+import { ReviewRoute } from "./modules/review/review.route";
+import { SmsRoute } from "./modules/sms/sms.route";
+import { SimulationRoute } from "./modules/simulation/simulation.route";
+import { SosRoute } from "./modules/sos/sos.route";
 export const routers = createBrowserRouter([
   {
     path: "/",
@@ -28,6 +32,10 @@ export const routers = createBrowserRouter([
       ...WalletRoute,
       ...OrderRoute,
       ...PaymentChannelRoute,
+      ...ReviewRoute,
+      ...SmsRoute,
+      ...SimulationRoute,
+      ...SosRoute,
     ],
   },
   {

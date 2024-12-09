@@ -122,11 +122,63 @@ export const navigationList = [
     segment: "paymentChannel",
     title: "PaymentCHannel",
     isParent: true,
+    icon: <FormatListBulletedIcon />,
+    children: [
+      {
+        segment: "list",
+        title: "List",
+        icon: <FormatListBulletedIcon />,
+      },
+    ],
+  },
+  {
+    segment: "sos",
+    title: "Sos",
+    isParent: true,
+    icon: <FormatListBulletedIcon />,
+    children: [
+      {
+        segment: "list",
+        title: "List",
+        icon: <FormatListBulletedIcon />,
+      },
+    ],
+  },
+  {
+    segment: "review",
+    title: "Review",
+    isParent: true,
     icon: <AccountBalanceWalletIcon />,
     children: [
       {
         segment: "list",
         title: "List",
+        icon: <FormatListBulletedIcon />,
+      },
+    ],
+  },
+  {
+    segment: "sms",
+    title: "Sms",
+    isParent: true,
+    icon: <DashboardIcon />,
+    children: [
+      {
+        segment: "list",
+        title: "List",
+        icon: <FormatListBulletedIcon />,
+      },
+    ],
+  },
+  {
+    segment: "simulation",
+    title: "Simulation",
+    isParent: true,
+    icon: <DashboardIcon />,
+    children: [
+      {
+        segment: "order",
+        title: "Order Create",
         icon: <FormatListBulletedIcon />,
       },
     ],

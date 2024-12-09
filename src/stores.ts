@@ -3,12 +3,15 @@ import shareSlice from "./shares/shareSlice";
 import adminSlice from "./modules/admin/admin.slice";
 import customerSlice from "./modules/customer/customer.slice";
 import promotionSlice from "./modules/promotion/promotion.slice";
+import reviewSlice from "./modules/review/review.slice";
 import scheduleSlice from "./modules/scheduleBooking/scheduleBooking.slice";
 import driverSlice from "./modules/driver/driver.slice";
 import vehicleSlice from "./modules/vehicle/vehicle.slice";
 import walletSlice from "./modules/wallet/wallet.slice";
 import orderSlice from "./modules/order/order.slice";
 import paymentChannelSlice from "./modules/paymentchannel/paymentchannel.slice";
+import smsSlice from "./modules/sms/sms.slice";
+import sosSlice from "./modules/sos/sos.slice";
 // interface RootState {
 //     share: SHARE_SLICE;
 //     admin: ADMIN_SLICE;
@@ -27,12 +30,15 @@ export const stores = configureStore({
     admin: adminSlice,
     customer: customerSlice,
     promotion: promotionSlice,
+    review: reviewSlice,
     scheduleBookings: scheduleSlice,
     driver: driverSlice,
     vehicle: vehicleSlice,
     wallet: walletSlice,
     order: orderSlice,
     paymentChannel: paymentChannelSlice,
+    sms: smsSlice,
+    sos: sosSlice,
   },
 });
 

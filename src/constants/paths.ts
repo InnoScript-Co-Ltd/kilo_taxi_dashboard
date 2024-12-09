@@ -52,4 +52,19 @@ export const paths = {
   paymentChannelList: "/paymentchannel/list",
   paymentChannelCreate: "/paymentchannel/new",
   paymentChannelDetail: "/paymentchannel/:id",
+
+  review: "/review",
+  reviewList: "/review/list",
+  reviewCreate: "/review/new",
+  reviewDetail: "/review/:id",
+
+  sms: "/sms",
+  smsList: "/sms/list",
+  smsCreate: "/sms/new",
+  smsDetail: "/sms/:id",
+
+  sosList: "/sos/list",
+
+  simulation: "/simulation",
+  simulationOrderCreate: "/simulation/order",
 };

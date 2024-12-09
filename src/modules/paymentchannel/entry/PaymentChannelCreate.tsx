@@ -49,7 +49,7 @@ const PaymentChannelCreate = () => {
       notifications
     );
     if (response.status === 201) {
-      navigate(`${paths.walletList}`);
+      navigate(`${paths.paymentChannelList}`);
     }
     setLoading(false);
   };
