@@ -11,7 +11,7 @@ import { DriverRoute } from "./modules/driver/driver.route";
 import { VehicleRoute } from "./modules/vehicle/vehicle.route";
 import { WalletRoute } from "./modules/wallet/wallet.route";
 import { OrderRoute } from "./modules/order/order.route";
-
+import { PaymentChannelRoute } from "./modules/paymentchannel/paymentchannel.route";
 export const routers = createBrowserRouter([
   {
     path: "/",
@@ -27,6 +27,7 @@ export const routers = createBrowserRouter([
       ...VehicleRoute,
       ...WalletRoute,
       ...OrderRoute,
+      ...PaymentChannelRoute,
     ],
   },
   {

@@ -118,6 +118,19 @@ export const navigationList = [
       },
     ],
   },
+  {
+    segment: "paymentChannel",
+    title: "PaymentCHannel",
+    isParent: true,
+    icon: <AccountBalanceWalletIcon />,
+    children: [
+      {
+        segment: "list",
+        title: "List",
+        icon: <FormatListBulletedIcon />,
+      },
+    ],
+  },
   // {
   //   segment: 'country',
   //   title: 'Country',

@@ -47,4 +47,9 @@ export const paths = {
   order: "/order",
   orderList: "/order/list",
   orderDetail: "/order/:id",
+
+  paymentChannel: "/paymentchannel",
+  paymentChannelList: "/paymentchannel/list",
+  paymentChannelCreate: "/paymentchannel/new",
+  paymentChannelDetail: "/paymentchannel/:id",
 };

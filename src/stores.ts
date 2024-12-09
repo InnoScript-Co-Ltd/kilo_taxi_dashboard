@@ -8,7 +8,7 @@ import driverSlice from "./modules/driver/driver.slice";
 import vehicleSlice from "./modules/vehicle/vehicle.slice";
 import walletSlice from "./modules/wallet/wallet.slice";
 import orderSlice from "./modules/order/order.slice";
-
+import paymentChannelSlice from "./modules/paymentchannel/paymentchannel.slice";
 // interface RootState {
 //     share: SHARE_SLICE;
 //     admin: ADMIN_SLICE;
@@ -32,6 +32,7 @@ export const stores = configureStore({
     vehicle: vehicleSlice,
     wallet: walletSlice,
     order: orderSlice,
+    paymentChannel: paymentChannelSlice,
   },
 });
 

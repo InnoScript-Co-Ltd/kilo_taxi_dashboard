@@ -16,7 +16,7 @@ export const endpoints = {
   vehicle: "Vehicle",
   wallet: "Wallet",
   order: "Order",
-
+  paymentChannel: "PaymentChannel",
   login: "auth/login",
   image: `${baseURL}/storage/images`,
   status: "status",
