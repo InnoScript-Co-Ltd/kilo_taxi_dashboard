@@ -39,7 +39,7 @@ export const stores = configureStore({
     wallet: walletSlice,
     order: orderSlice,
     reason: reasonSlice,
-    topUpTransaction: topupTransactionSlice
+    topUpTransaction: topupTransactionSlice,
     paymentChannel: paymentChannelSlice,
     sms: smsSlice,
     sos: sosSlice,

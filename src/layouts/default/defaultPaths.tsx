@@ -142,6 +142,11 @@ export const navigationList = [
         title: "List",
         icon: <FormatListBulletedIcon />,
       },
+      {
+        segment: "Receives",
+        title: "Receive Sos",
+        icon: <FormatListBulletedIcon />,
+      },
     ],
   },
   {
@@ -170,6 +175,7 @@ export const navigationList = [
       },
     ],
   },
+  {
     segment: "sms",
     title: "Sms",
     isParent: true,
@@ -191,6 +197,11 @@ export const navigationList = [
       {
         segment: "list",
         title: "List",
+        icon: <FormatListBulletedIcon />,
+      },
+    ],
+  },
+  {
     segment: "simulation",
     title: "Simulation",
     isParent: true,
@@ -203,6 +214,7 @@ export const navigationList = [
       },
     ],
   },
+
   // {
   //   segment: 'country',
   //   title: 'Country',

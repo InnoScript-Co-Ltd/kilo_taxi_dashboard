@@ -36,7 +36,7 @@ export const routers = createBrowserRouter([
       ...PaymentChannelRoute,
       ...ReviewRoute,
       ...ReasonRoute,
-      ...TopupTransactionRoute
+      ...TopupTransactionRoute,
       ...SmsRoute,
       ...SimulationRoute,
       ...SosRoute,
