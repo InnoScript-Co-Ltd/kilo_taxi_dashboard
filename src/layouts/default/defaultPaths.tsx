@@ -119,6 +119,32 @@ export const navigationList = [
     ],
   },
   {
+    segment: "paymentChannel",
+    title: "PaymentCHannel",
+    isParent: true,
+    icon: <FormatListBulletedIcon />,
+    children: [
+      {
+        segment: "list",
+        title: "List",
+        icon: <FormatListBulletedIcon />,
+      },
+    ],
+  },
+  {
+    segment: "sos",
+    title: "Sos",
+    isParent: true,
+    icon: <FormatListBulletedIcon />,
+    children: [
+      {
+        segment: "list",
+        title: "List",
+        icon: <FormatListBulletedIcon />,
+      },
+    ],
+  },
+  {
     segment: "review",
     title: "Review",
     isParent: true,
