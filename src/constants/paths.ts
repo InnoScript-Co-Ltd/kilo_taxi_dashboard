@@ -49,6 +49,11 @@ export const paths = {
   orderList: "/order/list",
   orderDetail: "/order/:id",
 
+  paymentChannel: "/paymentchannel",
+  paymentChannelList: "/paymentchannel/list",
+  paymentChannelCreate: "/paymentchannel/new",
+  paymentChannelDetail: "/paymentchannel/:id",
+
   review: "/review",
   reviewList: "/review/list",
   reviewCreate: "/review/new",
@@ -63,4 +68,14 @@ export const paths = {
   topupTransactionList: "/topupTransaction/list",
   topupTransactionCreate: "/topupTransaction/new",
   topupTransactionDetail: "/topupTransaction/:id",
+  
+  sms: "/sms",
+  smsList: "/sms/list",
+  smsCreate: "/sms/new",
+  smsDetail: "/sms/:id",
+
+  sosList: "/sos/list",
+
+  simulation: "/simulation",
+  simulationOrderCreate: "/simulation/order",
 };
