@@ -17,6 +17,8 @@ export const endpoints = {
   vehicle: "Vehicle",
   wallet: "Wallet",
   order: "Order",
+  topupTransaction: "TopupTransaction",
+  reason: "Reason",
   paymentChannel: "PaymentChannel",
   sms: "Sms",
   simulation: "Simulation",

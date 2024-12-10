@@ -3,6 +3,7 @@ import { paths } from "../../constants/paths"; // Ensure this path is correct
 // import DriverUpdate from "./entry/DriverUpdate"; // Adjust the import path as necessary
 import DriverList from "./view/DriverList"; // Adjust the import path as necessary
 import DriverDetail from "./view/DriverDetail"; // Adjust the import path as necessary
+import DriverUpdate from "./entry/DriverUpdate";
 
 
 export const DriverRoute = [
@@ -41,10 +42,23 @@ export const DriverRoute = [
             return {
                 breadcrumbs: [
                     { label: "Dashboard", url: paths.dashboard },
-                    { label: "Drivers", url: paths.driverList },
-                    { label: "Update", url: paths.driverDetail },
+                    { label: "Drivers", url: paths.driverList }
                 ],
             };
         },
+    },
+    {
+        id: "customer-update",
+        path: paths.driverUpdate,
+        element: <DriverUpdate />,
+        loader : () => {
+            return{
+                breadcrumbs: [
+                    { label: "Dashboard", url: paths.dashboard },
+                    { label: "Drivers", url: paths.driverList },
+                ],
+            }
+        },
+        
     },
 ];

@@ -158,6 +158,18 @@ export const navigationList = [
     ],
   },
   {
+    segment: "reason",
+    title: "Reason",
+    isParent: true,
+    icon: <AccountBalanceWalletIcon />,
+    children: [
+      {
+        segment: "list",
+        title: "List",
+        icon: <FormatListBulletedIcon />,
+      },
+    ],
+  },
     segment: "sms",
     title: "Sms",
     isParent: true,
@@ -171,6 +183,14 @@ export const navigationList = [
     ],
   },
   {
+    segment: "topupTransaction",
+    title: "TopupTransaction",
+    isParent: true,
+    icon: <AccountBalanceWalletIcon />,
+    children: [
+      {
+        segment: "list",
+        title: "List",
     segment: "simulation",
     title: "Simulation",
     isParent: true,

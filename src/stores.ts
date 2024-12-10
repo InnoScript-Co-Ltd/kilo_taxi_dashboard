@@ -9,6 +9,8 @@ import driverSlice from "./modules/driver/driver.slice";
 import vehicleSlice from "./modules/vehicle/vehicle.slice";
 import walletSlice from "./modules/wallet/wallet.slice";
 import orderSlice from "./modules/order/order.slice";
+import reasonSlice from "./modules/reason/reason.slice";
+import topupTransactionSlice from "./modules/topupTransaction/topupTransaction.slice";
 import paymentChannelSlice from "./modules/paymentchannel/paymentchannel.slice";
 import smsSlice from "./modules/sms/sms.slice";
 import sosSlice from "./modules/sos/sos.slice";
@@ -36,6 +38,8 @@ export const stores = configureStore({
     vehicle: vehicleSlice,
     wallet: walletSlice,
     order: orderSlice,
+    reason: reasonSlice,
+    topUpTransaction: topupTransactionSlice
     paymentChannel: paymentChannelSlice,
     sms: smsSlice,
     sos: sosSlice,

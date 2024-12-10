@@ -34,6 +34,7 @@ export const paths = {
   driver: "/driver",
   driverList: "/driver/list",
   driverDetail: "/driver/:id",
+  driverUpdate: "/driver/update/:id",
 
   vehicle: "/vehicle",
   vehicleList: "/vehicle/list",
@@ -58,6 +59,16 @@ export const paths = {
   reviewCreate: "/review/new",
   reviewDetail: "/review/:id",
 
+  reason: "/reason",
+  reasonList: "/reason/list",
+  reasonCreate: "/reason/new",
+  reasonDetail: "/reason/:id",
+
+  topupTransaction: "/topupTransaction",
+  topupTransactionList: "/topupTransaction/list",
+  topupTransactionCreate: "/topupTransaction/new",
+  topupTransactionDetail: "/topupTransaction/:id",
+  
   sms: "/sms",
   smsList: "/sms/list",
   smsCreate: "/sms/new",

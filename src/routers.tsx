@@ -13,6 +13,8 @@ import { WalletRoute } from "./modules/wallet/wallet.route";
 import { OrderRoute } from "./modules/order/order.route";
 import { PaymentChannelRoute } from "./modules/paymentchannel/paymentchannel.route";
 import { ReviewRoute } from "./modules/review/review.route";
+import { ReasonRoute } from "./modules/reason/reason.route";
+import { TopupTransactionRoute } from "./modules/topupTransaction/topupTransaction.route";
 import { SmsRoute } from "./modules/sms/sms.route";
 import { SimulationRoute } from "./modules/simulation/simulation.route";
 import { SosRoute } from "./modules/sos/sos.route";
@@ -33,6 +35,8 @@ export const routers = createBrowserRouter([
       ...OrderRoute,
       ...PaymentChannelRoute,
       ...ReviewRoute,
+      ...ReasonRoute,
+      ...TopupTransactionRoute
       ...SmsRoute,
       ...SimulationRoute,
       ...SosRoute,
