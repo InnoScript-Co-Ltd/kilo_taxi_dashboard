@@ -7,8 +7,8 @@ export const promotionSchema = z.object({
   PromoCode: z.string(),
   ExpiredAt: z.date(),
   Value: z.string(),
-  PromotionType: z.string(),
-  ApplicableTo: z.string(),
+  PromotionType: z.number(),
+  ApplicableTo: z.number(),
   Status: z.number().nullable(),
 });
 

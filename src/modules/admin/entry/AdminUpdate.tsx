@@ -277,7 +277,7 @@ const AdminUpdate = () => {
                       disabled={loading}
                       label="Gender"
                       {...field}
-                      value={field.value || ""} // Convert field value to a string
+                      value={field.value} // Convert field value to a string
                       onChange={(event) => field.onChange(event.target.value)} // Ensure onChange value is a string
                     >
                       {genderStatuslists?.map((general: any) => (
@@ -307,7 +307,7 @@ const AdminUpdate = () => {
                       disabled={loading}
                       label="Status"
                       {...field}
-                      value={field.value || ""} // Convert field value to a string
+                      value={field.value} // Convert field value to a string
                       onChange={(event) => field.onChange(event.target.value)} // Ensure onChange value is a string
                     >
                       {customerStatusLists?.map((status: any) => (

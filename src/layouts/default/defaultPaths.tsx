@@ -143,8 +143,8 @@ export const navigationList = [
         icon: <FormatListBulletedIcon />,
       },
       {
-        segment: "Receives",
-        title: "Receive Sos",
+        segment: "receive",
+        title: "Sos Receive",
         icon: <FormatListBulletedIcon />,
       },
     ],

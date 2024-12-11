@@ -75,7 +75,7 @@ export const paths = {
   smsDetail: "/sms/:id",
 
   sosList: "/sos/list",
-  sosRecieve: "/sos/receive",
+  sosReceive: "/sos/receive",
 
   simulation: "/simulation",
   simulationOrderCreate: "/simulation/order",

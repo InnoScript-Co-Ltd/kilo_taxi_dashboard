@@ -23,11 +23,12 @@ export interface Sos {
   status: string;
   walletType: string;
   reasonId: string;
+  reasonName: string;
 }
 
 // Define columns for wallet table
 interface SosColumn {
-  id: "id" | "address" | "status" | "walletType" | "reasonId" | "action";
+  id: "id" | "address" | "status" | "walletType" | "reasonName" | "action";
   label: string;
   minWidth?: number;
   align?: "right";
@@ -74,8 +75,8 @@ export const sosColumns: readonly SosColumn[] = [
     sort: true,
   },
   {
-    id: "reasonId",
-    label: "Reason Id",
+    id: "reasonName",
+    label: "Reason name",
     minWidth: 60,
     numeric: false,
     disablePadding: false,

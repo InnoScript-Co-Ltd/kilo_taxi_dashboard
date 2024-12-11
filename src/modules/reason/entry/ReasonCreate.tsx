@@ -23,7 +23,10 @@ import { useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { DatePicker } from "@mui/x-date-pickers";
 import { useNotifications } from "@toolpad/core/useNotifications";
-import { genderStatuslists } from "../../../constants/config";
+import {
+  genderStatuslists,
+  generalStatusLists,
+} from "../../../constants/config";
 
 const ReasonCreate = () => {
   const [loading, setLoading] = useState(false);
@@ -58,21 +61,13 @@ const ReasonCreate = () => {
         <form onSubmit={handleSubmit(submitReasonCreate)}>
           <Grid2 container spacing={2}>
             <Grid2 size={{ xs: 6, md: 3 }}>
-              <FormControl
-                variant="filled"
-                fullWidth
-                error={!!errors.reason}
-              >
-                <InputLabel htmlFor="reason_name">Reason Name</InputLabel>
-                <FilledInput
-                  size="small"
-                  id="reason_name"
-                  {...register("reason")}
-                />
-                <FormHelperText>{errors.reason?.message}</FormHelperText>
+              <FormControl variant="filled" fullWidth error={!!errors.name}>
+                <InputLabel htmlFor="name">Reason Name</InputLabel>
+                <FilledInput size="small" id="name" {...register("name")} />
+                <FormHelperText>{errors.name?.message}</FormHelperText>
               </FormControl>
             </Grid2>
-          
+
             <Grid2 size={{ xs: 6, md: 3 }}>
               <FormControl variant="filled" fullWidth error={!!errors.status}>
                 <InputLabel htmlFor="status">Status</InputLabel>
@@ -90,7 +85,7 @@ const ReasonCreate = () => {
                       value={field.value || 0} // Convert field value to a string
                       onChange={(event) => field.onChange(event.target.value)} // Ensure onChange value is a string
                     >
-                      {genderStatuslists?.map((status: any) => (
+                      {generalStatusLists?.map((status: any) => (
                         <MenuItem key={status.id} value={status.id}>
                           {status.value}
                         </MenuItem>

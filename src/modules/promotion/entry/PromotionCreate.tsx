@@ -26,8 +26,10 @@ import { useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { DatePicker } from "@mui/x-date-pickers";
 import {
+  applicableToLists,
   generalStatusLists,
   promoStatusLists,
+  promotionTypeLists,
 } from "../../../constants/config";
 
 const PromotionCreate = () => {
@@ -135,48 +137,50 @@ const PromotionCreate = () => {
             </Grid2>
 
             <Grid2 size={{ xs: 6, md: 3 }}>
-              <FormControl fullWidth error={!!errors.ExpiredAt}>
-                <Controller
-                  name="ExpiredAt"
-                  control={control}
-                  render={({ field }) => (
-                    <DatePicker
-                      label="Expired At"
-                      value={field.value}
-                      onChange={(date) => field.onChange(date)}
-                      disabled={loading}
-                      slotProps={{
-                        textField: {
-                          error: !!errors.ExpiredAt,
-                          helperText: errors.ExpiredAt?.message,
-                        },
-                      }}
-                    />
-                  )}
-                />
-                <FormHelperText>{errors.ExpiredAt?.message}</FormHelperText>
-              </FormControl>
-            </Grid2>
-            <Grid2 size={{ xs: 6, md: 3 }}>
               <FormControl variant="filled" fullWidth error={!!errors.Value}>
                 <InputLabel htmlFor="value">Value</InputLabel>
-                <FilledInput size="small" id="value" {...register("Value")} />
+                <FilledInput
+                  type="number"
+                  size="small"
+                  id="value"
+                  {...register("Value", { valueAsNumber: true })}
+                />
                 <FormHelperText>{errors.Value?.message}</FormHelperText>
               </FormControl>
             </Grid2>
-
             <Grid2 size={{ xs: 6, md: 3 }}>
               <FormControl
                 variant="filled"
                 fullWidth
                 error={!!errors.PromotionType}
               >
-                <InputLabel htmlFor="promo_type">Promotion Type</InputLabel>
-                <FilledInput
-                  size="small"
-                  id="promo_type"
-                  {...register("PromotionType")}
+                <InputLabel htmlFor="promotionType">PromotionType</InputLabel>
+                <Controller
+                  name="PromotionType"
+                  control={control}
+                  render={({ field }) => (
+                    <Select
+                      id="promotionType"
+                      aria-describedby="promotionType_text"
+                      size="small"
+                      disabled={loading}
+                      label="PromotionType"
+                      {...field}
+                      value={field.value || 0} // Convert field value to a string
+                      onChange={(event) => field.onChange(event.target.value)} // Ensure onChange value is a string
+                    >
+                      {promotionTypeLists?.map((promotionType: any) => (
+                        <MenuItem
+                          key={promotionType.id}
+                          value={promotionType.id}
+                        >
+                          {promotionType.value}
+                        </MenuItem>
+                      ))}
+                    </Select>
+                  )}
                 />
+
                 <FormHelperText>{errors.PromotionType?.message}</FormHelperText>
               </FormControl>
             </Grid2>
@@ -187,12 +191,30 @@ const PromotionCreate = () => {
                 fullWidth
                 error={!!errors.ApplicableTo}
               >
-                <InputLabel htmlFor="applicable_to">Applicable To</InputLabel>
-                <FilledInput
-                  size="small"
-                  id="applicable_to"
-                  {...register("ApplicableTo")}
+                <InputLabel htmlFor="applicableTo">ApplicableTo</InputLabel>
+                <Controller
+                  name="ApplicableTo"
+                  control={control}
+                  render={({ field }) => (
+                    <Select
+                      id="applicableTo"
+                      aria-describedby="applicableTo_text"
+                      size="small"
+                      disabled={loading}
+                      label="ApplicableTo"
+                      {...field}
+                      value={field.value || 0} // Convert field value to a string
+                      onChange={(event) => field.onChange(event.target.value)} // Ensure onChange value is a string
+                    >
+                      {applicableToLists?.map((applicableTo: any) => (
+                        <MenuItem key={applicableTo.id} value={applicableTo.id}>
+                          {applicableTo.value}
+                        </MenuItem>
+                      ))}
+                    </Select>
+                  )}
                 />
+
                 <FormHelperText>{errors.ApplicableTo?.message}</FormHelperText>
               </FormControl>
             </Grid2>
@@ -211,7 +233,7 @@ const PromotionCreate = () => {
                       disabled={loading}
                       label="Status"
                       {...field}
-                      value={field.value || ""} // Convert field value to a string
+                      value={field.value || 0} // Convert field value to a string
                       onChange={(event) => field.onChange(event.target.value)} // Ensure onChange value is a string
                     >
                       {promoStatusLists?.map((status: any) => (

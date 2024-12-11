@@ -134,6 +134,35 @@ const VehicleUpdate = () => {
 
         <form onSubmit={handleSubmit(submitVehicleUpdate)}>
           <Grid2 container spacing={2}>
+            <Grid2 size={{ xs: 6, md: 3 }}>
+              <FormControl variant="filled" fullWidth error={!!errors.DriverId}>
+                <InputLabel htmlFor="driver_name">Driver</InputLabel>
+                <Controller
+                  name="DriverId"
+                  control={control}
+                  render={({ field }) => (
+                    <Select
+                      size="small"
+                      id="driver_name"
+                      aria-describedby="driver_name_text"
+                      disabled={loading}
+                      label="Driver"
+                      {...field}
+                      value={field.value} // Convert field value to a string
+                      onChange={(event) => field.onChange(event.target.value)} // Ensure onChange value is a string
+                    >
+                      {driversList.map((driver: any) => (
+                        <MenuItem key={driver.id} value={driver.id}>
+                          {driver.name}
+                        </MenuItem>
+                      ))}
+                    </Select>
+                  )}
+                />
+
+                <FormHelperText>{errors.DriverId?.message}</FormHelperText>
+              </FormControl>
+            </Grid2>
             {/* Vehicle Number */}
             <Grid2 size={{ xs: 6, md: 3 }}>
               <FormControl

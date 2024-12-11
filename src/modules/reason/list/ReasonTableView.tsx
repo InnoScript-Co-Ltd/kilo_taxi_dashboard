@@ -10,7 +10,7 @@ import { reasonColumns, reasonPayload } from "../reason.payload"; // Replace wit
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, AppRootState } from "../../../stores";
 import { reasonService } from "../reason.service";
-import { paginateOptions } from "../../../constants/config";
+import { generalStatusLists, paginateOptions } from "../../../constants/config";
 import { NavigateId } from "../../../shares/NavigateId";
 import { paths } from "../../../constants/paths";
 import {
@@ -30,6 +30,7 @@ import {
   StyledTableCell,
   StyledTableRow,
 } from "../../../components/TableCommon";
+import Status from "../../../components/Status";
 import { useNotifications } from "@toolpad/core/useNotifications";
 
 const ReasonTableView = () => {
@@ -193,17 +194,20 @@ const ReasonTableView = () => {
                     <StyledTableCell key={column.id} align={column.align}>
                       {(() => {
                         switch (column.label) {
-                          case "Reason Name":
+                          case "Name":
                             return (
                               <NavigateId
                                 url={`${paths.reason}/${row.id}`} // Adjust the path for reason detail
                                 value={value}
                               />
                             );
-                          case "Create Date":
-                            return value;
-                          case "Update Date":
-                            return value;
+                          case "Status":
+                            return (
+                              <Status
+                                status={value}
+                                lists={generalStatusLists}
+                              />
+                            );
                           case "Action":
                             return (
                               <UpAndDel
