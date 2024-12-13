@@ -217,12 +217,7 @@ const PromotionUpdate = () => {
             <Grid2 size={{ xs: 6, md: 3 }}>
               <FormControl variant="filled" fullWidth error={!!errors.Value}>
                 <InputLabel htmlFor="value">Unit</InputLabel>
-                <FilledInput
-                  type="number"
-                  size="small"
-                  id="vaule"
-                  {...register("Value", { valueAsNumber: true })}
-                />
+                <FilledInput size="small" id="vaule" {...register("Value")} />
                 <FormHelperText>{errors.Value?.message}</FormHelperText>
               </FormControl>
             </Grid2>

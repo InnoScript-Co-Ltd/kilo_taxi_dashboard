@@ -135,16 +135,36 @@ const PromotionCreate = () => {
                 <FormHelperText>{errors.PromoCode?.message}</FormHelperText>
               </FormControl>
             </Grid2>
+            <Grid2 size={{ xs: 6, md: 3 }}>
+              <FormControl fullWidth error={!!errors.ExpiredAt}>
+                <Controller
+                  name="ExpiredAt"
+                  control={control}
+                  render={({ field }) => {
+                    return (
+                      <DatePicker
+                        label="ExpiredAt"
+                        value={field.value}
+                        onChange={(date) => field.onChange(date)}
+                        disabled={loading}
+                        slotProps={{
+                          textField: {
+                            error: !!errors.ExpiredAt,
+                            helperText: errors.ExpiredAt?.message,
+                          },
+                        }}
+                      />
+                    );
+                  }}
+                />
+                <FormHelperText>{errors.ExpiredAt?.message}</FormHelperText>
+              </FormControl>
+            </Grid2>
 
             <Grid2 size={{ xs: 6, md: 3 }}>
               <FormControl variant="filled" fullWidth error={!!errors.Value}>
-                <InputLabel htmlFor="value">Value</InputLabel>
-                <FilledInput
-                  type="number"
-                  size="small"
-                  id="value"
-                  {...register("Value", { valueAsNumber: true })}
-                />
+                <InputLabel htmlFor="value">Unit</InputLabel>
+                <FilledInput size="small" id="value" {...register("Value")} />
                 <FormHelperText>{errors.Value?.message}</FormHelperText>
               </FormControl>
             </Grid2>

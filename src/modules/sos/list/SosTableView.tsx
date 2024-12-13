@@ -208,7 +208,7 @@ const SosTableView = () => {
                                 lists={walletTypeStatusLists}
                               />
                             );
-                          case "ReasonId":
+                          case "ReasonName":
                             return value;
                           // case "Action":
                           //   return (
