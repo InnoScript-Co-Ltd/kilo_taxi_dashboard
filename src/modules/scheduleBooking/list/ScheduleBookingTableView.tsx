@@ -31,6 +31,7 @@ import {
   StyledTableRow,
 } from "../../../components/TableCommon";
 import { useNotifications } from "@toolpad/core";
+import { formatDate } from "../../../helpers/common";
 
 const ScheduleBookingTableView = () => {
   const [page, setPage] = React.useState(0);
@@ -188,12 +189,12 @@ const ScheduleBookingTableView = () => {
                         switch (column.label) {
                           case "Pickup Address":
                             return value;
-                          case "Schedule Time":
+                          case "Drop Off Location":
                             return value;
                           case "Destination":
                             return value;
-                          case "Kilo Type":
-                            return value;
+                          case "Created Date":
+                            return formatDate(value);
                           case "Action":
                             return (
                               <NavigateId
