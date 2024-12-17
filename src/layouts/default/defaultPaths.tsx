@@ -7,6 +7,8 @@ import DepartureBoardIcon from "@mui/icons-material/DepartureBoard";
 import DirectionsCarIcon from "@mui/icons-material/DirectionsCar";
 import PersonIcon from "@mui/icons-material/Person";
 import AccountBalanceWalletIcon from "@mui/icons-material/AccountBalanceWallet";
+import NoteIcon from '@mui/icons-material/Note';
+import CreditCardIcon from '@mui/icons-material/CreditCard';
 
 export const navigationList = [
   {
@@ -135,7 +137,7 @@ export const navigationList = [
     segment: "reason",
     title: "Reason",
     isParent: true,
-    icon: <AccountBalanceWalletIcon />,
+    icon: <NoteIcon />,
     children: [
       {
         segment: "list",
@@ -148,7 +150,7 @@ export const navigationList = [
     segment: "topupTransaction",
     title: "TopupTransaction",
     isParent: true,
-    icon: <AccountBalanceWalletIcon />,
+    icon: <CreditCardIcon />,
     children: [
       {
         segment: "list",

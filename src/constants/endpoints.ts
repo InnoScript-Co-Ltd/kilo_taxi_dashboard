@@ -17,7 +17,7 @@ export const endpoints = {
   vehicle: "Vehicle",
   wallet: "Wallet",
   order: "Order",
-  topupTransaction: "TopupTransaction",
+  topupTransaction: "TopUpTransaction",
   reason: "Reason",
 
   paymentChannel: "PaymentChannel",

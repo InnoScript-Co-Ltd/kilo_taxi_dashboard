@@ -193,7 +193,7 @@ const ReasonTableView = () => {
                     <StyledTableCell key={column.id} align={column.align}>
                       {(() => {
                         switch (column.label) {
-                          case "Reason Name":
+                          case "Name":
                             return (
                               <NavigateId
                                 url={`${paths.reason}/${row.id}`} // Adjust the path for reason detail

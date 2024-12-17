@@ -23,7 +23,7 @@ import { useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { DatePicker } from "@mui/x-date-pickers";
 import { useNotifications } from "@toolpad/core/useNotifications";
-import { genderStatuslists } from "../../../constants/config";
+import { generalStatusLists } from "../../../constants/config";
 
 const ReasonCreate = () => {
   const [loading, setLoading] = useState(false);
@@ -61,15 +61,15 @@ const ReasonCreate = () => {
               <FormControl
                 variant="filled"
                 fullWidth
-                error={!!errors.reason}
+                error={!!errors.name}
               >
                 <InputLabel htmlFor="reason_name">Reason Name</InputLabel>
                 <FilledInput
                   size="small"
                   id="reason_name"
-                  {...register("reason")}
+                  {...register("name")}
                 />
-                <FormHelperText>{errors.reason?.message}</FormHelperText>
+                <FormHelperText>{errors.name?.message}</FormHelperText>
               </FormControl>
             </Grid2>
           
@@ -90,7 +90,7 @@ const ReasonCreate = () => {
                       value={field.value || 0} // Convert field value to a string
                       onChange={(event) => field.onChange(event.target.value)} // Ensure onChange value is a string
                     >
-                      {genderStatuslists?.map((status: any) => (
+                      {generalStatusLists?.map((status: any) => (
                         <MenuItem key={status.id} value={status.id}>
                           {status.value}
                         </MenuItem>

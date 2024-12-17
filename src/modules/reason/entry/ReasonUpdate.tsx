@@ -21,9 +21,8 @@ import { paths } from "../../../constants/paths";
 import { Breadcrumb } from "../../../components/Breadcrumb";
 import { Controller, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { DatePicker } from "@mui/x-date-pickers";
 import { useNotifications } from "@toolpad/core/useNotifications";
-import { genderStatuslists } from "../../../constants/config";
+import { generalStatusLists } from "../../../constants/config";
 import { getId } from "../../../helpers/updateHelper";
 
 const ReasonUpdate = () => {
@@ -45,7 +44,7 @@ const ReasonUpdate = () => {
   } = useForm<ReasonFormInputs>({
     resolver: zodResolver(reasonSchema),
     defaultValues: {
-      reason: "",
+      name: "",
       status: 0,
     },
   });
@@ -83,10 +82,10 @@ const ReasonUpdate = () => {
   useEffect(() => {
     if (reason) {
       setValue("id", Number(reason.id) || 0);
-      setValue("reason", reason.reason || "");
+      setValue("name", reason.name || "");
       setValue(
         "status",
-        getId({ lists: genderStatuslists, value: reason.status }) || 0
+        getId({ lists: generalStatusLists, value: reason.status }) || 0
       );
     }
   }, [reason, setValue]);
@@ -103,49 +102,48 @@ const ReasonUpdate = () => {
               <FormControl
                 variant="filled"
                 fullWidth
-                error={!!errors.reason}
+                error={!!errors.name}
               >
-                <InputLabel htmlFor="reason_name">Reason</InputLabel>
+                <InputLabel htmlFor="reason_name">Name</InputLabel>
                 <FilledInput
                   size="small"
                   id="reason_name"
-                  {...register("reason")}
+                  {...register("name")}
                 />
-                <FormHelperText>{errors.reason?.message}</FormHelperText>
+                <FormHelperText>{errors.name?.message}</FormHelperText>
+              </FormControl>
+            </Grid2>
+
+            <Grid2 size={{ xs: 6, md: 3 }}>
+              <FormControl variant="filled" fullWidth error={!!errors.status}>
+                <InputLabel htmlFor="status">Status</InputLabel>
+                <Controller
+                  name="status"
+                  control={control}
+                  render={({ field }) => (
+                    <Select
+                      size="small"
+                      id="status"
+                      aria-describedby="status_text"
+                      disabled={loading}
+                      label="Status"
+                      {...field}
+                      value={field.value || 0} // Convert field value to a string
+                      onChange={(event) => field.onChange(event.target.value)} // Ensure onChange value is a string
+                    >
+                      {generalStatusLists?.map((status: any) => (
+                        <MenuItem key={status.id} value={status.id}>
+                          {status.value}
+                        </MenuItem>
+                      ))}
+                    </Select>
+                  )}
+                />
+
+                <FormHelperText>{errors.status?.message}</FormHelperText>
               </FormControl>
             </Grid2>
           </Grid2>
-
-          <Grid2 size={{ xs: 6, md: 3 }}>
-            <FormControl variant="filled" fullWidth error={!!errors.status}>
-              <InputLabel htmlFor="status">Status</InputLabel>
-              <Controller
-                name="status"
-                control={control}
-                render={({ field }) => (
-                  <Select
-                    size="small"
-                    id="status"
-                    aria-describedby="status_text"
-                    disabled={loading}
-                    label="Status"
-                    {...field}
-                    value={field.value || 0} // Convert field value to a string
-                    onChange={(event) => field.onChange(event.target.value)} // Ensure onChange value is a string
-                  >
-                    {genderStatuslists?.map((status: any) => (
-                      <MenuItem key={status.id} value={status.id}>
-                        {status.value}
-                      </MenuItem>
-                    ))}
-                  </Select>
-                )}
-              />
-
-              <FormHelperText>{errors.status?.message}</FormHelperText>
-            </FormControl>
-          </Grid2>
-
           {/* Footer */}
           <Box
             sx={{
