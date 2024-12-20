@@ -23,10 +23,12 @@ import { useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { DatePicker } from "@mui/x-date-pickers";
 import { useNotifications } from "@toolpad/core/useNotifications";
+
 import {
   genderStatuslists,
   generalStatusLists,
 } from "../../../constants/config";
+
 
 const ReasonCreate = () => {
   const [loading, setLoading] = useState(false);
@@ -61,9 +63,18 @@ const ReasonCreate = () => {
         <form onSubmit={handleSubmit(submitReasonCreate)}>
           <Grid2 container spacing={2}>
             <Grid2 size={{ xs: 6, md: 3 }}>
-              <FormControl variant="filled" fullWidth error={!!errors.name}>
-                <InputLabel htmlFor="name">Reason Name</InputLabel>
-                <FilledInput size="small" id="name" {...register("name")} />
+
+              <FormControl
+                variant="filled"
+                fullWidth
+                error={!!errors.name}
+              >
+                <InputLabel htmlFor="reason_name">Reason Name</InputLabel>
+                <FilledInput
+                  size="small"
+                  id="reason_name"
+                  {...register("name")}
+                />
                 <FormHelperText>{errors.name?.message}</FormHelperText>
               </FormControl>
             </Grid2>
