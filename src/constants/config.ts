@@ -1,3 +1,4 @@
+// export const env = ["https://localhost:7181/api/v1"];
 export const env = ["http://localhost:5112/api/v1"];
 
 export const drawerWidth: number = 300;
@@ -144,12 +145,21 @@ export const kiloTypeLists = [
   { id: 0, value: "Normal", color: "primary" },
   { id: 1, value: "KiloPlus", color: "success" },
 ];
+export const promotionTypeLists = [
+  { id: 0, value: "FixAmount", color: "primary" },
+  { id: 1, value: "Percentage", color: "success" },
+];
 
 export const promoStatusLists = [
   { id: 0, value: "Expired", color: "error" },
   { id: 1, value: "Used", color: "info" },
   { id: 2, value: "Active", color: "success" },
   { id: 3, value: "Reject", color: "error" },
+];
+export const applicableToLists = [
+  { id: 0, value: "Customer", color: "primary" },
+  { id: 1, value: "Driver", color: "info" },
+  { id: 2, value: "Both", color: "success" },
 ];
 
 export const notiStatusLists = [
@@ -177,8 +187,8 @@ export const vehicleStatusLists = [
 ];
 
 export const walletStatusLists = [
-  { id: 0, value: "ACTIVE", color: "success" },
-  { id: 1, value: "DISABLED", color: "secondary" },
+  { id: 0, value: "Active", color: "success" },
+  { id: 1, value: "Disable", color: "secondary" },
 ];
 
 export const topUpTransactionStatus = [

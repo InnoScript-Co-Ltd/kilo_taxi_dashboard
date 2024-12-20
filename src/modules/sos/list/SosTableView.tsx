@@ -6,11 +6,15 @@ import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TablePagination from "@mui/material/TablePagination";
 import TableRow from "@mui/material/TableRow";
-import { reasonColumns, reasonPayload } from "../reason.payload"; // Replace with your reason columns and payload
+import { sosColumns, sosPayload } from "../sos.payload"; // Replace with your wallet columns and payload
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, AppRootState } from "../../../stores";
-import { reasonService } from "../reason.service";
-import { generalStatusLists, paginateOptions } from "../../../constants/config";
+import { sosService } from "../sos.service";
+import {
+  generalStatusLists,
+  paginateOptions,
+  walletTypeStatusLists,
+} from "../../../constants/config";
 import { NavigateId } from "../../../shares/NavigateId";
 import { paths } from "../../../constants/paths";
 import {
@@ -20,7 +24,7 @@ import {
   InputAdornment,
   TableSortLabel,
 } from "@mui/material";
-import { setPaginate } from "../reason.slice"; // Adjust the slice if needed
+import { setPaginate } from "../sos.slice"; // Adjust the slice if needed
 import SearchIcon from "@mui/icons-material/Search";
 import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
 import RestartAltIcon from "@mui/icons-material/RestartAlt";
@@ -30,15 +34,15 @@ import {
   StyledTableCell,
   StyledTableRow,
 } from "../../../components/TableCommon";
-import Status from "../../../components/Status";
 import { useNotifications } from "@toolpad/core/useNotifications";
+import Status from "../../../components/Status";
 
-const ReasonTableView = () => {
+const SosTableView = () => {
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
   const dispatch = useDispatch<AppDispatch>();
   const { data, pagingParams } = useSelector(
-    (state: AppRootState) => state.reason
+    (state: AppRootState) => state.sos
   );
 
   const notifications = useNotifications();
@@ -72,7 +76,7 @@ const ReasonTableView = () => {
 
   const loadingData = React.useCallback(async () => {
     setLoading(true);
-    await reasonService.index(dispatch, pagingParams, notifications);
+    await sosService.index(dispatch, pagingParams, notifications);
     setLoading(false);
   }, [dispatch, pagingParams]);
 
@@ -93,7 +97,7 @@ const ReasonTableView = () => {
       >
         <Input
           id="input-with-icon-search"
-          placeholder="Search Reason"
+          placeholder="Search Wallet"
           value={pagingParams.SearchTerm}
           onChange={(e) => {
             dispatch(
@@ -119,15 +123,8 @@ const ReasonTableView = () => {
           }}
         >
           <Button
-            startIcon={<AddCircleOutlineIcon />}
-            onClick={() => navigate(paths.reasonCreate)} // Adjust path for reason create page
-          >
-            Create
-          </Button>
-
-          <Button
             onClick={() => {
-              dispatch(setPaginate(reasonPayload.pagingParams)); // Adjust the reset payload
+              dispatch(setPaginate(sosPayload.pagingParams)); // Adjust the reset payload
               setPage(0);
               setRowsPerPage(10);
             }}
@@ -143,7 +140,7 @@ const ReasonTableView = () => {
         <Table stickyHeader aria-label="sticky table">
           <TableHead>
             <TableRow>
-              {reasonColumns.map((column) => (
+              {sosColumns.map((column) => (
                 <StyledTableCell
                   key={column.id}
                   style={{ minWidth: column.minWidth }}
@@ -186,21 +183,17 @@ const ReasonTableView = () => {
             </TableRow>
           </TableHead>
           <TableBody>
-            {data.reasons?.map((row: any) => (
+            {data.sos?.map((row: any) => (
               <StyledTableRow hover role="checkbox" tabIndex={-1} key={row.id}>
-                {reasonColumns.map((column) => {
+                {sosColumns.map((column) => {
                   const value = row[column.id];
                   return (
                     <StyledTableCell key={column.id} align={column.align}>
                       {(() => {
                         switch (column.label) {
-                          case "Name":
-                            return (
-                              <NavigateId
-                                url={`${paths.reason}/${row.id}`} // Adjust the path for reason detail
-                                value={value}
-                              />
-                            );
+                          case "Address":
+                            return value;
+
                           case "Status":
                             return (
                               <Status
@@ -208,14 +201,23 @@ const ReasonTableView = () => {
                                 lists={generalStatusLists}
                               />
                             );
-                          case "Action":
+                          case "WalletType":
                             return (
-                              <UpAndDel
-                                url={`${paths.reason}/${row.id}`} // Adjust for reason delete
-                                fn={loadingData}
-                                priority={true}
+                              <Status
+                                status={value}
+                                lists={walletTypeStatusLists}
                               />
                             );
+                          case "ReasonName":
+                            return value;
+                          // case "Action":
+                          //   return (
+                          //     <UpAndDel
+                          //       url={`${paths.paymentChannel}/${row.id}`} // Adjust for wallet delete
+                          //       fn={loadingData}
+                          //       priority={true}
+                          //     />
+                          //   );
                           default:
                             return value; // Fallback case
                         }
@@ -242,4 +244,4 @@ const ReasonTableView = () => {
   );
 };
 
-export default ReasonTableView;
+export default SosTableView;

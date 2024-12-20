@@ -6,12 +6,10 @@ import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TablePagination from "@mui/material/TablePagination";
 import TableRow from "@mui/material/TableRow";
-import { reasonColumns, reasonPayload } from "../reason.payload"; // Replace with your reason columns and payload
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, AppRootState } from "../../../stores";
-import { reasonService } from "../reason.service";
-import { generalStatusLists, paginateOptions } from "../../../constants/config";
-import { NavigateId } from "../../../shares/NavigateId";
+
+import { smsStatusLists, paginateOptions } from "../../../constants/config";
 import { paths } from "../../../constants/paths";
 import {
   Box,
@@ -20,7 +18,6 @@ import {
   InputAdornment,
   TableSortLabel,
 } from "@mui/material";
-import { setPaginate } from "../reason.slice"; // Adjust the slice if needed
 import SearchIcon from "@mui/icons-material/Search";
 import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
 import RestartAltIcon from "@mui/icons-material/RestartAlt";
@@ -30,17 +27,19 @@ import {
   StyledTableCell,
   StyledTableRow,
 } from "../../../components/TableCommon";
+import { useNotifications } from "@toolpad/core";
 import Status from "../../../components/Status";
-import { useNotifications } from "@toolpad/core/useNotifications";
+import { setPaginate } from "../sms.slice";
+import { smsService } from "../sms.service";
+import { smsColumns, smsPayload } from "../sms.payload";
 
-const ReasonTableView = () => {
+const SmsTableView = () => {
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
   const dispatch = useDispatch<AppDispatch>();
   const { data, pagingParams } = useSelector(
-    (state: AppRootState) => state.reason
+    (state: AppRootState) => state.sms
   );
-
   const notifications = useNotifications();
   const navigate = useNavigate();
   const [loading, setLoading] = React.useState(false);
@@ -59,27 +58,26 @@ const ReasonTableView = () => {
   const handleChangeRowsPerPage = (
     event: React.ChangeEvent<HTMLInputElement>
   ) => {
-    setRowsPerPage(+event.target.value);
-    setPage(0);
     dispatch(
       setPaginate({
         ...pagingParams,
-        RowsPerPage: +event.target.value,
         CurrentPage: 1,
+        PageSize: event.target.value,
       })
     );
+    setRowsPerPage(+event.target.value);
+    setPage(0);
   };
 
   const loadingData = React.useCallback(async () => {
     setLoading(true);
-    await reasonService.index(dispatch, pagingParams, notifications);
+    await smsService.index(dispatch, pagingParams, notifications);
     setLoading(false);
-  }, [dispatch, pagingParams]);
+  }, [dispatch, pagingParams, notifications]);
 
   React.useEffect(() => {
     loadingData();
-  }, [loadingData]);
-
+  }, [pagingParams, loadingData]);
   return (
     <Paper sx={{ width: "100%", overflow: "hidden" }}>
       <Box
@@ -93,7 +91,7 @@ const ReasonTableView = () => {
       >
         <Input
           id="input-with-icon-search"
-          placeholder="Search Reason"
+          placeholder="Search State"
           value={pagingParams.SearchTerm}
           onChange={(e) => {
             dispatch(
@@ -120,14 +118,14 @@ const ReasonTableView = () => {
         >
           <Button
             startIcon={<AddCircleOutlineIcon />}
-            onClick={() => navigate(paths.reasonCreate)} // Adjust path for reason create page
+            onClick={() => navigate(paths.smsCreate)}
           >
             Create
           </Button>
 
           <Button
             onClick={() => {
-              dispatch(setPaginate(reasonPayload.pagingParams)); // Adjust the reset payload
+              dispatch(setPaginate(smsPayload.pagingParams));
               setPage(0);
               setRowsPerPage(10);
             }}
@@ -143,7 +141,7 @@ const ReasonTableView = () => {
         <Table stickyHeader aria-label="sticky table">
           <TableHead>
             <TableRow>
-              {reasonColumns.map((column) => (
+              {smsColumns.map((column) => (
                 <StyledTableCell
                   key={column.id}
                   style={{ minWidth: column.minWidth }}
@@ -186,34 +184,38 @@ const ReasonTableView = () => {
             </TableRow>
           </TableHead>
           <TableBody>
-            {data.reasons?.map((row: any) => (
+            {data.sms?.map((row: any) => (
               <StyledTableRow hover role="checkbox" tabIndex={-1} key={row.id}>
-                {reasonColumns.map((column) => {
+                {smsColumns.map((column) => {
                   const value = row[column.id];
+                  console.log(value);
                   return (
                     <StyledTableCell key={column.id} align={column.align}>
                       {(() => {
                         switch (column.label) {
                           case "Name":
-                            return (
-                              <NavigateId
-                                url={`${paths.reason}/${row.id}`} // Adjust the path for reason detail
-                                value={value}
-                              />
-                            );
+                            return value;
+                          case "Mobile Number":
+                            return value;
+                          case "Title":
+                            return value;
+                          case "Message":
+                            return value;
                           case "Status":
                             return (
-                              <Status
-                                status={value}
-                                lists={generalStatusLists}
-                              />
+                              <Status status={value} lists={smsStatusLists} />
                             );
+                          case "Admin Name":
+                            return value;
+                          case "Customer Name":
+                            return value;
+                          case "Driver Name":
+                            return value;
                           case "Action":
                             return (
                               <UpAndDel
-                                url={`${paths.reason}/${row.id}`} // Adjust for reason delete
+                                url={`${paths.sms}/${row.id}`}
                                 fn={loadingData}
-                                priority={true}
                               />
                             );
                           default:
@@ -242,4 +244,4 @@ const ReasonTableView = () => {
   );
 };
 
-export default ReasonTableView;
+export default SmsTableView;

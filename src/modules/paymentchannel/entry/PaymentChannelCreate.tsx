@@ -8,15 +8,16 @@ import {
   FormHelperText,
   Grid2,
   InputLabel,
-  MenuItem,
-  Select,
 } from "@mui/material";
 import { useState } from "react";
-import { ReasonFormInputs, reasonSchema } from "../reason.payload"; // Import reason schema
+import {
+  PaymentChannelFormInputs,
+  paymentChannelSchema,
+} from "../paymentchannel.payload"; // Import wallet schema
 import { useNavigate } from "react-router";
 import { useDispatch } from "react-redux";
 import { AppDispatch } from "../../../stores";
-import { reasonService } from "../reason.service"; // Import reason service
+import { paymentChannelService } from "../paymentchannel.service"; // Import wallet service
 import { Breadcrumb } from "../../../components/Breadcrumb";
 import { paths } from "../../../constants/paths";
 import { useForm, Controller } from "react-hook-form";
@@ -24,13 +25,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { DatePicker } from "@mui/x-date-pickers";
 import { useNotifications } from "@toolpad/core/useNotifications";
 
-import {
-  genderStatuslists,
-  generalStatusLists,
-} from "../../../constants/config";
-
-
-const ReasonCreate = () => {
+const PaymentChannelCreate = () => {
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
   const dispatch = useDispatch<AppDispatch>();
@@ -42,15 +37,19 @@ const ReasonCreate = () => {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm<ReasonFormInputs>({
-    resolver: zodResolver(reasonSchema),
+  } = useForm<PaymentChannelFormInputs>({
+    resolver: zodResolver(paymentChannelSchema),
   });
 
-  const submitReasonCreate = async (data: ReasonFormInputs) => {
+  const submitPaymentChannelCreate = async (data: PaymentChannelFormInputs) => {
     setLoading(true);
-    const response = await reasonService.store(data, dispatch, notifications);
+    const response = await paymentChannelService.store(
+      data,
+      dispatch,
+      notifications
+    );
     if (response.status === 201) {
-      navigate(`${paths.reasonList}`);
+      navigate(`${paths.paymentChannelList}`);
     }
     setLoading(false);
   };
@@ -59,53 +58,37 @@ const ReasonCreate = () => {
     <Box>
       <Breadcrumb />
       <Card sx={{ marginTop: "20px", padding: "20px" }}>
-        <h2>Reason Create</h2>
-        <form onSubmit={handleSubmit(submitReasonCreate)}>
+        <h2>PaymentChannel Create</h2>
+        <form onSubmit={handleSubmit(submitPaymentChannelCreate)}>
           <Grid2 container spacing={2}>
             <Grid2 size={{ xs: 6, md: 3 }}>
-
               <FormControl
                 variant="filled"
                 fullWidth
-                error={!!errors.name}
+                error={!!errors.channelName}
               >
-                <InputLabel htmlFor="reason_name">Reason Name</InputLabel>
+                <InputLabel htmlFor="channel_name">Channel Name</InputLabel>
                 <FilledInput
                   size="small"
-                  id="reason_name"
-                  {...register("name")}
+                  id="channel_name"
+                  {...register("channelName")}
                 />
-                <FormHelperText>{errors.name?.message}</FormHelperText>
+                <FormHelperText>{errors.channelName?.message}</FormHelperText>
               </FormControl>
             </Grid2>
-
             <Grid2 size={{ xs: 6, md: 3 }}>
-              <FormControl variant="filled" fullWidth error={!!errors.status}>
-                <InputLabel htmlFor="status">Status</InputLabel>
-                <Controller
-                  name="status"
-                  control={control}
-                  render={({ field }) => (
-                    <Select
-                      size="small"
-                      id="status"
-                      aria-describedby="status_text"
-                      disabled={loading}
-                      label="Status"
-                      {...field}
-                      value={field.value || 0} // Convert field value to a string
-                      onChange={(event) => field.onChange(event.target.value)} // Ensure onChange value is a string
-                    >
-                      {generalStatusLists?.map((status: any) => (
-                        <MenuItem key={status.id} value={status.id}>
-                          {status.value}
-                        </MenuItem>
-                      ))}
-                    </Select>
-                  )}
+              <FormControl
+                variant="filled"
+                fullWidth
+                error={!!errors.description}
+              >
+                <InputLabel htmlFor="description">Description</InputLabel>
+                <FilledInput
+                  size="small"
+                  id="description"
+                  {...register("description")}
                 />
-
-                <FormHelperText>{errors.status?.message}</FormHelperText>
+                <FormHelperText>{errors.description?.message}</FormHelperText>
               </FormControl>
             </Grid2>
           </Grid2>
@@ -122,7 +105,7 @@ const ReasonCreate = () => {
           >
             <Button
               variant="outlined"
-              onClick={() => navigate(paths.reasonList)}
+              onClick={() => navigate(paths.walletList)}
             >
               Cancel
             </Button>
@@ -136,4 +119,4 @@ const ReasonCreate = () => {
   );
 };
 
-export default ReasonCreate;
+export default PaymentChannelCreate;

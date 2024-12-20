@@ -9,9 +9,9 @@ export const vehicleSchema = z.object({
   FuelType: z.string().min(1, { message: "Fuel type is required" }),
   Status: z.number(),
   DriverId: z.number().min(1, { message: "Driver ID is required" }),
-  file_BusinessLicenseImage: z.instanceof(File).nullable(),
-  file_VehicleLicenseFront: z.instanceof(File).nullable(),
-  file_VehicleLicenseBack: z.instanceof(File).nullable(),
+  file_BusinessLicenseImage: z.any().nullable(),
+  file_VehicleLicenseFront: z.any().nullable(),
+  file_VehicleLicenseBack: z.any().nullable(),
 });
 
 export type VehicleFormInputs = z.infer<typeof vehicleSchema>;
@@ -27,6 +27,7 @@ export interface VEHICLE {
   vehicleLicenseBack: string;
   status: number;
   driverId: number;
+  driverName: string;
   file_BusinessLicenseImage: File;
   file_VehicleLicenseFront: File;
   file_VehicleLicenseBack: File;
@@ -42,8 +43,10 @@ interface VehicleColumn {
     | "fuelType"
     | "status"
     | "driverId"
-    | "file_BusinessLicenseImage"
-    | "file_VehicleLicenseImage"
+    | "driverName"
+    | "businessLicenseImage"
+    | "vehicleLicenseImageFront"
+    | "vehicleLicenseImageFrontBack"
     | "action";
   label: string;
   minWidth?: number;
@@ -95,8 +98,8 @@ export const vehicleColumns: readonly VehicleColumn[] = [
     sort: true,
   },
   {
-    id: "driverId",
-    label: "Driver ID",
+    id: "driverName",
+    label: "Driver Name",
     minWidth: 10,
     numeric: true,
     disablePadding: false,

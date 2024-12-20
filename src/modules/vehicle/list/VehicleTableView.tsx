@@ -187,13 +187,14 @@ const VehicleTableView = () => {
                     <StyledTableCell key={column.id} align={column.align}>
                       {(() => {
                         switch (column.label) {
-                          case "Vehicle Name":
+                          case "Vehicle No":
                             return (
                               <NavigateId
                                 url={`${paths.vehicle}/${row.id}`} // Path to vehicle details
                                 value={value}
                               />
                             );
+
                           case "Status":
                             return (
                               <Status

@@ -12,11 +12,9 @@ import {
   Select,
 } from "@mui/material";
 import { useState } from "react";
-import { PromotionFormInputs, promotionSchema } from "../promotion.payload"; // Import the state payload
 import { useNavigate } from "react-router";
 import { useDispatch } from "react-redux";
 import { AppDispatch } from "../../../stores";
-import { promotionService } from "../promotion.service"; // Import state service and payload type
 import { httpErrorHandler, httpServiceHandler } from "../../../helpers/handler";
 import { Breadcrumb } from "../../../components/Breadcrumb";
 import { paths } from "../../../constants/paths";
@@ -24,17 +22,15 @@ import { getRequest } from "../../../helpers/api";
 import { endpoints } from "../../../constants/endpoints";
 import { useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { DatePicker } from "@mui/x-date-pickers";
-import {
-  applicableToLists,
-  generalStatusLists,
-  promoStatusLists,
-  promotionTypeLists,
-} from "../../../constants/config";
+import { smsStatusLists } from "../../../constants/config";
+import { SmsFormInputs, smsSchema } from "../sms.payload";
+import { smsService } from "../sms.service";
 
-const PromotionCreate = () => {
+const SmsCreate = () => {
   const [loading, setLoading] = useState(false);
+  const [adminLists, setAdminLists] = useState<Array<any>>([]);
   const [customerLists, setCustomerLists] = useState<Array<any>>([]);
+  const [driverLists, setDriverLists] = useState<Array<any>>([]);
 
   const navigate = useNavigate();
   const dispatch = useDispatch<AppDispatch>();
@@ -45,15 +41,15 @@ const PromotionCreate = () => {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm<PromotionFormInputs>({
-    resolver: zodResolver(promotionSchema),
+  } = useForm<SmsFormInputs>({
+    resolver: zodResolver(smsSchema),
   });
 
-  const submitPromotionCreate = async (data: PromotionFormInputs) => {
+  const submitSmsCreate = async (data: SmsFormInputs) => {
     setLoading(true);
-    const response = await promotionService.store(data, dispatch);
+    const response = await smsService.store(data, dispatch);
     if (response.status === 201) {
-      navigate(`${paths.promotionList}`);
+      navigate(`${paths.smsList}`);
     }
     setLoading(false);
   };
@@ -61,12 +57,23 @@ const PromotionCreate = () => {
   const loadingData = React.useCallback(async () => {
     setLoading(true);
     try {
-      const response: any = await getRequest(`${endpoints.customer}`, null);
-      console.log(response);
+      const adminRes: any = await getRequest(`${endpoints.admin}`, null);
+      const customerRes: any = await getRequest(`${endpoints.customer}`, null);
+      const driverRes: any = await getRequest(`${endpoints.driver}`, null);
 
-      await httpServiceHandler(dispatch, response);
-      if (response && "data" in response && response.status === 200) {
-        setCustomerLists(response.data.customers);
+      await httpServiceHandler(dispatch, adminRes);
+      if (adminRes && "data" in adminRes && adminRes.status === 200) {
+        setAdminLists(adminRes.data.admins);
+      }
+
+      await httpServiceHandler(dispatch, customerRes);
+      if (customerRes && "data" in customerRes && customerRes.status === 200) {
+        setCustomerLists(customerRes.data.customers);
+      }
+
+      await httpServiceHandler(dispatch, driverRes);
+      if (driverRes && "data" in driverRes && driverRes.status === 200) {
+        setDriverLists(driverRes.data.drivers);
       }
     } catch (error) {
       await httpErrorHandler(error);
@@ -83,9 +90,39 @@ const PromotionCreate = () => {
     <Box>
       <Breadcrumb />
       <Card sx={{ marginTop: "20px", padding: "20px" }}>
-        <h2>Promotion Create</h2>
-        <form onSubmit={handleSubmit(submitPromotionCreate)}>
+        <h2>Sms Create</h2>
+        <form onSubmit={handleSubmit(submitSmsCreate)}>
           <Grid2 container spacing={2}>
+            <Grid2 size={{ xs: 6, md: 3 }}>
+              <FormControl variant="filled" fullWidth error={!!errors.AdminId}>
+                <InputLabel htmlFor="admin_name">Admin</InputLabel>
+                <Controller
+                  name="AdminId"
+                  control={control}
+                  render={({ field }) => (
+                    <Select
+                      size="small"
+                      id="admin_name"
+                      aria-describedby="admin_name_text"
+                      disabled={loading}
+                      label="Admin"
+                      {...field}
+                      value={field.value} // Convert field value to a string
+                      onChange={(event) => field.onChange(event.target.value)} // Ensure onChange value is a string
+                    >
+                      {adminLists.map((admin: any) => (
+                        <MenuItem key={admin.id} value={admin.id}>
+                          {admin.name}
+                        </MenuItem>
+                      ))}
+                    </Select>
+                  )}
+                />
+
+                <FormHelperText>{errors.AdminId?.message}</FormHelperText>
+              </FormControl>
+            </Grid2>
+
             <Grid2 size={{ xs: 6, md: 3 }}>
               <FormControl
                 variant="filled"
@@ -121,121 +158,76 @@ const PromotionCreate = () => {
             </Grid2>
 
             <Grid2 size={{ xs: 6, md: 3 }}>
+              <FormControl variant="filled" fullWidth error={!!errors.DriverId}>
+                <InputLabel htmlFor="driver_name">Driver</InputLabel>
+                <Controller
+                  name="DriverId"
+                  control={control}
+                  render={({ field }) => (
+                    <Select
+                      size="small"
+                      id="driver_name"
+                      aria-describedby="driver_name_text"
+                      disabled={loading}
+                      label="Driver"
+                      {...field}
+                      value={field.value} // Convert field value to a string
+                      onChange={(event) => field.onChange(event.target.value)} // Ensure onChange value is a string
+                    >
+                      {driverLists.map((driver: any) => (
+                        <MenuItem key={driver.id} value={driver.id}>
+                          {driver.name}
+                        </MenuItem>
+                      ))}
+                    </Select>
+                  )}
+                />
+
+                <FormHelperText>{errors.DriverId?.message}</FormHelperText>
+              </FormControl>
+            </Grid2>
+
+            <Grid2 size={{ xs: 6, md: 3 }}>
               <FormControl
                 variant="filled"
                 fullWidth
-                error={!!errors.PromoCode}
+                error={!!errors.MobileNumber}
               >
-                <InputLabel htmlFor="promo_code">Promo Code</InputLabel>
+                <InputLabel htmlFor="mobile_number">Mobile Number</InputLabel>
                 <FilledInput
                   size="small"
-                  id="promo_code"
-                  {...register("PromoCode")}
+                  id="mobile_number"
+                  {...register("MobileNumber")}
                 />
-                <FormHelperText>{errors.PromoCode?.message}</FormHelperText>
-              </FormControl>
-            </Grid2>
-            <Grid2 size={{ xs: 6, md: 3 }}>
-              <FormControl fullWidth error={!!errors.ExpiredAt}>
-                <Controller
-                  name="ExpiredAt"
-                  control={control}
-                  render={({ field }) => {
-                    return (
-                      <DatePicker
-                        label="ExpiredAt"
-                        value={field.value}
-                        onChange={(date) => field.onChange(date)}
-                        disabled={loading}
-                        slotProps={{
-                          textField: {
-                            error: !!errors.ExpiredAt,
-                            helperText: errors.ExpiredAt?.message,
-                          },
-                        }}
-                      />
-                    );
-                  }}
-                />
-                <FormHelperText>{errors.ExpiredAt?.message}</FormHelperText>
+                <FormHelperText>{errors.MobileNumber?.message}</FormHelperText>
               </FormControl>
             </Grid2>
 
             <Grid2 size={{ xs: 6, md: 3 }}>
-              <FormControl variant="filled" fullWidth error={!!errors.Value}>
-                <InputLabel htmlFor="value">Unit</InputLabel>
-                <FilledInput size="small" id="value" {...register("Value")} />
-                <FormHelperText>{errors.Value?.message}</FormHelperText>
-              </FormControl>
-            </Grid2>
-            <Grid2 size={{ xs: 6, md: 3 }}>
-              <FormControl
-                variant="filled"
-                fullWidth
-                error={!!errors.PromotionType}
-              >
-                <InputLabel htmlFor="promotionType">PromotionType</InputLabel>
-                <Controller
-                  name="PromotionType"
-                  control={control}
-                  render={({ field }) => (
-                    <Select
-                      id="promotionType"
-                      aria-describedby="promotionType_text"
-                      size="small"
-                      disabled={loading}
-                      label="PromotionType"
-                      {...field}
-                      value={field.value || 0} // Convert field value to a string
-                      onChange={(event) => field.onChange(event.target.value)} // Ensure onChange value is a string
-                    >
-                      {promotionTypeLists?.map((promotionType: any) => (
-                        <MenuItem
-                          key={promotionType.id}
-                          value={promotionType.id}
-                        >
-                          {promotionType.value}
-                        </MenuItem>
-                      ))}
-                    </Select>
-                  )}
-                />
-
-                <FormHelperText>{errors.PromotionType?.message}</FormHelperText>
+              <FormControl variant="filled" fullWidth error={!!errors.Name}>
+                <InputLabel htmlFor="name">Name</InputLabel>
+                <FilledInput size="small" id="name" {...register("Name")} />
+                <FormHelperText>{errors.Name?.message}</FormHelperText>
               </FormControl>
             </Grid2>
 
             <Grid2 size={{ xs: 6, md: 3 }}>
-              <FormControl
-                variant="filled"
-                fullWidth
-                error={!!errors.ApplicableTo}
-              >
-                <InputLabel htmlFor="applicableTo">ApplicableTo</InputLabel>
-                <Controller
-                  name="ApplicableTo"
-                  control={control}
-                  render={({ field }) => (
-                    <Select
-                      id="applicableTo"
-                      aria-describedby="applicableTo_text"
-                      size="small"
-                      disabled={loading}
-                      label="ApplicableTo"
-                      {...field}
-                      value={field.value || 0} // Convert field value to a string
-                      onChange={(event) => field.onChange(event.target.value)} // Ensure onChange value is a string
-                    >
-                      {applicableToLists?.map((applicableTo: any) => (
-                        <MenuItem key={applicableTo.id} value={applicableTo.id}>
-                          {applicableTo.value}
-                        </MenuItem>
-                      ))}
-                    </Select>
-                  )}
-                />
+              <FormControl variant="filled" fullWidth error={!!errors.Title}>
+                <InputLabel htmlFor="title">Title</InputLabel>
+                <FilledInput size="small" id="title" {...register("Title")} />
+                <FormHelperText>{errors.Title?.message}</FormHelperText>
+              </FormControl>
+            </Grid2>
 
-                <FormHelperText>{errors.ApplicableTo?.message}</FormHelperText>
+            <Grid2 size={{ xs: 6, md: 3 }}>
+              <FormControl variant="filled" fullWidth error={!!errors.Message}>
+                <InputLabel htmlFor="message">Message</InputLabel>
+                <FilledInput
+                  size="small"
+                  id="message"
+                  {...register("Message")}
+                />
+                <FormHelperText>{errors.Message?.message}</FormHelperText>
               </FormControl>
             </Grid2>
 
@@ -256,7 +248,7 @@ const PromotionCreate = () => {
                       value={field.value || 0} // Convert field value to a string
                       onChange={(event) => field.onChange(event.target.value)} // Ensure onChange value is a string
                     >
-                      {promoStatusLists?.map((status: any) => (
+                      {smsStatusLists?.map((status: any) => (
                         <MenuItem key={status.id} value={status.id}>
                           {status.value}
                         </MenuItem>
@@ -280,10 +272,7 @@ const PromotionCreate = () => {
               marginTop: "20px",
             }}
           >
-            <Button
-              variant="outlined"
-              onClick={() => navigate(paths.promotionList)}
-            >
+            <Button variant="outlined" onClick={() => navigate(paths.smsList)}>
               Cancel
             </Button>
             <Button disabled={loading} variant="contained" type="submit">
@@ -296,4 +285,4 @@ const PromotionCreate = () => {
   );
 };
 
-export default PromotionCreate;
+export default SmsCreate;

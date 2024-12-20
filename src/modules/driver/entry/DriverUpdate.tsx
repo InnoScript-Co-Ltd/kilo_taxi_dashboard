@@ -13,10 +13,7 @@ import {
   Select,
 } from "@mui/material";
 import { useCallback, useEffect, useState } from "react";
-import {
-  DriverFormInputs,
-  driverSchema,
-} from "../driver.payload"; // Similar to cityPayload but for states
+import { DriverFormInputs, driverSchema } from "../driver.payload"; // Similar to cityPayload but for states
 import { useNavigate, useParams } from "react-router";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, AppRootState } from "../../../stores";
@@ -30,7 +27,12 @@ import { Controller, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { DatePicker } from "@mui/x-date-pickers";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
-import { driverStatusLists, genderStatuslists, generalStatusLists, kycStatusLists} from "../../../constants/config";
+import {
+  driverStatusLists,
+  genderStatuslists,
+  generalStatusLists,
+  kycStatusLists,
+} from "../../../constants/config";
 import FileUploadWithPreview from "../../../components/FileUploadWithPreview";
 import { getId } from "../../../helpers/updateHelper";
 import { formBuilder } from "../../../helpers/formBuilder";
@@ -67,10 +69,9 @@ const DriverUpdate = () => {
       status: 0,
       gender: 0,
       kycStatus: 0,
-      dob: null
+      dob: null,
     },
   });
-
 
   // Function to load state data based on the ID from params
   const loadingData = useCallback(async () => {
@@ -82,7 +83,7 @@ const DriverUpdate = () => {
     try {
       await driverService.show(dispatch, params.id);
     } finally {
-      clearTimeout(timeout); 
+      clearTimeout(timeout);
       setLoading(false);
     }
   }, [dispatch, params.id]);
@@ -124,17 +125,12 @@ const DriverUpdate = () => {
   const onSubmit = async (data: DriverFormInputs) => {
     setLoading(true);
     const formData = formBuilder(data, driverSchema);
-    const response = await driverService.update(
-      dispatch,
-      params.id,
-      formData
-    );
+    const response = await driverService.update(dispatch, params.id, formData);
     if (response.status === 200) {
       navigate(`${paths.driverList}`);
     }
     setLoading(false);
   };
-
 
   return (
     <Box>
@@ -157,8 +153,14 @@ const DriverUpdate = () => {
             </Grid2>
 
             <Grid2 size={{ xs: 6, md: 3 }}>
-              <FormControl variant="filled" fullWidth error={!!errors.mobilePrefix}>
-                <InputLabel htmlFor="driver_mobilePrefix">Mobile Prefix</InputLabel>
+              <FormControl
+                variant="filled"
+                fullWidth
+                error={!!errors.mobilePrefix}
+              >
+                <InputLabel htmlFor="driver_mobilePrefix">
+                  Mobile Prefix
+                </InputLabel>
                 <FilledInput
                   size="small"
                   id="driver_mobilePrefix"
@@ -231,8 +233,14 @@ const DriverUpdate = () => {
             </Grid2>
 
             <Grid2 size={{ xs: 6, md: 3 }}>
-              <FormControl variant="filled" fullWidth error={!!errors.driverLicense}>
-                <InputLabel htmlFor="driver_driverLicense">Driver License</InputLabel>
+              <FormControl
+                variant="filled"
+                fullWidth
+                error={!!errors.driverLicense}
+              >
+                <InputLabel htmlFor="driver_driverLicense">
+                  Driver License
+                </InputLabel>
                 <FilledInput
                   size="small"
                   id="driver_driverLicense"
@@ -307,7 +315,7 @@ const DriverUpdate = () => {
 
             <Grid2 size={{ xs: 6, md: 3 }}>
               <FormControl variant="filled" fullWidth error={!!errors.townShip}>
-                <InputLabel htmlFor="driver_townShip">Name</InputLabel>
+                <InputLabel htmlFor="driver_townShip">TownShip</InputLabel>
                 <FilledInput
                   size="small"
                   id="driver_townShip"
@@ -335,8 +343,7 @@ const DriverUpdate = () => {
                       }}
                       error={
                         errors.file_profile
-                          ? typeof errors.file_profile.message ===
-                            "string"
+                          ? typeof errors.file_profile.message === "string"
                             ? errors.file_profile.message
                             : undefined
                           : undefined
@@ -403,8 +410,7 @@ const DriverUpdate = () => {
                       }}
                       error={
                         errors.file_nrcImageBack
-                          ? typeof errors.file_nrcImageBack.message ===
-                            "string"
+                          ? typeof errors.file_nrcImageBack.message === "string"
                             ? errors.file_nrcImageBack.message
                             : undefined
                           : undefined
@@ -437,8 +443,8 @@ const DriverUpdate = () => {
                       }}
                       error={
                         errors.file_driverImageLicenseFront
-                          ? typeof errors.file_driverImageLicenseFront.message ===
-                            "string"
+                          ? typeof errors.file_driverImageLicenseFront
+                              .message === "string"
                             ? errors.file_driverImageLicenseFront.message
                             : undefined
                           : undefined
@@ -471,8 +477,8 @@ const DriverUpdate = () => {
                       }}
                       error={
                         errors.file_driverImageLicenseBack
-                          ? typeof errors.file_driverImageLicenseBack.message ===
-                            "string"
+                          ? typeof errors.file_driverImageLicenseBack
+                              .message === "string"
                             ? errors.file_driverImageLicenseBack.message
                             : undefined
                           : undefined
@@ -548,7 +554,11 @@ const DriverUpdate = () => {
             </Grid2>
 
             <Grid2 size={{ xs: 6, md: 3 }}>
-              <FormControl variant="filled" fullWidth error={!!errors.kycStatus}>
+              <FormControl
+                variant="filled"
+                fullWidth
+                error={!!errors.kycStatus}
+              >
                 <InputLabel htmlFor="kycStatus">kyc Status</InputLabel>
                 <Controller
                   name="kycStatus"
@@ -576,7 +586,6 @@ const DriverUpdate = () => {
                 <FormHelperText>{errors.kycStatus?.message}</FormHelperText>
               </FormControl>
             </Grid2>
-            
           </Grid2>
 
           {/* footer */}

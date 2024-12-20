@@ -52,6 +52,7 @@ const orderSlice = createSlice({
       state.order = action.payload;
       return state;
     },
+
     setPaginate: (state, action) => {
       state.pagingParams = action.payload;
       return state;

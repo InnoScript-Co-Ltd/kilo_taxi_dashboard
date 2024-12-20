@@ -1,40 +1,44 @@
 import { paginateOptions } from "../../constants/config";
 import { z } from "zod";
 
-export const promotionSchema = z.object({
+export const smsSchema = z.object({
   id: z.number().min(0, { message: "id" }).default(0),
-  CustomerId: z.number().nullable(),
-  PromoCode: z.string(),
-  ExpiredAt: z.date(),
-  Value: z.string(),
-  PromotionType: z.number(),
-  ApplicableTo: z.number(),
-  Status: z.number().nullable(),
+  MobileNumber: z.string(),
+  Name: z.string(),
+  Title: z.string(),
+  Message: z.string(),
+  Status: z.number(),
+  AdminId: z.number(),
+  CustomerId: z.number(),
+  DriverId: z.number(),
 });
 
-export type PromotionFormInputs = z.infer<typeof promotionSchema>;
+export type SmsFormInputs = z.infer<typeof smsSchema>;
 
 /**
- * Interface representing the shape of a promotion object.
+ * Interface representing the shape of a sms object.
  */
-export interface PROMOTION {
+export interface SMS {
   id: string;
-  customerId?: number;
+  adminId: number;
+  adminName: string;
+  customerId: number;
   customerName: string;
-  promoCode: string;
-  expiredAt: null | Date;
-  value: string;
-  promotionType: string;
-  applicableTo: string;
+  driverId: number;
+  driverName: string;
+  mobileNumber: string;
+  name: string;
+  title: string;
+  message: string;
   status: number;
   action?: null;
 }
 
-type PromotionColumnId = keyof PROMOTION;
+type SmsColumnId = keyof SMS;
 
 // Define columns for state table
-interface Promotion_Column {
-  id: PromotionColumnId;
+interface Sms_Column {
+  id: SmsColumnId;
   label: string;
   minWidth?: number;
   maxWidth?: number;
@@ -46,7 +50,7 @@ interface Promotion_Column {
 }
 
 // Define State Payload
-export interface PROMOTION_PAYLOAD {
+export interface SMS_PAYLOAD {
   pagingParams: {
     PageSize: number | string;
     CurrentPage: number;
@@ -57,26 +61,42 @@ export interface PROMOTION_PAYLOAD {
 }
 
 // Define columns structure for the state table
-export const promotionColumns: readonly Promotion_Column[] = [
+export const smsColumns: readonly Sms_Column[] = [
   {
-    id: "promoCode",
-    label: "Promo Code",
-    minWidth: 170,
+    id: "name",
+    label: "Name",
+    minWidth: 200,
     numeric: false,
     disablePadding: false,
     sort: true,
   },
   {
-    id: "expiredAt",
-    label: "Expired At",
-    minWidth: 150,
+    id: "title",
+    label: "Title",
+    minWidth: 100,
     numeric: false,
     disablePadding: false,
     sort: true,
   },
   {
-    id: "value",
-    label: "Value",
+    id: "mobileNumber",
+    label: "Mobile Number",
+    minWidth: 100,
+    numeric: false,
+    disablePadding: false,
+    sort: true,
+  },
+  {
+    id: "message",
+    label: "Message",
+    minWidth: 100,
+    numeric: false,
+    disablePadding: false,
+    sort: true,
+  },
+  {
+    id: "adminName",
+    label: "Admin Name",
     minWidth: 150,
     numeric: false,
     disablePadding: false,
@@ -88,20 +108,12 @@ export const promotionColumns: readonly Promotion_Column[] = [
     minWidth: 150,
     numeric: false,
     disablePadding: false,
-    sort: false,
+    sort: true,
   },
   {
-    id: "promotionType",
-    label: "Promotion Type",
-    minWidth: 100,
-    numeric: false,
-    disablePadding: false,
-    sort: false,
-  },
-  {
-    id: "applicableTo",
-    label: "Applicable To",
-    minWidth: 100,
+    id: "driverName",
+    label: "Driver Name",
+    minWidth: 150,
     numeric: false,
     disablePadding: false,
     sort: false,
@@ -109,7 +121,7 @@ export const promotionColumns: readonly Promotion_Column[] = [
   {
     id: "status",
     label: "Status",
-    minWidth: 100,
+    minWidth: 150,
     numeric: false,
     disablePadding: false,
     sort: false,
@@ -125,11 +137,11 @@ export const promotionColumns: readonly Promotion_Column[] = [
 ];
 
 // State payload example
-export const promotionPayload: PROMOTION_PAYLOAD = {
+export const smsPayload: SMS_PAYLOAD = {
   pagingParams: {
     PageSize: paginateOptions.rows,
     CurrentPage: 1,
-    SortField: "id",
+    SortField: "name",
     SortDir: 0,
     SearchTerm: "",
   },

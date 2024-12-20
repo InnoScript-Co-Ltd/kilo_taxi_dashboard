@@ -28,6 +28,7 @@ import FileUploadWithPreview from "../../../components/FileUploadWithPreview";
 import Loading from "../../../components/Loading";
 import { getId } from "../../../helpers/updateHelper";
 import { formBuilder } from "../../../helpers/formBuilder";
+import { VehicleRoute } from "../vehicle.route";
 
 const VehicleUpdate = () => {
   const [loading, setLoading] = useState(false);
@@ -37,7 +38,6 @@ const VehicleUpdate = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch<AppDispatch>();
   const { vehicle } = useSelector((state: AppRootState) => state.vehicle); // Selecting vehicle data from the store
-
   // Set up React Hook Form with Zod schema
   const {
     control,
@@ -106,18 +106,6 @@ const VehicleUpdate = () => {
         "Status",
         getId({ lists: vehicleStatusLists, value: vehicle.status }) || 0
       );
-      setValue(
-        "file_BusinessLicenseImage",
-        vehicle.file_BusinessLicenseImage || ""
-      );
-      setValue(
-        "file_VehicleLicenseFront",
-        vehicle.file_VehicleLicenseFront || ""
-      );
-      setValue(
-        "file_VehicleLicenseBack",
-        vehicle.file_VehicleLicenseBack || ""
-      );
     }
   }, [vehicle, setValue]);
 
@@ -134,6 +122,35 @@ const VehicleUpdate = () => {
 
         <form onSubmit={handleSubmit(submitVehicleUpdate)}>
           <Grid2 container spacing={2}>
+            <Grid2 size={{ xs: 6, md: 3 }}>
+              <FormControl variant="filled" fullWidth error={!!errors.DriverId}>
+                <InputLabel htmlFor="driver_name">Driver</InputLabel>
+                <Controller
+                  name="DriverId"
+                  control={control}
+                  render={({ field }) => (
+                    <Select
+                      size="small"
+                      id="driver_name"
+                      aria-describedby="driver_name_text"
+                      disabled={loading}
+                      label="Driver"
+                      {...field}
+                      value={field.value} // Convert field value to a string
+                      onChange={(event) => field.onChange(event.target.value)} // Ensure onChange value is a string
+                    >
+                      {driversList.map((driver: any) => (
+                        <MenuItem key={driver.id} value={driver.id}>
+                          {driver.name}
+                        </MenuItem>
+                      ))}
+                    </Select>
+                  )}
+                />
+
+                <FormHelperText>{errors.DriverId?.message}</FormHelperText>
+              </FormControl>
+            </Grid2>
             {/* Vehicle Number */}
             <Grid2 size={{ xs: 6, md: 3 }}>
               <FormControl
@@ -198,35 +215,6 @@ const VehicleUpdate = () => {
               </FormControl>
             </Grid2>
 
-            {/* Driver Select */}
-            {/* <Grid2 size={{ xs: 6, md: 3 }}>
-              <FormControl variant="filled" fullWidth error={!!errors.DriverId}>
-                <InputLabel htmlFor="driver_id">Driver</InputLabel>
-                <Controller
-                  name="DriverId"
-                  control={control}
-                  render={({ field }) => (
-                    <Select
-                      size="small"
-                      id="driver_id"
-                      label="Driver"
-                      {...field}
-                      value={field.value || ""}
-                      onChange={field.onChange}
-                      disabled={loading}
-                    >
-                      {driversList?.map((driver: any) => (
-                        <MenuItem key={driver.id} value={driver.id}>
-                          {driver.name}
-                        </MenuItem>
-                      ))}
-                    </Select>
-                  )}
-                />
-                <FormHelperText>{errors.DriverId?.message}</FormHelperText>
-              </FormControl>
-            </Grid2> */}
-
             {/* Status */}
             {/* Status Select */}
             <Grid2 size={{ xs: 6, md: 3 }}>
@@ -286,6 +274,7 @@ const VehicleUpdate = () => {
                       }
                       // Correctly extracting the error message
                       field="Business License Image" // Label for the upload button
+                      src={vehicle?.businessLicenseImage}
                       disabled={loading}
                     />
                   )}
@@ -322,6 +311,7 @@ const VehicleUpdate = () => {
                       }
                       // Correctly extracting the error message
                       field="Vehicle License Image Front" // Label for the upload button
+                      src={vehicle?.vehicleLicenseFront}
                       disabled={loading}
                     />
                   )}
@@ -356,6 +346,7 @@ const VehicleUpdate = () => {
                       }
                       // Correctly extracting the error message
                       field="Vehicle License Image Back" // Label for the upload button
+                      src={vehicle?.vehicleLicenseBack}
                       disabled={loading}
                     />
                   )}

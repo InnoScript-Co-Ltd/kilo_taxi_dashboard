@@ -26,6 +26,8 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { DatePicker } from "@mui/x-date-pickers";
 import {
   generalStatusLists,
+  promotionTypeLists,
+  applicableToLists,
   promoStatusLists,
 } from "../../../constants/config";
 import { getId } from "../../../helpers/updateHelper";
@@ -54,8 +56,8 @@ const PromotionUpdate = () => {
       PromoCode: "",
       ExpiredAt: new Date(),
       Value: "",
-      PromotionType: "",
-      ApplicableTo: "",
+      PromotionType: 0,
+      ApplicableTo: 0,
       Status: 0,
     },
   });
@@ -104,8 +106,15 @@ const PromotionUpdate = () => {
         promotion.expiredAt ? new Date(promotion.expiredAt) : new Date()
       );
       setValue("Value", String(promotion.value) || "");
-      setValue("PromotionType", String(promotion.promotionType) || "");
-      setValue("ApplicableTo", String(promotion.applicableTo) || "");
+      setValue(
+        "PromotionType",
+        getId({ lists: promotionTypeLists, value: promotion.promotionType }) ||
+          0
+      );
+      setValue(
+        "ApplicableTo",
+        getId({ lists: applicableToLists, value: promotion.applicableTo }) || 0
+      );
       setValue(
         "Status",
         getId({ lists: promoStatusLists, value: promotion.status }) || 0
@@ -207,8 +216,8 @@ const PromotionUpdate = () => {
             </Grid2>
             <Grid2 size={{ xs: 6, md: 3 }}>
               <FormControl variant="filled" fullWidth error={!!errors.Value}>
-                <InputLabel htmlFor="value">Value</InputLabel>
-                <FilledInput size="small" id="value" {...register("Value")} />
+                <InputLabel htmlFor="value">Unit</InputLabel>
+                <FilledInput size="small" id="vaule" {...register("Value")} />
                 <FormHelperText>{errors.Value?.message}</FormHelperText>
               </FormControl>
             </Grid2>
@@ -219,12 +228,33 @@ const PromotionUpdate = () => {
                 fullWidth
                 error={!!errors.PromotionType}
               >
-                <InputLabel htmlFor="promotion_type">Promotion Type</InputLabel>
-                <FilledInput
-                  size="small"
-                  id="promotion_type"
-                  {...register("PromotionType")}
+                <InputLabel htmlFor="applicableTo">PromotionType</InputLabel>
+                <Controller
+                  name="PromotionType"
+                  control={control}
+                  render={({ field }) => (
+                    <Select
+                      id="promotionType"
+                      aria-describedby="promotionType_text"
+                      size="small"
+                      disabled={loading}
+                      label="PromotionType"
+                      {...field}
+                      value={field.value || 0} // Convert field value to a string
+                      onChange={(event) => field.onChange(event.target.value)} // Ensure onChange value is a string
+                    >
+                      {promotionTypeLists?.map((promotionType: any) => (
+                        <MenuItem
+                          key={promotionType.id}
+                          value={promotionType.id}
+                        >
+                          {promotionType.value}
+                        </MenuItem>
+                      ))}
+                    </Select>
+                  )}
                 />
+
                 <FormHelperText>{errors.PromotionType?.message}</FormHelperText>
               </FormControl>
             </Grid2>
@@ -235,12 +265,30 @@ const PromotionUpdate = () => {
                 fullWidth
                 error={!!errors.ApplicableTo}
               >
-                <InputLabel htmlFor="applicable_to">Applicable To</InputLabel>
-                <FilledInput
-                  size="small"
-                  id="applicable_to"
-                  {...register("ApplicableTo")}
+                <InputLabel htmlFor="applicableTo">ApplicableTo</InputLabel>
+                <Controller
+                  name="ApplicableTo"
+                  control={control}
+                  render={({ field }) => (
+                    <Select
+                      id="applicableTo"
+                      aria-describedby="applicableTo_text"
+                      size="small"
+                      disabled={loading}
+                      label="ApplicableTo"
+                      {...field}
+                      value={field.value || 0} // Convert field value to a string
+                      onChange={(event) => field.onChange(event.target.value)} // Ensure onChange value is a string
+                    >
+                      {applicableToLists?.map((applicableTo: any) => (
+                        <MenuItem key={applicableTo.id} value={applicableTo.id}>
+                          {applicableTo.value}
+                        </MenuItem>
+                      ))}
+                    </Select>
+                  )}
                 />
+
                 <FormHelperText>{errors.ApplicableTo?.message}</FormHelperText>
               </FormControl>
             </Grid2>
@@ -259,7 +307,7 @@ const PromotionUpdate = () => {
                       disabled={loading}
                       label="Status"
                       {...field}
-                      value={field.value || ""} // Convert field value to a string
+                      value={field.value || 0} // Convert field value to a string
                       onChange={(event) => field.onChange(event.target.value)} // Ensure onChange value is a string
                     >
                       {promoStatusLists?.map((status: any) => (
@@ -290,7 +338,7 @@ const PromotionUpdate = () => {
               variant="outlined"
               onClick={() => navigate(paths.promotionList)}
             >
-              Cancle
+              Cancel
             </Button>
             <Button disabled={loading} variant="contained" type="submit">
               Update

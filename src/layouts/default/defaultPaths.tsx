@@ -121,6 +121,37 @@ export const navigationList = [
     ],
   },
   {
+    segment: "paymentChannel",
+    title: "PaymentCHannel",
+    isParent: true,
+    icon: <FormatListBulletedIcon />,
+    children: [
+      {
+        segment: "list",
+        title: "List",
+        icon: <FormatListBulletedIcon />,
+      },
+    ],
+  },
+  {
+    segment: "sos",
+    title: "Sos",
+    isParent: true,
+    icon: <FormatListBulletedIcon />,
+    children: [
+      {
+        segment: "list",
+        title: "List",
+        icon: <FormatListBulletedIcon />,
+      },
+      {
+        segment: "receive",
+        title: "Sos Receive",
+        icon: <FormatListBulletedIcon />,
+      },
+    ],
+  },
+  {
     segment: "review",
     title: "Review",
     isParent: true,
@@ -147,6 +178,19 @@ export const navigationList = [
     ],
   },
   {
+    segment: "sms",
+    title: "Sms",
+    isParent: true,
+    icon: <DashboardIcon />,
+    children: [
+      {
+        segment: "list",
+        title: "List",
+        icon: <FormatListBulletedIcon />,
+      },
+    ],
+  },
+  {
     segment: "topupTransaction",
     title: "TopupTransaction",
     isParent: true,
@@ -159,6 +203,20 @@ export const navigationList = [
       },
     ],
   },
+  {
+    segment: "simulation",
+    title: "Simulation",
+    isParent: true,
+    icon: <DashboardIcon />,
+    children: [
+      {
+        segment: "order",
+        title: "Order Create",
+        icon: <FormatListBulletedIcon />,
+      },
+    ],
+  },
+
   // {
   //   segment: 'country',
   //   title: 'Country',

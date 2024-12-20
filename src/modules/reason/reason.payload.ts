@@ -53,13 +53,13 @@ export const reasonColumns: readonly ReasonColumn[] = [
     disablePadding: false,
     sort: true,
   },
-  { 
-    id: "status", 
-    label: "Status", 
-    minWidth: 50, 
-    numeric: false, 
-    disablePadding: false, 
-    sort: true 
+  {
+    id: "status",
+    label: "Status",
+    minWidth: 50,
+    numeric: false,
+    disablePadding: false,
+    sort: true,
   },
   {
     id: "action",

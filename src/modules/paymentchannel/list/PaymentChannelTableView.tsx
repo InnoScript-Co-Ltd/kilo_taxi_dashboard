@@ -6,11 +6,14 @@ import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TablePagination from "@mui/material/TablePagination";
 import TableRow from "@mui/material/TableRow";
-import { reasonColumns, reasonPayload } from "../reason.payload"; // Replace with your reason columns and payload
+import {
+  paymentChannelColumns,
+  paymentChannelPayload,
+} from "../paymentchannel.payload"; // Replace with your wallet columns and payload
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, AppRootState } from "../../../stores";
-import { reasonService } from "../reason.service";
-import { generalStatusLists, paginateOptions } from "../../../constants/config";
+import { paymentChannelService } from "../paymentchannel.service";
+import { paginateOptions } from "../../../constants/config";
 import { NavigateId } from "../../../shares/NavigateId";
 import { paths } from "../../../constants/paths";
 import {
@@ -20,7 +23,7 @@ import {
   InputAdornment,
   TableSortLabel,
 } from "@mui/material";
-import { setPaginate } from "../reason.slice"; // Adjust the slice if needed
+import { setPaginate } from "../paymentchannel.slice"; // Adjust the slice if needed
 import SearchIcon from "@mui/icons-material/Search";
 import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
 import RestartAltIcon from "@mui/icons-material/RestartAlt";
@@ -30,15 +33,14 @@ import {
   StyledTableCell,
   StyledTableRow,
 } from "../../../components/TableCommon";
-import Status from "../../../components/Status";
 import { useNotifications } from "@toolpad/core/useNotifications";
 
-const ReasonTableView = () => {
+const PaymentChannelTableView = () => {
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
   const dispatch = useDispatch<AppDispatch>();
   const { data, pagingParams } = useSelector(
-    (state: AppRootState) => state.reason
+    (state: AppRootState) => state.paymentChannel
   );
 
   const notifications = useNotifications();
@@ -72,7 +74,7 @@ const ReasonTableView = () => {
 
   const loadingData = React.useCallback(async () => {
     setLoading(true);
-    await reasonService.index(dispatch, pagingParams, notifications);
+    await paymentChannelService.index(dispatch, pagingParams, notifications);
     setLoading(false);
   }, [dispatch, pagingParams]);
 
@@ -93,7 +95,7 @@ const ReasonTableView = () => {
       >
         <Input
           id="input-with-icon-search"
-          placeholder="Search Reason"
+          placeholder="Search Wallet"
           value={pagingParams.SearchTerm}
           onChange={(e) => {
             dispatch(
@@ -120,14 +122,14 @@ const ReasonTableView = () => {
         >
           <Button
             startIcon={<AddCircleOutlineIcon />}
-            onClick={() => navigate(paths.reasonCreate)} // Adjust path for reason create page
+            onClick={() => navigate(paths.paymentChannelCreate)} // Adjust path for wallet create page
           >
             Create
           </Button>
 
           <Button
             onClick={() => {
-              dispatch(setPaginate(reasonPayload.pagingParams)); // Adjust the reset payload
+              dispatch(setPaginate(paymentChannelPayload.pagingParams)); // Adjust the reset payload
               setPage(0);
               setRowsPerPage(10);
             }}
@@ -143,7 +145,7 @@ const ReasonTableView = () => {
         <Table stickyHeader aria-label="sticky table">
           <TableHead>
             <TableRow>
-              {reasonColumns.map((column) => (
+              {paymentChannelColumns.map((column) => (
                 <StyledTableCell
                   key={column.id}
                   style={{ minWidth: column.minWidth }}
@@ -186,32 +188,27 @@ const ReasonTableView = () => {
             </TableRow>
           </TableHead>
           <TableBody>
-            {data.reasons?.map((row: any) => (
+            {data.paymentChannels?.map((row: any) => (
               <StyledTableRow hover role="checkbox" tabIndex={-1} key={row.id}>
-                {reasonColumns.map((column) => {
+                {paymentChannelColumns.map((column) => {
                   const value = row[column.id];
                   return (
                     <StyledTableCell key={column.id} align={column.align}>
                       {(() => {
                         switch (column.label) {
-                          case "Name":
+                          case "Channel Name":
                             return (
                               <NavigateId
-                                url={`${paths.reason}/${row.id}`} // Adjust the path for reason detail
+                                url={`${paths.paymentChannel}/${row.id}`} // Adjust the path for wallet detail
                                 value={value}
                               />
                             );
-                          case "Status":
-                            return (
-                              <Status
-                                status={value}
-                                lists={generalStatusLists}
-                              />
-                            );
+                          case "Description":
+                            return value;
                           case "Action":
                             return (
                               <UpAndDel
-                                url={`${paths.reason}/${row.id}`} // Adjust for reason delete
+                                url={`${paths.paymentChannel}/${row.id}`} // Adjust for wallet delete
                                 fn={loadingData}
                                 priority={true}
                               />
@@ -242,4 +239,4 @@ const ReasonTableView = () => {
   );
 };
 
-export default ReasonTableView;
+export default PaymentChannelTableView;
