@@ -27,7 +27,6 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { DatePicker } from "@mui/x-date-pickers";
 import {
   applicableToLists,
-  generalStatusLists,
   promoStatusLists,
   promotionTypeLists,
 } from "../../../constants/config";
@@ -44,10 +43,19 @@ const PromotionCreate = () => {
     control,
     register,
     handleSubmit,
+    watch,
     formState: { errors },
   } = useForm<PromotionFormInputs>({
     resolver: zodResolver(promotionSchema),
+    defaultValues: {
+      PromotionType: 0,
+      ApplicableTo: 0,
+      Status: 0,
+      CustomerIds: [],
+    },
   });
+
+  const promotionType = watch("PromotionType");
 
   const submitPromotionCreate = async (data: PromotionFormInputs) => {
     setLoading(true);
@@ -90,40 +98,6 @@ const PromotionCreate = () => {
               <FormControl
                 variant="filled"
                 fullWidth
-                error={!!errors.CustomerId}
-              >
-                <InputLabel htmlFor="customer_name">Customer</InputLabel>
-                <Controller
-                  name="CustomerId"
-                  control={control}
-                  render={({ field }) => (
-                    <Select
-                      size="small"
-                      id="customer_name"
-                      aria-describedby="customer_name_text"
-                      disabled={loading}
-                      label="Customer"
-                      {...field}
-                      value={field.value} // Convert field value to a string
-                      onChange={(event) => field.onChange(event.target.value)} // Ensure onChange value is a string
-                    >
-                      {customerLists.map((customer: any) => (
-                        <MenuItem key={customer.id} value={customer.id}>
-                          {customer.name}
-                        </MenuItem>
-                      ))}
-                    </Select>
-                  )}
-                />
-
-                <FormHelperText>{errors.CustomerId?.message}</FormHelperText>
-              </FormControl>
-            </Grid2>
-
-            <Grid2 size={{ xs: 6, md: 3 }}>
-              <FormControl
-                variant="filled"
-                fullWidth
                 error={!!errors.PromoCode}
               >
                 <InputLabel htmlFor="promo_code">Promo Code</InputLabel>
@@ -135,39 +109,92 @@ const PromotionCreate = () => {
                 <FormHelperText>{errors.PromoCode?.message}</FormHelperText>
               </FormControl>
             </Grid2>
+
             <Grid2 size={{ xs: 6, md: 3 }}>
-              <FormControl fullWidth error={!!errors.ExpiredAt}>
+              <FormControl fullWidth error={!!errors.CreatedDate}>
                 <Controller
-                  name="ExpiredAt"
+                  name="CreatedDate"
                   control={control}
                   render={({ field }) => {
                     return (
                       <DatePicker
-                        label="ExpiredAt"
+                        label="CreatedDate"
                         value={field.value}
                         onChange={(date) => field.onChange(date)}
                         disabled={loading}
                         slotProps={{
                           textField: {
-                            error: !!errors.ExpiredAt,
-                            helperText: errors.ExpiredAt?.message,
+                            error: !!errors.CreatedDate,
+                            helperText: errors.CreatedDate?.message,
                           },
                         }}
                       />
                     );
                   }}
                 />
-                <FormHelperText>{errors.ExpiredAt?.message}</FormHelperText>
+                <FormHelperText>{errors.CreatedDate?.message}</FormHelperText>
+              </FormControl>
+            </Grid2>
+            <Grid2 size={{ xs: 6, md: 3 }}>
+              <FormControl fullWidth error={!!errors.ExpiredDate}>
+                <Controller
+                  name="ExpiredDate"
+                  control={control}
+                  render={({ field }) => {
+                    return (
+                      <DatePicker
+                        label="ExpiredDate"
+                        value={field.value}
+                        onChange={(date) => field.onChange(date)}
+                        disabled={loading}
+                        slotProps={{
+                          textField: {
+                            error: !!errors.ExpiredDate,
+                            helperText: errors.ExpiredDate?.message,
+                          },
+                        }}
+                      />
+                    );
+                  }}
+                />
+                <FormHelperText>{errors.ExpiredDate?.message}</FormHelperText>
               </FormControl>
             </Grid2>
 
             <Grid2 size={{ xs: 6, md: 3 }}>
-              <FormControl variant="filled" fullWidth error={!!errors.Value}>
-                <InputLabel htmlFor="value">Unit</InputLabel>
-                <FilledInput size="small" id="value" {...register("Value")} />
-                <FormHelperText>{errors.Value?.message}</FormHelperText>
+              <FormControl variant="filled" fullWidth error={!!errors.Quantity}>
+                <InputLabel htmlFor="Quantity">Quantity</InputLabel>
+                <FilledInput
+                  size="small"
+                  id="Quantity"
+                  {...register("Quantity")}
+                />
+                <FormHelperText>{errors.Quantity?.message}</FormHelperText>
               </FormControl>
             </Grid2>
+            <Grid2 size={{ xs: 6, md: 3 }}>
+              <FormControl variant="filled" fullWidth error={!!errors.Unit}>
+                <InputLabel htmlFor="Unit">Unit</InputLabel>
+                <FilledInput size="small" id="Unit" {...register("Unit")} />
+                <FormHelperText>{errors.Unit?.message}</FormHelperText>
+              </FormControl>
+            </Grid2>
+            <Grid2 size={{ xs: 6, md: 3 }}>
+              <FormControl
+                variant="filled"
+                fullWidth
+                error={!!errors.Description}
+              >
+                <InputLabel htmlFor="description">Description</InputLabel>
+                <FilledInput
+                  size="small"
+                  id="description"
+                  {...register("Description")}
+                />
+                <FormHelperText>{errors.Description?.message}</FormHelperText>
+              </FormControl>
+            </Grid2>
+
             <Grid2 size={{ xs: 6, md: 3 }}>
               <FormControl
                 variant="filled"
@@ -186,8 +213,9 @@ const PromotionCreate = () => {
                       disabled={loading}
                       label="PromotionType"
                       {...field}
-                      value={field.value || 0} // Convert field value to a string
-                      onChange={(event) => field.onChange(event.target.value)} // Ensure onChange value is a string
+                      value={field.value || 0}
+                      defaultValue={field.value || 0}
+                      onChange={(event) => field.onChange(event.target.value)}
                     >
                       {promotionTypeLists?.map((promotionType: any) => (
                         <MenuItem
@@ -200,11 +228,9 @@ const PromotionCreate = () => {
                     </Select>
                   )}
                 />
-
                 <FormHelperText>{errors.PromotionType?.message}</FormHelperText>
               </FormControl>
             </Grid2>
-
             <Grid2 size={{ xs: 6, md: 3 }}>
               <FormControl
                 variant="filled"
@@ -224,6 +250,7 @@ const PromotionCreate = () => {
                       label="ApplicableTo"
                       {...field}
                       value={field.value || 0} // Convert field value to a string
+                      defaultValue={field.value || 0}
                       onChange={(event) => field.onChange(event.target.value)} // Ensure onChange value is a string
                     >
                       {applicableToLists?.map((applicableTo: any) => (
@@ -238,7 +265,6 @@ const PromotionCreate = () => {
                 <FormHelperText>{errors.ApplicableTo?.message}</FormHelperText>
               </FormControl>
             </Grid2>
-
             <Grid2 size={{ xs: 6, md: 3 }}>
               <FormControl variant="filled" fullWidth error={!!errors.Status}>
                 <InputLabel htmlFor="status">Status</InputLabel>
@@ -254,6 +280,7 @@ const PromotionCreate = () => {
                       label="Status"
                       {...field}
                       value={field.value || 0} // Convert field value to a string
+                      defaultValue={field.value || 0}
                       onChange={(event) => field.onChange(event.target.value)} // Ensure onChange value is a string
                     >
                       {promoStatusLists?.map((status: any) => (
@@ -268,6 +295,44 @@ const PromotionCreate = () => {
                 <FormHelperText>{errors.Status?.message}</FormHelperText>
               </FormControl>
             </Grid2>
+
+            {/* Conditionally Render the Customers Field */}
+            {promotionType === 1 && (
+              <Grid2 size={{ xs: 6, md: 3 }}>
+                <FormControl
+                  variant="filled"
+                  fullWidth
+                  error={!!errors.CustomerIds}
+                >
+                  <InputLabel htmlFor="customer_name">Customers</InputLabel>
+                  <Controller
+                    name="CustomerIds"
+                    control={control}
+                    render={({ field }) => (
+                      <Select
+                        size="small"
+                        id="customer_name"
+                        aria-describedby="customer_name_text"
+                        disabled={loading}
+                        label="Customer"
+                        {...field}
+                        multiple
+                        value={field.value || []}
+                        defaultValue={field.value || []}
+                        onChange={(event) => field.onChange(event.target.value)}
+                      >
+                        {customerLists.map((customer: any) => (
+                          <MenuItem key={customer.id} value={customer.id}>
+                            {customer.name}
+                          </MenuItem>
+                        ))}
+                      </Select>
+                    )}
+                  />
+                  <FormHelperText>{errors.CustomerIds?.message}</FormHelperText>
+                </FormControl>
+              </Grid2>
+            )}
           </Grid2>
 
           {/* footer */}

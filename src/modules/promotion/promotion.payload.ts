@@ -3,13 +3,16 @@ import { z } from "zod";
 
 export const promotionSchema = z.object({
   id: z.number().min(0, { message: "id" }).default(0),
-  CustomerId: z.number().nullable(),
   PromoCode: z.string(),
-  ExpiredAt: z.date(),
-  Value: z.string(),
+  CreatedDate: z.date(),
+  ExpiredDate: z.date(),
+  Quantity: z.string().nullable(),
+  Unit: z.string(),
+  Description: z.string(),
   PromotionType: z.number(),
   ApplicableTo: z.number(),
   Status: z.number().nullable(),
+  CustomerIds: z.array(z.number()).optional(),
 });
 
 export type PromotionFormInputs = z.infer<typeof promotionSchema>;
@@ -19,14 +22,16 @@ export type PromotionFormInputs = z.infer<typeof promotionSchema>;
  */
 export interface PROMOTION {
   id: string;
-  customerId?: number;
-  customerName: string;
   promoCode: string;
-  expiredAt: null | Date;
-  value: string;
+  createdDate: null | Date;
+  expiredDate: null | Date;
+  quantity?: string;
+  unit: string;
+  description?: string;
   promotionType: string;
   applicableTo: string;
-  status: number;
+  status: string;
+  customerIds?: number[] | null;
   action?: null;
 }
 
@@ -61,31 +66,44 @@ export const promotionColumns: readonly Promotion_Column[] = [
   {
     id: "promoCode",
     label: "Promo Code",
-    minWidth: 170,
+    minWidth: 100,
+    maxWidth: 200,
     numeric: false,
     disablePadding: false,
     sort: true,
   },
   {
-    id: "expiredAt",
-    label: "Expired At",
-    minWidth: 150,
+    id: "createdDate",
+    label: "Created Date",
+    minWidth: 100,
+    maxWidth: 200,
     numeric: false,
     disablePadding: false,
     sort: true,
   },
   {
-    id: "value",
-    label: "Value",
-    minWidth: 150,
+    id: "expiredDate",
+    label: "Expired Date",
+    minWidth: 100,
+    maxWidth: 200,
     numeric: false,
     disablePadding: false,
     sort: true,
   },
   {
-    id: "customerName",
-    label: "Customer Name",
-    minWidth: 150,
+    id: "quantity",
+    label: "Quantity",
+    minWidth: 100,
+    maxWidth: 200,
+    numeric: false,
+    disablePadding: false,
+    sort: false,
+  },
+  {
+    id: "unit",
+    label: "Unit",
+    minWidth: 100,
+    maxWidth: 200,
     numeric: false,
     disablePadding: false,
     sort: false,
@@ -94,6 +112,7 @@ export const promotionColumns: readonly Promotion_Column[] = [
     id: "promotionType",
     label: "Promotion Type",
     minWidth: 100,
+    maxWidth: 200,
     numeric: false,
     disablePadding: false,
     sort: false,
@@ -102,6 +121,7 @@ export const promotionColumns: readonly Promotion_Column[] = [
     id: "applicableTo",
     label: "Applicable To",
     minWidth: 100,
+    maxWidth: 200,
     numeric: false,
     disablePadding: false,
     sort: false,
@@ -110,6 +130,7 @@ export const promotionColumns: readonly Promotion_Column[] = [
     id: "status",
     label: "Status",
     minWidth: 100,
+    maxWidth: 200,
     numeric: false,
     disablePadding: false,
     sort: false,

@@ -146,8 +146,8 @@ export const kiloTypeLists = [
   { id: 1, value: "KiloPlus", color: "success" },
 ];
 export const promotionTypeLists = [
-  { id: 0, value: "FixAmount", color: "primary" },
-  { id: 1, value: "Percentage", color: "success" },
+  { id: 0, value: "AllCustomer", color: "primary" },
+  { id: 1, value: "SpecificCustomer", color: "success" },
 ];
 
 export const promoStatusLists = [

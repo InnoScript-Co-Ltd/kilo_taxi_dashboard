@@ -11,9 +11,11 @@ import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, AppRootState } from "../../../stores";
 import { promotionService } from "../promotion.service";
 import {
+  applicableToLists,
   generalStatusLists,
   paginateOptions,
   promoStatusLists,
+  promotionTypeLists,
 } from "../../../constants/config";
 import { NavigateId } from "../../../shares/NavigateId";
 import { paths } from "../../../constants/paths";
@@ -198,22 +200,36 @@ const PromotionTableView = () => {
                     <StyledTableCell key={column.id} align={column.align}>
                       {(() => {
                         switch (column.label) {
-                          case "Customer Name":
-                            return value;
                           case "Promo Code":
                             return value;
-                          case "Expired At":
+                          case "Created Date":
+                            return formatDate(value);
+                          case "Expired Date":
                             return formatDate(value);
                           case "Status":
                             return (
                               <Status status={value} lists={promoStatusLists} />
                             );
-                          case "Value":
+                          case "Unit":
+                            return value;
+                          case "Quantity":
+                            return value;
+                          case "Description":
                             return value;
                           case "Promotion Type":
-                            return value;
+                            return (
+                              <Status
+                                status={value}
+                                lists={promotionTypeLists}
+                              />
+                            );
                           case "Applicable To":
-                            return value;
+                            return (
+                              <Status
+                                status={value}
+                                lists={applicableToLists}
+                              />
+                            );
                           case "Action":
                             return (
                               <UpAndDel
