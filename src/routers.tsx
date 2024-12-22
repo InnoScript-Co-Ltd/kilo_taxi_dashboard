@@ -18,6 +18,7 @@ import { TopupTransactionRoute } from "./modules/topupTransaction/topupTransacti
 import { SmsRoute } from "./modules/sms/sms.route";
 import { SimulationRoute } from "./modules/simulation/simulation.route";
 import { SosRoute } from "./modules/sos/sos.route";
+import { VehicleTypeRoute } from "./modules/vehicleType/vehicleType.route";
 export const routers = createBrowserRouter([
   {
     path: "/",
@@ -31,6 +32,7 @@ export const routers = createBrowserRouter([
       ...ScheduleBookingRoute,
       ...DriverRoute,
       ...VehicleRoute,
+      ...VehicleTypeRoute,
       ...WalletRoute,
       ...OrderRoute,
       ...PaymentChannelRoute,

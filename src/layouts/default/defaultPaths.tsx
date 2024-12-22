@@ -95,6 +95,19 @@ export const navigationList = [
     ],
   },
   {
+    segment: "vehicleType",
+    title: "VehicleType",
+    isParent: true,
+    icon: <DirectionsCarIcon />,
+    children: [
+      {
+        segment: "list",
+        title: "List",
+        icon: <FormatListBulletedIcon />,
+      },
+    ],
+  },
+  {
     segment: "wallet",
     title: "Wallet",
     isParent: true,
