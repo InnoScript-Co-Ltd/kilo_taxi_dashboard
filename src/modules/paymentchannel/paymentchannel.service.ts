@@ -7,11 +7,7 @@ import { index, show, update } from "./paymentchannel.slice";
 
 export const paymentChannelService = {
   // Method to create a new wallet
-  store: async (
-    payload: PaymentChannelFormInputs,
-    dispatch: Dispatch,
-    notifications?: any
-  ) => {
+  store: async (payload: any, dispatch: Dispatch, notifications?: any) => {
     const response: any = await postRequest(endpoints.paymentChannel, payload);
     await httpServiceHandler(dispatch, response);
 
@@ -46,7 +42,7 @@ export const paymentChannelService = {
   update: async (
     dispatch: Dispatch,
     id: number,
-    payload: PaymentChannelFormInputs,
+    payload: any,
     notifications?: any
   ) => {
     const response: any = await putRequest(

@@ -104,8 +104,8 @@ export const paymentStatusLists = [
 
 export const paymentTypeStatusLists = [
   { id: 0, value: "Cash", color: "success" },
-  { id: 1, value: "Wallet", color: "info" },
-  { id: 2, value: "OnlinePayment", color: "primary" },
+  { id: 1, value: "BankTransfer", color: "success" },
+  { id: 2, value: "OnlinePayment", color: "success" },
 ];
 
 export const scheduleOrderStatusLists = [
@@ -146,7 +146,7 @@ export const kiloTypeLists = [
   { id: 1, value: "KiloPlus", color: "success" },
 ];
 export const promotionTypeLists = [
-  { id: 0, value: "AllCustomer", color: "primary" },
+  { id: 0, value: "AllCustomer", color: "success" },
   { id: 1, value: "SpecificCustomer", color: "success" },
 ];
 
@@ -157,8 +157,8 @@ export const promoStatusLists = [
   { id: 3, value: "Reject", color: "error" },
 ];
 export const applicableToLists = [
-  { id: 0, value: "Customer", color: "primary" },
-  { id: 1, value: "Driver", color: "info" },
+  { id: 0, value: "Customer", color: "success" },
+  { id: 1, value: "Driver", color: "success" },
   { id: 2, value: "Both", color: "success" },
 ];
 

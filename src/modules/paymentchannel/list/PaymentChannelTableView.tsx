@@ -13,7 +13,10 @@ import {
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, AppRootState } from "../../../stores";
 import { paymentChannelService } from "../paymentchannel.service";
-import { paginateOptions } from "../../../constants/config";
+import {
+  paginateOptions,
+  paymentTypeStatusLists,
+} from "../../../constants/config";
 import { NavigateId } from "../../../shares/NavigateId";
 import { paths } from "../../../constants/paths";
 import {
@@ -34,6 +37,7 @@ import {
   StyledTableRow,
 } from "../../../components/TableCommon";
 import { useNotifications } from "@toolpad/core/useNotifications";
+import Status from "../../../components/Status";
 
 const PaymentChannelTableView = () => {
   const [page, setPage] = React.useState(0);
@@ -196,15 +200,23 @@ const PaymentChannelTableView = () => {
                     <StyledTableCell key={column.id} align={column.align}>
                       {(() => {
                         switch (column.label) {
-                          case "Channel Name":
+                          case "Icon":
                             return (
-                              <NavigateId
-                                url={`${paths.paymentChannel}/${row.id}`} // Adjust the path for wallet detail
-                                value={value}
-                              />
+                              <>
+                                <img src={value} alt={value} />
+                              </>
                             );
+                          case "ChannelName":
+                            return value;
                           case "Description":
                             return value;
+                          case "PaymentType":
+                            return (
+                              <Status
+                                status={value}
+                                lists={paymentTypeStatusLists}
+                              />
+                            );
                           case "Action":
                             return (
                               <UpAndDel

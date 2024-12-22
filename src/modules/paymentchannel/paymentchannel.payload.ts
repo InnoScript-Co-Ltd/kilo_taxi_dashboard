@@ -4,12 +4,12 @@ import { paginateOptions } from "../../constants/config"; // Assuming paginateOp
 // Define Wallet Schema
 export const paymentChannelSchema = z.object({
   id: z.number().min(0, { message: "id" }).default(0),
-  channelName: z
-    .string()
-    .min(2, { message: "Channel name must be at least 2 characters long" }),
-  description: z
-    .string()
-    .min(2, { message: "Description must be at least 2 characters long" }),
+  ChannelName: z.string(),
+  Description: z.string(),
+  PaymentType: z.number(),
+  Phone: z.string()?.nullable(),
+  UserName: z.string()?.nullable(),
+  file_Icon: z.any().nullable(),
 });
 
 export type PaymentChannelFormInputs = z.infer<typeof paymentChannelSchema>;
@@ -21,13 +21,22 @@ export interface PAYMENTCHANNEL {
   id: string;
   channelName: string;
   description: string;
+  paymentType: string;
+  icon: string;
+  phone?: string;
+  userName?: string;
+  file_Icon: string;
+  action?: null;
 }
+
+type PaymentChannelColumnId = keyof PAYMENTCHANNEL;
 
 // Define columns for wallet table
 interface PaymentChannelColumn {
-  id: "id" | "channelName" | "description" | "action";
+  id: PaymentChannelColumnId;
   label: string;
   minWidth?: number;
+  maxWidth?: number;
   align?: "right";
   numeric: boolean;
   disablePadding: boolean;
@@ -48,9 +57,19 @@ export interface PaymentChannel_PAYLOAD {
 
 export const paymentChannelColumns: readonly PaymentChannelColumn[] = [
   {
+    id: "icon",
+    label: "Icon",
+    minWidth: 100,
+    maxWidth: 200,
+    numeric: false,
+    disablePadding: false,
+    sort: true,
+  },
+  {
     id: "channelName",
     label: "Channel Name",
-    minWidth: 130,
+    minWidth: 100,
+    maxWidth: 200,
     numeric: false,
     disablePadding: false,
     sort: true,
@@ -58,7 +77,17 @@ export const paymentChannelColumns: readonly PaymentChannelColumn[] = [
   {
     id: "description",
     label: "Description",
-    minWidth: 125,
+    minWidth: 100,
+    maxWidth: 200,
+    numeric: false,
+    disablePadding: false,
+    sort: true,
+  },
+  {
+    id: "paymentType",
+    label: "PaymentType",
+    minWidth: 100,
+    maxWidth: 200,
     numeric: false,
     disablePadding: false,
     sort: true,
@@ -66,7 +95,8 @@ export const paymentChannelColumns: readonly PaymentChannelColumn[] = [
   {
     id: "action",
     label: "Action",
-    minWidth: 60,
+    minWidth: 100,
+    maxWidth: 200,
     numeric: false,
     disablePadding: false,
     sort: false,
