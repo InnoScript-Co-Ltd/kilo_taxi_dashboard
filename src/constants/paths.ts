@@ -7,6 +7,11 @@ export const paths = {
   adminDetail: "/admin/:id",
   adminLogout: "/auth/login",
 
+  city: "/city",
+  cityList: "/city/list",
+  cityCreate: "/city/new",
+  cityDetail: "/city/:id",
+
   customer: "/customer",
   customerList: "/customer/list",
   customerCreate: "/customer/new",
@@ -76,6 +81,11 @@ export const paths = {
 
   sosList: "/sos/list",
   sosReceive: "/sos/receive",
+
+  travelRate: "/travelrate",
+  travelRateList: "/travelrate/list",
+  travelRateCreate: "/travelrate/new",
+  travelRateDetail: "/travelrate/:id",
 
   simulation: "/simulation",
   simulationOrderCreate: "/simulation/order",

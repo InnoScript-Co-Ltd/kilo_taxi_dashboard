@@ -28,6 +28,19 @@ export const navigationList = [
     ],
   },
   {
+    segment: "city",
+    title: "City",
+    isParent: true,
+    icon: <AdminPanelSettingsIcon />,
+    children: [
+      {
+        segment: "list",
+        title: "List",
+        icon: <FormatListBulletedIcon />,
+      },
+    ],
+  },
+  {
     segment: "customer",
     title: "Customer",
     isParent: true,
@@ -123,6 +136,19 @@ export const navigationList = [
     title: "PaymentCHannel",
     isParent: true,
     icon: <FormatListBulletedIcon />,
+    children: [
+      {
+        segment: "list",
+        title: "List",
+        icon: <FormatListBulletedIcon />,
+      },
+    ],
+  },
+  {
+    segment: "travelRate",
+    title: "TravelRate",
+    isParent: true,
+    icon: <AdminPanelSettingsIcon />,
     children: [
       {
         segment: "list",

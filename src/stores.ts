@@ -14,6 +14,9 @@ import topupTransactionSlice from "./modules/topupTransaction/topupTransaction.s
 import paymentChannelSlice from "./modules/paymentchannel/paymentchannel.slice";
 import smsSlice from "./modules/sms/sms.slice";
 import sosSlice from "./modules/sos/sos.slice";
+import citySlice from "./modules/city/city.slice";
+import travelRateSlice from "./modules/travelrate/travelrate.slice";
+
 // interface RootState {
 //     share: SHARE_SLICE;
 //     admin: ADMIN_SLICE;
@@ -30,6 +33,7 @@ export const stores = configureStore({
   reducer: {
     share: shareSlice,
     admin: adminSlice,
+    city: citySlice,
     customer: customerSlice,
     promotion: promotionSlice,
     review: reviewSlice,
@@ -43,6 +47,7 @@ export const stores = configureStore({
     paymentChannel: paymentChannelSlice,
     sms: smsSlice,
     sos: sosSlice,
+    travelRate: travelRateSlice,
   },
 });
 
