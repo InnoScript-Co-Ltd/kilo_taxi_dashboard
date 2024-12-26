@@ -6,18 +6,8 @@ import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TablePagination from "@mui/material/TablePagination";
 import TableRow from "@mui/material/TableRow";
-import {
-  paymentChannelColumns,
-  paymentChannelPayload,
-} from "../paymentchannel.payload"; // Replace with your wallet columns and payload
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, AppRootState } from "../../../stores";
-import { paymentChannelService } from "../paymentchannel.service";
-import {
-  paginateOptions,
-  paymentTypeStatusLists,
-} from "../../../constants/config";
-import { NavigateId } from "../../../shares/NavigateId";
 import { paths } from "../../../constants/paths";
 import {
   Box,
@@ -26,7 +16,6 @@ import {
   InputAdornment,
   TableSortLabel,
 } from "@mui/material";
-import { setPaginate } from "../paymentchannel.slice"; // Adjust the slice if needed
 import SearchIcon from "@mui/icons-material/Search";
 import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
 import RestartAltIcon from "@mui/icons-material/RestartAlt";
@@ -36,17 +25,19 @@ import {
   StyledTableCell,
   StyledTableRow,
 } from "../../../components/TableCommon";
-import { useNotifications } from "@toolpad/core/useNotifications";
-import Status from "../../../components/Status";
+import { useNotifications } from "@toolpad/core";
+import { setPaginate } from "../vehicleType.slice";
+import { vehicleTypeService } from "../vehicleType.service";
+import { vehicleTypeColumns, vehicleTypePayload } from "../vehicleType.payload";
+import { paginateOptions } from "../../../constants/config";
 
-const PaymentChannelTableView = () => {
+const VehicleTypeTableView = () => {
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
   const dispatch = useDispatch<AppDispatch>();
   const { data, pagingParams } = useSelector(
-    (state: AppRootState) => state.paymentChannel
+    (state: AppRootState) => state.vehicleType
   );
-
   const notifications = useNotifications();
   const navigate = useNavigate();
   const [loading, setLoading] = React.useState(false);
@@ -65,27 +56,26 @@ const PaymentChannelTableView = () => {
   const handleChangeRowsPerPage = (
     event: React.ChangeEvent<HTMLInputElement>
   ) => {
-    setRowsPerPage(+event.target.value);
-    setPage(0);
     dispatch(
       setPaginate({
         ...pagingParams,
-        RowsPerPage: +event.target.value,
         CurrentPage: 1,
+        PageSize: event.target.value,
       })
     );
+    setRowsPerPage(+event.target.value);
+    setPage(0);
   };
 
   const loadingData = React.useCallback(async () => {
     setLoading(true);
-    await paymentChannelService.index(dispatch, pagingParams, notifications);
+    await vehicleTypeService.index(dispatch, pagingParams, notifications);
     setLoading(false);
-  }, [dispatch, pagingParams]);
+  }, [dispatch, pagingParams, notifications]);
 
   React.useEffect(() => {
     loadingData();
-  }, [loadingData]);
-
+  }, [pagingParams, loadingData]);
   return (
     <Paper sx={{ width: "100%", overflow: "hidden" }}>
       <Box
@@ -99,7 +89,7 @@ const PaymentChannelTableView = () => {
       >
         <Input
           id="input-with-icon-search"
-          placeholder="Search Wallet"
+          placeholder="Search State"
           value={pagingParams.SearchTerm}
           onChange={(e) => {
             dispatch(
@@ -126,14 +116,14 @@ const PaymentChannelTableView = () => {
         >
           <Button
             startIcon={<AddCircleOutlineIcon />}
-            onClick={() => navigate(paths.paymentChannelCreate)} // Adjust path for wallet create page
+            onClick={() => navigate(paths.vehicleTypeCreate)}
           >
             Create
           </Button>
 
           <Button
             onClick={() => {
-              dispatch(setPaginate(paymentChannelPayload.pagingParams)); // Adjust the reset payload
+              dispatch(setPaginate(vehicleTypePayload.pagingParams));
               setPage(0);
               setRowsPerPage(10);
             }}
@@ -149,7 +139,7 @@ const PaymentChannelTableView = () => {
         <Table stickyHeader aria-label="sticky table">
           <TableHead>
             <TableRow>
-              {paymentChannelColumns.map((column) => (
+              {vehicleTypeColumns.map((column) => (
                 <StyledTableCell
                   key={column.id}
                   style={{ minWidth: column.minWidth }}
@@ -192,37 +182,25 @@ const PaymentChannelTableView = () => {
             </TableRow>
           </TableHead>
           <TableBody>
-            {data.paymentChannels?.map((row: any) => (
+            {data.vehicleTypes?.map((row: any) => (
               <StyledTableRow hover role="checkbox" tabIndex={-1} key={row.id}>
-                {paymentChannelColumns.map((column) => {
+                {vehicleTypeColumns.map((column) => {
+                  console.log(vehicleTypeColumns);
                   const value = row[column.id];
+                  console.log(value);
                   return (
                     <StyledTableCell key={column.id} align={column.align}>
                       {(() => {
                         switch (column.label) {
-                          case "Icon":
-                            return (
-                              <>
-                                <img src={value} alt={value} />
-                              </>
-                            );
-                          case "ChannelName":
+                          case "Name":
                             return value;
                           case "Description":
                             return value;
-                          case "PaymentType":
-                            return (
-                              <Status
-                                status={value}
-                                lists={paymentTypeStatusLists}
-                              />
-                            );
                           case "Action":
                             return (
                               <UpAndDel
-                                url={`${paths.paymentChannel}/${row.id}`} // Adjust for wallet delete
+                                url={`${paths.vehicleType}/${row.id}`}
                                 fn={loadingData}
-                                priority={true}
                               />
                             );
                           default:
@@ -251,4 +229,4 @@ const PaymentChannelTableView = () => {
   );
 };
 
-export default PaymentChannelTableView;
+export default VehicleTypeTableView;

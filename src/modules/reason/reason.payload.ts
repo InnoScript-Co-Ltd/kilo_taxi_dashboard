@@ -6,7 +6,7 @@ export const reasonSchema = z.object({
   id: z.number().min(0, { message: "id" }).default(0),
   name: z
     .string()
-    .min(2, { message: "reason must be at least 2 characters long" }),
+    .min(2, { message: "Name must be at least 2 characters long" }),
   status: z.number(),
 });
 

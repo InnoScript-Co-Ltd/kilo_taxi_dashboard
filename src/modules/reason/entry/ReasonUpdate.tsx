@@ -21,12 +21,12 @@ import { paths } from "../../../constants/paths";
 import { Breadcrumb } from "../../../components/Breadcrumb";
 import { Controller, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { DatePicker } from "@mui/x-date-pickers";
 import { useNotifications } from "@toolpad/core/useNotifications";
 import {
   genderStatuslists,
   generalStatusLists,
 } from "../../../constants/config";
+
 import { getId } from "../../../helpers/updateHelper";
 
 const ReasonUpdate = () => {
@@ -89,7 +89,7 @@ const ReasonUpdate = () => {
       setValue("name", reason.name || "");
       setValue(
         "status",
-        getId({ lists: genderStatuslists, value: reason.status }) || 0
+        getId({ lists: generalStatusLists, value: reason.status }) || 0
       );
     }
   }, [reason, setValue]);
@@ -103,13 +103,15 @@ const ReasonUpdate = () => {
         <form onSubmit={handleSubmit(submitReasonUpdate)}>
           <Grid2 container spacing={2}>
             <Grid2 size={{ xs: 6, md: 3 }}>
+
               <FormControl variant="filled" fullWidth error={!!errors.name}>
                 <InputLabel htmlFor="name">Reason name</InputLabel>
                 <FilledInput size="small" id="name" {...register("name")} />
+
                 <FormHelperText>{errors.name?.message}</FormHelperText>
               </FormControl>
             </Grid2>
-          </Grid2>
+
 
           <Grid2 size={{ xs: 6, md: 3 }}>
             <FormControl variant="filled" fullWidth error={!!errors.status}>
@@ -137,10 +139,11 @@ const ReasonUpdate = () => {
                 )}
               />
 
-              <FormHelperText>{errors.status?.message}</FormHelperText>
-            </FormControl>
-          </Grid2>
 
+                <FormHelperText>{errors.status?.message}</FormHelperText>
+              </FormControl>
+            </Grid2>
+          </Grid2>
           {/* Footer */}
           <Box
             sx={{

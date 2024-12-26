@@ -8,6 +8,8 @@ import {
   FormHelperText,
   Grid2,
   InputLabel,
+  MenuItem,
+  Select,
 } from "@mui/material";
 import { useState } from "react";
 import {
@@ -22,8 +24,10 @@ import { Breadcrumb } from "../../../components/Breadcrumb";
 import { paths } from "../../../constants/paths";
 import { useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { DatePicker } from "@mui/x-date-pickers";
 import { useNotifications } from "@toolpad/core/useNotifications";
+import { paymentTypeStatusLists } from "../../../constants/config";
+import FileUploadWithPreview from "../../../components/FileUploadWithPreview";
+import { formBuilder } from "../../../helpers/formBuilder";
 
 const PaymentChannelCreate = () => {
   const [loading, setLoading] = useState(false);
@@ -36,22 +40,33 @@ const PaymentChannelCreate = () => {
     control,
     register,
     handleSubmit,
+    watch,
     formState: { errors },
   } = useForm<PaymentChannelFormInputs>({
     resolver: zodResolver(paymentChannelSchema),
+    defaultValues: {
+      PaymentType: 0,
+    },
   });
 
+  const paymentType = watch("PaymentType");
+
   const submitPaymentChannelCreate = async (data: PaymentChannelFormInputs) => {
-    setLoading(true);
-    const response = await paymentChannelService.store(
-      data,
-      dispatch,
-      notifications
-    );
-    if (response.status === 201) {
-      navigate(`${paths.paymentChannelList}`);
+    try {
+      const formData = formBuilder(data, paymentChannelSchema);
+      const response = await paymentChannelService.store(
+        formData,
+        dispatch,
+        notifications
+      );
+      if (response.status === 201) {
+        navigate(`${paths.paymentChannelList}`);
+      }
+    } catch (error) {
+      console.error("Error submitting form:", error);
+    } finally {
+      setLoading(false);
     }
-    setLoading(false);
   };
 
   return (
@@ -65,32 +80,124 @@ const PaymentChannelCreate = () => {
               <FormControl
                 variant="filled"
                 fullWidth
-                error={!!errors.channelName}
+                error={!!errors.ChannelName}
               >
                 <InputLabel htmlFor="channel_name">Channel Name</InputLabel>
                 <FilledInput
                   size="small"
                   id="channel_name"
-                  {...register("channelName")}
+                  {...register("ChannelName")}
                 />
-                <FormHelperText>{errors.channelName?.message}</FormHelperText>
+                <FormHelperText>{errors.ChannelName?.message}</FormHelperText>
               </FormControl>
             </Grid2>
             <Grid2 size={{ xs: 6, md: 3 }}>
               <FormControl
                 variant="filled"
                 fullWidth
-                error={!!errors.description}
+                error={!!errors.Description}
               >
                 <InputLabel htmlFor="description">Description</InputLabel>
                 <FilledInput
                   size="small"
                   id="description"
-                  {...register("description")}
+                  {...register("Description")}
                 />
-                <FormHelperText>{errors.description?.message}</FormHelperText>
+                <FormHelperText>{errors.Description?.message}</FormHelperText>
               </FormControl>
             </Grid2>
+
+            <Grid2 size={{ xs: 6, md: 3 }}>
+              <FormControl
+                variant="filled"
+                fullWidth
+                error={!!errors.PaymentType}
+              >
+                <InputLabel htmlFor="payment_type">Payment Type</InputLabel>
+                <Controller
+                  name="PaymentType"
+                  control={control}
+                  render={({ field }) => (
+                    <Select
+                      id="payment_type"
+                      aria-describedby="payment_type_text"
+                      size="small"
+                      disabled={loading}
+                      label="PaymentType"
+                      {...field}
+                      value={field.value || 0} // Convert field value to a string
+                      onChange={(event) => field.onChange(event.target.value)} // Ensure onChange value is a string
+                    >
+                      {paymentTypeStatusLists?.map((payment: any) => (
+                        <MenuItem key={payment.id} value={payment.id}>
+                          {payment.value}
+                        </MenuItem>
+                      ))}
+                    </Select>
+                  )}
+                />
+
+                <FormHelperText>{errors?.PaymentType?.message}</FormHelperText>
+              </FormControl>
+            </Grid2>
+
+            <Grid2 size={{ xs: 6, md: 3 }}>
+              <FormControl
+                variant="filled"
+                fullWidth
+                error={!!errors.file_Icon}
+              >
+                <Controller
+                  name="file_Icon"
+                  control={control}
+                  defaultValue={undefined}
+                  rules={{ required: "Icon is required" }}
+                  render={({ field: { onChange, value } }) => (
+                    <FileUploadWithPreview
+                      onFileChange={(file) => {
+                        onChange(file);
+                      }}
+                      error={
+                        errors.file_Icon
+                          ? typeof errors.file_Icon.message === "string"
+                            ? errors.file_Icon.message
+                            : undefined
+                          : undefined
+                      }
+                      field="Icon"
+                      disabled={loading}
+                    />
+                  )}
+                />
+              </FormControl>
+            </Grid2>
+
+            {paymentType === 2 && (
+              <Grid2 size={{ xs: 6, md: 3 }}>
+                <FormControl variant="filled" fullWidth error={!!errors.Phone}>
+                  <InputLabel htmlFor="phone">Phone</InputLabel>
+                  <FilledInput size="small" id="phone" {...register("Phone")} />
+                  <FormHelperText>{errors.Phone?.message}</FormHelperText>
+                </FormControl>
+              </Grid2>
+            )}
+            {(paymentType === 1 || paymentType === 2) && (
+              <Grid2 size={{ xs: 6, md: 3 }}>
+                <FormControl
+                  variant="filled"
+                  fullWidth
+                  error={!!errors.UserName}
+                >
+                  <InputLabel htmlFor="user_name">User Name</InputLabel>
+                  <FilledInput
+                    size="small"
+                    id="user_name"
+                    {...register("UserName")}
+                  />
+                  <FormHelperText>{errors.UserName?.message}</FormHelperText>
+                </FormControl>
+              </Grid2>
+            )}
           </Grid2>
 
           {/* Footer with Cancel and Submit buttons */}

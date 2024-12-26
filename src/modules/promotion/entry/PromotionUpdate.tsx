@@ -47,20 +47,26 @@ const PromotionUpdate = () => {
     register,
     handleSubmit,
     setValue,
+    watch,
     formState: { errors },
   } = useForm<PromotionFormInputs>({
     resolver: zodResolver(promotionSchema),
     defaultValues: {
       id: 0,
-      CustomerId: 0,
       PromoCode: "",
-      ExpiredAt: new Date(),
-      Value: "",
+      CreatedDate: new Date(),
+      ExpiredDate: new Date(),
+      Unit: "",
+      Quantity: "",
+      Description: "",
       PromotionType: 0,
       ApplicableTo: 0,
       Status: 0,
+      CustomerIds: [],
     },
   });
+
+  const promotionType = watch("PromotionType");
 
   // Function to handle form submission and state update
   const submitPromotionUpdate = async (data: PromotionFormInputs) => {
@@ -99,13 +105,18 @@ const PromotionUpdate = () => {
   useEffect(() => {
     if (promotion) {
       setValue("id", Number(promotion.id) || 0);
-      setValue("CustomerId", promotion.customerId || 0);
       setValue("PromoCode", promotion.promoCode || "");
       setValue(
-        "ExpiredAt",
-        promotion.expiredAt ? new Date(promotion.expiredAt) : new Date()
+        "CreatedDate",
+        promotion.createdDate ? new Date(promotion.createdDate) : new Date()
       );
-      setValue("Value", String(promotion.value) || "");
+      setValue(
+        "ExpiredDate",
+        promotion.expiredDate ? new Date(promotion.expiredDate) : new Date()
+      );
+      setValue("Unit", String(promotion.unit) || "");
+      setValue("Quantity", String(promotion.quantity) || "");
+      setValue("Description", String(promotion.description) || "");
       setValue(
         "PromotionType",
         getId({ lists: promotionTypeLists, value: promotion.promotionType }) ||
@@ -119,10 +130,10 @@ const PromotionUpdate = () => {
         "Status",
         getId({ lists: promoStatusLists, value: promotion.status }) || 0
       );
+      setValue("CustomerIds", promotion.customerIds || []);
     }
   }, [promotion, setValue]);
 
-  // Load data into form fields on component mount
   const loadingDataDetail = useCallback(async () => {
     setLoading(true);
     await promotionService.show(dispatch, params.id);
@@ -145,40 +156,6 @@ const PromotionUpdate = () => {
               <FormControl
                 variant="filled"
                 fullWidth
-                error={!!errors.CustomerId}
-              >
-                <InputLabel htmlFor="customer_name">Customer</InputLabel>
-                <Controller
-                  name="CustomerId"
-                  control={control}
-                  render={({ field }) => (
-                    <Select
-                      size="small"
-                      id="customer_name"
-                      aria-describedby="customer_name_text"
-                      disabled={loading}
-                      label="Customer"
-                      {...field}
-                      value={field.value} // Convert field value to a string
-                      onChange={(event) => field.onChange(event.target.value)} // Ensure onChange value is a string
-                    >
-                      {customerLists.map((customer: any) => (
-                        <MenuItem key={customer.id} value={customer.id}>
-                          {customer.name}
-                        </MenuItem>
-                      ))}
-                    </Select>
-                  )}
-                />
-
-                <FormHelperText>{errors.CustomerId?.message}</FormHelperText>
-              </FormControl>
-            </Grid2>
-
-            <Grid2 size={{ xs: 6, md: 3 }}>
-              <FormControl
-                variant="filled"
-                fullWidth
                 error={!!errors.PromoCode}
               >
                 <InputLabel htmlFor="promo_code">Promo Code</InputLabel>
@@ -192,9 +169,9 @@ const PromotionUpdate = () => {
             </Grid2>
 
             <Grid2 size={{ xs: 6, md: 3 }}>
-              <FormControl fullWidth error={!!errors.ExpiredAt}>
+              <FormControl fullWidth error={!!errors.CreatedDate}>
                 <Controller
-                  name="ExpiredAt"
+                  name="CreatedDate"
                   control={control}
                   render={({ field }) => (
                     <DatePicker
@@ -204,21 +181,71 @@ const PromotionUpdate = () => {
                       disabled={loading}
                       slotProps={{
                         textField: {
-                          error: !!errors.ExpiredAt,
-                          helperText: errors.ExpiredAt?.message,
+                          error: !!errors.CreatedDate,
+                          helperText: errors.CreatedDate?.message,
                         },
                       }}
                     />
                   )}
                 />
-                <FormHelperText>{errors.ExpiredAt?.message}</FormHelperText>
+                <FormHelperText>{errors.CreatedDate?.message}</FormHelperText>
               </FormControl>
             </Grid2>
             <Grid2 size={{ xs: 6, md: 3 }}>
-              <FormControl variant="filled" fullWidth error={!!errors.Value}>
-                <InputLabel htmlFor="value">Unit</InputLabel>
-                <FilledInput size="small" id="vaule" {...register("Value")} />
-                <FormHelperText>{errors.Value?.message}</FormHelperText>
+              <FormControl fullWidth error={!!errors.ExpiredDate}>
+                <Controller
+                  name="ExpiredDate"
+                  control={control}
+                  render={({ field }) => (
+                    <DatePicker
+                      label="Expired At"
+                      value={field.value}
+                      onChange={(date) => field.onChange(date)}
+                      disabled={loading}
+                      slotProps={{
+                        textField: {
+                          error: !!errors.ExpiredDate,
+                          helperText: errors.ExpiredDate?.message,
+                        },
+                      }}
+                    />
+                  )}
+                />
+                <FormHelperText>{errors.ExpiredDate?.message}</FormHelperText>
+              </FormControl>
+            </Grid2>
+
+            <Grid2 size={{ xs: 6, md: 3 }}>
+              <FormControl variant="filled" fullWidth error={!!errors.Unit}>
+                <InputLabel htmlFor="Unit">Unit</InputLabel>
+                <FilledInput size="small" id="Unit" {...register("Unit")} />
+                <FormHelperText>{errors.Unit?.message}</FormHelperText>
+              </FormControl>
+            </Grid2>
+            <Grid2 size={{ xs: 6, md: 3 }}>
+              <FormControl variant="filled" fullWidth error={!!errors.Quantity}>
+                <InputLabel htmlFor="Quantity">Quantity</InputLabel>
+                <FilledInput
+                  size="small"
+                  id="Quantity"
+                  {...register("Quantity")}
+                />
+                <FormHelperText>{errors.Quantity?.message}</FormHelperText>
+              </FormControl>
+            </Grid2>
+            <Grid2 size={{ xs: 6, md: 3 }}>
+              <FormControl
+                variant="filled"
+                fullWidth
+                error={!!errors.Description}
+              >
+                <InputLabel htmlFor="description">Description</InputLabel>
+                <FilledInput
+                  size="small"
+                  id="description"
+                  {...register("Description")}
+                />
+                <FormHelperText>{errors.Description?.message}</FormHelperText>
               </FormControl>
             </Grid2>
 
@@ -258,7 +285,6 @@ const PromotionUpdate = () => {
                 <FormHelperText>{errors.PromotionType?.message}</FormHelperText>
               </FormControl>
             </Grid2>
-
             <Grid2 size={{ xs: 6, md: 3 }}>
               <FormControl
                 variant="filled"
@@ -292,7 +318,6 @@ const PromotionUpdate = () => {
                 <FormHelperText>{errors.ApplicableTo?.message}</FormHelperText>
               </FormControl>
             </Grid2>
-
             <Grid2 size={{ xs: 6, md: 3 }}>
               <FormControl variant="filled" fullWidth error={!!errors.Status}>
                 <InputLabel htmlFor="status">Status</InputLabel>
@@ -322,6 +347,42 @@ const PromotionUpdate = () => {
                 <FormHelperText>{errors.Status?.message}</FormHelperText>
               </FormControl>
             </Grid2>
+
+            {promotionType === 1 && (
+              <Grid2 size={{ xs: 6, md: 3 }}>
+                <FormControl
+                  variant="filled"
+                  fullWidth
+                  error={!!errors.CustomerIds}
+                >
+                  <InputLabel htmlFor="customer_name">Customers</InputLabel>
+                  <Controller
+                    name="CustomerIds"
+                    control={control}
+                    render={({ field }) => (
+                      <Select
+                        size="small"
+                        id="customer_name"
+                        aria-describedby="customer_name_text"
+                        disabled={loading}
+                        label="Customer"
+                        {...field}
+                        multiple
+                        value={field.value || []}
+                        onChange={(event) => field.onChange(event.target.value)}
+                      >
+                        {customerLists.map((customer: any) => (
+                          <MenuItem key={customer.id} value={customer.id}>
+                            {customer.name}
+                          </MenuItem>
+                        ))}
+                      </Select>
+                    )}
+                  />
+                  <FormHelperText>{errors.CustomerIds?.message}</FormHelperText>
+                </FormControl>
+              </Grid2>
+            )}
           </Grid2>
 
           {/* footer */}

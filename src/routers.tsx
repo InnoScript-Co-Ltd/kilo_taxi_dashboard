@@ -20,7 +20,7 @@ import { SimulationRoute } from "./modules/simulation/simulation.route";
 import { SosRoute } from "./modules/sos/sos.route";
 import { CityRoute } from "./modules/city/city.route";
 import { TravelRateRoute } from "./modules/travelrate/travelrate.route";
-
+import { VehicleTypeRoute } from "./modules/vehicleType/vehicleType.route";
 export const routers = createBrowserRouter([
   {
     path: "/",
@@ -34,6 +34,7 @@ export const routers = createBrowserRouter([
       ...ScheduleBookingRoute,
       ...DriverRoute,
       ...VehicleRoute,
+      ...VehicleTypeRoute,
       ...WalletRoute,
       ...OrderRoute,
       ...PaymentChannelRoute,

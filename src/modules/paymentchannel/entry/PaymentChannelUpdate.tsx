@@ -7,6 +7,8 @@ import {
   FormHelperText,
   Grid2,
   InputLabel,
+  MenuItem,
+  Select,
 } from "@mui/material";
 import { useCallback, useEffect, useState } from "react";
 import {
@@ -23,6 +25,10 @@ import { Breadcrumb } from "../../../components/Breadcrumb";
 import { Controller, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useNotifications } from "@toolpad/core/useNotifications";
+import { paymentTypeStatusLists } from "../../../constants/config";
+import { getId } from "../../../helpers/updateHelper";
+import { formBuilder } from "../../../helpers/formBuilder";
+import FileUploadWithPreview from "../../../components/FileUploadWithPreview";
 
 const PaymentChannelUpdate = () => {
   const [loading, setLoading] = useState(false);
@@ -40,30 +46,21 @@ const PaymentChannelUpdate = () => {
     control,
     register,
     handleSubmit,
+    watch,
     setValue,
     formState: { errors },
   } = useForm<PaymentChannelFormInputs>({
     resolver: zodResolver(paymentChannelSchema),
     defaultValues: {
-      channelName: "",
-      description: "",
+      ChannelName: "",
+      Description: "",
+      PaymentType: 0,
+      UserName: "",
+      Phone: "",
     },
   });
 
-  // Function to handle form submission and wallet update
-  const submitPaymentChannelUpdate = async (data: PaymentChannelFormInputs) => {
-    setLoading(true);
-    const response: any = await paymentChannelService.update(
-      dispatch,
-      params.id,
-      data,
-      notifications
-    );
-    if (response.status === 200) {
-      navigate(`${paths.paymentChannelList}`); // Navigate to the wallet list page on success
-    }
-    setLoading(false);
-  };
+  const paymentType = watch("PaymentType");
 
   // Function to load wallet data based on the ID from params
   const loadingData = useCallback(async () => {
@@ -83,10 +80,34 @@ const PaymentChannelUpdate = () => {
   useEffect(() => {
     if (paymentChannel) {
       setValue("id", Number(paymentChannel.id) || 0);
-      setValue("channelName", paymentChannel.channelName || "");
-      setValue("description", paymentChannel.description || "");
+      setValue("ChannelName", paymentChannel.channelName || "");
+      setValue("Description", paymentChannel.description || "");
+      setValue(
+        "PaymentType",
+        getId({
+          lists: paymentTypeStatusLists,
+          value: paymentChannel.paymentType,
+        }) || 0
+      );
+      setValue("UserName", paymentChannel.userName || "");
+      setValue("Phone", paymentChannel.phone || "");
     }
   }, [paymentChannel, setValue]);
+
+  // Function to handle form submission and wallet update
+  const submitPaymentChannelUpdate = async (data: PaymentChannelFormInputs) => {
+    setLoading(true);
+    const formData = formBuilder(data, paymentChannelSchema);
+    const response = await paymentChannelService.update(
+      dispatch,
+      params.id,
+      formData
+    );
+    if (response.status === 200) {
+      navigate(`${paths.customerList}`);
+    }
+    setLoading(false);
+  };
 
   return (
     <Box>
@@ -100,15 +121,30 @@ const PaymentChannelUpdate = () => {
               <FormControl
                 variant="filled"
                 fullWidth
-                error={!!errors.channelName}
+                error={!!errors.ChannelName}
               >
                 <InputLabel htmlFor="channel_name">Channel Name</InputLabel>
                 <FilledInput
                   size="small"
                   id="channel_name"
-                  {...register("channelName")}
+                  {...register("ChannelName")}
                 />
-                <FormHelperText>{errors.channelName?.message}</FormHelperText>
+                <FormHelperText>{errors.ChannelName?.message}</FormHelperText>
+              </FormControl>
+            </Grid2>
+            <Grid2 size={{ xs: 6, md: 3 }}>
+              <FormControl
+                variant="filled"
+                fullWidth
+                error={!!errors.Description}
+              >
+                <InputLabel htmlFor="description">Description</InputLabel>
+                <FilledInput
+                  size="small"
+                  id="description"
+                  {...register("Description")}
+                />
+                <FormHelperText>{errors.Description?.message}</FormHelperText>
               </FormControl>
             </Grid2>
 
@@ -116,17 +152,93 @@ const PaymentChannelUpdate = () => {
               <FormControl
                 variant="filled"
                 fullWidth
-                error={!!errors.description}
+                error={!!errors.PaymentType}
               >
-                <InputLabel htmlFor="description">Description</InputLabel>
-                <FilledInput
-                  size="small"
-                  id="description"
-                  {...register("description")}
+                <InputLabel htmlFor="payment_type">Payment Type</InputLabel>
+                <Controller
+                  name="PaymentType"
+                  control={control}
+                  render={({ field }) => (
+                    <Select
+                      id="payment_type"
+                      aria-describedby="payment_type_text"
+                      size="small"
+                      disabled={loading}
+                      label="PaymentType"
+                      {...field}
+                      value={field.value || 0} // Convert field value to a string
+                      onChange={(event) => field.onChange(event.target.value)} // Ensure onChange value is a string
+                    >
+                      {paymentTypeStatusLists?.map((payment: any) => (
+                        <MenuItem key={payment.id} value={payment.id}>
+                          {payment.value}
+                        </MenuItem>
+                      ))}
+                    </Select>
+                  )}
                 />
-                <FormHelperText>{errors.description?.message}</FormHelperText>
+
+                <FormHelperText>{errors?.PaymentType?.message}</FormHelperText>
               </FormControl>
             </Grid2>
+
+            <Grid2 size={{ xs: 6, md: 3 }}>
+              <FormControl
+                variant="filled"
+                fullWidth
+                error={!!errors.file_Icon}
+              >
+                <Controller
+                  name="file_Icon"
+                  control={control}
+                  defaultValue={undefined}
+                  rules={{ required: "Icon is required" }}
+                  render={({ field: { onChange, value } }) => (
+                    <FileUploadWithPreview
+                      onFileChange={(file) => {
+                        onChange(file);
+                      }}
+                      error={
+                        errors.file_Icon
+                          ? typeof errors.file_Icon.message === "string"
+                            ? errors.file_Icon.message
+                            : undefined
+                          : undefined
+                      }
+                      field="Icon"
+                      disabled={loading}
+                    />
+                  )}
+                />
+              </FormControl>
+            </Grid2>
+
+            {paymentType === 2 && (
+              <Grid2 size={{ xs: 6, md: 3 }}>
+                <FormControl variant="filled" fullWidth error={!!errors.Phone}>
+                  <InputLabel htmlFor="phone">Channel Name</InputLabel>
+                  <FilledInput size="small" id="phone" {...register("Phone")} />
+                  <FormHelperText>{errors.Phone?.message}</FormHelperText>
+                </FormControl>
+              </Grid2>
+            )}
+            {(paymentType === 1 || paymentType === 2) && (
+              <Grid2 size={{ xs: 6, md: 3 }}>
+                <FormControl
+                  variant="filled"
+                  fullWidth
+                  error={!!errors.UserName}
+                >
+                  <InputLabel htmlFor="user_name">User Name</InputLabel>
+                  <FilledInput
+                    size="small"
+                    id="user_name"
+                    {...register("UserName")}
+                  />
+                  <FormHelperText>{errors.UserName?.message}</FormHelperText>
+                </FormControl>
+              </Grid2>
+            )}
           </Grid2>
 
           {/* Footer */}

@@ -32,6 +32,7 @@ import { setPaginate } from "../order.slice";
 import UpAndDel from "../../../components/UpAndDel";
 import { paths } from "../../../constants/paths";
 import { NavigateId } from "../../../shares/NavigateId";
+import { formatDate } from "../../../helpers/common";
 
 const OrderTableView = () => {
   const [page, setPage] = React.useState(0);
@@ -184,7 +185,7 @@ const OrderTableView = () => {
                               <Status status={value} lists={orderStatusLists} />
                             );
                           case "Created Date":
-                            return value;
+                            return formatDate(value);
                           case "Wallet Transaction Id":
                             return value;
                           case "Customer Id":

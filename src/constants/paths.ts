@@ -45,6 +45,11 @@ export const paths = {
   vehicleList: "/vehicle/list",
   vehicleDetail: "/vehicle/:id",
 
+  vehicleType: "/vehicletype",
+  vehicleTypeList: "/vehicletype/list",
+  vehicleTypeCreate: "/vehicletype/new",
+  vehicleTypeUpdate: "/vehicletype/:id",
+
   wallet: "/wallet",
   walletList: "/wallet/list",
   walletCreate: "/wallet/new",

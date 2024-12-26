@@ -2,19 +2,16 @@ import { Dispatch } from "redux";
 import { endpoints } from "../../constants/endpoints";
 import { getRequest, postRequest, putRequest } from "../../helpers/api";
 import { httpServiceHandler } from "../../helpers/handler";
-import { PaymentChannelFormInputs } from "./paymentchannel.payload";
-import { index, show, update } from "./paymentchannel.slice";
+import { VehicleTypeFormInputs } from "./vehicleType.payload";
+import { index, show, update } from "./vehicleType.slice";
 
-export const paymentChannelService = {
-  // Method to create a new wallet
+export const vehicleTypeService = {
   store: async (payload: any, dispatch: Dispatch, notifications?: any) => {
-    const response: any = await postRequest(endpoints.paymentChannel, payload);
+    const response: any = await postRequest(endpoints.vehicleType, payload);
     await httpServiceHandler(dispatch, response);
 
-    if (response.status === 201) {
-      //'info' | 'success' | 'warning' | 'error'
-      console.log("error here");
-      notifications.show("PaymentChannel is created successfully", {
+    if (response.status === 200) {
+      notifications.show("Vehicle Type created successfully", {
         severity: "success",
         autoHideDuration: 3000,
       });
@@ -22,14 +19,12 @@ export const paymentChannelService = {
     return response;
   },
 
-  // Method to retrieve a list of wallets with optional parameters
   index: async (dispatch: Dispatch, params: any, notifications?: any) => {
-    const response: any = await getRequest(endpoints.paymentChannel, params);
+    const response: any = await getRequest(endpoints.vehicleType, params);
     await httpServiceHandler(dispatch, response);
-
     if (response.status === 200) {
       //'info' | 'success' | 'warning' | 'error'
-      notifications.show("PaymentChannel list is successfully retrieved!", {
+      notifications.show("Vehicle Type list successfully retrieved!", {
         severity: "info",
         autoHideDuration: 3000,
       });
@@ -38,22 +33,21 @@ export const paymentChannelService = {
     return response;
   },
 
-  // Method to update an existing wallet by ID
+  // Method to update an existing state by ID
   update: async (
     dispatch: Dispatch,
     id: number,
-    payload: any,
+    payload: VehicleTypeFormInputs,
     notifications?: any
   ) => {
     const response: any = await putRequest(
-      `${endpoints.paymentChannel}/${id}`,
+      `${endpoints.vehicleType}/${id}`,
       payload
     );
     await httpServiceHandler(dispatch, response);
 
     if (response.status === 200) {
-      //'info' | 'success' | 'warning' | 'error'
-      notifications?.show("PaymentChannel is updated successfully", {
+      notifications?.show("Vehicle Type updated successfully", {
         severity: "success",
         autoHideDuration: 3000,
       });
@@ -62,10 +56,10 @@ export const paymentChannelService = {
     return response;
   },
 
-  // Method to fetch details of a specific wallet by ID
+  // Method to fetch details of a specific state by ID
   show: async (dispatch: Dispatch, id: number) => {
     const response: any = await getRequest(
-      `${endpoints.paymentChannel}/${id}`,
+      `${endpoints.vehicleType}/${id}`,
       null
     );
     await httpServiceHandler(dispatch, response);
@@ -73,6 +67,7 @@ export const paymentChannelService = {
     if (response.status === 200) {
       dispatch(show(response.data));
     }
+
     return response;
   },
 };

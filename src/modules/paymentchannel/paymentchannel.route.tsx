@@ -1,10 +1,7 @@
 import { paths } from "../../constants/paths"; // Ensure this path is correct
 import PaymentChannelCreate from "./entry/PaymentChannelCreate";
-import WalletCreate from "./entry/PaymentChannelCreate"; // Adjust the import path as necessary
 import PaymentChannelUpdate from "./entry/PaymentChannelUpdate";
-import WalletUpdate from "./entry/PaymentChannelUpdate"; // Adjust the import path as necessary
 import PaymentChannelList from "./view/PaymentChannelList";
-import WalletList from "./view/PaymentChannelList"; // Adjust the import path as necessary
 
 export const PaymentChannelRoute = [
   {
