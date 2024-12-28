@@ -5,7 +5,7 @@ import { AppProvider } from "@toolpad/core/AppProvider";
 import { DashboardLayout } from "@toolpad/core/DashboardLayout";
 import type { Router } from "@toolpad/core";
 import { navigationList } from "../defaultPaths";
-import { Outlet, useNavigate } from "react-router";
+import { Outlet, useLocation, useNavigate } from "react-router";
 import { green, grey, indigo, orange, red, yellow } from "@mui/material/colors";
 import { IconButton } from "@mui/material";
 import NotificationsIcon from "@mui/icons-material/Notifications";
@@ -13,6 +13,8 @@ import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import { NotificationsProvider } from "@toolpad/core/useNotifications";
 import { LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
+import { getData } from "../../../helpers/localStorage";
+import { keys } from "../../../constants/config";
 
 const demoTheme = createTheme({
   cssVariables: {
@@ -108,7 +110,7 @@ function ToolBarAccount() {
 export default function BrandLayout() {
   const [pathname, setPathname] = React.useState("/");
   const navigate = useNavigate();
-  const location = window.location.pathname;
+  const location = useLocation();
 
   // Handler to navigate, supporting `string | URL`
   const handleNavigation = (path: string | URL) => {
@@ -116,45 +118,54 @@ export default function BrandLayout() {
     const normalizedPath = pathString.startsWith("/") ? pathString.slice(1) : pathString;
 
     const item = navigationList.find((nav) => nav.segment === normalizedPath);
-  
+
     if (item?.isParent) {
       const newPath = `/${normalizedPath}/list`;
-      navigate(newPath);
-      setPathname(newPath);
+      console.log(newPath);
+      
+      if (pathname !== newPath) {
+        navigate(newPath);
+        setPathname(newPath);
+      }
     } else {
-      navigate(pathString);
-      setPathname(pathString)
+      if (pathname !== pathString) {
+        navigate(pathString);
+        setPathname(pathString);
+      }
     }
   };
 
-  // Define router object with matching types
-  const router = React.useMemo<Router>(
+  const router = React.useMemo(
     () => ({
-      pathname: location, // Sync with current URL
-      searchParams: new URLSearchParams(),
+      pathname: location.pathname,
+      searchParams: new URLSearchParams(location.search),
       navigate: (url: string | URL) => {
         const pathString = typeof url === "string" ? url : url.toString();
         handleNavigation(pathString);
       },
     }),
-    [location]
+    [location.pathname, location.search]
   );
+
+  const memoizedNavigationList = React.useMemo(() => navigationList, []);
+  const memoizedTheme = React.useMemo(() => demoTheme, []);
+  const slots = React.useMemo(() => ({
+    toolbarActions: ToolBarActions,
+    toolbarAccount: ToolBarAccount,
+  }), []);
 
   return (
     // preview-start
     <AppProvider
-      navigation={navigationList}
+      navigation={memoizedNavigationList}
       router={router}
-      theme={demoTheme}
+      theme={memoizedTheme}
       branding={BRANDING}
     >
       <DashboardLayout
-        slots={{
-          toolbarActions: ToolBarActions,
-          toolbarAccount: ToolBarAccount,
-        }}
+        slots={slots}
       >
-         <Box sx={{ width: "100%", padding: "20px" }}>
+        <Box sx={{ width: "100%", padding: "20px" }}>
           <NotificationsProvider>
             <LocalizationProvider dateAdapter={AdapterDateFns}>
               <Outlet />
