@@ -18,6 +18,8 @@ export const endpoints = {
   vehicleType: "VehicleType",
   wallet: "Wallet",
   order: "Order",
+  orderExtend: "OrderExtend",
+  extraDemand: "ExtraDemand",
   topupTransaction: "TopUpTransaction",
   reason: "Reason",
   paymentChannel: "PaymentChannel",

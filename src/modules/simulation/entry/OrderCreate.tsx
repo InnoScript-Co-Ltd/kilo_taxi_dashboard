@@ -271,16 +271,16 @@ const OrderCreate = () => {
               <FormControl
                 variant="filled"
                 fullWidth
-                error={!!errors.TotalAmount}
+                error={!!errors.EstimatedAmount}
               >
                 <InputLabel htmlFor="total_amount">Total Amount</InputLabel>
                 <FilledInput
                   type="number"
                   size="small"
                   id="total_amount"
-                  {...register("TotalAmount", { valueAsNumber: true })}
+                  {...register("EstimatedAmount", { valueAsNumber: true })}
                 />
-                <FormHelperText>{errors.TotalAmount?.message}</FormHelperText>
+                <FormHelperText>{errors.EstimatedAmount?.message}</FormHelperText>
               </FormControl>
             </Grid2>
 

@@ -20,26 +20,26 @@ import {
 import SearchIcon from "@mui/icons-material/Search";
 import RestartAltIcon from "@mui/icons-material/RestartAlt";
 import LoginIcon from "@mui/icons-material/Login";
-import { orderService } from "../order.service";
-import { orderColumns, orderPayload } from "../order.payload";
+import { extraDemandService } from "../extraDemand.service";
+import { extraDemandColumns, extraDemandPayload } from "../extraDemand.payload";
 import {
   StyledTableCell,
   StyledTableRow,
 } from "../../../components/TableCommon";
 import Status from "../../../components/Status";
-import { orderStatusLists, paginateOptions } from "../../../constants/config";
-import { setPaginate } from "../order.slice";
+import { paginateOptions } from "../../../constants/config";
+import { setPaginate } from "../extraDemand.slice";
 import UpAndDel from "../../../components/UpAndDel";
 import { paths } from "../../../constants/paths";
 import { NavigateId } from "../../../shares/NavigateId";
 import { formatDate } from "../../../helpers/common";
 
-const OrderTableView = () => {
+const ExtraDemandTableView = () => {
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
   const dispatch = useDispatch<AppDispatch>();
   const { data, pagingParams } = useSelector(
-    (state: AppRootState) => state.order // Adjust to your order slice state
+    (state: AppRootState) => state.extraDemand // Adjust to your extraDemand slice state
   );
 
   const notifications = useNotifications();
@@ -71,7 +71,7 @@ const OrderTableView = () => {
 
   const loadingData = React.useCallback(async () => {
     setLoading(true);
-    await orderService.index(dispatch, pagingParams, notifications);
+    await extraDemandService.index(dispatch, pagingParams, notifications);
     setLoading(false);
   }, [dispatch, pagingParams, notifications]);
 
@@ -92,7 +92,7 @@ const OrderTableView = () => {
       >
         <Input
           id="input-with-icon-search"
-          placeholder="Search Order"
+          placeholder="Search ExtraDemand"
           value={pagingParams.SearchTerm}
           onChange={(e) => {
             dispatch(
@@ -119,7 +119,7 @@ const OrderTableView = () => {
         >
           <Button
             onClick={() => {
-              dispatch(setPaginate(orderPayload.pagingParams)); // Reset the paginate
+              dispatch(setPaginate(extraDemandPayload.pagingParams)); // Reset the paginate
               setPage(0);
               setRowsPerPage(10);
             }}
@@ -135,7 +135,7 @@ const OrderTableView = () => {
         <Table stickyHeader aria-label="sticky table">
           <TableHead>
             <TableRow>
-              {orderColumns.map((column) => (
+              {extraDemandColumns.map((column) => (
                 <StyledTableCell
                   key={column.id}
                   style={{ minWidth: column.minWidth }}
@@ -170,24 +170,20 @@ const OrderTableView = () => {
             </TableRow>
           </TableHead>
           <TableBody>
-            {data.orders?.map((row: any) => (
+            {data.extraDemands?.map((row: any) => (
               <StyledTableRow hover role="checkbox" tabIndex={-1} key={row.id}>
-                {orderColumns.map((column) => {
+                {extraDemandColumns.map((column) => {
                   const value = row[column.id];
                   return (
                     <StyledTableCell key={column.id} align={column.align}>
                       {(() => {
                         switch (column.label) {
-                          case "Status":
-                            return (
-                              <Status status={value} lists={orderStatusLists} />
-                            );
                           case "Created Date":
                             return formatDate(value);
                           case "Action":
                             return (
                               <NavigateId
-                                url={`${paths.order}/${row.id}`}
+                                url={`${paths.extraDemand}/${row.id}`}
                                 value={
                                   <>
                                     <Button startIcon={<></>} color="secondary">
@@ -223,4 +219,4 @@ const OrderTableView = () => {
   );
 };
 
-export default OrderTableView;
+export default ExtraDemandTableView;

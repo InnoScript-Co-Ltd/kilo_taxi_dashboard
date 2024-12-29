@@ -34,7 +34,7 @@ const OrderDetail = () => {
   }, [loadingData]);
   return (
     <>
-      <h2>Driver Detail</h2>
+      <h2>Order Detail</h2>
       {order ? (
         <div>
           <Accordion
@@ -53,7 +53,7 @@ const OrderDetail = () => {
                 <strong>ID:</strong> {order.id}
               </p>
               <p>
-                <strong>Total Amount:</strong> {order.totalAmount}
+                <strong>Total Amount:</strong> {order.estimatedAmount}
               </p>
               <p>
                 <strong>Status:</strong> {order.status}

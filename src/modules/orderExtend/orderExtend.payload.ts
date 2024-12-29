@@ -1,61 +1,32 @@
 import { paginateOptions } from "../../constants/config";
 import { z } from "zod";
-import { CUSTOMER } from "../customer/customer.payload";
-import { DRIVER } from "../driver/driver.payload";
-import { SCHEDULE } from "../scheduleBooking/scheduleBooking.payload";
-import { WALLET } from "../wallet/wallet.payload";
+import { ORDER } from "../order/order.payload";
 
-export const orderSchema = z.object({
+export const orderExtendSchema = z.object({
   id: z.number().min(0, { message: "id" }).default(0),
-  pickUpLocation: z.string(),
-  pickUpLat: z.string(),
-  pickUpLong: z.string(),
   destinationLocation: z.string(),
   destinationLat: z.string(),
   destinationLong: z.string(),
-  WalletTransactionId: z
-    .number()
-    .min(1, { message: "Wallet Transaction ID is required" }),
-  CustomerId: z.number().min(1, { message: "Customer ID is required" }),
-  DriverId: z.number().min(1, { message: "Driver ID is required" }),
-  ScheduleBookingId: z
-    .number()
-    .min(1, { message: "Schedule Booking ID is required" }),
-  EstimatedAmount: z
-    .number()
-    .min(1, { message: "EstimatedAmount must be at least 1 characters long" }),
-  Status: z.number(),
+  OrderId: z.number().min(1, { message: "Order ID is required" }),
   CreatedDate: z.date(),
 });
 
-export type OrderFormInputs = z.infer<typeof orderSchema>;
+export type OrderFormInputs = z.infer<typeof orderExtendSchema>;
 
 /**
  * Interface representing the shape of a country object.
  */
-export interface ORDER {
+export interface ORDER_EXTEND {
   id: string;
-  pickUpLocation: string;
-  pickUpLat: string;
-  pickUpLong: string;
   destinationLocation: string;
   destinationLat: string;
   destinationLong: string;
-  walletTransactionId: number;
-  customerId: number;
-  driverId: number;
-  scheduleBookingId: number;
-  estimatedAmount: number;
-  status: number;
   createdDate: string;
-  walletTransaction: WALLET[];
-  customer: CUSTOMER[]; // Use the CUSTOMER interface as an array
-  driver: DRIVER[]; // Use the DRIVER interface as an array
-  schedule: SCHEDULE[]; // Use the SCHEDULE interface as an array
+  orderId: ORDER[]; // Use the SCHEDULE interface as an array
   action: any;
 }
 
-type OrderColumnId = keyof ORDER;
+type OrderColumnId = keyof ORDER_EXTEND;
 
 /**
  * Represents the structure of a column in the country table.
@@ -85,7 +56,7 @@ export interface Order_Column {
  * Payload structure for creating and updating a country,
  * as well as pagination parameters.
  */
-export interface ORDER_PAYLOAD {
+export interface ORDER_EXTEND_PAYLOAD {
   /** Parameters for paging and sorting */
   pagingParams: {
     PageSize: number | string;
@@ -99,16 +70,7 @@ export interface ORDER_PAYLOAD {
 /**
  * An array of columns for displaying the country table.
  */
-export const orderColumns: readonly Order_Column[] = [
-  {
-    id: "pickUpLocation",
-    label: "Pick Up Location",
-    minWidth: 100,
-    maxWidth: 250,
-    numeric: false,
-    disablePadding: false,
-    sort: true,
-  },
+export const orderExtendColumns: readonly Order_Column[] = [
   {
     id: "destinationLocation",
     label: "Destination Location",
@@ -119,8 +81,8 @@ export const orderColumns: readonly Order_Column[] = [
     sort: true,
   },
   {
-    id: "estimatedAmount",
-    label: "Estimated Amount",
+    id: "destinationLat",
+    label: "Destination Lat",
     minWidth: 100,
     maxWidth: 250,
     numeric: false,
@@ -128,8 +90,8 @@ export const orderColumns: readonly Order_Column[] = [
     sort: true,
   },
   {
-    id: "status",
-    label: "Status",
+    id: "destinationLong",
+    label: "destination Long",
     minWidth: 50,
     maxWidth: 50,
     numeric: false,
@@ -145,39 +107,11 @@ export const orderColumns: readonly Order_Column[] = [
     disablePadding: false,
     sort: true,
   },
-
   {
-    id: "walletTransactionId",
-    label: "Wallet Transaction Id",
-    minWidth: 50,
-    maxWidth: 50,
-    numeric: false,
-    disablePadding: false,
-    sort: true,
-  },
-  {
-    id: "customerId",
-    label: "Customer Id",
-    minWidth: 50,
-    maxWidth: 50,
-    numeric: false,
-    disablePadding: false,
-    sort: true,
-  },
-  {
-    id: "driverId",
-    label: "Driver Id",
-    minWidth: 50,
-    maxWidth: 50,
-    numeric: false,
-    disablePadding: false,
-    sort: true,
-  },
-  {
-    id: "scheduleBookingId",
-    label: "Schedule Booking Id",
-    minWidth: 50,
-    maxWidth: 50,
+    id: "orderId",
+    label: "Order",
+    minWidth: 100,
+    maxWidth: 150,
     numeric: false,
     disablePadding: false,
     sort: true,
@@ -195,7 +129,7 @@ export const orderColumns: readonly Order_Column[] = [
 /**
  * Default payload object for country operations.
  */
-export const orderPayload: ORDER_PAYLOAD = {
+export const orderExtendPayload: ORDER_EXTEND_PAYLOAD = {
   pagingParams: {
     PageSize: paginateOptions.rows,
     CurrentPage: 1,

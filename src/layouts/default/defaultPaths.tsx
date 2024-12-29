@@ -147,6 +147,32 @@ export const navigationList = [
     ],
   },
   {
+    segment: "orderExtend",
+    title: "OrderExtend",
+    isParent: true,
+    icon: <AccountBalanceWalletIcon />,
+    children: [
+      {
+        segment: "list",
+        title: "List",
+        icon: <FormatListBulletedIcon />,
+      },
+    ],
+  },
+  {
+    segment: "extraDemand",
+    title: "ExtraDemand",
+    isParent: true,
+    icon: <AccountBalanceWalletIcon />,
+    children: [
+      {
+        segment: "list",
+        title: "List",
+        icon: <FormatListBulletedIcon />,
+      },
+    ],
+  },
+  {
     segment: "paymentChannel",
     title: "PaymentChannel",
     isParent: true,

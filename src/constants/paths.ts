@@ -59,6 +59,14 @@ export const paths = {
   orderList: "/order/list",
   orderDetail: "/order/:id",
 
+  orderExtend: "/orderExtend",
+  orderExtendList: "/orderExtend/list",
+  orderExtendDetail: "/orderExtend/:id",
+
+  extraDemand: "/extraDemand",
+  extraDemandList: "/extraDemand/list",
+  extraDemandDetail: "/extraDemand/:id",
+
   paymentChannel: "/paymentchannel",
   paymentChannelList: "/paymentchannel/list",
   paymentChannelCreate: "/paymentchannel/new",

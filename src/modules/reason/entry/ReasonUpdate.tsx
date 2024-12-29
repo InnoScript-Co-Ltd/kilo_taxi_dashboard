@@ -138,12 +138,11 @@ const ReasonUpdate = () => {
                   </Select>
                 )}
               />
-
-
-                <FormHelperText>{errors.status?.message}</FormHelperText>
-              </FormControl>
-            </Grid2>
+              <FormHelperText>{errors.status?.message}</FormHelperText>
+            </FormControl>
           </Grid2>
+          
+        </Grid2>
           {/* Footer */}
           <Box
             sx={{

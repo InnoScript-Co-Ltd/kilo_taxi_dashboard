@@ -28,6 +28,7 @@ import { getId } from "../../../helpers/updateHelper";
 import { endpoints } from "../../../constants/endpoints";
 import { getRequest } from "../../../helpers/api";
 import FileUploadWithPreview from "../../../components/FileUploadWithPreview";
+import { formBuilder } from "../../../helpers/formBuilder";
 
 const TopupTransactionUpdate = () => {
   const [loading, setLoading] = useState(false);
@@ -49,25 +50,26 @@ const TopupTransactionUpdate = () => {
   } = useForm<TopupTransactionFormInputs>({
     resolver: zodResolver(topupTransactionSchema),
     defaultValues: {
-      paymentChannelId: 0,
-      amount: 0,
-      phoneNumber: "",
-      status: 0,
+      PaymentChannelId: 0,
+      Amount: 0,
+      DigitalPaymentFromPhoneNumber: "",
+      DigitalPaymentToPhoneNumber: "",
+      PhoneNumber: "",
+      Status: 0,
     },
   });
 
-  // Function to handle form submission and topupTransaction update
   const submitTopupTransactionUpdate = async (data: TopupTransactionFormInputs) => {
     setLoading(true);
-    const response: any = await topupTransactionService.update(
-      dispatch,
-      params.id,
-      data,
-      notifications
-    );
-    if (response.status === 200) {
-      navigate(`${paths.topupTransactionList}`); // Navigate to the topupTransaction list page on success
-    }
+    const formData = formBuilder(data, topupTransactionSchema);
+    // const response = await topupTransactionService.update(
+    //   dispatch,
+    //   params.id,
+    //   formData
+    // );
+    // if (response.status === 200) {
+    //   navigate(`${paths.topupTransactionList}`);
+    // }
     setLoading(false);
   };
 
@@ -94,11 +96,13 @@ const TopupTransactionUpdate = () => {
   useEffect(() => {
     if (topupTransaction) {
       setValue("id", Number(topupTransaction.id) || 0);
-      setValue("paymentChannelId", topupTransaction.paymentChannelId || 0);
-      setValue("amount", topupTransaction.amount || 0);
-      setValue("phoneNumber", topupTransaction.phoneNumber || "");
+      setValue("PaymentChannelId", topupTransaction.paymentChannelId || 0);
+      setValue("Amount", topupTransaction.amount || 0);
+      setValue("DigitalPaymentFromPhoneNumber", topupTransaction.digitalPaymentFromPhoneNumber || "");
+      setValue("DigitalPaymentToPhoneNumber", topupTransaction.digitalPaymentToPhoneNumber || "");
+      setValue("PhoneNumber", topupTransaction.phoneNumber || "");
       setValue(
-        "status",
+        "Status",
         getId({ lists: topUpTransactionStatus, value: topupTransaction.status }) || 0
       );
     }
@@ -126,11 +130,11 @@ const TopupTransactionUpdate = () => {
               <FormControl
                 variant="filled"
                 fullWidth
-                error={!!errors.paymentChannelId}
+                error={!!errors.PaymentChannelId}
               >
                 <InputLabel htmlFor="payment_channel_name">Payment Channel</InputLabel>
                 <Controller
-                  name="paymentChannelId"
+                  name="PaymentChannelId"
                   control={control}
                   render={({ field }) => (
                     <Select
@@ -143,16 +147,16 @@ const TopupTransactionUpdate = () => {
                       value={field.value} // Convert field value to a string
                       onChange={(event) => field.onChange(event.target.value)} // Ensure onChange value is a string
                     >
-                      {paymentChannelLists.map((paymentChannel: any) => (
+                      {paymentChannelLists?.map((paymentChannel: any) => (
                         <MenuItem key={paymentChannel.id} value={paymentChannel.id}>
-                          {paymentChannel.name}
+                          {paymentChannel.channelName}
                         </MenuItem>
                       ))}
                     </Select>
                   )}
                 />
 
-                <FormHelperText>{errors.amount?.message}</FormHelperText>
+                <FormHelperText>{errors.Amount?.message}</FormHelperText>
               </FormControl>
             </Grid2>
 
@@ -160,15 +164,15 @@ const TopupTransactionUpdate = () => {
               <FormControl
                 variant="filled"
                 fullWidth
-                error={!!errors.amount}
+                error={!!errors.Amount}
               >
                 <InputLabel htmlFor="topupTransaction_amount">Amount</InputLabel>
                 <FilledInput
                   size="small"
                   id="topupTransaction_amount"
-                  {...register("amount")}
+                  {...register("Amount")}
                 />
-                <FormHelperText>{errors.amount?.message}</FormHelperText>
+                <FormHelperText>{errors.Amount?.message}</FormHelperText>
               </FormControl>
             </Grid2>
 
@@ -176,10 +180,10 @@ const TopupTransactionUpdate = () => {
               <FormControl
                 variant="filled"
                 fullWidth
-                error={!!errors.file_transaction_screenshoot}
+                error={!!errors.file_TransactionScreenShoot}
               >
                 <Controller
-                  name="file_transaction_screenshoot"
+                  name="file_TransactionScreenShoot"
                   control={control}
                   defaultValue={undefined} // Set initial state to null
                   rules={{ required: "NRC Front is required" }} // Only use required here
@@ -189,16 +193,16 @@ const TopupTransactionUpdate = () => {
                         onChange(file); // Update the field with the selected file
                       }}
                       error={
-                        errors.file_transaction_screenshoot
-                          ? typeof errors.file_transaction_screenshoot.message ===
+                        errors.file_TransactionScreenShoot
+                          ? typeof errors.file_TransactionScreenShoot.message ===
                             "string"
-                            ? errors.file_transaction_screenshoot.message
+                            ? errors.file_TransactionScreenShoot.message
                             : undefined
                           : undefined
                       }
                       // Correctly extracting the error message
                       field="NRC Front" // Label for the upload button
-                      src={topupTransaction?.transaction_screenshoot}
+                      src={topupTransaction?.file_TransactionScreenShoot}
                       disabled={loading}
                     />
                   )}
@@ -207,28 +211,52 @@ const TopupTransactionUpdate = () => {
             </Grid2>
 
             <Grid2 size={{ xs: 6, md: 3 }}>
-              <FormControl variant="filled" fullWidth error={!!errors.phoneNumber}>
-                <InputLabel htmlFor="driver_phone_number">Phone</InputLabel>
+              <FormControl variant="filled" fullWidth error={!!errors.PhoneNumber}>
+                <InputLabel htmlFor="topUpTransaction_PhoneNumberr">Phone</InputLabel>
                 <FilledInput
                   size="small"
-                  id="driver_phoneNumber"
-                  {...register("phoneNumber")}
+                  id="PhoneNumber"
+                  {...register("PhoneNumber")}
                 />
-                <FormHelperText>{errors.phoneNumber?.message}</FormHelperText>
+                <FormHelperText>{errors.PhoneNumber?.message}</FormHelperText>
               </FormControl>
             </Grid2>
 
             <Grid2 size={{ xs: 6, md: 3 }}>
-              <FormControl variant="filled" fullWidth error={!!errors.status}>
-                <InputLabel htmlFor="status">Status</InputLabel>
+              <FormControl variant="filled" fullWidth error={!!errors.DigitalPaymentFromPhoneNumber}>
+                <InputLabel htmlFor="topUpTransaction_DigitalPaymentFromPhoneNumberr">Phone</InputLabel>
+                <FilledInput
+                  size="small"
+                  id="DigitalPaymentFromPhoneNumber"
+                  {...register("DigitalPaymentFromPhoneNumber")}
+                />
+                <FormHelperText>{errors.DigitalPaymentFromPhoneNumber?.message}</FormHelperText>
+              </FormControl>
+            </Grid2>
+
+            <Grid2 size={{ xs: 6, md: 3 }}>
+              <FormControl variant="filled" fullWidth error={!!errors.DigitalPaymentToPhoneNumber}>
+                <InputLabel htmlFor="topUpTransaction_DigitalPaymentToPhoneNumberr">Phone</InputLabel>
+                <FilledInput
+                  size="small"
+                  id="DigitalPaymentToPhoneNumber"
+                  {...register("DigitalPaymentToPhoneNumber")}
+                />
+                <FormHelperText>{errors.DigitalPaymentToPhoneNumber?.message}</FormHelperText>
+              </FormControl>
+            </Grid2>
+
+            <Grid2 size={{ xs: 6, md: 3 }}>
+              <FormControl variant="filled" fullWidth error={!!errors.Status}>
+                <InputLabel htmlFor="Status">Status</InputLabel>
                 <Controller
-                  name="status"
+                  name="Status"
                   control={control}
                   render={({ field }) => (
                     <Select
                       size="small"
-                      id="status"
-                      aria-describedby="status_text"
+                      id="Status"
+                      aria-describedby="Status_text"
                       disabled={loading}
                       label="Status"
                       {...field}
@@ -244,7 +272,7 @@ const TopupTransactionUpdate = () => {
                   )}
                 />
 
-                <FormHelperText>{errors.status?.message}</FormHelperText>
+                <FormHelperText>{errors.Status?.message}</FormHelperText>
               </FormControl>
             </Grid2>
 

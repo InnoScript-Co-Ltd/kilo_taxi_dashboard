@@ -21,6 +21,8 @@ import { SosRoute } from "./modules/sos/sos.route";
 import { CityRoute } from "./modules/city/city.route";
 import { TravelRateRoute } from "./modules/travelrate/travelrate.route";
 import { VehicleTypeRoute } from "./modules/vehicleType/vehicleType.route";
+import { OrderExtendRoute } from "./modules/orderExtend/orderExtend.route";
+import { ExtraDemandRoute } from "./modules/extraDemand/extraDemand.route";
 export const routers = createBrowserRouter([
   {
     path: "/",
@@ -37,6 +39,8 @@ export const routers = createBrowserRouter([
       ...VehicleTypeRoute,
       ...WalletRoute,
       ...OrderRoute,
+      ...OrderExtendRoute,
+      ...ExtraDemandRoute,
       ...PaymentChannelRoute,
       ...ReviewRoute,
       ...ReasonRoute,

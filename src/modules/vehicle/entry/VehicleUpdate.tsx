@@ -2,6 +2,7 @@ import {
   Box,
   Button,
   Card,
+  CircularProgress,
   FilledInput,
   FormControl,
   FormHelperText,
@@ -9,6 +10,7 @@ import {
   InputLabel,
   MenuItem,
   Select,
+  Typography,
 } from "@mui/material";
 import { useCallback, useEffect, useState } from "react";
 import { VehicleFormInputs, vehicleSchema } from "../vehicle.payload"; // Assuming vehicleSchema for validation
@@ -33,6 +35,24 @@ import { VehicleRoute } from "../vehicle.route";
 const VehicleUpdate = () => {
   const [loading, setLoading] = useState(false);
   const [driversList, setDriversList] = useState<Array<any>>([]);
+  const [location, setLocation] = useState<{ lat: number; lng: number } | null>(null);
+
+  const handleGetLocation = () => {
+    if (!navigator.geolocation) {
+      alert('Geolocation is not supported by your browser');
+      return;
+    }
+
+    navigator.geolocation.getCurrentPosition(
+      (position) => {
+        const { latitude, longitude } = position.coords;
+        setLocation({ lat: latitude, lng: longitude });
+      },
+      (error) => {
+        alert(`Error: ${error.message}`);
+      }
+    );
+  };
 
   const params: any = useParams();
   const navigate = useNavigate();
@@ -95,7 +115,6 @@ const VehicleUpdate = () => {
 
   useEffect(() => {
     if (vehicle) {
-      console.log(vehicle.status);
       setValue("id", Number(vehicle.id) || 0);
       setValue("DriverId", vehicle.driverId || 0);
       setValue("VehicleNo", vehicle.vehicleNo || "");
@@ -377,6 +396,37 @@ const VehicleUpdate = () => {
           </Box>
         </form>
       </Card>
+
+      <Box
+        display="flex"
+        flexDirection="column"
+        alignItems="center"
+        justifyContent="center"
+        p={4}
+        sx={{ gap: 2 }}
+      >
+        <Button variant="contained" color="primary" onClick={handleGetLocation} disabled={loading}>
+          {loading ? <CircularProgress size={24} color="inherit" /> : 'GetCurrentLocation'}
+        </Button>
+        {location && (
+          <Box mt={4} width="100%" maxWidth="600px" textAlign="center">
+            <Typography variant="body1">
+              <strong>Latitude:</strong> {location.lat}
+            </Typography>
+            <Typography variant="body1">
+              <strong>Longitude:</strong> {location.lng}
+            </Typography>
+            <Box mt={2}>
+              <iframe
+                title="map"
+                src={`https://www.google.com/maps?q=${location.lat},${location.lng}&hl=es;z=14&output=embed`}
+                style={{ width: '100%', height: '400px', border: 'none' }}
+              ></iframe>
+            </Box>
+          </Box>
+        )}
+      </Box>
+      
     </Box>
   );
 };

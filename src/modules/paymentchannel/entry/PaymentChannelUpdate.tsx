@@ -94,20 +94,20 @@ const PaymentChannelUpdate = () => {
     }
   }, [paymentChannel, setValue]);
 
-  // Function to handle form submission and wallet update
   const submitPaymentChannelUpdate = async (data: PaymentChannelFormInputs) => {
-    setLoading(true);
-    const formData = formBuilder(data, paymentChannelSchema);
-    const response = await paymentChannelService.update(
-      dispatch,
-      params.id,
-      formData
-    );
-    if (response.status === 200) {
-      navigate(`${paths.customerList}`);
-    }
-    setLoading(false);
-  };
+      setLoading(true);
+      const formData = formBuilder(data, paymentChannelSchema);
+      const response = await paymentChannelService.update(
+        dispatch,
+        params.id,
+        formData
+      );
+      if (response.status === 200) {
+        navigate(`${paths.customerList}`);
+      }
+      setLoading(false);
+    };
+  
 
   return (
     <Box>

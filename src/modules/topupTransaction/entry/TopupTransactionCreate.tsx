@@ -28,10 +28,12 @@ import { httpErrorHandler, httpServiceHandler } from "../../../helpers/handler";
 import { getRequest } from "../../../helpers/api";
 import FileUploadWithPreview from "../../../components/FileUploadWithPreview";
 import { topUpTransactionStatus } from "../../../constants/config";
+import { formBuilder } from "../../../helpers/formBuilder";
 
 const TopupTransactionCreate = () => {
   const [loading, setLoading] = useState(false);
   const [paymentChannelLists, setPaymentChannelLists] = useState<Array<any>>([]);
+  const [userLists, setUserLists] = useState<Array<any>>([]);
 
   const navigate = useNavigate();
   const dispatch = useDispatch<AppDispatch>();
@@ -48,23 +50,39 @@ const TopupTransactionCreate = () => {
   });
 
   const submitTopupTransactionCreate = async (data: TopupTransactionFormInputs) => {
-    setLoading(true);
-    const response = await topupTransactionService.store(data, dispatch, notifications);
-    if (response.status === 201) {
-      navigate(`${paths.topupTransactionList}`);
+    try {
+      setLoading(true);
+      const formData:any = formBuilder(data, topupTransactionSchema);
+      const response = await topupTransactionService.store(
+        formData,
+        dispatch,
+        notifications
+      );
+      if (response.status === 201) {
+        navigate(`${paths.topupTransactionList}`);
+      }
+    } catch (error) {
+      console.error("Error submitting form:", error);
+    } finally {
+      setLoading(false);
     }
-    setLoading(false);
   };
 
   const loadingData = React.useCallback(async () => {
     setLoading(true);
     try {
-      const response: any = await getRequest(`${endpoints.paymentChannel}`, null);
-     
-      await httpServiceHandler(dispatch, response);
-      if (response && "data" in response && response.status === 200) {
-        setPaymentChannelLists(response.data.customers);
+      const paymentChannelResponse: any = await getRequest(`${endpoints.paymentChannel}`, null);
+      await httpServiceHandler(dispatch, paymentChannelResponse);
+      if (paymentChannelResponse && "data" in paymentChannelResponse && paymentChannelResponse.status === 200) {
+        setPaymentChannelLists(paymentChannelResponse.data.paymentChannels);
       }
+
+      const userResponse: any = await getRequest(`${endpoints.driver}`, null);
+      await httpServiceHandler(dispatch, userResponse);
+      if (userResponse && "data" in userResponse && userResponse.status === 200) {
+        setUserLists(userResponse.data.drivers);
+      }
+      
     } catch (error) {
       await httpErrorHandler(error);
     }
@@ -83,28 +101,55 @@ const TopupTransactionCreate = () => {
         <h2>TopupTransaction Create</h2>
         <form onSubmit={handleSubmit(submitTopupTransactionCreate)}>
           <Grid2 container spacing={2}>
+            
             <Grid2 size={{ xs: 6, md: 3 }}>
-              <FormControl
-                variant="filled"
-                fullWidth
-                error={!!errors.paymentChannelId}
-              >
-                <InputLabel htmlFor="payment_channel_name">Payment Channel</InputLabel>
+              <FormControl variant="filled" fullWidth error={!!errors.PaymentChannelId}>
+                <InputLabel htmlFor="topupTransaction_paymentChannel">Payment Channel</InputLabel>
                 <Controller
-                  name="paymentChannelId"
+                  name="PaymentChannelId"
                   control={control}
                   render={({ field }) => (
                     <Select
                       size="small"
-                      id="payment_channel_name"
-                      aria-describedby="payment_channel_name_text"
+                      id="topupTransaction_paymentChannel"
+                      aria-describedby="topupTransaction_paymentChannel_text"
                       disabled={loading}
-                      label="Payment Channel"
+                      label="PaymentChannel"
                       {...field}
                       value={field.value} // Convert field value to a string
                       onChange={(event) => field.onChange(event.target.value)} // Ensure onChange value is a string
                     >
-                      {paymentChannelLists.map((paymentChannel: any) => (
+                      {paymentChannelLists?.map((paymentChannel: any) => (
+                        <MenuItem key={paymentChannel.id} value={paymentChannel.id}>
+                          {paymentChannel.channelName}
+                        </MenuItem>
+                      ))}
+                    </Select>
+                  )}
+                />
+
+                <FormHelperText>{errors.PaymentChannelId?.message}</FormHelperText>
+              </FormControl>
+            </Grid2>
+
+            <Grid2 size={{ xs: 6, md: 3 }}>
+              <FormControl variant="filled" fullWidth error={!!errors.UserId}>
+                <InputLabel htmlFor="topupTransaction_paymentChannel">User</InputLabel>
+                <Controller
+                  name="UserId"
+                  control={control}
+                  render={({ field }) => (
+                    <Select
+                      size="small"
+                      id="topupTransaction_paymentChannel"
+                      aria-describedby="topupTransaction_paymentChannel_text"
+                      disabled={loading}
+                      label="UserId"
+                      {...field}
+                      value={field.value} // Convert field value to a string
+                      onChange={(event) => field.onChange(event.target.value)} // Ensure onChange value is a string
+                    >
+                      {userLists?.map((paymentChannel: any) => (
                         <MenuItem key={paymentChannel.id} value={paymentChannel.id}>
                           {paymentChannel.name}
                         </MenuItem>
@@ -113,7 +158,7 @@ const TopupTransactionCreate = () => {
                   )}
                 />
 
-                <FormHelperText>{errors.amount?.message}</FormHelperText>
+                <FormHelperText>{errors.UserId?.message}</FormHelperText>
               </FormControl>
             </Grid2>
 
@@ -121,15 +166,16 @@ const TopupTransactionCreate = () => {
               <FormControl
                 variant="filled"
                 fullWidth
-                error={!!errors.amount}
+                error={!!errors.Amount}
               >
                 <InputLabel htmlFor="topupTransaction_amount">Amount</InputLabel>
                 <FilledInput
                   size="small"
                   id="topupTransaction_amount"
-                  {...register("amount")}
+                  type="number" // Ensure input type is "number"
+                  {...register("Amount", { valueAsNumber: true })} // Parse value as a number
                 />
-                <FormHelperText>{errors.amount?.message}</FormHelperText>
+                <FormHelperText>{errors.Amount?.message}</FormHelperText>
               </FormControl>
             </Grid2>
 
@@ -137,10 +183,10 @@ const TopupTransactionCreate = () => {
               <FormControl
                 variant="filled"
                 fullWidth
-                error={!!errors.file_transaction_screenshoot}
+                error={!!errors.file_TransactionScreenShoot}
               >
                 <Controller
-                  name="file_transaction_screenshoot"
+                  name="file_TransactionScreenShoot"
                   control={control}
                   defaultValue={undefined} // Set initial state to null
                   rules={{ required: "NRC Front is required" }} // Only use required here
@@ -150,10 +196,10 @@ const TopupTransactionCreate = () => {
                         onChange(file); // Update the field with the selected file
                       }}
                       error={
-                        errors.file_transaction_screenshoot
-                          ? typeof errors.file_transaction_screenshoot.message ===
+                        errors.file_TransactionScreenShoot
+                          ? typeof errors.file_TransactionScreenShoot.message ===
                             "string"
-                            ? errors.file_transaction_screenshoot.message
+                            ? errors.file_TransactionScreenShoot.message
                             : undefined
                           : undefined
                       }
@@ -167,46 +213,72 @@ const TopupTransactionCreate = () => {
             </Grid2>
 
             <Grid2 size={{ xs: 6, md: 3 }}>
-              <FormControl variant="filled" fullWidth error={!!errors.phoneNumber}>
-                <InputLabel htmlFor="driver_phone_number">Phone</InputLabel>
+              <FormControl variant="filled" fullWidth error={!!errors.PhoneNumber}>
+                <InputLabel htmlFor="topUpTransaction_phone_number">Phone</InputLabel>
                 <FilledInput
                   size="small"
-                  id="driver_phoneNumber"
-                  {...register("phoneNumber")}
+                  id="topUpTransaction_phoneNumber"
+                  {...register("PhoneNumber")}
                 />
-                <FormHelperText>{errors.phoneNumber?.message}</FormHelperText>
+                <FormHelperText>{errors.PhoneNumber?.message}</FormHelperText>
               </FormControl>
             </Grid2>
 
             <Grid2 size={{ xs: 6, md: 3 }}>
-              <FormControl variant="filled" fullWidth error={!!errors.status}>
-                <InputLabel htmlFor="status">Status</InputLabel>
+              <FormControl variant="filled" fullWidth error={!!errors.DigitalPaymentFromPhoneNumber}>
+                <InputLabel htmlFor="topUpTransaction_DigitalPaymentFromPhoneNumberr">Digital Payment From Phone Number</InputLabel>
+                <FilledInput
+                  size="small"
+                  id="topUpTransaction_DigitalPaymentFromPhoneNumber"
+                  {...register("DigitalPaymentFromPhoneNumber")}
+                />
+                <FormHelperText>{errors.DigitalPaymentFromPhoneNumber?.message}</FormHelperText>
+              </FormControl>
+            </Grid2>
+
+            <Grid2 size={{ xs: 6, md: 3 }}>
+              <FormControl variant="filled" fullWidth error={!!errors.DigitalPaymentToPhoneNumber}>
+                <InputLabel htmlFor="topUpTransaction_DigitalPaymentToPhoneNumber">Digital Payment To Phone Number</InputLabel>
+                <FilledInput
+                  size="small"
+                  id="topUpTransaction_DigitalPaymentToPhoneNumber"
+                  {...register("DigitalPaymentToPhoneNumber")}
+                />
+                <FormHelperText>{errors.DigitalPaymentToPhoneNumber?.message}</FormHelperText>
+              </FormControl>
+            </Grid2>
+
+            <Grid2 size={{ xs: 6, md: 3 }}>
+              <FormControl variant="filled" fullWidth error={!!errors.Status}>
+                <InputLabel htmlFor="Status">Status</InputLabel>
                 <Controller
-                  name="status"
+                  name="Status"
                   control={control}
                   render={({ field }) => (
                     <Select
                       size="small"
-                      id="status"
-                      aria-describedby="status_text"
+                      id="Status"
+                      aria-describedby="Status_text"
                       disabled={loading}
                       label="Status"
                       {...field}
                       value={field.value || 0} // Convert field value to a string
                       onChange={(event) => field.onChange(event.target.value)} // Ensure onChange value is a string
                     >
-                      {topUpTransactionStatus?.map((status: any) => (
-                        <MenuItem key={status.id} value={status.id}>
-                          {status.value}
+                      {topUpTransactionStatus?.map((Status: any) => (
+                        <MenuItem key={Status.id} value={Status.id}>
+                          {Status.value}
                         </MenuItem>
                       ))}
                     </Select>
                   )}
                 />
 
-                <FormHelperText>{errors.status?.message}</FormHelperText>
+                <FormHelperText>{errors.Status?.message}</FormHelperText>
               </FormControl>
             </Grid2>
+
+            
 
           </Grid2>
 

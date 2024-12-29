@@ -86,7 +86,7 @@ const ReviewCreate = () => {
   }, [dispatch]);
 
   React.useEffect(() => {
-    loadingData();
+ 
   }, [loadingData]);
 
   return (
