@@ -86,7 +86,7 @@ const CityUpdate = () => {
     <Box>
       <Breadcrumb />
       <Card sx={{ marginTop: "20px", padding: "20px" }}>
-        <h2>Wallet Update</h2>
+        <h2>City Update</h2>
 
         <form onSubmit={handleSubmit(submitCityUpdate)}>
           <Grid2 container spacing={2}>

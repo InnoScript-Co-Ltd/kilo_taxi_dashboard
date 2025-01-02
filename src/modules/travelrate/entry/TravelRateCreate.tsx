@@ -28,7 +28,7 @@ import { travelRateService } from "../travelrate.service";
 
 const TravelRateCreate = () => {
   const [loading, setLoading] = useState(false);
-  // const [driverLists, setDriverLists] = useState<Array<any>>([]);
+  const [cityLists, setCityLists] = useState<Array<any>>([]);
 
   const navigate = useNavigate();
   const dispatch = useDispatch<AppDispatch>();
@@ -55,11 +55,11 @@ const TravelRateCreate = () => {
   const loadingData = React.useCallback(async () => {
     setLoading(true);
     try {
-      //  const driverRes: any = await getRequest(`${endpoints.driver}`, null);
-      // await httpServiceHandler(dispatch, driverRes);
-      // if (driverRes && "data" in driverRes && driverRes.status === 200) {
-      //   setDriverLists(driverRes.data.drivers);
-      // }
+      const cityRes: any = await getRequest(`${endpoints.city}`, null);
+      await httpServiceHandler(dispatch, cityRes);
+      if (cityRes && "data" in cityRes && cityRes.status === 200) {
+        setCityLists(cityRes.data.citys);
+      }
     } catch (error) {
       await httpErrorHandler(error);
     }
@@ -75,38 +75,38 @@ const TravelRateCreate = () => {
     <Box>
       <Breadcrumb />
       <Card sx={{ marginTop: "20px", padding: "20px" }}>
-        <h2>Sms Create</h2>
+        <h2>TravelRate Create</h2>
         <form onSubmit={handleSubmit(submitTravelRateCreate)}>
           <Grid2 container spacing={2}>
-            {/* <Grid2 size={{ xs: 6, md: 3 }}>
-              <FormControl variant="filled" fullWidth error={!!errors.DriverId}>
-                <InputLabel htmlFor="driver_name">Driver</InputLabel>
+            <Grid2 size={{ xs: 6, md: 3 }}>
+              <FormControl variant="filled" fullWidth error={!!errors.cityId}>
+                <InputLabel htmlFor="city_name">City Name</InputLabel>
                 <Controller
-                  name="DriverId"
+                  name="cityId"
                   control={control}
                   render={({ field }) => (
                     <Select
                       size="small"
-                      id="driver_name"
-                      aria-describedby="driver_name_text"
+                      id="city_name"
+                      aria-describedby="city_name_text"
                       disabled={loading}
-                      label="Driver"
+                      label="City"
                       {...field}
                       value={field.value} // Convert field value to a string
                       onChange={(event) => field.onChange(event.target.value)} // Ensure onChange value is a string
                     >
-                      {driverLists.map((driver: any) => (
-                        <MenuItem key={driver.id} value={driver.id}>
-                          {driver.name}
+                      {cityLists.map((city: any) => (
+                        <MenuItem key={city.id} value={city.id}>
+                          {city.name}
                         </MenuItem>
                       ))}
                     </Select>
                   )}
                 />
 
-                <FormHelperText>{errors.DriverId?.message}</FormHelperText>
+                <FormHelperText>{errors.cityId?.message}</FormHelperText>
               </FormControl>
-            </Grid2> */}
+            </Grid2>
 
             <Grid2 size={{ xs: 6, md: 3 }}>
               <FormControl variant="filled" fullWidth error={!!errors.unit}>
