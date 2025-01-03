@@ -1,11 +1,13 @@
 export const paths = {
   dashboard: "/dashboard",
 
+  authLogin: "/auth/login",
+  authLogout: "/auth/logout",
+
   admin: "/admin",
   adminList: "/admin/list",
   adminCreate: "/admin/new",
   adminDetail: "/admin/:id",
-  adminLogout: "/auth/login",
 
   city: "/city",
   cityList: "/city/list",

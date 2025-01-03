@@ -21,12 +21,14 @@ import { SosRoute } from "./modules/sos/sos.route";
 import { CityRoute } from "./modules/city/city.route";
 import { TravelRateRoute } from "./modules/travelrate/travelrate.route";
 import { VehicleTypeRoute } from "./modules/vehicleType/vehicleType.route";
+import Login from "./modules/auth/view/Login";
 export const routers = createBrowserRouter([
   {
     path: "/",
     element: <DefaultLayout />,
     errorElement: <NotFound />,
     children: [
+      // ...AuthRoute,
       ...DashboardRoute,
       ...AdminRoute,
       ...CustomerRoute,
@@ -52,11 +54,10 @@ export const routers = createBrowserRouter([
     path: "auth",
     element: <BlankTemplate />,
     errorElement: <NotFound />,
-    children: [
-      // {
-      //     path: "login",
-      //     element: <Login />
-      // }
-    ],
   },
+  {
+    path: "auth/login",
+    element: <Login />,
+    errorElement: <NotFound />
+  }
 ]);

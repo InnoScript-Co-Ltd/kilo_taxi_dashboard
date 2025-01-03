@@ -4,6 +4,7 @@ import { env } from "./config";
 export const baseURL = env[0];
 
 export const endpoints = {
+  authLogin: "Auth/adminLogin",
   admin: "Admin",
   customer: "Customer",
   promotion: "Promotion",

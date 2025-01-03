@@ -51,7 +51,7 @@ const CityCreate = () => {
     <Box>
       <Breadcrumb />
       <Card sx={{ marginTop: "20px", padding: "20px" }}>
-        <h2>Wallet Create</h2>
+        <h2>City Create</h2>
         <form onSubmit={handleSubmit(submitCityCreate)}>
           <Grid2 container spacing={2}>
             <Grid2 size={{ xs: 6, md: 3 }}>

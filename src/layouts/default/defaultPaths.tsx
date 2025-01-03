@@ -15,6 +15,13 @@ export const navigationList = [
     segment: "dashboard",
     title: "Dashboard",
     icon: <DashboardIcon />,
+    isParent: false,
+  },
+  {
+    segment: "auth",
+    title: "Auth",
+    icon: null,
+    isParent: false
   },
   {
     segment: "admin",
