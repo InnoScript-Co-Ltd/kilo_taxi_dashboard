@@ -1,6 +1,8 @@
 // export const env = ["https://localhost:7181/api/v1"];
 export const env = ["https://localhost:7181/api/v1"];
 
+export const hadUrl = "";
+
 export const drawerWidth: number = 300;
 
 export const keys = {
