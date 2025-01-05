@@ -52,6 +52,10 @@ const driverSlice = createSlice({
       state.driver = action.payload;
       return state;
     },
+    update: (state, action) => {
+      state.driver = action.payload;
+      return state;
+    },
     setPaginate: (state, action) => {
       state.pagingParams = action.payload;
       return state;
@@ -60,7 +64,7 @@ const driverSlice = createSlice({
 });
 
 // Export actions for use in components
-export const { index, show, setPaginate } = driverSlice.actions;
+export const { index, show, update, setPaginate } = driverSlice.actions;
 
 // Export the reducer to be included in the store
 export default driverSlice.reducer;

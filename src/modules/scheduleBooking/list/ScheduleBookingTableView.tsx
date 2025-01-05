@@ -6,10 +6,7 @@ import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TablePagination from "@mui/material/TablePagination";
 import TableRow from "@mui/material/TableRow";
-import {
-  scheduleColumns,
-  schedulePayload,
-} from "../scheduleBooking.payload"; 
+import { scheduleColumns, schedulePayload } from "../scheduleBooking.payload";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, AppRootState } from "../../../stores";
 import { scheduleBookingService } from "../scheduleBooking.service";
@@ -23,21 +20,25 @@ import {
   InputAdornment,
   TableSortLabel,
 } from "@mui/material";
-import { setPaginate } from "../scheduleBooking.slice"; 
+import { setPaginate } from "../scheduleBooking.slice";
 import SearchIcon from "@mui/icons-material/Search";
 import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
 import RestartAltIcon from "@mui/icons-material/RestartAlt";
 import { useNavigate } from "react-router";
 import UpAndDel from "../../../components/UpAndDel";
-import { StyledTableCell, StyledTableRow } from "../../../components/TableCommon";
+import {
+  StyledTableCell,
+  StyledTableRow,
+} from "../../../components/TableCommon";
 import { useNotifications } from "@toolpad/core";
+import { formatDate } from "../../../helpers/common";
 
 const ScheduleBookingTableView = () => {
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
   const dispatch = useDispatch<AppDispatch>();
   const { data, pagingParams } = useSelector(
-    (state: AppRootState) => state.promotion 
+    (state: AppRootState) => state.scheduleBookings
   );
   const notifications = useNotifications();
   const navigate = useNavigate();
@@ -77,6 +78,8 @@ const ScheduleBookingTableView = () => {
   React.useEffect(() => {
     loadingData();
   }, [pagingParams]);
+
+  console.log(data);
   return (
     <Paper sx={{ width: "100%", overflow: "hidden" }}>
       <Box
@@ -116,13 +119,6 @@ const ScheduleBookingTableView = () => {
           }}
         >
           <Button
-            startIcon={<AddCircleOutlineIcon />}
-            onClick={() => navigate(paths.scheduleBookingCreate)}
-          >
-            Create
-          </Button>
-
-          <Button
             onClick={() => {
               dispatch(setPaginate(schedulePayload.pagingParams));
               setPage(0);
@@ -146,14 +142,26 @@ const ScheduleBookingTableView = () => {
                   style={{ minWidth: column.minWidth }}
                   align={column.numeric ? "right" : "left"}
                   padding={column.disablePadding ? "none" : "normal"}
-                  sortDirection={column.sort === true && pagingParams.SortDir === column.id ? pagingParams.SortField : false}
+                  sortDirection={
+                    column.sort === true && pagingParams.SortDir === column.id
+                      ? pagingParams.SortField
+                      : false
+                  }
                 >
                   <TableSortLabel
                     hideSortIcon={column.sort === false ? true : false}
-                    active={column.sort === true ? pagingParams.SortDir === column.id : false}
-                    direction={column.sort === true && pagingParams.SortDir === 0 ? "asc" : "desc"}
+                    active={
+                      column.sort === true
+                        ? pagingParams.SortDir === column.id
+                        : false
+                    }
+                    direction={
+                      column.sort === true && pagingParams.SortDir === 0
+                        ? "asc"
+                        : "desc"
+                    }
                     onClick={() => {
-                      if(column.sort) {
+                      if (column.sort) {
                         dispatch(
                           setPaginate({
                             ...pagingParams,
@@ -171,35 +179,33 @@ const ScheduleBookingTableView = () => {
             </TableRow>
           </TableHead>
           <TableBody>
-            {data.promotions?.map((row: any) => (
-              <StyledTableRow
-                hover
-                role="checkbox"
-                tabIndex={-1}
-                key={row.id}
-              >
+            {data.scheduleBookings?.map((row: any) => (
+              <StyledTableRow hover role="checkbox" tabIndex={-1} key={row.id}>
                 {scheduleColumns.map((column) => {
                   const value = row[column.id];
                   return (
                     <StyledTableCell key={column.id} align={column.align}>
                       {(() => {
                         switch (column.label) {
-                          case "Customer Name":
-                            return (
-                              <NavigateId
-                                url={`${paths.promotion}/${row.id}`} 
-                                value={value}
-                              />
-                            );
-                          case "Promo Code":
+                          case "Pickup Address":
                             return value;
-                          case "ExpiredAt":
-                            return value; 
+                          case "Drop Off Location":
+                            return value;
+                          case "Destination":
+                            return value;
+                          case "Created Date":
+                            return formatDate(value);
                           case "Action":
                             return (
-                              <UpAndDel
-                                url={`${paths.promotion}/${row.id}`} 
-                                fn={loadingData}
+                              <NavigateId
+                                url={`${paths.scheduleBooking}/${row.id}`}
+                                value={
+                                  <>
+                                    <Button startIcon={<></>} color="secondary">
+                                      View Detail
+                                    </Button>
+                                  </>
+                                }
                               />
                             );
                           default:

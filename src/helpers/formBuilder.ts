@@ -15,7 +15,7 @@ export const formBuilder = <T extends ZodSchema<any>>(
 
   // Iterate through the schema's shape keys
   for (const key of Object.keys(schema.shape)) {
-    const value :any = payload[key as keyof z.infer<T>];
+    const value: any = payload[key as keyof z.infer<T>];
 
     if (isFileList(value)) {
       formData.append(key, value[0]); // Handle FileList

@@ -10,7 +10,13 @@ import { promotionColumns, promotionPayload } from "../promotion.payload";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, AppRootState } from "../../../stores";
 import { promotionService } from "../promotion.service";
-import { generalStatusLists, paginateOptions } from "../../../constants/config";
+import {
+  applicableToLists,
+  generalStatusLists,
+  paginateOptions,
+  promoStatusLists,
+  promotionTypeLists,
+} from "../../../constants/config";
 import { NavigateId } from "../../../shares/NavigateId";
 import { paths } from "../../../constants/paths";
 import {
@@ -189,23 +195,41 @@ const PromotionTableView = () => {
               <StyledTableRow hover role="checkbox" tabIndex={-1} key={row.id}>
                 {promotionColumns.map((column) => {
                   const value = row[column.id];
+                  console.log(value);
                   return (
                     <StyledTableCell key={column.id} align={column.align}>
                       {(() => {
                         switch (column.label) {
-                          case "Customer Name":
-                            return (
-                              <NavigateId
-                                url={`${paths.promotion}/${row.id}`}
-                                value={value}
-                              />
-                            );
                           case "Promo Code":
                             return value;
-                          case "ExpiredAt":
+                          case "Created Date":
+                            return formatDate(value);
+                          case "Expired Date":
                             return formatDate(value);
                           case "Status":
-                            return <Status status={value} lists={generalStatusLists} />;
+                            return (
+                              <Status status={value} lists={promoStatusLists} />
+                            );
+                          case "Unit":
+                            return value;
+                          case "Quantity":
+                            return value;
+                          case "Description":
+                            return value;
+                          case "Promotion Type":
+                            return (
+                              <Status
+                                status={value}
+                                lists={promotionTypeLists}
+                              />
+                            );
+                          case "Applicable To":
+                            return (
+                              <Status
+                                status={value}
+                                lists={applicableToLists}
+                              />
+                            );
                           case "Action":
                             return (
                               <UpAndDel

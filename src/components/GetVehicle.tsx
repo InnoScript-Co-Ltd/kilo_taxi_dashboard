@@ -5,42 +5,70 @@ import {
   ListItemText,
 } from "@mui/material";
 import LocalTaxiIcon from "@mui/icons-material/LocalTaxi";
-import React from "react";
+import React, { useEffect, useState } from "react";
+import signalRService from "../helpers/signalrService";
 
-const GetVehicle = () => {
-  const [location, setLocation] = React.useState<any>({
-    latitude: null,
-    longitude: null,
-  });
+type LocationData = {
+  latitude: number;
+  longitude: number;
+};
 
-  const getLocation = () => {
-    if (navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition(
-        (position) => {
-          setLocation({
-            latitude: position.coords.latitude,
-            longitude: position.coords.longitude,
-          });
-        },
-        (error) => {
-          console.error("Error getting location: ", error);
-        }
-      );
-    } else {
-      console.error("Geolocation is not supported by this browser.");
+type Message = {
+  vehicleId: string;
+  location: LocationData;
+};
+
+const GetVehicle = ({ id }: { id: string }) => {
+  const [messages, setMessages] = useState<Message[]>([]);
+  const { connection, startConnection, invokeMethod, sendMethod, onReceive } = signalRService();
+
+  useEffect(() => {
+    startConnection();
+  
+    onReceive("ReceiveLocationData", (vehicleId: string, location: any) => {
+      console.log(`Location data received for vehicle ${vehicleId}:`, location);
+      setMessages((prevMessages: any) => [...prevMessages, { vehicleId, location }]);
+    });
+  
+    return () => {
+      connection
+        .stop()
+        .then(() => console.log("SignalR connection stopped"))
+        .catch((err) => console.error("Error stopping SignalR connection:", err));
+    };
+    
+  }, [connection, startConnection, onReceive]);
+  
+
+  const handleSend = async () => {
+    try {
+      // Using `invoke` to send a message and receive a response
+      const response = await invokeMethod("RequestVehicleLocation", id);
+      console.log("Server response:", response);
+
+      // Using `send` to send a message without expecting a response
+      await sendMethod("RequestVehicleLocation", id);
+    } catch (err) {
+      console.error("Error sending message:", err);
     }
   };
   return (
     <div>
-      <Button startIcon={<LocalTaxiIcon />} onClick={getLocation}>
+      <Button startIcon={<LocalTaxiIcon />} onClick={handleSend}>
         Get Vehicle
       </Button>
 
       <List dense={false}>
-        <ListItem>
-          <ListItemText primary={location.latitude} secondary={location.longitude} />
+      {messages.map((message, index) => (
+        <ListItem key={index}>
+          <ListItemText
+            primary={`Vehicle ID: ${message.vehicleId}`}
+            secondary={`Location: Latitude ${message.location.latitude}, Longitude ${message.location.longitude}`}
+          />
         </ListItem>
-      </List>
+      ))}
+    </List>
+
     </div>
   );
 };

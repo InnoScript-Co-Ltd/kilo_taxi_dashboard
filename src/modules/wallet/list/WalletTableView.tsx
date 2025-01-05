@@ -6,10 +6,7 @@ import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TablePagination from "@mui/material/TablePagination";
 import TableRow from "@mui/material/TableRow";
-import {
-  walletColumns,
-  walletPayload,
-} from "../wallet.payload"; // Replace with your wallet columns and payload
+import { walletColumns, walletPayload } from "../wallet.payload"; // Replace with your wallet columns and payload
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, AppRootState } from "../../../stores";
 import { walletService } from "../wallet.service";
@@ -29,8 +26,11 @@ import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
 import RestartAltIcon from "@mui/icons-material/RestartAlt";
 import { useNavigate } from "react-router";
 import UpAndDel from "../../../components/UpAndDel";
-import { StyledTableCell, StyledTableRow } from "../../../components/TableCommon";
-import { useNotifications } from '@toolpad/core/useNotifications';
+import {
+  StyledTableCell,
+  StyledTableRow,
+} from "../../../components/TableCommon";
+import { useNotifications } from "@toolpad/core/useNotifications";
 
 const WalletTableView = () => {
   const [page, setPage] = React.useState(0);
@@ -71,7 +71,7 @@ const WalletTableView = () => {
 
   const loadingData = React.useCallback(async () => {
     setLoading(true);
-    await walletService.index(dispatch, pagingParams,notifications);
+    await walletService.index(dispatch, pagingParams, notifications);
     setLoading(false);
   }, [dispatch, pagingParams]);
 
@@ -148,14 +148,26 @@ const WalletTableView = () => {
                   style={{ minWidth: column.minWidth }}
                   align={column.numeric ? "right" : "left"}
                   padding={column.disablePadding ? "none" : "normal"}
-                  sortDirection={column.sort === true && pagingParams.SortDir === column.id ? pagingParams.SortField : false}
+                  sortDirection={
+                    column.sort === true && pagingParams.SortDir === column.id
+                      ? pagingParams.SortField
+                      : false
+                  }
                 >
                   <TableSortLabel
                     hideSortIcon={column.sort === false ? true : false}
-                    active={column.sort === true ? pagingParams.SortDir === column.id : false}
-                    direction={column.sort === true && pagingParams.SortDir === 0 ? "asc" : "desc"}
+                    active={
+                      column.sort === true
+                        ? pagingParams.SortDir === column.id
+                        : false
+                    }
+                    direction={
+                      column.sort === true && pagingParams.SortDir === 0
+                        ? "asc"
+                        : "desc"
+                    }
                     onClick={() => {
-                      if(column.sort) {
+                      if (column.sort) {
                         dispatch(
                           setPaginate({
                             ...pagingParams,
@@ -174,12 +186,7 @@ const WalletTableView = () => {
           </TableHead>
           <TableBody>
             {data.wallets?.map((row: any) => (
-              <StyledTableRow
-                hover
-                role="checkbox"
-                tabIndex={-1}
-                key={row.id}
-              >
+              <StyledTableRow hover role="checkbox" tabIndex={-1} key={row.id}>
                 {walletColumns.map((column) => {
                   const value = row[column.id];
                   return (
@@ -196,12 +203,13 @@ const WalletTableView = () => {
                           case "Create Date":
                             return value;
                           case "Update Date":
-                            return value;                          
+                            return value;
                           case "Action":
                             return (
                               <UpAndDel
                                 url={`${paths.wallet}/${row.id}`} // Adjust for wallet delete
                                 fn={loadingData}
+                                priority={true}
                               />
                             );
                           default:

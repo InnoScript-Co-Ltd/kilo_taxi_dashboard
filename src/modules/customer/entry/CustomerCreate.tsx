@@ -27,7 +27,7 @@ import { useState } from "react";
 import {
   genderStatuslists,
   kycStatusLists,
-  generalStatusLists,
+  customerStatusLists,
 } from "../../../constants/config";
 import { DatePicker } from "@mui/x-date-pickers";
 import FileUploadWithPreview from "../../../components/FileUploadWithPreview";
@@ -372,12 +372,12 @@ const CustomerCreate = () => {
                       disabled={loading}
                       label="Gender"
                       {...field}
-                      value={field.value || ''} // Convert field value to a string
+                      value={field.value || 0} // Convert field value to a string
                       onChange={(event) => field.onChange(event.target.value)} // Ensure onChange value is a string
                     >
-                      {genderStatuslists?.map((general: any) => (
-                        <MenuItem key={general.id} value={general.id}>
-                          {general.value}
+                      {genderStatuslists?.map((gender: any) => (
+                        <MenuItem key={gender.id} value={gender.id}>
+                          {gender.value}
                         </MenuItem>
                       ))}
                     </Select>
@@ -402,10 +402,10 @@ const CustomerCreate = () => {
                       disabled={loading}
                       label="Status"
                       {...field}
-                      value={field.value || ''} // Convert field value to a string
+                      value={field.value || 0} // Convert field value to a string
                       onChange={(event) => field.onChange(event.target.value)} // Ensure onChange value is a string
                     >
-                      {generalStatusLists?.map((status: any) => (
+                      {customerStatusLists?.map((status: any) => (
                         <MenuItem key={status.id} value={status.id}>
                           {status.value}
                         </MenuItem>
@@ -436,7 +436,7 @@ const CustomerCreate = () => {
                       disabled={loading}
                       label="KycStatus"
                       {...field}
-                      value={field.value || ''} // Convert field value to a string
+                      value={field.value || 0} // Convert field value to a string
                       onChange={(event) => field.onChange(event.target.value)} // Ensure onChange value is a string
                     >
                       {kycStatusLists?.map((status: any) => (

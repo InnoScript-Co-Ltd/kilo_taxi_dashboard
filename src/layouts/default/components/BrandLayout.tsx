@@ -5,7 +5,7 @@ import { AppProvider } from "@toolpad/core/AppProvider";
 import { DashboardLayout } from "@toolpad/core/DashboardLayout";
 import type { Router } from "@toolpad/core";
 import { navigationList } from "../defaultPaths";
-import { Outlet, useNavigate } from "react-router";
+import { Outlet, useLocation, useNavigate } from "react-router";
 import { green, grey, indigo, orange, red, yellow } from "@mui/material/colors";
 import { IconButton } from "@mui/material";
 import NotificationsIcon from "@mui/icons-material/Notifications";
@@ -13,6 +13,8 @@ import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import { NotificationsProvider } from "@toolpad/core/useNotifications";
 import { LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
+import { getData } from "../../../helpers/localStorage";
+import { keys } from "../../../constants/config";
 
 const demoTheme = createTheme({
   cssVariables: {
@@ -76,22 +78,6 @@ const demoTheme = createTheme({
   },
 });
 
-function Main({ pathname }: { pathname: string }) {
-  let list = [];
-  const formatted = pathname.split("/").filter(Boolean); // Split by '/' and filter out empty values
-  list.push(...formatted); // Push the elements into the array
-
-  return (
-    <Box sx={{ width: "100%", padding: "20px" }}>
-      <NotificationsProvider>
-        <LocalizationProvider dateAdapter={AdapterDateFns}>
-          <Outlet />
-        </LocalizationProvider>
-      </NotificationsProvider>
-    </Box>
-  );
-}
-
 const BRANDING = {
   title: "",
   logo: <img src="/logo.png" alt="Logo" />,
@@ -124,52 +110,68 @@ function ToolBarAccount() {
 export default function BrandLayout() {
   const [pathname, setPathname] = React.useState("/");
   const navigate = useNavigate();
+  const location = useLocation();
 
-  // Handler to navigate only if item is not a parent
-  const handleNavigation = (path: string) => {
-    // Remove leading slash from path if it exists, to normalize
-    const normalizedPath = path.startsWith("/") ? path.slice(1) : path;
+  // Handler to navigate, supporting `string | URL`
+  const handleNavigation = (path: string | URL) => {
+    const pathString = typeof path === "string" ? path : path.toString();
+    const normalizedPath = pathString.startsWith("/") ? pathString.slice(1) : pathString;
 
-    let item = navigationList.find((nav) => nav.segment === normalizedPath);
+    const item = navigationList.find((nav) => nav.segment === normalizedPath);
 
     if (item?.isParent) {
-      // If the item is a parent, redirect to the corresponding child path
-      const newPath = `${normalizedPath}/list`; // Construct new path
-      setPathname(newPath); // Update the pathname to redirect to child
+      const newPath = `/${normalizedPath}/list`;
+      console.log(newPath);
+      
+      if (pathname !== newPath) {
+        navigate(newPath);
+        setPathname(newPath);
+      }
     } else {
-      setPathname(path); // Set the pathname for non-parent items
+      if (pathname !== pathString) {
+        navigate(pathString);
+        setPathname(pathString);
+      }
     }
   };
 
-  // Define router object with matching types
-  const router = React.useMemo<Router>(
+  const router = React.useMemo(
     () => ({
-      pathname,
-      searchParams: new URLSearchParams(),
-      navigate: (path: any) => handleNavigation(path),
+      pathname: location.pathname,
+      searchParams: new URLSearchParams(location.search),
+      navigate: (url: string | URL) => {
+        const pathString = typeof url === "string" ? url : url.toString();
+        handleNavigation(pathString);
+      },
     }),
-    [pathname]
+    [location.pathname, location.search]
   );
 
-  React.useEffect(() => {
-    navigate(pathname);
-  }, [pathname, navigate]);
+  const memoizedNavigationList = React.useMemo(() => navigationList, []);
+  const memoizedTheme = React.useMemo(() => demoTheme, []);
+  const slots = React.useMemo(() => ({
+    toolbarActions: ToolBarActions,
+    toolbarAccount: ToolBarAccount,
+  }), []);
 
   return (
     // preview-start
     <AppProvider
-      navigation={navigationList}
+      navigation={memoizedNavigationList}
       router={router}
-      theme={demoTheme}
+      theme={memoizedTheme}
       branding={BRANDING}
     >
       <DashboardLayout
-        slots={{
-          toolbarActions: ToolBarActions,
-          toolbarAccount: ToolBarAccount,
-        }}
+        slots={slots}
       >
-        <Main pathname={pathname} />
+        <Box sx={{ width: "100%", padding: "20px" }}>
+          <NotificationsProvider>
+            <LocalizationProvider dateAdapter={AdapterDateFns}>
+              <Outlet />
+            </LocalizationProvider>
+          </NotificationsProvider>
+        </Box>
       </DashboardLayout>
     </AppProvider>
     // preview-end

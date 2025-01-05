@@ -1,51 +1,99 @@
-
-
 export const paths = {
+  dashboard: "/dashboard",
 
-    dashboard: "/dashboard",
+  authLogin: "/auth/login",
+  authLogout: "/auth/logout",
 
-    admin: "/admin",
-    adminList: "/admin/list",
-    adminCreate: "/admin/new",
-    adminDetail: "/admin/:id",
-    adminLogout: "/auth/login",
+  admin: "/admin",
+  adminList: "/admin/list",
+  adminCreate: "/admin/new",
+  adminDetail: "/admin/:id",
 
-    customer: "/customer",
-    customerList: "/customer/list",
-    customerCreate: "/customer/new",
-    customerDetail: "/customer/:id",
+  city: "/city",
+  cityList: "/city/list",
+  cityCreate: "/city/new",
+  cityDetail: "/city/:id",
 
-    promotion: "/promotion",
-    promotionList: "/promotion/list",
-    promotionCreate: "/promotion/new",
-    promotionDetail: "/promotion/:id",
+  customer: "/customer",
+  customerList: "/customer/list",
+  customerCreate: "/customer/new",
+  customerDetail: "/customer/:id",
 
-    scheduleBooking: "/schedule",
-    scheduleBookingList: "/schedule/list",
-    scheduleBookingCreate: "/schedule/new",
-    scheduleBookingDetail: "/schedule/:id",
+  promotion: "/promotion",
+  promotionList: "/promotion/list",
+  promotionCreate: "/promotion/new",
+  promotionDetail: "/promotion/:id",
 
-    country: "/country",
-    countryList: "/country/list",
-    countryCreate: "/country/new",
-    countryDetail: "/country/:id",
-  
-    state: "/state",
-    stateList: "/state/list",
-    stateCreate: "/state/new",
-    stateDetail: "/state/:id",
+  scheduleBooking: "/schedule",
+  scheduleBookingList: "/schedule/list",
+  scheduleBookingDetail: "/schedule/:id",
 
-    driver: "/driver",
-    driverList: "/driver/list",
-    driverDetail: "/driver/:id",
+  country: "/country",
+  countryList: "/country/list",
+  countryCreate: "/country/new",
+  countryDetail: "/country/:id",
 
-    vehicle: "/vehicle",
-    vehicleList: "/vehicle/list",
-    vehicleDetail: "/vehicle/:id",
+  state: "/state",
+  stateList: "/state/list",
+  stateCreate: "/state/new",
+  stateDetail: "/state/:id",
 
-    wallet: "/wallet",
-    walletList: "/wallet/list",
-    walletCreate: "/wallet/new",
-    walletDetail: "/wallet/:id",
+  driver: "/driver",
+  driverList: "/driver/list",
+  driverDetail: "/driver/:id",
+  driverUpdate: "/driver/update/:id",
 
-}
+  vehicle: "/vehicle",
+  vehicleList: "/vehicle/list",
+  vehicleDetail: "/vehicle/:id",
+
+  vehicleType: "/vehicletype",
+  vehicleTypeList: "/vehicletype/list",
+  vehicleTypeCreate: "/vehicletype/new",
+  vehicleTypeUpdate: "/vehicletype/:id",
+
+  wallet: "/wallet",
+  walletList: "/wallet/list",
+  walletCreate: "/wallet/new",
+  walletDetail: "/wallet/:id",
+
+  order: "/order",
+  orderList: "/order/list",
+  orderDetail: "/order/:id",
+
+  paymentChannel: "/paymentchannel",
+  paymentChannelList: "/paymentchannel/list",
+  paymentChannelCreate: "/paymentchannel/new",
+  paymentChannelDetail: "/paymentchannel/:id",
+
+  review: "/review",
+  reviewList: "/review/list",
+  reviewCreate: "/review/new",
+  reviewDetail: "/review/:id",
+
+  reason: "/reason",
+  reasonList: "/reason/list",
+  reasonCreate: "/reason/new",
+  reasonDetail: "/reason/:id",
+
+  topupTransaction: "/topupTransaction",
+  topupTransactionList: "/topupTransaction/list",
+  topupTransactionCreate: "/topupTransaction/new",
+  topupTransactionDetail: "/topupTransaction/:id",
+
+  sms: "/sms",
+  smsList: "/sms/list",
+  smsCreate: "/sms/new",
+  smsDetail: "/sms/:id",
+
+  sosList: "/sos/list",
+  sosReceive: "/sos/receive",
+
+  travelRate: "/travelrate",
+  travelRateList: "/travelrate/list",
+  travelRateCreate: "/travelrate/new",
+  travelRateDetail: "/travelrate/:id",
+
+  simulation: "/simulation",
+  simulationOrderCreate: "/simulation/order",
+};

@@ -5,31 +5,43 @@ import { walletSchema, WALLET } from "../wallet/wallet.payload";
 
 // Define Driver Schema
 export const driverSchema = z.object({
-  id: z.string().min(1,{ message: "Invalid ID format" }),
-  name: z.string().min(2, { message: "Name must be at least 2 characters long" }),
-  profile: z.string().url({ message: "Profile must be a valid URL" }),
+  id: z.number().min(1, { message: "Invalid ID format" }),
+  name: z
+    .string()
+    .min(2, { message: "Name must be at least 2 characters long" }),
   mobilePrefix: z.string().min(1, { message: "Mobile Prefix is required" }),
-  phone: z.string().min(10, { message: "Phone number must be at least 10 digits long" }),
+  phone: z
+    .string()
+    .min(10, { message: "Phone number must be at least 10 digits long" }),
   email: z.string().email({ message: "Invalid email address" }),
-  dob: z.string().regex(/^\d{4}-\d{2}-\d{2}$/, { message: "Date of birth must be in YYYY-MM-DD format" }),
+  dob: z.date().nullable(),
   nrc: z.string().min(6, { message: "NRC must be at least 6 characters" }),
-  nrcImageFront: z.string().url({ message: "NRC Front must be a valid URL" }),
-  nrcImageBack: z.string().url({ message: "NRC Back must be a valid URL" }),
-  driverLicense: z.string().min(6, { message: "Driver License must be at least 6 characters" }),
-  driverImageLicenseFront: z.string().url({ message: "Driver License Front must be a valid URL" }),
-  driverImageLicenseBack: z.string().url({ message: "Driver License Back must be a valid URL" }),
+  driverLicense: z
+    .string()
+    .min(6, { message: "Driver License must be at least 6 characters" }),
   emailVerifiedAt: z.string().optional(),
   phoneVerifiedAt: z.string().optional(),
-  password: z.string().min(6, { message: "Password must be at least 6 characters long" }),
-  address: z.string().min(5, { message: "Address must be at least 5 characters" }),
+  password: z
+    .string()
+    .min(6, { message: "Password must be at least 6 characters long" }),
+  address: z
+    .string()
+    .min(5, { message: "Address must be at least 5 characters" }),
   state: z.string(),
   city: z.string(),
-  township: z.string(),
-  status: z.string(),
-  gender: z.string(),
-  kycStatus: z.string(),
-  vehicle: z.array(vehicleSchema), // Use vehicleSchema as an array
-  wallet: z.array(walletSchema), // Use walletSchema as an array
+  townShip: z.string(),
+  gender: z.number(),
+  status: z.number(),
+  kycStatus: z.number(),
+
+  file_profile: z.any().nullable(),
+  file_nrcImageFront: z.any().nullable(),
+  file_nrcImageBack: z.any().nullable(),
+  file_driverImageLicenseFront: z.any().nullable(),
+  file_driverImageLicenseBack: z.any().nullable(),
+
+  // vehicle: z.array(vehicleSchema), // Use vehicleSchema as an array
+  // wallet: z.array(walletSchema), // Use walletSchema as an array
 });
 
 export type DriverFormInputs = z.infer<typeof driverSchema>;
@@ -38,13 +50,13 @@ export type DriverFormInputs = z.infer<typeof driverSchema>;
  * Interface representing the shape of a driver object.
  */
 export interface DRIVER {
-  id: string;
+  id: number;
   name: string;
   profile: string;
   mobilePrefix: string;
   phone: string;
   email: string;
-  dob: string;
+  dob: Date | null | string;
   nrc: string;
   nrcImageFront: string;
   nrcImageBack: string;
@@ -53,23 +65,52 @@ export interface DRIVER {
   driverImageLicenseBack: string;
   emailVerifiedAt: string;
   phoneVerifiedAt: string;
-  password: string;  
+  password: string;
   address: string;
   state: string;
   city: string;
-  township: string;
-  gender: string;
-  status: string;
-  kycStatus: string;
+  townShip: string;
+  gender: number;
+  status: number;
+  kycStatus: number;
   auditColumn: string;
+  file_profile: string;
+  file_nrcImageFront: string;
+  file_nrcImageBack: string;
+  file_driverImageLicenseFront: string;
+  file_driverImageLicenseBack: string;
   vehicle: VEHICLE[]; // Use the VEHICLE interface as an array
-  wallet: WALLET[]; // Use the WALLET interface as an array
-
+  walletUserMapping: WALLETUSERMAPPING[]; // Use the WALLET interface as an array
+  action: any;
 }
 
 // Define columns for driver table
 interface DriverColumn {
-  id: "id" | "name" | "profile" | "mobilePrefix" | "phone" | "email" | "dob" | "nrc" | "nrcImageFront" | "nrcImageBack" | "driverLicense" | "driverImageLicenseFront" | "driverImageLicenseBack" | "emailVerifiedAt" | "phoneVerifiedAt" | "password" | "gender" | "address" | "state" | "city" | "township" | "status" | "kycStatus"  | "action";
+  id:
+    | "id"
+    | "name"
+    | "profile"
+    | "mobilePrefix"
+    | "phone"
+    | "email"
+    | "dob"
+    | "nrc"
+    | "nrcImageFront"
+    | "nrcImageBack"
+    | "driverLicense"
+    | "driverImageLicenseFront"
+    | "driverImageLicenseBack"
+    | "emailVerifiedAt"
+    | "phoneVerifiedAt"
+    | "password"
+    | "gender"
+    | "address"
+    | "state"
+    | "city"
+    | "townShip"
+    | "status"
+    | "kycStatus"
+    | "action";
   label: string;
   minWidth?: number;
   align?: "right";
@@ -78,26 +119,154 @@ interface DriverColumn {
   sort?: boolean;
   format?: (value: string) => string;
 }
+export interface WALLETUSERMAPPING {
+  id: string;
+  balance: string;
+  createDate: Date | null;
+  updateDate?: Date | null;
+  status: number;
+}
 
 // Define State Payload
 export interface DRIVER_PAYLOAD {
-    pagingParams: {
-      PageSize: number,
-      CurrentPage: number,
-      SortField: any,
-      SortDir: any,
-      SearchTerm: string
-    }
-  }
+  pagingParams: {
+    PageSize: number;
+    CurrentPage: number;
+    SortField: any;
+    SortDir: any;
+    SearchTerm: string;
+  };
+}
 
 export const driverColumns: readonly DriverColumn[] = [
-  { id: "name", label: "Driver Name", minWidth: 130, numeric: false, disablePadding: false, sort: true },
-  { id: "phone", label: "Phone", minWidth: 125, numeric: false, disablePadding: false, sort: true },
-  { id: "email", label: "Email", minWidth: 200, numeric: false, disablePadding: false, sort: true },
-  { id: "status", label: "Status", minWidth: 90, numeric: false, disablePadding: false, sort: true },
-  { id: "kycStatus", label: "KYC Status", minWidth: 100, numeric: false, disablePadding: false, sort: false },
+  {
+    id: "name",
+    label: "Driver Name",
+    minWidth: 130,
+    numeric: false,
+    disablePadding: false,
+    sort: true,
+  },
+  {
+    id: "profile",
+    label: "Profile",
+    minWidth: 50,
+    numeric: false,
+    disablePadding: false,
+    sort: true,
+  },
+  {
+    id: "mobilePrefix",
+    label: "Mobile Prefix",
+    minWidth: 35,
+    numeric: false,
+    disablePadding: false,
+    sort: true,
+  },
+  {
+    id: "phone",
+    label: "Phone",
+    minWidth: 70,
+    numeric: false,
+    disablePadding: false,
+    sort: true,
+  },
+  {
+    id: "email",
+    label: "Email",
+    minWidth: 100,
+    numeric: false,
+    disablePadding: false,
+    sort: true,
+  },
+  {
+    id: "dob",
+    label: "DOB",
+    minWidth: 135,
+    numeric: false,
+    disablePadding: false,
+    sort: true,
+  },
+  {
+    id: "nrc",
+    label: "NRC",
+    minWidth: 70,
+    numeric: false,
+    disablePadding: false,
+    sort: true,
+  },
+  {
+    id: "driverLicense",
+    label: "Driver License",
+    minWidth: 70,
+    numeric: false,
+    disablePadding: false,
+    sort: true,
+  },
+  {
+    id: "address",
+    label: "Address",
+    minWidth: 145,
+    numeric: false,
+    disablePadding: false,
+    sort: true,
+  },
+  {
+    id: "state",
+    label: "State",
+    minWidth: 70,
+    numeric: false,
+    disablePadding: false,
+    sort: true,
+  },
+  {
+    id: "city",
+    label: "City",
+    minWidth: 70,
+    numeric: false,
+    disablePadding: false,
+    sort: true,
+  },
+  {
+    id: "townShip",
+    label: "TownShip",
+    minWidth: 70,
+    numeric: false,
+    disablePadding: false,
+    sort: true,
+  },
+  {
+    id: "gender",
+    label: "Gender",
+    minWidth: 50,
+    numeric: false,
+    disablePadding: false,
+    sort: true,
+  },
+  {
+    id: "status",
+    label: "Status",
+    minWidth: 50,
+    numeric: false,
+    disablePadding: false,
+    sort: true,
+  },
+  {
+    id: "kycStatus",
+    label: "Kyc Status",
+    minWidth: 50,
+    numeric: false,
+    disablePadding: false,
+    sort: false,
+  },
+  {
+    id: "action",
+    label: "Action",
+    minWidth: 50,
+    numeric: false,
+    disablePadding: false,
+  },
 ];
-
 
 // Driver payload example
 export const driverPayload: DRIVER_PAYLOAD = {

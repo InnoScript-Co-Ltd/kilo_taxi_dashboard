@@ -27,11 +27,13 @@ import {
   genderStatuslists,
   kycStatusLists,
   generalStatusLists,
+  customerStatusLists,
 } from "../../../constants/config";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
 import { DatePicker } from "@mui/x-date-pickers";
 import Loading from "../../../components/Loading";
 import { formBuilder } from "../../../helpers/formBuilder";
+import { getId } from "../../../helpers/updateHelper";
 
 const CustomerUpdate = () => {
   const [loading, setLoading] = useState(false);
@@ -63,9 +65,7 @@ const CustomerUpdate = () => {
       Gender: 0,
       Status: 0,
       KycStatus: 0,
-      Dob: null
-      // flagIcon: undefined,
-      // zipCode: ""
+      Dob: null,
     },
   });
 
@@ -94,8 +94,9 @@ const CustomerUpdate = () => {
 
   // Populate form values when country data is available
   useEffect(() => {
+    console.log(customer);
     if (customer) {
-      setValue("id", Number(customer.id) || 0)
+      setValue("id", Number(customer.id) || 0);
       setValue("Name", customer.name || "");
       setValue("Phone", customer.phone || "");
       setValue("Nrc", customer.nrc || "");
@@ -107,9 +108,18 @@ const CustomerUpdate = () => {
       setValue("State", customer.state || "");
       setValue("City", customer.city || "");
       setValue("Township", customer.township || "");
-      setValue("Gender", customer.gender || 0);
-      setValue("Status", customer.status || 0);
-      setValue("KycStatus", customer.kycStatus || 0);
+      setValue(
+        "Gender",
+        getId({ lists: genderStatuslists, value: customer.gender }) || 0
+      );
+      setValue(
+        "Status",
+        getId({ lists: customerStatusLists, value: customer.status }) || 0
+      );
+      setValue(
+        "KycStatus",
+        getId({ lists: kycStatusLists, value: customer.kycStatus }) || 0
+      );
       // setValue("Profile", customer.profile || "");
       // setValue("NrcImageFront", customer.nrcImageFront || "");
       // setValue("NrcImageBack", customer.nrcImageBack || "");
@@ -119,8 +129,12 @@ const CustomerUpdate = () => {
   // Submit form data
   const onSubmit = async (data: CustomerFormInputs) => {
     setLoading(true);
-    const formData = formBuilder(data, customerSchema)
-    const response = await customerService.update(dispatch, params.id, formData);
+    const formData = formBuilder(data, customerSchema);
+    const response = await customerService.update(
+      dispatch,
+      params.id,
+      formData
+    );
     if (response.status === 200) {
       navigate(`${paths.customerList}`);
     }
@@ -154,7 +168,12 @@ const CustomerUpdate = () => {
             <Grid2 size={{ xs: 6, md: 3 }}>
               <FormControl variant="filled" fullWidth error={!!errors.Email}>
                 <InputLabel htmlFor="email">Email</InputLabel>
-                <FilledInput size="small" disabled={loading} id="email" {...register("Email")} />
+                <FilledInput
+                  size="small"
+                  disabled={loading}
+                  id="email"
+                  {...register("Email")}
+                />
                 <FormHelperText>{errors.Email?.message}</FormHelperText>
               </FormControl>
             </Grid2>
@@ -162,7 +181,12 @@ const CustomerUpdate = () => {
             <Grid2 size={{ xs: 6, md: 3 }}>
               <FormControl variant="filled" fullWidth error={!!errors.Phone}>
                 <InputLabel htmlFor="phone">Phone</InputLabel>
-                <FilledInput size="small" disabled={loading} id="phone" {...register("Phone")} />
+                <FilledInput
+                  size="small"
+                  disabled={loading}
+                  id="phone"
+                  {...register("Phone")}
+                />
                 <FormHelperText>{errors.Phone?.message}</FormHelperText>
               </FormControl>
             </Grid2>
@@ -240,7 +264,12 @@ const CustomerUpdate = () => {
             <Grid2 size={{ xs: 6, md: 3 }}>
               <FormControl variant="filled" fullWidth error={!!errors.Nrc}>
                 <InputLabel htmlFor="Nrc">Nrc</InputLabel>
-                <FilledInput size="small" disabled={loading} id="Nrc" {...register("Nrc")} />
+                <FilledInput
+                  size="small"
+                  disabled={loading}
+                  id="Nrc"
+                  {...register("Nrc")}
+                />
                 <FormHelperText>{errors.Nrc?.message}</FormHelperText>
               </FormControl>
             </Grid2>
@@ -361,7 +390,12 @@ const CustomerUpdate = () => {
             <Grid2 size={{ xs: 6, md: 3 }}>
               <FormControl variant="filled" fullWidth error={!!errors.State}>
                 <InputLabel htmlFor="state">State</InputLabel>
-                <FilledInput size="small" disabled={loading} id="state" {...register("State")} />
+                <FilledInput
+                  size="small"
+                  disabled={loading}
+                  id="state"
+                  {...register("State")}
+                />
                 <FormHelperText>{errors.State?.message}</FormHelperText>
               </FormControl>
             </Grid2>
@@ -369,7 +403,12 @@ const CustomerUpdate = () => {
             <Grid2 size={{ xs: 6, md: 3 }}>
               <FormControl variant="filled" fullWidth error={!!errors.City}>
                 <InputLabel htmlFor="city">City</InputLabel>
-                <FilledInput size="small" disabled={loading} id="city" {...register("City")} />
+                <FilledInput
+                  size="small"
+                  disabled={loading}
+                  id="city"
+                  {...register("City")}
+                />
                 <FormHelperText>{errors.City?.message}</FormHelperText>
               </FormControl>
             </Grid2>
@@ -401,12 +440,12 @@ const CustomerUpdate = () => {
                       disabled={loading}
                       label="Gender"
                       {...field}
-                      value={field.value || ''} // Convert field value to a string
+                      value={field.value || 0} // Convert field value to a string
                       onChange={(event) => field.onChange(event.target.value)} // Ensure onChange value is a string
                     >
-                      {genderStatuslists?.map((general: any) => (
-                        <MenuItem key={general.id} value={general.id}>
-                          {general.value}
+                      {genderStatuslists?.map((gender: any) => (
+                        <MenuItem key={gender.id} value={gender.id}>
+                          {gender.value}
                         </MenuItem>
                       ))}
                     </Select>
@@ -431,10 +470,10 @@ const CustomerUpdate = () => {
                       disabled={loading}
                       label="Status"
                       {...field}
-                      value={field.value || ''} // Convert field value to a string
+                      value={field.value || 0} // Convert field value to a string
                       onChange={(event) => field.onChange(event.target.value)} // Ensure onChange value is a string
                     >
-                      {generalStatusLists?.map((status: any) => (
+                      {customerStatusLists?.map((status: any) => (
                         <MenuItem key={status.id} value={status.id}>
                           {status.value}
                         </MenuItem>
@@ -465,7 +504,7 @@ const CustomerUpdate = () => {
                       disabled={loading}
                       label="KycStatus"
                       {...field}
-                      value={field.value || ''} // Convert field value to a string
+                      value={field.value || 0} // Convert field value to a string
                       onChange={(event) => field.onChange(event.target.value)} // Ensure onChange value is a string
                     >
                       {kycStatusLists?.map((status: any) => (

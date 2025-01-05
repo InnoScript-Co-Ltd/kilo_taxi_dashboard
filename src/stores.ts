@@ -1,12 +1,22 @@
-import { configureStore } from '@reduxjs/toolkit'
+import { configureStore } from "@reduxjs/toolkit";
 import shareSlice from "./shares/shareSlice";
-import adminSlice from './modules/admin/admin.slice';
-import customerSlice from './modules/customer/customer.slice';
-import promotionSlice from './modules/promotion/promotion.slice';
-import scheduleSlice from './modules/scheduleBooking/scheduleBooking.slice';
-import driverSlice from './modules/driver/driver.slice';
-import vehicleSlice from './modules/vehicle/vehicle.slice';
-import walletSlice from './modules/wallet/wallet.slice';
+import adminSlice from "./modules/admin/admin.slice";
+import customerSlice from "./modules/customer/customer.slice";
+import promotionSlice from "./modules/promotion/promotion.slice";
+import reviewSlice from "./modules/review/review.slice";
+import scheduleSlice from "./modules/scheduleBooking/scheduleBooking.slice";
+import driverSlice from "./modules/driver/driver.slice";
+import vehicleSlice from "./modules/vehicle/vehicle.slice";
+import vehicleTypeSlice from "./modules/vehicleType/vehicleType.slice";
+import walletSlice from "./modules/wallet/wallet.slice";
+import orderSlice from "./modules/order/order.slice";
+import reasonSlice from "./modules/reason/reason.slice";
+import topupTransactionSlice from "./modules/topupTransaction/topupTransaction.slice";
+import paymentChannelSlice from "./modules/paymentchannel/paymentchannel.slice";
+import smsSlice from "./modules/sms/sms.slice";
+import sosSlice from "./modules/sos/sos.slice";
+import citySlice from "./modules/city/city.slice";
+import travelRateSlice from "./modules/travelrate/travelrate.slice";
 
 // interface RootState {
 //     share: SHARE_SLICE;
@@ -24,14 +34,24 @@ export const stores = configureStore({
   reducer: {
     share: shareSlice,
     admin: adminSlice,
+    city: citySlice,
     customer: customerSlice,
     promotion: promotionSlice,
-    schedule: scheduleSlice,
+    review: reviewSlice,
+    scheduleBookings: scheduleSlice,
     driver: driverSlice,
     vehicle: vehicleSlice,
-    wallet:walletSlice,
+    vehicleType: vehicleTypeSlice,
+    wallet: walletSlice,
+    order: orderSlice,
+    reason: reasonSlice,
+    topUpTransaction: topupTransactionSlice,
+    paymentChannel: paymentChannelSlice,
+    sms: smsSlice,
+    sos: sosSlice,
+    travelRate: travelRateSlice,
   },
-})
+});
 
 // Infer the RootState type from the store itself
 export type AppRootState = ReturnType<typeof stores.getState>;
