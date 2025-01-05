@@ -8,33 +8,46 @@ import LocalTaxiIcon from "@mui/icons-material/LocalTaxi";
 import React, { useEffect, useState } from "react";
 import signalRService from "../helpers/signalrService";
 
-const GetVehicle = () => {
-  const [messages, setMessages] = useState<any>([]);
+type LocationData = {
+  latitude: number;
+  longitude: number;
+};
+
+type Message = {
+  vehicleId: string;
+  location: LocationData;
+};
+
+const GetVehicle = ({ id }: { id: string }) => {
+  const [messages, setMessages] = useState<Message[]>([]);
   const { connection, startConnection, invokeMethod, sendMethod, onReceive } = signalRService();
 
   useEffect(() => {
-    // Start the connection
     startConnection();
-
-    // Receive messages from the server
-    onReceive("ReceiveLocationData", (user: any, message: string) => {
-      console.log(`Message received from ${user}: ${message}`);
-      setMessages((prevMessages: any) => [...prevMessages, { user, message }]);
+  
+    onReceive("ReceiveLocationData", (vehicleId: string, location: any) => {
+      console.log(`Location data received for vehicle ${vehicleId}:`, location);
+      setMessages((prevMessages: any) => [...prevMessages, { vehicleId, location }]);
     });
-
+  
     return () => {
-      connection.stop();
+      connection
+        .stop()
+        .then(() => console.log("SignalR connection stopped"))
+        .catch((err) => console.error("Error stopping SignalR connection:", err));
     };
+    
   }, [connection, startConnection, onReceive]);
+  
 
   const handleSend = async () => {
     try {
       // Using `invoke` to send a message and receive a response
-      const response = await invokeMethod("RequestVehicleLocation", "User1", "Hello from React!");
+      const response = await invokeMethod("RequestVehicleLocation", id);
       console.log("Server response:", response);
 
       // Using `send` to send a message without expecting a response
-      // await sendMethod("BroadcastMessage", "User1", "Hello everyone!");
+      await sendMethod("RequestVehicleLocation", id);
     } catch (err) {
       console.error("Error sending message:", err);
     }
@@ -46,10 +59,16 @@ const GetVehicle = () => {
       </Button>
 
       <List dense={false}>
-        <ListItem>
-          {/* <ListItemText primary={location.latitude} secondary={location.longitude} /> */}
+      {messages.map((message, index) => (
+        <ListItem key={index}>
+          <ListItemText
+            primary={`Vehicle ID: ${message.vehicleId}`}
+            secondary={`Location: Latitude ${message.location.latitude}, Longitude ${message.location.longitude}`}
+          />
         </ListItem>
-      </List>
+      ))}
+    </List>
+
     </div>
   );
 };
