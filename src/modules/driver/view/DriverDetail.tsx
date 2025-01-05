@@ -316,7 +316,7 @@ const DriverDetail = () => {
         ) : (
           <p>No driver details available.</p>
         )}
-        <GetVehicle />
+        <GetVehicle id={params.id} />
       </Card>
     </Box>
   );
