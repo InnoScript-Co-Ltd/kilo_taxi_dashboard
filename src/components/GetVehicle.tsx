@@ -34,7 +34,7 @@ const GetVehicle = ({ id }: { id: string }) => {
       connection
         .stop()
         .then(() => console.log("SignalR connection stopped"))
-        .catch((err) => console.error("Error stopping SignalR connection:", err));
+        .catch((err: any) => console.error("Error stopping SignalR connection:", err));
     };
     
   }, [connection, startConnection, onReceive]);

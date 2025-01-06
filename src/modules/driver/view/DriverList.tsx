@@ -1,5 +1,6 @@
 import DriverTableView from '../list/DriverTableView'
 import { Breadcrumb } from '../../../components/Breadcrumb'
+import OpenMap from '../../../components/OpenMap'
 
 const DriverList = () =>{
     return (
@@ -8,6 +9,8 @@ const DriverList = () =>{
             <Breadcrumb />
     
             <DriverTableView />
+
+            <OpenMap />
     
         </div>
       )
