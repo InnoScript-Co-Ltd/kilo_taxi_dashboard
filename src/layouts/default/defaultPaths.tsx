@@ -185,4 +185,17 @@ export const navigationList = [
   //     },
   //   ],
   // },
+  {
+    segment: 'test',
+    title: 'Test',
+    isParent: true,
+    icon: <CreditCardIcon  />,
+    children: [
+      {
+        segment: 'list',
+        title: 'List',
+        icon: <FormatListBulletedIcon />,
+      },
+    ],
+  },
 ];

@@ -63,4 +63,6 @@ export const paths = {
   topupTransactionList: "/topupTransaction/list",
   topupTransactionCreate: "/topupTransaction/new",
   topupTransactionDetail: "/topupTransaction/:id",
+
+  testList: "/test/list"
 };

@@ -14,6 +14,7 @@ import { OrderRoute } from "./modules/order/order.route";
 import { ReviewRoute } from "./modules/review/review.route";
 import { ReasonRoute } from "./modules/reason/reason.route";
 import { TopupTransactionRoute } from "./modules/topupTransaction/topupTransaction.route";
+import { TestRoute } from "./modules/test/test.route";
 
 export const routers = createBrowserRouter([
   {
@@ -32,7 +33,8 @@ export const routers = createBrowserRouter([
       ...OrderRoute,
       ...ReviewRoute,
       ...ReasonRoute,
-      ...TopupTransactionRoute
+      ...TopupTransactionRoute,
+      ...TestRoute
     ],
   },
   {
