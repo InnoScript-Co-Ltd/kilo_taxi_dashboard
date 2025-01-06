@@ -21,6 +21,7 @@ export const customerSchema = z.object({
     .regex(/[^a-zA-Z0-9]/, {
       message: "Password must contain at least one special character",
     }), // Special character
+  role: z.string().nullable().default("Customer"),
   MobilePrefix: z.string(),
   Dob: z.date().nullable(), // Date validation
   Nrc: z.string().nullable(),
@@ -34,8 +35,8 @@ export const customerSchema = z.object({
   // file_NrcImageFront: z.instanceof(File).nullable(),
   // file_NrcImageBack: z.instanceof(File).nullable(),
   // file_Profile: z.instanceof(File).nullable(),
-  file_NrcImageFront: z.any().nullable(),
-  file_NrcImageBack: z.any().nullable(),
+  // file_NrcImageFront: z.any().nullable(),
+  // file_NrcImageBack: z.any().nullable(),
   file_Profile: z.any().nullable(),
 });
 
@@ -50,6 +51,7 @@ export interface CUSTOMER {
   phone: string;
   profile: string;
   mobilePrefix: string;
+  role: string;
   email: string;
   dob: Date | null | string;
   nrc: string | null;

@@ -62,6 +62,7 @@ const CustomerUpdate = () => {
       Email: "",
       Phone: "",
       Password: "",
+      role: "Customer",
       Gender: 0,
       Status: 0,
       KycStatus: 0,
@@ -274,7 +275,7 @@ const CustomerUpdate = () => {
               </FormControl>
             </Grid2>
 
-            <Grid2 size={{ xs: 6, md: 3, xl: 3 }}>
+            {/* <Grid2 size={{ xs: 6, md: 3, xl: 3 }}>
               <FormControl
                 variant="filled"
                 fullWidth
@@ -339,7 +340,7 @@ const CustomerUpdate = () => {
                   )}
                 />
               </FormControl>
-            </Grid2>
+            </Grid2> */}
 
             <Grid2 size={{ xs: 6, md: 3, xl: 3 }}>
               <FormControl

@@ -22,14 +22,17 @@ export const customerService = {
 
   index: async (dispatch: Dispatch, params: any, notifications: any) => {
     const response: any = await getRequest(endpoints.customer, params);
+
     await httpServiceHandler(dispatch, response, notifications);
-    if (response.status === 200) {
+    if (response.data.statusCode === 200) {
       //'info' | 'success' | 'warning' | 'error'
       notifications.show("Customer list is successfully retrieved!", {
         severity: "info",
         autoHideDuration: 3000,
       });
-      dispatch(index(response.data ? response.data : response.data));
+      dispatch(
+        index(response.data.payload ? response.data.payload : response.data)
+      );
     }
     return response;
   },

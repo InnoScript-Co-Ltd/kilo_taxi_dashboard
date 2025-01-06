@@ -22,11 +22,11 @@ const DefaultLayout: React.FC = () => {
     }
   }, [token, location, navigate]);
 
-  React.useEffect(() => {
-    console.log("Token:", token);
-    console.log("Current Path:", location.pathname);
-    authRedirect();
-  }, [authRedirect]);
+  // React.useEffect(() => {
+  //   console.log("Token:", token);
+  //   console.log("Current Path:", location.pathname);
+  //   authRedirect();
+  // }, [authRedirect]);
 
   return (
     <>
