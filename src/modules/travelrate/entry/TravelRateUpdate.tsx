@@ -28,7 +28,8 @@ import { travelRateService } from "../travelrate.service";
 
 const TravelRateUpdate = () => {
   const [loading, setLoading] = useState(false);
-  // const [driverLists, setDriverLists] = useState<Array<any>>([]);
+  const [vehicleTypeLists, setVehicleTypeLists] = useState<Array<any>>([]);
+  const [cityLists, setCityLists] = useState<Array<any>>([]);
 
   const params: any = useParams();
   const navigate = useNavigate();
@@ -71,11 +72,27 @@ const TravelRateUpdate = () => {
   const loadingData = useCallback(async () => {
     setLoading(true);
     try {
-      // const driverRes: any = await getRequest(`${endpoints.driver}`, null);
-      // await httpServiceHandler(dispatch, driverRes);
-      // if (driverRes && "data" in driverRes && driverRes.status === 200) {
-      //   setDriverLists(driverRes.data.drivers);
-      // }
+      const vehicleTypeRes: any = await getRequest(
+        `${endpoints.vehicleType}`,
+        null
+      );
+      await httpServiceHandler(dispatch, vehicleTypeRes);
+      if (
+        vehicleTypeRes &&
+        "data" in vehicleTypeRes &&
+        vehicleTypeRes.status === 200
+      ) {
+        setVehicleTypeLists(vehicleTypeRes.data.vehicleTypes);
+      }
+    } catch (error) {
+      await httpErrorHandler(error);
+    }
+    try {
+      const cityRes: any = await getRequest(`${endpoints.city}`, null);
+      await httpServiceHandler(dispatch, cityRes);
+      if (cityRes && "data" in cityRes && cityRes.status === 200) {
+        setCityLists(cityRes.data.cities);
+      }
     } catch (error) {
       await httpErrorHandler(error);
     }
@@ -116,35 +133,69 @@ const TravelRateUpdate = () => {
 
         <form onSubmit={handleSubmit(submitTravelRateUpdate)}>
           <Grid2 container spacing={2}>
-            {/* <Grid2 size={{ xs: 6, md: 3 }}>
-              <FormControl variant="filled" fullWidth error={!!errors.DriverId}>
-                <InputLabel htmlFor="driver_name">Driver</InputLabel>
+            <Grid2 size={{ xs: 6, md: 3 }}>
+              <FormControl
+                variant="filled"
+                fullWidth
+                error={!!errors.vehicleTypeId}
+              >
+                <InputLabel htmlFor="vehicleTypeId">Driver</InputLabel>
                 <Controller
-                  name="DriverId"
+                  name="vehicleTypeId"
                   control={control}
                   render={({ field }) => (
                     <Select
                       size="small"
-                      id="driver_name"
-                      aria-describedby="driver_name_text"
+                      id="vehicleTypeId"
+                      aria-describedby="vehicleTypeId_text"
                       disabled={loading}
-                      label="Driver"
+                      label="VehicleTypeId"
                       {...field}
                       value={field.value} // Convert field value to a string
                       onChange={(event) => field.onChange(event.target.value)} // Ensure onChange value is a string
                     >
-                      {driverLists.map((driver: any) => (
-                        <MenuItem key={driver.id} value={driver.id}>
-                          {driver.name}
+                      {vehicleTypeLists.map((vehicleType: any) => (
+                        <MenuItem key={vehicleType.id} value={vehicleType.id}>
+                          {vehicleType.name}
                         </MenuItem>
                       ))}
                     </Select>
                   )}
                 />
 
-                <FormHelperText>{errors.DriverId?.message}</FormHelperText>
+                <FormHelperText>{errors.vehicleTypeId?.message}</FormHelperText>
               </FormControl>
-            </Grid2> */}
+            </Grid2>
+
+            <Grid2 size={{ xs: 6, md: 3 }}>
+              <FormControl variant="filled" fullWidth error={!!errors.cityId}>
+                <InputLabel htmlFor="cityId">CityName</InputLabel>
+                <Controller
+                  name="cityId"
+                  control={control}
+                  render={({ field }) => (
+                    <Select
+                      size="small"
+                      id="cityId"
+                      aria-describedby="cityId_text"
+                      disabled={loading}
+                      label="cityId"
+                      {...field}
+                      value={field.value} // Convert field value to a string
+                      onChange={(event) => field.onChange(event.target.value)} // Ensure onChange value is a string
+                    >
+                      {cityLists.map((city: any) => (
+                        <MenuItem key={city.id} value={city.id}>
+                          {city.name}
+                        </MenuItem>
+                      ))}
+                    </Select>
+                  )}
+                />
+
+                <FormHelperText>{errors.vehicleTypeId?.message}</FormHelperText>
+              </FormControl>
+            </Grid2>
 
             <Grid2 size={{ xs: 6, md: 3 }}>
               <FormControl variant="filled" fullWidth error={!!errors.unit}>
@@ -178,7 +229,10 @@ const TravelRateUpdate = () => {
               marginTop: "20px",
             }}
           >
-            <Button variant="outlined" onClick={() => navigate(paths.smsList)}>
+            <Button
+              variant="outlined"
+              onClick={() => navigate(paths.travelRateList)}
+            >
               Cancel
             </Button>
             <Button disabled={loading} variant="contained" type="submit">

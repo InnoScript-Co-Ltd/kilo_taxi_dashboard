@@ -24,7 +24,7 @@ const signalRService = () => {
   });
 
   // Sending data using `invoke`
-  const invokeMethod = async (methodName: string, ...args : any) => {
+  const invokeMethod = async (methodName: string, ...args: any) => {
     try {
       const response = await connection.invoke(methodName, ...args);
       console.log(`Response from ${methodName}:`, response);
@@ -36,7 +36,7 @@ const signalRService = () => {
   };
 
   // Sending data using `send` (fire-and-forget)
-  const sendMethod = async (methodName: string, ...args : any) => {
+  const sendMethod = async (methodName: string, ...args: any) => {
     try {
       await connection.send(methodName, ...args);
       console.log(`Data sent to ${methodName} successfully.`);
@@ -47,7 +47,7 @@ const signalRService = () => {
   };
 
   // Receiving messages from the server
-  const onReceive = (methodName: string, callback : any) => {
+  const onReceive = (methodName: string, callback: any) => {
     connection.on(methodName, callback);
     console.log(`Listening for ${methodName} events.`);
   };

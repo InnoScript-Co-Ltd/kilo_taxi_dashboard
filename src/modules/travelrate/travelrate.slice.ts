@@ -8,7 +8,7 @@ import {
 // Define a type for the state slice, similar to CITY_SLICE
 export interface TRAVELRATE_SLICE {
   data: {
-    travelRate: Array<any>;
+    travelRates: Array<TRAVELRATE>;
     paging: {
       totalCount: number;
       totalPages: number;
@@ -24,7 +24,7 @@ export interface TRAVELRATE_SLICE {
 
 const initialState: TRAVELRATE_SLICE = {
   data: {
-    travelRate: [],
+    travelRates: [],
     paging: {
       totalCount: 0,
       totalPages: 0,
@@ -43,10 +43,7 @@ const travelRateSlice = createSlice({
   name: "travelRate",
   initialState: initialState,
   reducers: {
-    index: (
-      state,
-      action: PayloadAction<{ travelRate: TRAVELRATE[]; paging: any }>
-    ) => {
+    index: (state, action) => {
       state.data = action.payload;
       return state;
     },

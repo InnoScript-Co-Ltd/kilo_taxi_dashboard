@@ -1,9 +1,4 @@
-import {
-  Button,
-  List,
-  ListItem,
-  ListItemText,
-} from "@mui/material";
+import { Button, List, ListItem, ListItemText } from "@mui/material";
 import LocalTaxiIcon from "@mui/icons-material/LocalTaxi";
 import React, { useEffect, useState } from "react";
 import signalRService from "../helpers/signalrService";
@@ -20,7 +15,8 @@ type Message = {
 
 const GetVehicle = ({ id }: { id: string }) => {
   const [messages, setMessages] = useState<Message[]>([]);
-  const { connection, startConnection, invokeMethod, sendMethod, onReceive } = signalRService();
+  const { connection, startConnection, invokeMethod, sendMethod, onReceive } =
+    signalRService();
 
   useEffect(() => {
     startConnection();
@@ -29,16 +25,16 @@ const GetVehicle = ({ id }: { id: string }) => {
       console.log(`Location data received for vehicle:`, location);
       setMessages((prevMessages: any) => [...prevMessages, { location }]);
     });
-  
+
     return () => {
       connection
         .stop()
         .then(() => console.log("SignalR connection stopped"))
-        .catch((err) => console.error("Error stopping SignalR connection:", err));
+        .catch((err) =>
+          console.error("Error stopping SignalR connection:", err)
+        );
     };
-    
   }, [connection, startConnection, onReceive]);
-  
 
   const handleSend = async () => {
     try {
@@ -68,7 +64,6 @@ const GetVehicle = ({ id }: { id: string }) => {
         </ListItem>
       ))}
     </List>
-
     </div>
   );
 };
