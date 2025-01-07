@@ -253,7 +253,7 @@ const PaymentChannelUpdate = () => {
           >
             <Button
               variant="outlined"
-              onClick={() => navigate(paths.walletList)}
+              onClick={() => navigate(paths.paymentChannelList)}
             >
               Cancel
             </Button>

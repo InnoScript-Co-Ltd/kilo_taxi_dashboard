@@ -24,9 +24,10 @@ export const customerSchema = z.object({
   role: z.string().nullable().default("Customer"),
   MobilePrefix: z.string(),
   Dob: z.date().nullable(), // Date validation
-  Nrc: z.string().nullable(),
+
+  // Nrc: z.string().nullable(),
   Address: z.string(),
-  State: z.string(),
+  // State: z.string(),
   City: z.string(),
   Township: z.string(),
   Gender: z.number(),
@@ -54,14 +55,14 @@ export interface CUSTOMER {
   role: string;
   email: string;
   dob: Date | null | string;
-  nrc: string | null;
-  nrcImageFront: string;
-  nrcImageBack: string;
+  // nrc: string | null;
+  // nrcImageFront: string;
+  // nrcImageBack: string;
   emailVerifiedAt: Date | null;
   phoneVerifiedAt: Date | null;
   password: string;
   address: string;
-  state: string;
+  // state: string;
   city: string;
   township: string;
   gender: number;
@@ -157,14 +158,14 @@ export const columns: readonly Customer_Column[] = [
     numeric: false,
     disablePadding: false,
   },
-  {
-    id: "status",
-    label: "Status",
-    minWidth: 50,
-    maxWidth: 50,
-    numeric: false,
-    disablePadding: false,
-  },
+  // {
+  //   id: "status",
+  //   label: "Status",
+  //   minWidth: 50,
+  //   maxWidth: 50,
+  //   numeric: false,
+  //   disablePadding: false,
+  // },
   {
     id: "kycStatus",
     label: "KycStatus",

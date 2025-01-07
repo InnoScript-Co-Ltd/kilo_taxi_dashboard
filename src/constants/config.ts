@@ -77,6 +77,11 @@ export const genderStatuslists = [
   { id: 2, value: "Undefined", color: "primary" },
 ];
 
+export const propertyStatusLists = [
+  { id: 0, value: "CarOwner", color: "success" },
+  { id: 1, value: "Rent", color: "success" },
+];
+
 export const otpStatusLists = [
   { id: 0, value: "Pending", color: "info" },
   { id: 1, value: "Success", color: "success" },
@@ -173,12 +178,19 @@ export const kycStatusLists = [
   { id: 1, value: "FullKyc", color: "success" },
   { id: 2, value: "Reject", color: "error" },
 ];
-
+export const driverModeLists = [
+  { id: 0, value: "Available", color: "success" },
+  { id: 1, value: "Offline", color: "danger" },
+  { id: 2, value: "Engaged", color: "secondary" },
+];
 export const driverStatusLists = [
   { id: 0, value: "Pending", color: "secondary" },
   { id: 1, value: "Active", color: "success" },
   { id: 2, value: "Deactivate", color: "warning" },
   { id: 3, value: "Suspend", color: "error" },
+  { id: 4, value: "Busy", color: "warning" },
+  { id: 5, value: "Offline", color: "danger" },
+  { id: 6, value: "Online", color: "success" },
 ];
 
 export const vehicleStatusLists = [

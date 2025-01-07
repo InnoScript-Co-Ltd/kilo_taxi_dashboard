@@ -10,7 +10,7 @@ export const customerService = {
     const response: any = await postRequest(endpoints.customer, payload);
     await httpServiceHandler(dispatch, response);
 
-    if (response.status === 201) {
+    if (response.data.statusCode === 201) {
       //'info' | 'success' | 'warning' | 'error'
       notifications.show("Customer is created successfully", {
         severity: "success",

@@ -32,6 +32,7 @@ import {
   genderStatuslists,
   generalStatusLists,
   kycStatusLists,
+  propertyStatusLists,
 } from "../../../constants/config";
 import FileUploadWithPreview from "../../../components/FileUploadWithPreview";
 import { getId } from "../../../helpers/updateHelper";
@@ -63,13 +64,17 @@ const DriverUpdate = () => {
     resolver: zodResolver(driverSchema),
     defaultValues: {
       name: "",
-      email: "",
+      // email: "",
+      role: "Driver",
       phone: "",
       password: "",
       status: 0,
       gender: 0,
       kycStatus: 0,
+      referralMobileNumber: "",
+      propertyStatus: 0,
       dob: null,
+      availableStatus: 0,
     },
   });
 
@@ -96,10 +101,11 @@ const DriverUpdate = () => {
     if (driver) {
       setValue("id", driver.id || 0);
       setValue("name", driver.name || "");
-      setValue("mobilePrefix", driver.mobilePrefix || "");
+      // setValue("mobilePrefix", driver.mobilePrefix || "");
       setValue("phone", driver.phone || "");
-      setValue("email", driver.email || "");
+      // setValue("email", driver.email || "");
       setValue("dob", (driver?.dob && new Date(driver.dob)) || new Date());
+
       setValue("nrc", driver.nrc || "");
       setValue("driverLicense", driver.driverLicense || "");
       setValue("password", driver.password || "");
@@ -107,6 +113,15 @@ const DriverUpdate = () => {
       setValue("state", driver.state || "");
       setValue("city", driver.city || "");
       setValue("townShip", driver.townShip || "");
+      setValue("referralMobileNumber", driver.referralMobileNumber || "");
+      setValue(
+        "propertyStatus",
+        getId({ lists: propertyStatusLists, value: driver.propertyStatus }) || 0
+      );
+      setValue(
+        "availableStatus",
+        getId({ lists: driverStatusLists, value: driver.availableStatus }) || 0
+      );
       setValue(
         "status",
         getId({ lists: genderStatuslists, value: driver.status }) || 0
@@ -152,7 +167,7 @@ const DriverUpdate = () => {
               </FormControl>
             </Grid2>
 
-            <Grid2 size={{ xs: 6, md: 3 }}>
+            {/* <Grid2 size={{ xs: 6, md: 3 }}>
               <FormControl
                 variant="filled"
                 fullWidth
@@ -168,7 +183,7 @@ const DriverUpdate = () => {
                 />
                 <FormHelperText>{errors.mobilePrefix?.message}</FormHelperText>
               </FormControl>
-            </Grid2>
+            </Grid2> */}
 
             <Grid2 size={{ xs: 6, md: 3 }}>
               <FormControl variant="filled" fullWidth error={!!errors.phone}>
@@ -181,8 +196,26 @@ const DriverUpdate = () => {
                 <FormHelperText>{errors.phone?.message}</FormHelperText>
               </FormControl>
             </Grid2>
-
             <Grid2 size={{ xs: 6, md: 3 }}>
+              <FormControl
+                variant="filled"
+                fullWidth
+                error={!!errors.referralMobileNumber}
+              >
+                <InputLabel htmlFor="driver_referralMobileNumber">
+                  ReferralMobileNumber
+                </InputLabel>
+                <FilledInput
+                  size="small"
+                  id="driver_referralMobileNumber"
+                  {...register("referralMobileNumber")}
+                />
+                <FormHelperText>
+                  {errors.referralMobileNumber?.message}
+                </FormHelperText>
+              </FormControl>
+            </Grid2>
+            {/* <Grid2 size={{ xs: 6, md: 3 }}>
               <FormControl variant="filled" fullWidth error={!!errors.email}>
                 <InputLabel htmlFor="driver_email">Email</InputLabel>
                 <FilledInput
@@ -192,7 +225,7 @@ const DriverUpdate = () => {
                 />
                 <FormHelperText>{errors.email?.message}</FormHelperText>
               </FormControl>
-            </Grid2>
+            </Grid2> */}
 
             <Grid2 size={{ xs: 6, md: 3 }}>
               <FormControl fullWidth error={!!errors.dob}>
@@ -358,7 +391,7 @@ const DriverUpdate = () => {
               </FormControl>
             </Grid2>
 
-            <Grid2 size={{ xs: 6, md: 3, xl: 3 }}>
+            {/* <Grid2 size={{ xs: 6, md: 3, xl: 3 }}>
               <FormControl
                 variant="filled"
                 fullWidth
@@ -423,7 +456,7 @@ const DriverUpdate = () => {
                   )}
                 />
               </FormControl>
-            </Grid2>
+            </Grid2> */}
 
             <Grid2 size={{ xs: 6, md: 3, xl: 3 }}>
               <FormControl
@@ -513,6 +546,81 @@ const DriverUpdate = () => {
                       {driverStatusLists?.map((status: any) => (
                         <MenuItem key={status.id} value={status.id}>
                           {status.value}
+                        </MenuItem>
+                      ))}
+                    </Select>
+                  )}
+                />
+
+                <FormHelperText>{errors.status?.message}</FormHelperText>
+              </FormControl>
+            </Grid2>
+
+            <Grid2 size={{ xs: 6, md: 3 }}>
+              <FormControl
+                variant="filled"
+                fullWidth
+                error={!!errors.availableStatus}
+              >
+                <InputLabel htmlFor="availableStatus">
+                  AvailableStatus
+                </InputLabel>
+                <Controller
+                  name="availableStatus"
+                  control={control}
+                  render={({ field }) => (
+                    <Select
+                      size="small"
+                      id="availableStatus"
+                      aria-describedby="availableStatus_text"
+                      disabled={loading}
+                      label="AvailableStatus"
+                      {...field}
+                      value={field.value || 0} // Convert field value to a string
+                      onChange={(event) => field.onChange(event.target.value)} // Ensure onChange value is a string
+                    >
+                      {driverStatusLists?.map((availableStatus: any) => (
+                        <MenuItem
+                          key={availableStatus.id}
+                          value={availableStatus.id}
+                        >
+                          {availableStatus.value}
+                        </MenuItem>
+                      ))}
+                    </Select>
+                  )}
+                />
+
+                <FormHelperText>{errors.status?.message}</FormHelperText>
+              </FormControl>
+            </Grid2>
+            <Grid2 size={{ xs: 6, md: 3 }}>
+              <FormControl
+                variant="filled"
+                fullWidth
+                error={!!errors.propertyStatus}
+              >
+                <InputLabel htmlFor="propertyStatus">PropertyStatus</InputLabel>
+                <Controller
+                  name="propertyStatus"
+                  control={control}
+                  render={({ field }) => (
+                    <Select
+                      size="small"
+                      id="propertyStatus"
+                      aria-describedby="propertyStatus_text"
+                      disabled={loading}
+                      label="PropertyStatus"
+                      {...field}
+                      value={field.value || 0} // Convert field value to a string
+                      onChange={(event) => field.onChange(event.target.value)} // Ensure onChange value is a string
+                    >
+                      {propertyStatusLists?.map((propertyStatus: any) => (
+                        <MenuItem
+                          key={propertyStatus.id}
+                          value={propertyStatus.id}
+                        >
+                          {propertyStatus.value}
                         </MenuItem>
                       ))}
                     </Select>

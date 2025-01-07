@@ -1,9 +1,4 @@
-import {
-  Button,
-  List,
-  ListItem,
-  ListItemText,
-} from "@mui/material";
+import { Button, List, ListItem, ListItemText } from "@mui/material";
 import LocalTaxiIcon from "@mui/icons-material/LocalTaxi";
 import React, { useEffect, useState } from "react";
 import signalRService from "../helpers/signalrService";
@@ -20,25 +15,27 @@ type Message = {
 
 const GetVehicle = ({ id }: { id: string }) => {
   const [messages, setMessages] = useState<Message[]>([]);
-  const { connection, startConnection, invokeMethod, sendMethod, onReceive } = signalRService();
+  const { connection, startConnection, invokeMethod, sendMethod, onReceive } =
+    signalRService();
 
   useEffect(() => {
     startConnection();
-  
-    onReceive("ReceiveLocationData", (vehicleId: string, location: any) => {
-      console.log(`Location data received for vehicle ${vehicleId}:`, location);
-      setMessages((prevMessages: any) => [...prevMessages, { vehicleId, location }]);
+
+    onReceive("ReceiveLocationData", (vehicledData: string, location: any) => {
+      console.log(`Location data received for vehicle :`, vehicledData);
+
+      setMessages((prevMessages: any) => [...prevMessages, { vehicledData }]);
     });
-  
+
     return () => {
       connection
         .stop()
         .then(() => console.log("SignalR connection stopped"))
-        .catch((err) => console.error("Error stopping SignalR connection:", err));
+        .catch((err) =>
+          console.error("Error stopping SignalR connection:", err)
+        );
     };
-    
   }, [connection, startConnection, onReceive]);
-  
 
   const handleSend = async () => {
     try {
@@ -59,16 +56,15 @@ const GetVehicle = ({ id }: { id: string }) => {
       </Button>
 
       <List dense={false}>
-      {messages.map((message, index) => (
-        <ListItem key={index}>
-          <ListItemText
-            primary={`Vehicle ID: ${message.vehicleId}`}
-            secondary={`Location: Latitude ${message.location.latitude}, Longitude ${message.location.longitude}`}
-          />
-        </ListItem>
-      ))}
-    </List>
-
+        {messages.map((message, index) => (
+          <ListItem key={index}>
+            <ListItemText
+              primary={`Vehicle ID: ${message.vehicleId}`}
+              secondary={`Location: Latitude ${message.location.latitude}, Longitude ${message.location.longitude}`}
+            />
+          </ListItem>
+        ))}
+      </List>
     </div>
   );
 };

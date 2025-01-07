@@ -65,7 +65,7 @@ const CustomerCreate = () => {
         dispatch,
         notifications
       );
-      if (response.status === 201) {
+      if (response.data.statusCode === 201) {
         navigate(`${paths.customerList}`);
       }
     } catch (error) {
@@ -196,7 +196,7 @@ const CustomerCreate = () => {
               </FormControl>
             </Grid2>
 
-            <Grid2 size={{ xs: 6, md: 3 }}>
+            {/* <Grid2 size={{ xs: 6, md: 3 }}>
               <FormControl variant="filled" fullWidth error={!!errors.Nrc}>
                 <InputLabel htmlFor="Nrc">Nrc</InputLabel>
                 <FilledInput
@@ -207,7 +207,7 @@ const CustomerCreate = () => {
                 />
                 <FormHelperText>{errors.Nrc?.message}</FormHelperText>
               </FormControl>
-            </Grid2>
+            </Grid2> */}
 
             {/* <Grid2 size={{ xs: 6, md: 3, xl: 3 }}>
               <FormControl
@@ -319,7 +319,7 @@ const CustomerCreate = () => {
               </FormControl>
             </Grid2>
 
-            <Grid2 size={{ xs: 6, md: 3 }}>
+            {/* <Grid2 size={{ xs: 6, md: 3 }}>
               <FormControl variant="filled" fullWidth error={!!errors.State}>
                 <InputLabel htmlFor="state">State</InputLabel>
                 <FilledInput
@@ -330,7 +330,7 @@ const CustomerCreate = () => {
                 />
                 <FormHelperText>{errors.State?.message}</FormHelperText>
               </FormControl>
-            </Grid2>
+            </Grid2> */}
 
             <Grid2 size={{ xs: 6, md: 3 }}>
               <FormControl variant="filled" fullWidth error={!!errors.City}>

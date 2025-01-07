@@ -6,6 +6,7 @@ export const vehicleSchema = z.object({
   VehicleNo: z.string().min(1, { message: "Vehicle number is required" }),
   VehicleType: z.string().min(1, { message: "Vehicle type is required" }),
   Model: z.string().min(1, { message: "Model is required" }),
+  driverMode: z.number(),
   FuelType: z.string().min(1, { message: "Fuel type is required" }),
   Status: z.number(),
   DriverId: z.number().min(1, { message: "Driver ID is required" }),
@@ -25,6 +26,7 @@ export interface VEHICLE {
   businessLicenseImage: string;
   vehicleLicenseFront: string;
   vehicleLicenseBack: string;
+  driverMode: number;
   status: number;
   driverId: number;
   driverName: string;
