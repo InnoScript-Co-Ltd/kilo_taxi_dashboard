@@ -1,22 +1,20 @@
-declare module "leaflet-routing-machine" {
-    import * as L from "leaflet";
-  
-    namespace Routing {
-      function control(options: RoutingControlOptions): L.Routing.Control;
-  
-      interface RoutingControlOptions {
-        waypoints: L.LatLng[];
-        routeWhileDragging?: boolean;
-        lineOptions?: L.PolylineOptions & {
-          styles?: { color?: string; weight?: number }[];
-        };
-      }
-  
-      namespace Control {
-        function extend(options: any): any;
-      }
+import * as L from "leaflet";
+
+declare module "leaflet" {
+  namespace Routing {
+    function control(options: ControlOptions): Control;
+
+    interface ControlOptions {
+      waypoints: LatLng[];
+      lineOptions?: {
+        styles?: Array<{ color: string; weight?: number; opacity?: number }>;
+      };
+      routeWhileDragging?: boolean;
     }
-  
-    export = Routing;
+
+    interface Control extends L.Control {
+      getWaypoints(): LatLng[];
+      on(event: string, callback: (e: any) => void): this;
+    }
   }
-  
+}

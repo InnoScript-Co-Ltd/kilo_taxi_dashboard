@@ -1,73 +1,76 @@
 import * as L from "leaflet";
-import "leaflet-routing-machine"; // Ensure the routing plugin is imported
-import { useEffect, useRef, useState } from "react";
 import "leaflet/dist/leaflet.css";
+import "leaflet-routing-machine";
+import { useEffect, useRef, useState } from "react";
 
 const OpenMap = () => {
   const mapRef = useRef<HTMLDivElement>(null);
-  const mapInstanceRef = useRef<L.Map | null>(null); // Reference to map instance
-  const [waypoints, setWaypoints] = useState<L.LatLng[]>([]); // State to track waypoints
-  const [totalDistance, setTotalDistance] = useState<number>(0); // State to track total distance
+  const mapInstanceRef = useRef<L.Map | null>(null);
+  const [totalDistance, setTotalDistance] = useState<number>(0); // Total distance state
+  const [coordinates, setCoordinates] = useState<[number, number][]>([]); // Array of coordinates
+  const routingControlRef = useRef<any>(null); // Reference to the routing control
 
-  const startPoint: [number, number] = [16.825770, 96.130111];
-  const endPoint: [number, number] = [16.808771, 96.154487];
+  // Mock API response: Replace this with your actual API call
+  const fetchCoordinatesFromAPI = async () => {
+    // Simulate a delay
+    return new Promise<[number, number][]>((resolve) =>
+      setTimeout(() => {
+        resolve([
+          [16.825770, 96.130111], // Start point
+          [16.820000, 96.135000],
+          [16.815000, 96.140000],
+          [16.808771, 96.154487], // End point
+        ]);
+      }, 1000)
+    );
+  };
 
   useEffect(() => {
-    if (mapRef.current && !mapInstanceRef.current) {
-      const map = L.map(mapRef.current).setView(startPoint, 13);
-      mapInstanceRef.current = map; // Store the map instance in the ref
+    const fetchAndRenderMap = async () => {
+      const apiCoordinates = await fetchCoordinatesFromAPI();
 
-      // Add Tile Layer
-      L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
-        attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors',
-      }).addTo(map);
+      // Only use the first and last points
+      const filteredCoordinates = [
+        apiCoordinates[0], // Start point
+        apiCoordinates[apiCoordinates.length - 1], // End point
+      ];
+      setCoordinates(filteredCoordinates);
 
-      // Initialize the waypoints
-      const initialWaypoints = [L.latLng(...startPoint), L.latLng(...endPoint)];
-      setWaypoints(initialWaypoints);
+      if (mapRef.current && !mapInstanceRef.current) {
+        // Initialize the map
+        const map = L.map(mapRef.current).setView(filteredCoordinates[0], 13);
+        mapInstanceRef.current = map;
 
-      // Add Routing Control
-      const routingControl = (L as any).Routing.control({
-        waypoints: initialWaypoints,
-        routeWhileDragging: true,
-        lineOptions: {
-          styles: [{ color: "red", weight: 5 }],
-        },
-      }).addTo(map);
+        // Add Tile Layer
+        L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+          attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors',
+        }).addTo(map);
 
-      // Listen for waypoint updates and update state
-      routingControl.on("routesfound", (event: any) => {
-        const newWaypoints = event.routes[0].waypoints;
-        setWaypoints(newWaypoints);
-        
-        // Calculate the total distance
-        let totalDistanceInMeters = 0;
-        for (let i = 0; i < newWaypoints.length - 1; i++) {
-          totalDistanceInMeters += newWaypoints[i].latLng.distanceTo(newWaypoints[i + 1].latLng);
-        }
-        setTotalDistance(totalDistanceInMeters / 1000); // Convert to kilometers
-      });
-    }
-  }, []); // Empty dependency array ensures the map is initialized only once
+        // Add Routing Machine
+        const routingControl = L.Routing.control({
+          waypoints: filteredCoordinates.map(([lat, lng]) => L.latLng(lat, lng)),
+          lineOptions: {
+            styles: [{ color: "orange", weight: 5 }],
+          },
+          routeWhileDragging: true,
+        }).addTo(map);
 
-  // Update the route dynamically when waypoints change
-  useEffect(() => {
-    if (mapInstanceRef.current) {
-      // Create a new Routing control whenever waypoints change
-      const routingControl = (L as any).Routing.control({
-        waypoints: waypoints,
-        routeWhileDragging: true,
-        lineOptions: {
-          styles: [{ color: "red", weight: 5 }],
-        },
-      }).addTo(mapInstanceRef.current);
+        routingControlRef.current = routingControl;
 
-      // Remove previous route if any
-      if (mapInstanceRef.current.hasLayer(routingControl)) {
-        mapInstanceRef.current.removeLayer(routingControl);
+        // Listen for the 'routesfound' event to get distance
+        routingControl.on("routesfound", (e: any) => {
+          const route = e.routes[0];
+          const distanceInKm = route.summary.totalDistance / 1000; // Convert meters to kilometers
+          setTotalDistance(distanceInKm);
+        });
+
+        // Fit the map to the route
+        map.fitBounds(L.polyline(filteredCoordinates).getBounds());
       }
-    }
-  }, [waypoints]); // Re-render whenever waypoints change
+    };
+
+    fetchAndRenderMap();
+  }, []);
 
   return (
     <div>
