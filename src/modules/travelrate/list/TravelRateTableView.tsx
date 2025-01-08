@@ -33,12 +33,12 @@ import { setPaginate } from "../travelrate.slice";
 import { travelRateService } from "../travelrate.service";
 import { travelRateColumns, travelRatePayload } from "../travelrate.payload";
 
-const SmsTableView = () => {
+const TravelRateTableView = () => {
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
   const dispatch = useDispatch<AppDispatch>();
   const { data, pagingParams } = useSelector(
-    (state: AppRootState) => state.sms
+    (state: AppRootState) => state.travelRate
   );
   const notifications = useNotifications();
   const navigate = useNavigate();
@@ -78,6 +78,7 @@ const SmsTableView = () => {
   React.useEffect(() => {
     loadingData();
   }, [pagingParams, loadingData]);
+  console.log(data.travelRates);
   return (
     <Paper sx={{ width: "100%", overflow: "hidden" }}>
       <Box
@@ -184,11 +185,10 @@ const SmsTableView = () => {
             </TableRow>
           </TableHead>
           <TableBody>
-            {data.sms?.map((row: any) => (
+            {data.travelRates?.map((row: any) => (
               <StyledTableRow hover role="checkbox" tabIndex={-1} key={row.id}>
                 {travelRateColumns.map((column) => {
                   const value = row[column.id];
-                  console.log(value);
                   return (
                     <StyledTableCell key={column.id} align={column.align}>
                       {(() => {
@@ -234,4 +234,4 @@ const SmsTableView = () => {
   );
 };
 
-export default SmsTableView;
+export default TravelRateTableView;

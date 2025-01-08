@@ -59,6 +59,7 @@ const AdminUpdate = () => {
       Phone: "",
       Password: "",
       gender: 0,
+      role: "Admin",
       status: 0,
       // emailVerifiedAt: null,
       // phoneVerifiedAt: null,

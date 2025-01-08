@@ -1,44 +1,40 @@
-import {
-  Button,
-  List,
-  ListItem,
-  ListItemText,
-} from "@mui/material";
+import { Button, List, ListItem, ListItemText } from "@mui/material";
 import LocalTaxiIcon from "@mui/icons-material/LocalTaxi";
 import React, { useEffect, useState } from "react";
 import signalRService from "../helpers/signalrService";
 
 type LocationData = {
-  latitude: number;
-  longitude: number;
+  vehicleId: any,
+  lat: any;
+  long: any;
 };
 
 type Message = {
-  vehicleId: string;
   location: LocationData;
 };
 
 const GetVehicle = ({ id }: { id: string }) => {
   const [messages, setMessages] = useState<Message[]>([]);
-  const { connection, startConnection, invokeMethod, sendMethod, onReceive } = signalRService();
+  const { connection, startConnection, invokeMethod, sendMethod, onReceive } =
+    signalRService();
 
   useEffect(() => {
     startConnection();
   
-    onReceive("ReceiveLocationData", (vehicleId: string, location: any) => {
-      console.log(`Location data received for vehicle ${vehicleId}:`, location);
-      setMessages((prevMessages: any) => [...prevMessages, { vehicleId, location }]);
+    onReceive("ReceiveLocationData", (location: any) => {
+      console.log(`Location data received for vehicle:`, location);
+      setMessages((prevMessages: any) => [...prevMessages, { location }]);
     });
-  
+
     return () => {
       connection
         .stop()
         .then(() => console.log("SignalR connection stopped"))
-        .catch((err: any) => console.error("Error stopping SignalR connection:", err));
+        .catch((err) =>
+          console.error("Error stopping SignalR connection:", err)
+        );
     };
-    
   }, [connection, startConnection, onReceive]);
-  
 
   const handleSend = async () => {
     try {
@@ -62,13 +58,12 @@ const GetVehicle = ({ id }: { id: string }) => {
       {messages.map((message, index) => (
         <ListItem key={index}>
           <ListItemText
-            primary={`Vehicle ID: ${message.vehicleId}`}
-            secondary={`Location: Latitude ${message.location.latitude}, Longitude ${message.location.longitude}`}
+            primary={`Vehicle ID: ${message.location.vehicleId}`}
+            secondary={`Location: Latitude ${message.location.lat}, Longitude ${message.location.long}`}
           />
         </ListItem>
       ))}
     </List>
-
     </div>
   );
 };

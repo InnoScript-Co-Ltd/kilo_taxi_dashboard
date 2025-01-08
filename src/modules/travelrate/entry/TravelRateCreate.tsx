@@ -29,6 +29,7 @@ import { travelRateService } from "../travelrate.service";
 const TravelRateCreate = () => {
   const [loading, setLoading] = useState(false);
   const [cityLists, setCityLists] = useState<Array<any>>([]);
+  const [vehicleLists, setVehicleTypeLists] = useState<Array<any>>([]);
 
   const navigate = useNavigate();
   const dispatch = useDispatch<AppDispatch>();
@@ -58,7 +59,24 @@ const TravelRateCreate = () => {
       const cityRes: any = await getRequest(`${endpoints.city}`, null);
       await httpServiceHandler(dispatch, cityRes);
       if (cityRes && "data" in cityRes && cityRes.status === 200) {
-        setCityLists(cityRes.data.citys);
+        setCityLists(cityRes.data.cities);
+      }
+    } catch (error) {
+      await httpErrorHandler(error);
+    }
+    try {
+      const vehicleTypeRes: any = await getRequest(
+        `${endpoints.vehicleType}`,
+        null
+      );
+      console.log(vehicleTypeRes);
+      await httpServiceHandler(dispatch, vehicleTypeRes);
+      if (
+        vehicleTypeRes &&
+        "data" in vehicleTypeRes &&
+        vehicleTypeRes.status === 200
+      ) {
+        setVehicleTypeLists(vehicleTypeRes.data.vehicleTypes);
       }
     } catch (error) {
       await httpErrorHandler(error);
@@ -98,6 +116,36 @@ const TravelRateCreate = () => {
                       {cityLists.map((city: any) => (
                         <MenuItem key={city.id} value={city.id}>
                           {city.name}
+                        </MenuItem>
+                      ))}
+                    </Select>
+                  )}
+                />
+
+                <FormHelperText>{errors.cityId?.message}</FormHelperText>
+              </FormControl>
+            </Grid2>
+
+            <Grid2 size={{ xs: 6, md: 3 }}>
+              <FormControl variant="filled" fullWidth error={!!errors.cityId}>
+                <InputLabel htmlFor="vehicle_Type">Vehicle Type</InputLabel>
+                <Controller
+                  name="vehicleTypeId"
+                  control={control}
+                  render={({ field }) => (
+                    <Select
+                      size="small"
+                      id="vehicle_Type"
+                      aria-describedby="vehicle_Type_text"
+                      disabled={loading}
+                      label="VehicleType"
+                      {...field}
+                      value={field.value} // Convert field value to a string
+                      onChange={(event) => field.onChange(event.target.value)} // Ensure onChange value is a string
+                    >
+                      {vehicleLists.map((vehicleType: any) => (
+                        <MenuItem key={vehicleType.id} value={vehicleType.id}>
+                          {vehicleType.name}
                         </MenuItem>
                       ))}
                     </Select>

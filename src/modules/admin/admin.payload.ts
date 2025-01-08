@@ -1,5 +1,5 @@
 import { paginateOptions } from "../../constants/config";
-import { z } from "zod";
+import { nullable, z } from "zod";
 
 export const adminSchema = z.object({
   id: z.number().min(0, { message: "id" }).default(0),
@@ -8,6 +8,7 @@ export const adminSchema = z.object({
     .min(2, { message: "Name must be at least 2 characters long" }),
   // zipCode: z.string().min(2, { message: "Zip Code is required" }),
   Email: z.string().email(),
+  role: z.string().nullable().default("Admin"),
   Phone: z.string().min(8, { message: "phone number is at least 8 digit" }),
   Password: z
     .string()
@@ -39,6 +40,7 @@ export interface ADMIN {
   name: string;
   phone: string;
   email: string;
+  role: string;
   emailVerifiedAt: Date;
   phoneVerifiedAt: Date;
   password: string;
