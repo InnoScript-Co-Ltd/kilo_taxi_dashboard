@@ -55,6 +55,7 @@ export interface CUSTOMER {
   role: string;
   email: string;
   dob: Date | null | string;
+  createdDate: Date;
   // nrc: string | null;
   // nrcImageFront: string;
   // nrcImageBack: string;
@@ -119,8 +120,16 @@ export interface CUSTOMER_PAYLOAD {
  */
 export const columns: readonly Customer_Column[] = [
   {
+    id: "id",
+    label: "Customer ID",
+    minWidth: 170,
+    maxWidth: 300,
+    numeric: false,
+    disablePadding: false,
+  },
+  {
     id: "name",
-    label: "Name",
+    label: "Customer",
     minWidth: 170,
     maxWidth: 300,
     numeric: false,
@@ -143,14 +152,6 @@ export const columns: readonly Customer_Column[] = [
     disablePadding: false,
   },
   {
-    id: "profile",
-    label: "Profile",
-    minWidth: 100,
-    maxWidth: 150,
-    numeric: false,
-    disablePadding: false,
-  },
-  {
     id: "gender",
     label: "Gender",
     minWidth: 50,
@@ -158,22 +159,23 @@ export const columns: readonly Customer_Column[] = [
     numeric: false,
     disablePadding: false,
   },
-  // {
-  //   id: "status",
-  //   label: "Status",
-  //   minWidth: 50,
-  //   maxWidth: 50,
-  //   numeric: false,
-  //   disablePadding: false,
-  // },
   {
-    id: "kycStatus",
-    label: "KycStatus",
+    id: "address",
+    label: "Address",
     minWidth: 50,
     maxWidth: 50,
     numeric: false,
     disablePadding: false,
   },
+  {
+    id: "createdDate",
+    label: "Registered Datetime",
+    minWidth: 100,
+    maxWidth: 150,
+    numeric: false,
+    disablePadding: false,
+  },
+
   {
     id: "action",
     label: "Action",

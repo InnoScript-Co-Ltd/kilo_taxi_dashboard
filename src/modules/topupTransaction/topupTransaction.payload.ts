@@ -4,19 +4,23 @@ import { paginateOptions } from "../../constants/config"; // Assuming paginateOp
 // Define TopupTransaction Schema
 export const topupTransactionSchema = z.object({
   id: z.number().min(0, { message: "id" }).default(0),
-  paymentChannelId: z.number().min(1, { message: "Payment Channel is required" }),
+  paymentChannelId: z
+    .number()
+    .min(1, { message: "Payment Channel is required" }),
   amount: z
     .number()
     .min(0.01, { message: "Amount must be at least 0.01" })
     .max(9999999.99, { message: "Amount must not exceed 9999999.99" })
     .refine((val) => /^\d{1,7}(\.\d{1,2})?$/.test(val.toString()), {
-      message: "Amount must be a valid number with up to 9 digits and 2 decimal places",
+      message:
+        "Amount must be a valid number with up to 9 digits and 2 decimal places",
     }),
   transaction_screenshoot: z.any().nullable(),
   file_transaction_screenshoot: z.any().nullable(),
-  phoneNumber: z.string().min(8, { message: "phone number is at least 8 digit" }),
+  phoneNumber: z
+    .string()
+    .min(8, { message: "phone number is at least 8 digit" }),
   status: z.number(),
-
 });
 
 export type TopupTransactionFormInputs = z.infer<typeof topupTransactionSchema>;
@@ -32,6 +36,7 @@ export interface TOPUPTRANSACTION {
   phoneNumber: string;
   status: number;
   file_transaction_screenshoot: string;
+  createdDate: Date;
   action?: null;
 }
 
@@ -62,25 +67,9 @@ export interface TOPUPTRANSACTION_PAYLOAD {
 
 export const topupTransactionColumns: readonly TopupTransactionColumn[] = [
   {
-    id: "paymentChannelId",
-    label: "Payment Channel",
+    id: "id",
+    label: "Id",
     minWidth: 130,
-    numeric: false,
-    disablePadding: false,
-    sort: true,
-  },
-  {
-    id: "amount",
-    label: "Amount",
-    minWidth: 125,
-    numeric: false,
-    disablePadding: false,
-    sort: true,
-  },
-  {
-    id: "transaction_screenshoot",
-    label: "Transaction Screenshoot",
-    minWidth: 125,
     numeric: false,
     disablePadding: false,
     sort: true,
@@ -94,8 +83,24 @@ export const topupTransactionColumns: readonly TopupTransactionColumn[] = [
     sort: true,
   },
   {
-    id: "status",
-    label: "Status",
+    id: "amount",
+    label: "Top-up Amount",
+    minWidth: 125,
+    numeric: false,
+    disablePadding: false,
+    sort: true,
+  },
+  {
+    id: "paymentChannelId",
+    label: "Top-up Channel",
+    minWidth: 125,
+    numeric: false,
+    disablePadding: false,
+    sort: true,
+  },
+  {
+    id: "createdDate",
+    label: "Datetime",
     minWidth: 125,
     numeric: false,
     disablePadding: false,

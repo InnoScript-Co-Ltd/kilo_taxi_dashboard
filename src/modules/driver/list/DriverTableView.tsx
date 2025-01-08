@@ -37,6 +37,7 @@ import {
 import { useNotifications } from "@toolpad/core/useNotifications";
 import Status from "../../../components/Status";
 import TAvatar from "../../../components/TAvatar";
+import { formatDate } from "../../../helpers/common";
 
 const DriverTableView = () => {
   const [page, setPage] = React.useState(0);
@@ -189,8 +190,8 @@ const DriverTableView = () => {
                                 value={value}
                               />
                             );
-                          case "Audit Column":
-                            return value;
+                          case "Register DateTime":
+                            return formatDate(value);
                           case "Profile":
                             return <TAvatar src={value} />;
                           case "Status":
@@ -202,10 +203,7 @@ const DriverTableView = () => {
                             );
                           case "Kyc Status":
                             return (
-                              <Status 
-                                status={value} 
-                                lists={kycStatusLists} 
-                              />
+                              <Status status={value} lists={kycStatusLists} />
                             );
                           case "Gender":
                             return (
