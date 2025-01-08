@@ -24,6 +24,7 @@ import {
   walletStatusLists,
 } from "../../../constants/config";
 import { paths } from "../../../constants/paths";
+import OpenMap from "../../../components/OpenMap";
 
 const DriverDetail = () => {
   const [loading, setLoading] = useState(false);
@@ -317,6 +318,7 @@ const DriverDetail = () => {
           <p>No driver details available.</p>
         )}
         <GetVehicle id={params.id} />
+        <OpenMap />
       </Card>
     </Box>
   );
