@@ -8,7 +8,7 @@ import { index, show, update } from "./vehicle.slice";
 export const vehicleService = {
   // Method to retrieve a list of vehicles with optional parameters
   index: async (dispatch: Dispatch, params: any, notifications?: any) => {
-    const response: any = await getRequest(endpoints.vehicle, params);
+    const response: any = await getRequest(endpoints.vehicle, params, dispatch);
     await httpServiceHandler(dispatch, response);
 
     if (response.status === 200) {
@@ -31,7 +31,8 @@ export const vehicleService = {
   ) => {
     const response: any = await putRequest(
       `${endpoints.vehicle}/${id}`,
-      payload
+      payload,
+      dispatch
     );
     await httpServiceHandler(dispatch, response);
 
@@ -48,7 +49,7 @@ export const vehicleService = {
 
   // Method to fetch details of a specific vehicle by ID
   show: async (dispatch: Dispatch, id: number) => {
-    const response: any = await getRequest(`${endpoints.vehicle}/${id}`, null);
+    const response: any = await getRequest(`${endpoints.vehicle}/${id}`, null,dispatch);
     await httpServiceHandler(dispatch, response);
 
     if (response.status === 200) {

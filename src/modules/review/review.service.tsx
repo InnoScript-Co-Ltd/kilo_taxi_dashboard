@@ -8,7 +8,7 @@ import { ReviewFormInputs } from "./review.payload";
 export const reviewService = {
   // Method to create a new state
   store: async (payload: any, dispatch: Dispatch, notifications?: any) => {
-    const response: any = await postRequest(endpoints.review, payload);
+    const response: any = await postRequest(endpoints.review, payload, dispatch);
     await httpServiceHandler(dispatch, response);
 
     if (response.status === 200) {
@@ -21,7 +21,7 @@ export const reviewService = {
   },
 
   index: async (dispatch: Dispatch, params: any, notifications?: any) => {
-    const response: any = await getRequest(endpoints.review, params);
+    const response: any = await getRequest(endpoints.review, params, dispatch);
     await httpServiceHandler(dispatch, response);
     if (response.status === 200) {
       //'info' | 'success' | 'warning' | 'error'
@@ -43,7 +43,8 @@ export const reviewService = {
   ) => {
     const response: any = await putRequest(
       `${endpoints.review}/${id}`,
-      payload
+      payload,
+      dispatch
     );
     await httpServiceHandler(dispatch, response);
 
@@ -59,7 +60,7 @@ export const reviewService = {
 
   // Method to fetch details of a specific state by ID
   show: async (dispatch: Dispatch, id: number) => {
-    const response: any = await getRequest(`${endpoints.review}/${id}`, null);
+    const response: any = await getRequest(`${endpoints.review}/${id}`, null, dispatch);
     await httpServiceHandler(dispatch, response);
 
     if (response.status === 200) {

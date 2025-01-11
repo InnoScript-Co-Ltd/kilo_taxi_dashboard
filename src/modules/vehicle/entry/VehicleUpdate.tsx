@@ -73,7 +73,7 @@ const VehicleUpdate = () => {
     setLoading(true);
     try {
       await vehicleService.show(dispatch, params.id); // Fetch vehicle data to populate the form
-      const driverResponse: any = await getRequest(endpoints.driver, null);
+      const driverResponse: any = await getRequest(endpoints.driver, null, dispatch);
 
       await httpServiceHandler(dispatch, driverResponse);
 
@@ -85,7 +85,7 @@ const VehicleUpdate = () => {
         setDriversList(driverResponse.data.drivers);
       }
     } catch (error) {
-      await httpErrorHandler(error);
+      await httpErrorHandler(error, dispatch);
     }
     setLoading(false);
   }, [dispatch, params.id]);

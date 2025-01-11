@@ -73,9 +73,9 @@ const SmsUpdate = () => {
   const loadingData = useCallback(async () => {
     setLoading(true);
     try {
-      const adminRes: any = await getRequest(`${endpoints.admin}`, null);
-      const customerRes: any = await getRequest(`${endpoints.customer}`, null);
-      const driverRes: any = await getRequest(`${endpoints.driver}`, null);
+      const adminRes: any = await getRequest(`${endpoints.admin}`, null, dispatch);
+      const customerRes: any = await getRequest(`${endpoints.customer}`, null, dispatch);
+      const driverRes: any = await getRequest(`${endpoints.driver}`, null, dispatch);
 
       await httpServiceHandler(dispatch, adminRes);
       if (adminRes && "data" in adminRes && adminRes.status === 200) {
@@ -92,7 +92,7 @@ const SmsUpdate = () => {
         setDriverLists(driverRes.data.drivers);
       }
     } catch (error) {
-      await httpErrorHandler(error);
+      await httpErrorHandler(error, dispatch);
     }
 
     setLoading(false);

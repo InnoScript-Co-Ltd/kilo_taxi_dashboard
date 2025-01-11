@@ -5,6 +5,7 @@ export const baseURL = env[0];
 
 export const endpoints = {
   authLogin: "Auth/adminLogin",
+  authRefreshToken: "Auth/refresh-token",
   admin: "Admin",
   customer: "Customer",
   promotion: "Promotion",

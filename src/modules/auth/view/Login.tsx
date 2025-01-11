@@ -35,6 +35,8 @@ const Login = () => {
 
     const submitLogin = async (data: AuthFormInputs) => {
         setLoading(true);
+        console.log(data);
+        
         const response = await authService.store(data, dispatch);
         if (response.status === 200) {
             navigate(`${paths.dashboard}`);

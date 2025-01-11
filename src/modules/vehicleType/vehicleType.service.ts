@@ -7,7 +7,7 @@ import { index, show, update } from "./vehicleType.slice";
 
 export const vehicleTypeService = {
   store: async (payload: any, dispatch: Dispatch, notifications?: any) => {
-    const response: any = await postRequest(endpoints.vehicleType, payload);
+    const response: any = await postRequest(endpoints.vehicleType, payload, dispatch);
     await httpServiceHandler(dispatch, response);
 
     if (response.status === 200) {
@@ -20,7 +20,7 @@ export const vehicleTypeService = {
   },
 
   index: async (dispatch: Dispatch, params: any, notifications?: any) => {
-    const response: any = await getRequest(endpoints.vehicleType, params);
+    const response: any = await getRequest(endpoints.vehicleType, params, dispatch);
     await httpServiceHandler(dispatch, response);
     if (response.status === 200) {
       //'info' | 'success' | 'warning' | 'error'
@@ -42,7 +42,8 @@ export const vehicleTypeService = {
   ) => {
     const response: any = await putRequest(
       `${endpoints.vehicleType}/${id}`,
-      payload
+      payload,
+      dispatch
     );
     await httpServiceHandler(dispatch, response);
 
@@ -60,7 +61,8 @@ export const vehicleTypeService = {
   show: async (dispatch: Dispatch, id: number) => {
     const response: any = await getRequest(
       `${endpoints.vehicleType}/${id}`,
-      null
+      null,
+      dispatch
     );
     await httpServiceHandler(dispatch, response);
 
