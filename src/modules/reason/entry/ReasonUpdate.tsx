@@ -74,7 +74,7 @@ const ReasonUpdate = () => {
     try {
       await reasonService.show(dispatch, params.id); // Fetch reason data to populate the form
     } catch (error) {
-      await httpErrorHandler(error);
+      await httpErrorHandler(error, dispatch);
     }
     setLoading(false);
   }, [dispatch, params.id]);

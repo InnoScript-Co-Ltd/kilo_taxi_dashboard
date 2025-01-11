@@ -69,7 +69,7 @@ const PromotionCreate = () => {
   const loadingData = React.useCallback(async () => {
     setLoading(true);
     try {
-      const response: any = await getRequest(`${endpoints.customer}`, null);
+      const response: any = await getRequest(`${endpoints.customer}`, null, dispatch);
       console.log(response);
 
       await httpServiceHandler(dispatch, response);
@@ -77,7 +77,7 @@ const PromotionCreate = () => {
         setCustomerLists(response.data.customers);
       }
     } catch (error) {
-      await httpErrorHandler(error);
+      await httpErrorHandler(error, dispatch);
     }
 
     setLoading(false);

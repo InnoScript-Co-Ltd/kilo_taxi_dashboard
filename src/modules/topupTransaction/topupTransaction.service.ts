@@ -12,7 +12,7 @@ export const topupTransactionService = {
     dispatch: Dispatch,
     notifications?: any
   ) => {
-    const response: any = await postRequest(endpoints.topupTransaction, payload);
+    const response: any = await postRequest(endpoints.topupTransaction, payload, dispatch);
     await httpServiceHandler(dispatch, response);
 
     if (response.status === 201) {
@@ -28,7 +28,7 @@ export const topupTransactionService = {
 
   // Method to retrieve a list of topupTransactions with optional parameters
   index: async (dispatch: Dispatch, params: any, notifications?: any) => {
-    const response: any = await getRequest(endpoints.topupTransaction, params);
+    const response: any = await getRequest(endpoints.topupTransaction, params, dispatch);
     await httpServiceHandler(dispatch, response);
 
     if (response.status === 200) {
@@ -51,7 +51,8 @@ export const topupTransactionService = {
   ) => {
     const response: any = await putRequest(
       `${endpoints.topupTransaction}/${id}`,
-      payload
+      payload,
+      dispatch
     );
     await httpServiceHandler(dispatch, response);
 
@@ -68,7 +69,7 @@ export const topupTransactionService = {
 
   // Method to fetch details of a specific topupTransaction by ID
   show: async (dispatch: Dispatch, id: number) => {
-    const response: any = await getRequest(`${endpoints.topupTransaction}/${id}`, null);
+    const response: any = await getRequest(`${endpoints.topupTransaction}/${id}`, null, dispatch);
     await httpServiceHandler(dispatch, response);
 
     if (response.status === 200) {

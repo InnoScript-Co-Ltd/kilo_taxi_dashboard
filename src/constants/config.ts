@@ -1,10 +1,11 @@
 // export const env = ["https://localhost:7181/api/v1"];
-export const env = ["https://localhost:7181/api/v1"];
+export const env = ["http://localhost:5112/api/v1"];
 export const hadUrl = "https://localhost:7044/dashboard";
 export const drawerWidth: number = 300;
 
 export const keys = {
   API_TOKEN: "TOKEN",
+  REFRESH_TOKEN: "REFRESH_TOKEN",
   USER: "USER",
   PERMISSION: "PERMISSION",
   ROLE: "ROLE",

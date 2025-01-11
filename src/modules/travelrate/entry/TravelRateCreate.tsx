@@ -56,18 +56,19 @@ const TravelRateCreate = () => {
   const loadingData = React.useCallback(async () => {
     setLoading(true);
     try {
-      const cityRes: any = await getRequest(`${endpoints.city}`, null);
+      const cityRes: any = await getRequest(`${endpoints.city}`, null, dispatch);
       await httpServiceHandler(dispatch, cityRes);
       if (cityRes && "data" in cityRes && cityRes.status === 200) {
         setCityLists(cityRes.data.cities);
       }
     } catch (error) {
-      await httpErrorHandler(error);
+      await httpErrorHandler(error, dispatch);
     }
     try {
       const vehicleTypeRes: any = await getRequest(
         `${endpoints.vehicleType}`,
-        null
+        null,
+        dispatch
       );
       console.log(vehicleTypeRes);
       await httpServiceHandler(dispatch, vehicleTypeRes);
@@ -79,7 +80,7 @@ const TravelRateCreate = () => {
         setVehicleTypeLists(vehicleTypeRes.data.vehicleTypes);
       }
     } catch (error) {
-      await httpErrorHandler(error);
+      await httpErrorHandler(error, dispatch);
     }
 
     setLoading(false);

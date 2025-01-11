@@ -8,7 +8,7 @@ import { index, show, update } from "./paymentchannel.slice";
 export const paymentChannelService = {
   // Method to create a new wallet
   store: async (payload: any, dispatch: Dispatch, notifications?: any) => {
-    const response: any = await postRequest(endpoints.paymentChannel, payload);
+    const response: any = await postRequest(endpoints.paymentChannel, payload, dispatch);
     await httpServiceHandler(dispatch, response);
 
     if (response.status === 201) {
@@ -24,7 +24,7 @@ export const paymentChannelService = {
 
   // Method to retrieve a list of wallets with optional parameters
   index: async (dispatch: Dispatch, params: any, notifications?: any) => {
-    const response: any = await getRequest(endpoints.paymentChannel, params);
+    const response: any = await getRequest(endpoints.paymentChannel, params, dispatch);
     await httpServiceHandler(dispatch, response);
 
     if (response.status === 200) {
@@ -47,7 +47,8 @@ export const paymentChannelService = {
   ) => {
     const response: any = await putRequest(
       `${endpoints.paymentChannel}/${id}`,
-      payload
+      payload,
+      dispatch
     );
     await httpServiceHandler(dispatch, response);
 
@@ -66,7 +67,8 @@ export const paymentChannelService = {
   show: async (dispatch: Dispatch, id: number) => {
     const response: any = await getRequest(
       `${endpoints.paymentChannel}/${id}`,
-      null
+      null,
+      dispatch
     );
     await httpServiceHandler(dispatch, response);
 

@@ -12,7 +12,7 @@ export const sosService = {
     dispatch: Dispatch,
     notifications?: any
   ) => {
-    const response: any = await postRequest(endpoints.paymentChannel, payload);
+    const response: any = await postRequest(endpoints.paymentChannel, payload, dispatch);
     await httpServiceHandler(dispatch, response);
 
     if (response.status === 201) {
@@ -28,7 +28,7 @@ export const sosService = {
 
   // Method to retrieve a list of wallets with optional parameters
   index: async (dispatch: Dispatch, params: any, notifications?: any) => {
-    const response: any = await getRequest(endpoints.sos, params);
+    const response: any = await getRequest(endpoints.sos, params, dispatch);
     await httpServiceHandler(dispatch, response);
 
     if (response.status === 200) {
@@ -49,7 +49,7 @@ export const sosService = {
     payload: SosFormInputs,
     notifications?: any
   ) => {
-    const response: any = await putRequest(`${endpoints.sos}/${id}`, payload);
+    const response: any = await putRequest(`${endpoints.sos}/${id}`, payload, dispatch);
     await httpServiceHandler(dispatch, response);
 
     if (response.status === 200) {
@@ -65,7 +65,7 @@ export const sosService = {
 
   // Method to fetch details of a specific wallet by ID
   show: async (dispatch: Dispatch, id: number) => {
-    const response: any = await getRequest(`${endpoints.sos}/${id}`, null);
+    const response: any = await getRequest(`${endpoints.sos}/${id}`, null, dispatch);
     await httpServiceHandler(dispatch, response);
 
     if (response.status === 200) {

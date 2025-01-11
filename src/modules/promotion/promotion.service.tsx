@@ -8,7 +8,7 @@ import { index, show, update } from "./promotion.slice"
 export const promotionService = {
     // Method to create a new state
     store: async (payload: any, dispatch: Dispatch, notifications? : any) => {
-        const response: any = await postRequest(endpoints.promotion, payload);
+        const response: any = await postRequest(endpoints.promotion, payload, dispatch);
         await httpServiceHandler(dispatch, response);
 
         if (response.status === 200) {
@@ -21,7 +21,7 @@ export const promotionService = {
     },
 
     index: async (dispatch: Dispatch, params: any, notifications? : any) => {
-        const response: any = await getRequest(endpoints.promotion, params);
+        const response: any = await getRequest(endpoints.promotion, params, dispatch);
         await httpServiceHandler(dispatch, response);
         if(response.status === 200) { 
             //'info' | 'success' | 'warning' | 'error'
@@ -36,7 +36,7 @@ export const promotionService = {
 
     // Method to update an existing state by ID
     update: async (dispatch: Dispatch, id: number, payload: PromotionFormInputs, notifications? : any) => {
-        const response: any = await putRequest(`${endpoints.promotion}/${id}`, payload);
+        const response: any = await putRequest(`${endpoints.promotion}/${id}`, payload, dispatch);
         await httpServiceHandler(dispatch, response);
 
         if (response.status === 200) {
@@ -51,7 +51,7 @@ export const promotionService = {
 
     // Method to fetch details of a specific state by ID
     show: async (dispatch: Dispatch, id: number) => {
-        const response: any = await getRequest(`${endpoints.promotion}/${id}`, null);
+        const response: any = await getRequest(`${endpoints.promotion}/${id}`, null, dispatch);
         await httpServiceHandler(dispatch, response);
 
         if (response.status === 200) {

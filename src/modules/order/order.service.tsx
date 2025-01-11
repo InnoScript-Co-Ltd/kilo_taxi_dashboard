@@ -7,7 +7,7 @@ import { index, show } from "./order.slice";
 export const orderService = {
   // Method to fetch the list of orders
   index: async (dispatch: Dispatch, params: any, notifications?: any) => {
-    const response: any = await getRequest(endpoints.order, params);
+    const response: any = await getRequest(endpoints.order, params, dispatch);
     await httpServiceHandler(dispatch, response);
 
     if (response.status === 200) {
@@ -23,7 +23,7 @@ export const orderService = {
 
   // Method to fetch details of a specific order by ID
   show: async (dispatch: Dispatch, id: number) => {
-    const response: any = await getRequest(`${endpoints.order}/${id}`, null);
+    const response: any = await getRequest(`${endpoints.order}/${id}`, null, dispatch);
     await httpServiceHandler(dispatch, response);
 
     if (response.status === 200) {
@@ -33,7 +33,7 @@ export const orderService = {
   },
 
   store: async (payload: any, dispatch: Dispatch, notifications?: any) => {
-    const response: any = await postRequest(endpoints.order, payload);
+    const response: any = await postRequest(endpoints.order, payload, dispatch);
     await httpServiceHandler(dispatch, response);
 
     if (response.status === 200) {

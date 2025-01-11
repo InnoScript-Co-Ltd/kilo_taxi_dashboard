@@ -69,9 +69,10 @@ const ReviewUpdate = () => {
     try {
       const customerResponse: any = await getRequest(
         `${endpoints.customer}`,
-        null
+        null,
+        dispatch
       );
-      const driverResponse: any = await getRequest(`${endpoints.driver}`, null);
+      const driverResponse: any = await getRequest(`${endpoints.driver}`, null, dispatch);
 
       await httpServiceHandler(dispatch, customerResponse);
       await httpServiceHandler(dispatch, driverResponse);
@@ -91,7 +92,7 @@ const ReviewUpdate = () => {
         setDriverLists(driverResponse.data.drivers);
       }
     } catch (error) {
-      await httpErrorHandler(error);
+      await httpErrorHandler(error, dispatch);
     }
 
     setLoading(false);

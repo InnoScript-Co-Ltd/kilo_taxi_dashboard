@@ -59,14 +59,14 @@ const TopupTransactionCreate = () => {
   const loadingData = React.useCallback(async () => {
     setLoading(true);
     try {
-      const response: any = await getRequest(`${endpoints.paymentChannel}`, null);
+      const response: any = await getRequest(`${endpoints.paymentChannel}`, null, dispatch);
      
       await httpServiceHandler(dispatch, response);
       if (response && "data" in response && response.status === 200) {
         setPaymentChannelLists(response.data.customers);
       }
     } catch (error) {
-      await httpErrorHandler(error);
+      await httpErrorHandler(error, dispatch);
     }
 
     setLoading(false);

@@ -1,11 +1,13 @@
 import { createSlice } from "@reduxjs/toolkit";
+import { getData } from "../helpers/localStorage";
 
 export interface SHARE_SLICE {
       errors: null | any,
       showSidebar: boolean,
       statusFilter: string,
       startFilterDate: null | any,
-      endFilterDate: null | any
+      endFilterDate: null | any,
+      refreshToken: boolean
 }
 
 const initialState: SHARE_SLICE = {
@@ -14,6 +16,7 @@ const initialState: SHARE_SLICE = {
     statusFilter: "ALL",
     startFilterDate: null,
     endFilterDate: null,
+    refreshToken: false
   };
 
 const shareSlice = createSlice({
@@ -52,6 +55,10 @@ const shareSlice = createSlice({
         state.startFilterDate = action.payload.startDate;
         state.endFilterDate = action.payload.endDate;
         return state;
+    },
+    checkRefreshToken: (state,action) => {
+      state.refreshToken = action.payload;
+      return state
     }
   },
 });
@@ -61,6 +68,7 @@ export const {
   updateError,
   sidebarToggle,
   setStatusFilter,
-  setDateFilter
+  setDateFilter,
+  checkRefreshToken
 } = shareSlice.actions;
 export default shareSlice.reducer;
