@@ -1,6 +1,6 @@
 // export const env = ["https://localhost:7181/api/v1"];
 export const env = ["http://localhost:5112/api/v1"];
-export const hadUrl = "https://localhost:7044/dashboard";
+export const hadUrl = "http://localhost:5182/dashboard";
 export const drawerWidth: number = 300;
 
 export const keys = {

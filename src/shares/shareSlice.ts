@@ -1,12 +1,19 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { getData } from "../helpers/localStorage";
 
+interface Location {
+  vehicleId: string,  // Send as string
+  lat: any,   // Send as string
+  long: any 
+}
+
 export interface SHARE_SLICE {
       errors: null | any,
       showSidebar: boolean,
       statusFilter: string,
       startFilterDate: null | any,
       endFilterDate: null | any,
+      signal: Location,
       refreshToken: boolean
 }
 
@@ -16,6 +23,11 @@ const initialState: SHARE_SLICE = {
     statusFilter: "ALL",
     startFilterDate: null,
     endFilterDate: null,
+    signal: {
+        vehicleId: "1",  // Send as string
+        lat: [16.825770, 96.130111],   // Send as string
+        long: [16.808771, 96.154487]
+    },
     refreshToken: false
   };
 
@@ -56,6 +68,10 @@ const shareSlice = createSlice({
         state.endFilterDate = action.payload.endDate;
         return state;
     },
+    setSignal: (state,action) => {
+      state.signal = action.payload;
+      return state;
+    },
     checkRefreshToken: (state,action) => {
       state.refreshToken = action.payload;
       return state
@@ -69,6 +85,7 @@ export const {
   sidebarToggle,
   setStatusFilter,
   setDateFilter,
+  setSignal,
   checkRefreshToken
 } = shareSlice.actions;
 export default shareSlice.reducer;
