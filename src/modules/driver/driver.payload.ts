@@ -9,18 +9,19 @@ export const driverSchema = z.object({
   name: z
     .string()
     .min(2, { message: "Name must be at least 2 characters long" }),
-  mobilePrefix: z.string().min(1, { message: "Mobile Prefix is required" }),
+  // mobilePrefix: z.string().min(1, { message: "Mobile Prefix is required" }),
   phone: z
     .string()
     .min(10, { message: "Phone number must be at least 10 digits long" }),
-  email: z.string().email({ message: "Invalid email address" }),
+  // email: z.string().email({ message: "Invalid email address" }),
   dob: z.date().nullable(),
   nrc: z.string().min(6, { message: "NRC must be at least 6 characters" }),
+  role: z.string().nullable().default("Driver"),
   driverLicense: z
     .string()
     .min(6, { message: "Driver License must be at least 6 characters" }),
-  emailVerifiedAt: z.string().optional(),
-  phoneVerifiedAt: z.string().optional(),
+  // emailVerifiedAt: z.string().optional(),
+  // phoneVerifiedAt: z.string().optional(),
   password: z
     .string()
     .min(6, { message: "Password must be at least 6 characters long" }),
@@ -32,11 +33,13 @@ export const driverSchema = z.object({
   townShip: z.string(),
   gender: z.number(),
   status: z.number(),
+  availableStatus: z.number(),
   kycStatus: z.number(),
-
+  referralMobileNumber: z.string(),
+  propertyStatus: z.number(),
   file_profile: z.any().nullable(),
-  file_nrcImageFront: z.any().nullable(),
-  file_nrcImageBack: z.any().nullable(),
+  // file_nrcImageFront: z.any().nullable(),
+  // file_nrcImageBack: z.any().nullable(),
   file_driverImageLicenseFront: z.any().nullable(),
   file_driverImageLicenseBack: z.any().nullable(),
 
@@ -63,6 +66,9 @@ export interface DRIVER {
   driverLicense: string;
   driverImageLicenseFront: string;
   driverImageLicenseBack: string;
+  referralMobileNumber: string;
+  availableStatus: number;
+  propertyStatus: number;
   emailVerifiedAt: string;
   phoneVerifiedAt: string;
   password: string;

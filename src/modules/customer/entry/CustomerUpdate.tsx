@@ -62,6 +62,7 @@ const CustomerUpdate = () => {
       Email: "",
       Phone: "",
       Password: "",
+      role: "Customer",
       Gender: 0,
       Status: 0,
       KycStatus: 0,
@@ -99,13 +100,13 @@ const CustomerUpdate = () => {
       setValue("id", Number(customer.id) || 0);
       setValue("Name", customer.name || "");
       setValue("Phone", customer.phone || "");
-      setValue("Nrc", customer.nrc || "");
+      // setValue("Nrc", customer.nrc || "");
       setValue("Email", customer.email || "");
       setValue("Password", customer.password || "");
       setValue("MobilePrefix", customer.mobilePrefix || "");
       setValue("Dob", (customer?.dob && new Date(customer.dob)) || new Date());
       setValue("Address", customer.address || "");
-      setValue("State", customer.state || "");
+      // setValue("State", customer.state || "");
       setValue("City", customer.city || "");
       setValue("Township", customer.township || "");
       setValue(
@@ -135,7 +136,7 @@ const CustomerUpdate = () => {
       params.id,
       formData
     );
-    if (response.status === 200) {
+    if (response.data.statusCode === 200) {
       navigate(`${paths.customerList}`);
     }
     setLoading(false);
@@ -261,7 +262,7 @@ const CustomerUpdate = () => {
               </FormControl>
             </Grid2>
 
-            <Grid2 size={{ xs: 6, md: 3 }}>
+            {/* <Grid2 size={{ xs: 6, md: 3 }}>
               <FormControl variant="filled" fullWidth error={!!errors.Nrc}>
                 <InputLabel htmlFor="Nrc">Nrc</InputLabel>
                 <FilledInput
@@ -272,9 +273,9 @@ const CustomerUpdate = () => {
                 />
                 <FormHelperText>{errors.Nrc?.message}</FormHelperText>
               </FormControl>
-            </Grid2>
+            </Grid2> */}
 
-            <Grid2 size={{ xs: 6, md: 3, xl: 3 }}>
+            {/* <Grid2 size={{ xs: 6, md: 3, xl: 3 }}>
               <FormControl
                 variant="filled"
                 fullWidth
@@ -339,7 +340,7 @@ const CustomerUpdate = () => {
                   )}
                 />
               </FormControl>
-            </Grid2>
+            </Grid2> */}
 
             <Grid2 size={{ xs: 6, md: 3, xl: 3 }}>
               <FormControl
@@ -387,7 +388,7 @@ const CustomerUpdate = () => {
               </FormControl>
             </Grid2>
 
-            <Grid2 size={{ xs: 6, md: 3 }}>
+            {/* <Grid2 size={{ xs: 6, md: 3 }}>
               <FormControl variant="filled" fullWidth error={!!errors.State}>
                 <InputLabel htmlFor="state">State</InputLabel>
                 <FilledInput
@@ -398,7 +399,7 @@ const CustomerUpdate = () => {
                 />
                 <FormHelperText>{errors.State?.message}</FormHelperText>
               </FormControl>
-            </Grid2>
+            </Grid2> */}
 
             <Grid2 size={{ xs: 6, md: 3 }}>
               <FormControl variant="filled" fullWidth error={!!errors.City}>

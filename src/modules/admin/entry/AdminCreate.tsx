@@ -57,7 +57,13 @@ const AdminCreate = () => {
   const onSubmit = async (data: AdminFormInputs) => {
     try {
       setLoading(true);
-      const response = await adminService.store(data, dispatch, notifications);
+      const adminData = { ...data, role: "Admin" };
+
+      const response = await adminService.store(
+        adminData,
+        dispatch,
+        notifications
+      );
       if (response.status === 201) {
         setLoading(false);
         navigate(paths.adminList);

@@ -101,7 +101,7 @@ export const travelRatePayload: TRAVELRATE_PAYLOAD = {
   pagingParams: {
     PageSize: paginateOptions.rows,
     CurrentPage: 1,
-    SortField: "unit",
+    SortField: "Unit",
     SortDir: 0,
     SearchTerm: "",
   },

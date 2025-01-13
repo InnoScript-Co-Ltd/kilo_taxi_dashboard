@@ -23,7 +23,7 @@ import { getRequest } from "../../../helpers/api";
 import { endpoints } from "../../../constants/endpoints";
 import { Controller, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { vehicleStatusLists } from "../../../constants/config";
+import { driverModeLists, vehicleStatusLists } from "../../../constants/config";
 import FileUploadWithPreview from "../../../components/FileUploadWithPreview";
 import Loading from "../../../components/Loading";
 import { getId } from "../../../helpers/updateHelper";
@@ -50,6 +50,7 @@ const VehicleUpdate = () => {
     defaultValues: {
       VehicleNo: "",
       VehicleType: "",
+      driverMode: 0,
       Model: "",
       FuelType: "",
       Status: 0,
@@ -105,6 +106,10 @@ const VehicleUpdate = () => {
       setValue(
         "Status",
         getId({ lists: vehicleStatusLists, value: vehicle.status }) || 0
+      );
+      setValue(
+        "driverMode",
+        getId({ lists: driverModeLists, value: vehicle.driverMode }) || 0
       );
     }
   }, [vehicle, setValue]);
@@ -236,6 +241,37 @@ const VehicleUpdate = () => {
                       {vehicleStatusLists?.map((Status: any) => (
                         <MenuItem key={Status.id} value={Status.id}>
                           {Status.value}
+                        </MenuItem>
+                      ))}
+                    </Select>
+                  )}
+                />
+                <FormHelperText>{errors.Status?.message}</FormHelperText>
+              </FormControl>
+            </Grid2>
+            <Grid2 size={{ xs: 6, md: 3 }}>
+              <FormControl
+                variant="filled"
+                fullWidth
+                error={!!errors.driverMode}
+              >
+                <InputLabel htmlFor="driverMode">DriverMode</InputLabel>
+                <Controller
+                  name="driverMode"
+                  control={control}
+                  render={({ field }) => (
+                    <Select
+                      size="small"
+                      id="driverMode"
+                      label="DriverMode"
+                      {...field}
+                      value={field.value || 0}
+                      onChange={field.onChange}
+                      disabled={loading}
+                    >
+                      {driverModeLists?.map((driverMode: any) => (
+                        <MenuItem key={driverMode.id} value={driverMode.id}>
+                          {driverMode.value}
                         </MenuItem>
                       ))}
                     </Select>

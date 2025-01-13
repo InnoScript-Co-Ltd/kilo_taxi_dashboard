@@ -30,6 +30,8 @@ export interface ORDER {
   id: string;
   totalAmount: number;
   status: number;
+  pickUpLocation: string;
+  destinationLocation: string;
   createdDate: string;
   walletTransactionId: number;
   customerId: number;
@@ -87,8 +89,8 @@ export interface ORDER_PAYLOAD {
  */
 export const orderColumns: readonly Order_Column[] = [
   {
-    id: "totalAmount",
-    label: "Total Amount",
+    id: "id",
+    label: "Order Id",
     minWidth: 100,
     maxWidth: 250,
     numeric: false,
