@@ -7,7 +7,7 @@ import { TravelRateFormInputs } from "./travelrate.payload";
 
 export const travelRateService = {
   store: async (payload: any, dispatch: Dispatch, notifications?: any) => {
-    const response: any = await postRequest(endpoints.travelRate, payload);
+    const response: any = await postRequest(endpoints.travelRate, payload, dispatch);
     await httpServiceHandler(dispatch, response);
 
     if (response.status === 200) {
@@ -20,7 +20,7 @@ export const travelRateService = {
   },
 
   index: async (dispatch: Dispatch, params: any, notifications?: any) => {
-    const response: any = await getRequest(endpoints.travelRate, params);
+    const response: any = await getRequest(endpoints.travelRate, params, dispatch);
     await httpServiceHandler(dispatch, response);
     if (response.status === 200) {
       //'info' | 'success' | 'warning' | 'error'
@@ -42,7 +42,8 @@ export const travelRateService = {
   ) => {
     const response: any = await putRequest(
       `${endpoints.travelRate}/${id}`,
-      payload
+      payload,
+      dispatch
     );
     await httpServiceHandler(dispatch, response);
 
@@ -60,7 +61,8 @@ export const travelRateService = {
   show: async (dispatch: Dispatch, id: number) => {
     const response: any = await getRequest(
       `${endpoints.travelRate}/${id}`,
-      null
+      null,
+      dispatch
     );
     await httpServiceHandler(dispatch, response);
 

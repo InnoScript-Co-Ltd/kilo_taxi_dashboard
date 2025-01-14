@@ -66,7 +66,7 @@ const CityUpdate = () => {
     try {
       await cityService.show(dispatch, params.id); // Fetch wallet data to populate the form
     } catch (error) {
-      await httpErrorHandler(error);
+      await httpErrorHandler(error, dispatch);
     }
     setLoading(false);
   }, [dispatch, params.id]);

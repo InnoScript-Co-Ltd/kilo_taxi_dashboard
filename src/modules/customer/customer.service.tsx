@@ -7,7 +7,7 @@ import { index, show, update } from "./customer.slice";
 
 export const customerService = {
   store: async (payload: any, dispatch: Dispatch, notifications: any) => {
-    const response: any = await postRequest(endpoints.customer, payload);
+    const response: any = await postRequest(endpoints.customer, payload, dispatch);
     await httpServiceHandler(dispatch, response);
 
     if (response.data.statusCode === 201) {
@@ -21,7 +21,7 @@ export const customerService = {
   },
 
   index: async (dispatch: Dispatch, params: any, notifications: any) => {
-    const response: any = await getRequest(endpoints.customer, params);
+    const response: any = await getRequest(endpoints.customer, params, dispatch);
 
     await httpServiceHandler(dispatch, response, notifications);
     if (response.data.statusCode === 200) {
@@ -45,7 +45,8 @@ export const customerService = {
   ) => {
     const response: any = await putRequest(
       `${endpoints.customer}/${id}`,
-      payload
+      payload,
+      dispatch
     );
     await httpServiceHandler(dispatch, response);
 
@@ -61,7 +62,7 @@ export const customerService = {
   },
 
   show: async (dispatch: Dispatch, id: number) => {
-    const response: any = await getRequest(`${endpoints.customer}/${id}`, null);
+    const response: any = await getRequest(`${endpoints.customer}/${id}`, null, dispatch);
     await httpServiceHandler(dispatch, response);
 
     if (response.status === 200) {

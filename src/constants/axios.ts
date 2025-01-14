@@ -7,17 +7,25 @@ const http = axios.create({
   baseURL: `${baseURL}`,
 });
 
+// Add request interceptor
 http.interceptors.request.use(
   (config: any) => {
-    const token = getData(keys.API_TOKEN) ? getData(keys.API_TOKEN) : null;
+    // Exclude certain endpoints (e.g., refresh token) from requiring Authorization
+    const excludedEndpoints = ["/Auth/refresh-token"];
 
-    if (token) {
-      config.headers = {
-        ...config.headers,
-        authorization: `Bearer ${token}`,
-        Accept: "Application/json",
-      };
+    if (!excludedEndpoints.some((endpoint) => config.url?.includes(endpoint))) {
+      const token = getData(keys.API_TOKEN);
+      if (token) {
+        config.headers.authorization = `Bearer ${token}`;
+      }
     }
+
+    // Common headers for all requests
+    config.headers = {
+      ...config.headers,
+      Accept: "*/*",
+      "Content-Type": "application/json",
+    };
 
     return config;
   },

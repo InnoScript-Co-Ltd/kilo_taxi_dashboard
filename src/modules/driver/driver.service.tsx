@@ -9,7 +9,7 @@ export const driverService = {
 
     // Method to fetch the list of drivers
     index: async (dispatch: Dispatch, params: any, notifications?: any) => {
-        const response: any = await getRequest(endpoints.driver, params);
+        const response: any = await getRequest(endpoints.driver, params, dispatch);
         await httpServiceHandler(dispatch, response);
 
         if(response.status === 200) { 
@@ -25,7 +25,7 @@ export const driverService = {
 
     // Method to update an existing state by ID
     update: async (dispatch: Dispatch, id: number, payload: any, notifications? : any) => {
-        const response: any = await putRequest(`${endpoints.driver}/${id}`, payload);
+        const response: any = await putRequest(`${endpoints.driver}/${id}`, payload, dispatch);
         await httpServiceHandler(dispatch, response);
 
         if(response.status === 200) {
@@ -41,7 +41,7 @@ export const driverService = {
 
     // Method to fetch details of a specific driver by ID
     show: async (dispatch: Dispatch, id: number) => {
-        const response: any = await getRequest(`${endpoints.driver}/${id}`, null);
+        const response: any = await getRequest(`${endpoints.driver}/${id}`, null, dispatch);
         await httpServiceHandler(dispatch, response);
 
         if (response.status === 200) {

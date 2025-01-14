@@ -7,7 +7,7 @@ import { index, show, update } from "./admin.slice";
 
 export const adminService = {
     store: async (payload: any, dispatch: Dispatch, notifications:any) => {
-        const response : any = await postRequest(endpoints.admin, payload);
+        const response : any = await postRequest(endpoints.admin, payload, dispatch);
         await httpServiceHandler(dispatch, response);
 
         if(response.status === 201) {
@@ -21,7 +21,7 @@ export const adminService = {
     },
 
     index: async (dispatch: Dispatch, params: any, notifications: any) => {
-        const response: any = await getRequest(endpoints.admin, params);
+        const response: any = await getRequest(endpoints.admin, params, dispatch);
         await httpServiceHandler(dispatch, response, notifications);
         if(response.status === 200) { 
             //'info' | 'success' | 'warning' | 'error'
@@ -35,7 +35,7 @@ export const adminService = {
     },
 
     update: async (dispatch: Dispatch, id: number, payload: AdminFormInputs, notifications? : any) => {
-        const response: any = await putRequest(`${endpoints.admin}/${id}`, payload);
+        const response: any = await putRequest(`${endpoints.admin}/${id}`, payload, dispatch);
         await httpServiceHandler(dispatch, response);
 
         if(response.status === 200) {
@@ -50,7 +50,7 @@ export const adminService = {
     },
 
     show: async (dispatch: Dispatch, id : number) => {
-        const response: any = await getRequest(`${endpoints.admin}/${id}`, null);
+        const response: any = await getRequest(`${endpoints.admin}/${id}`, null, dispatch);
         await httpServiceHandler(dispatch, response);
 
         if(response.status === 200) {

@@ -1,7 +1,10 @@
+import { is } from "date-fns/locale";
 import { HTTPErrorResponse, HTTPResponse, keys } from "../constants/config";
-import { updateError } from "../shares/shareSlice";
-import { removeData } from "./localStorage";
+import { authService } from "../modules/auth/auth.service";
+import { checkRefreshToken, updateError } from "../shares/shareSlice";
+import { getData, removeData, setData } from "./localStorage";
 import { Dispatch } from "redux";
+import axios from "axios";
 
 /**
  * Payload handler for update state
@@ -73,7 +76,7 @@ export const payloadHandler = (
  * @param {*} error
  * @returns
  */
-export const httpErrorHandler = (error: any): HTTPErrorResponse => {
+export const httpErrorHandler = async (error: any, dispatch : Dispatch): Promise<HTTPErrorResponse> => {
   if (error.code === "ERR_NETWORK") {
     return {
       message: "Network Error!",  // Ensure message is set
@@ -87,6 +90,7 @@ export const httpErrorHandler = (error: any): HTTPErrorResponse => {
   }
 
   const { status, data } = error.response;
+  let isRefreshing = false;
 
   if ([400, 404, 500, 403, 405].includes(status)) {
     return {
@@ -109,13 +113,16 @@ export const httpErrorHandler = (error: any): HTTPErrorResponse => {
   }
 
   if (status === 401) {
-    removeData(keys.API_TOKEN);
-    window.location.reload();
-    return {
-      status: status,
-      message: "Unauthorized access",  // Add message for 401 status
-      error: data.message,
-    };
+    // removeData(keys.API_TOKEN);
+    // window.location.reload();
+    console.log('Unauthorized access');
+    dispatch(checkRefreshToken(true));
+    // authService.refreshToken();
+    // return {
+    //   status: status,
+    //   message: "Unauthorized access",  // Add message for 401 status
+    //   error: data.message,
+    // };
   }
 
   return {

@@ -7,7 +7,7 @@ import { SmsFormInputs } from "./sms.payload";
 
 export const smsService = {
   store: async (payload: any, dispatch: Dispatch, notifications?: any) => {
-    const response: any = await postRequest(endpoints.sms, payload);
+    const response: any = await postRequest(endpoints.sms, payload, dispatch);
     await httpServiceHandler(dispatch, response);
 
     if (response.status === 200) {
@@ -20,7 +20,7 @@ export const smsService = {
   },
 
   index: async (dispatch: Dispatch, params: any, notifications?: any) => {
-    const response: any = await getRequest(endpoints.sms, params);
+    const response: any = await getRequest(endpoints.sms, params, dispatch);
     await httpServiceHandler(dispatch, response);
     if (response.status === 200) {
       //'info' | 'success' | 'warning' | 'error'
@@ -40,7 +40,7 @@ export const smsService = {
     payload: SmsFormInputs,
     notifications?: any
   ) => {
-    const response: any = await putRequest(`${endpoints.sms}/${id}`, payload);
+    const response: any = await putRequest(`${endpoints.sms}/${id}`, payload, dispatch);
     await httpServiceHandler(dispatch, response);
 
     if (response.status === 200) {
@@ -55,7 +55,7 @@ export const smsService = {
 
   // Method to fetch details of a specific state by ID
   show: async (dispatch: Dispatch, id: number) => {
-    const response: any = await getRequest(`${endpoints.sms}/${id}`, null);
+    const response: any = await getRequest(`${endpoints.sms}/${id}`, null, dispatch);
     await httpServiceHandler(dispatch, response);
 
     if (response.status === 200) {
