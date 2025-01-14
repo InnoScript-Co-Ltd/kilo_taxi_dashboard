@@ -3,18 +3,15 @@ import Box from "@mui/material/Box";
 import { createTheme } from "@mui/material/styles";
 import { AppProvider } from "@toolpad/core/AppProvider";
 import { DashboardLayout } from "@toolpad/core/DashboardLayout";
-import type { Router } from "@toolpad/core";
 import { navigationList } from "../defaultPaths";
 import { Outlet, useLocation, useNavigate } from "react-router";
 import { green, grey, indigo, orange, red, yellow } from "@mui/material/colors";
 import { IconButton } from "@mui/material";
 import NotificationsIcon from "@mui/icons-material/Notifications";
-import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import { NotificationsProvider } from "@toolpad/core/useNotifications";
 import { LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
-import { getData } from "../../../helpers/localStorage";
-import { keys } from "../../../constants/config";
+import { ToolBarAccount } from "./ToolBarAccount";
 
 const demoTheme = createTheme({
   cssVariables: {
@@ -89,18 +86,6 @@ function ToolBarActions() {
       <Box>
         <IconButton>
           <NotificationsIcon />
-        </IconButton>
-      </Box>
-    </React.Fragment>
-  );
-}
-
-function ToolBarAccount() {
-  return (
-    <React.Fragment>
-      <Box>
-        <IconButton>
-          <AccountCircleIcon />
         </IconButton>
       </Box>
     </React.Fragment>
