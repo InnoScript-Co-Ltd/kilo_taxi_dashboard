@@ -6,7 +6,7 @@ import { useDispatch } from "react-redux";
 import { setSignal } from "../shares/shareSlice";
 
 type LocationData = {
-  vehicleId: any,
+  vehicleId: any;
   lat: any;
   long: any;
 };
@@ -23,11 +23,11 @@ const GetVehicle = ({ id }: { id: string }) => {
 
   useEffect(() => {
     startConnection();
-  
+
     onReceive("ReceiveLocationData", (location: any) => {
       console.log(`Location data received for vehicle:`, location);
       setMessages((prevMessages: any) => [...prevMessages, { location }]);
-      dispatch(setSignal(location))
+      dispatch(setSignal(location));
     });
 
     return () => {
