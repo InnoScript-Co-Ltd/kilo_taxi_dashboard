@@ -43,25 +43,9 @@ export const authService = {
 
     console.log(payload);
 
-    // const response = await axios.post(
-    //   "http://localhost:5112/api/v1/Auth/refresh-token",
-    //   payload,
-    //   {
-    //     headers: {
-    //       "Content-Type": "application/json",
-    //       Accept: "*/*",
-    //     },
-    //   }
-    // );
-
     const response = await axios.post(
       "http://localhost:5112/api/v1/Auth/refresh-token",
-      {
-        accessToken:
-          "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJ0ZXN0QGVtYWlsIiwiaHR0cDovL3NjaGVtYXMubWljcm9zb2Z0LmNvbS93cy8yMDA4LzA2L2lkZW50aXR5L2NsYWltcy9yb2xlIjoiQWRtaW4iLCJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1lIjoidGVzdEBlbWFpbCIsImp0aSI6ImJhNGIzZWQ4LTMzNmQtNGQ2Yi05Yjk3LTk5NzU4NzVjYzJkNSIsImV4cCI6MTczNjYwMzQ4NCwiaXNzIjoiaHR0cDovL2xvY2FsaG9zdDo3MTgxIiwiYXVkIjoidGVzdCJ9.qozePPDfY9BVcU7yg0FSNT73oPaqYTpsz8fcdf2SWuw", // Hardcoded token
-        refreshToken:
-          "rYiLp1GNCplKgEmn14lWTyCIKm0WulP4e1sWqa71wpnAB++4N0Ot6CQ7iZ/Oca8M5/sy6DfoLXrB2iC61I6mrg==", // Hardcoded token
-      },
+      payload,
       {
         headers: {
           "Content-Type": "application/json",
