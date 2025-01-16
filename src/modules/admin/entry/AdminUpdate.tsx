@@ -112,7 +112,7 @@ const AdminUpdate = () => {
     try {
       setLoading(true);
       const response = await adminService.update(dispatch, params.id, data);
-      if (response.status === 200) {
+      if (response.statusCode === 200) {
         setLoading(false);
         navigate(`${paths.adminList}`);
       }

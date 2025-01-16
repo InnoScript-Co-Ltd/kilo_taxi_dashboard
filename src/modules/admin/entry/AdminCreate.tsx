@@ -64,7 +64,7 @@ const AdminCreate = () => {
         dispatch,
         notifications
       );
-      if (response.status === 201) {
+      if (response.statusCode === 201) {
         setLoading(false);
         navigate(paths.adminList);
       }

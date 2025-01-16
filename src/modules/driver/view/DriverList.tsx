@@ -10,8 +10,6 @@ const DriverList = () =>{
     
             <DriverTableView />
 
-            <OpenMap />
-    
         </div>
       )
     }

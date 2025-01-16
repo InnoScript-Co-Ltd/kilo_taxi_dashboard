@@ -7,7 +7,7 @@ export const drawerWidth: number = 300;
 
 export const keys = {
   API_TOKEN: "TOKEN",
-  REFRESH_TOKEN: "REFRESHTOKEN",
+  REFRESH_TOKEN: "REFRESH_TOKEN",
   USER: "USER",
   PERMISSION: "PERMISSION",
   ROLE: "ROLE",

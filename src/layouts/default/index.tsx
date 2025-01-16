@@ -36,10 +36,7 @@ const DefaultLayout: React.FC = () => {
   const refreshToken = useCallback(() => {
     if (checkRefresh) {
       console.log("Here the refresh logic will be implemented");
-      authService.RefreshToken(
-        getData(keys.API_TOKEN),
-        getData(keys.REFRESH_TOKEN)
-      );
+      authService.refreshToken(dispatch);
     }
   }, [checkRefresh]);
 

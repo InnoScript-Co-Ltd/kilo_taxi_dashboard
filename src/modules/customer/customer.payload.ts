@@ -5,7 +5,7 @@ export const customerSchema = z.object({
   id: z.number().min(0, { message: "id" }).default(0),
   Name: z
     .string()
-    .min(2, { message: "Country Name must be at least 2 characters long" }),
+    .min(2, { message: " Name must be at least 2 characters long" }),
   Email: z.string().email(),
   Phone: z.string().min(8, { message: "phone number is at least 8 digit" }),
   Password: z
@@ -22,23 +22,23 @@ export const customerSchema = z.object({
       message: "Password must contain at least one special character",
     }), // Special character
   role: z.string().nullable().default("Customer"),
-  MobilePrefix: z.string(),
-  Dob: z.date().nullable(), // Date validation
+  // MobilePrefix: z.string(),
+  // Dob: z.date().nullable(), // Date validation
 
-  // Nrc: z.string().nullable(),
-  Address: z.string(),
-  // State: z.string(),
-  City: z.string(),
-  Township: z.string(),
-  Gender: z.number(),
-  Status: z.number(),
-  KycStatus: z.number(),
-  // file_NrcImageFront: z.instanceof(File).nullable(),
-  // file_NrcImageBack: z.instanceof(File).nullable(),
-  // file_Profile: z.instanceof(File).nullable(),
-  // file_NrcImageFront: z.any().nullable(),
-  // file_NrcImageBack: z.any().nullable(),
-  file_Profile: z.any().nullable(),
+  // // Nrc: z.string().nullable(),
+  // Address: z.string(),
+  // // State: z.string(),
+  // City: z.string(),
+  // Township: z.string(),
+  // Gender: z.number(),
+  // Status: z.number(),
+  // KycStatus: z.number(),
+  // // file_NrcImageFront: z.instanceof(File).nullable(),
+  // // file_NrcImageBack: z.instanceof(File).nullable(),
+  // // file_Profile: z.instanceof(File).nullable(),
+  // // file_NrcImageFront: z.any().nullable(),
+  // // file_NrcImageBack: z.any().nullable(),
+  // file_Profile: z.any().nullable(),
 });
 
 export type CustomerFormInputs = z.infer<typeof customerSchema>;

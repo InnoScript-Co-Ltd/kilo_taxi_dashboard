@@ -12,7 +12,6 @@ http.interceptors.request.use(
   (config: any) => {
     // Exclude certain endpoints (e.g., refresh token) from requiring Authorization
     const excludedEndpoints = ["/Auth/refresh-token"];
-
     if (!excludedEndpoints.some((endpoint) => config.url?.includes(endpoint))) {
       const token = getData(keys.API_TOKEN);
       if (token) {

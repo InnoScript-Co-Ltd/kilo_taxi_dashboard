@@ -63,10 +63,10 @@ const CustomerUpdate = () => {
       Phone: "",
       Password: "",
       role: "Customer",
-      Gender: 0,
-      Status: 0,
-      KycStatus: 0,
-      Dob: null,
+      // Gender: 0,
+      // Status: 0,
+      // KycStatus: 0,
+      // Dob: null,
     },
   });
 
@@ -103,24 +103,24 @@ const CustomerUpdate = () => {
       // setValue("Nrc", customer.nrc || "");
       setValue("Email", customer.email || "");
       setValue("Password", customer.password || "");
-      setValue("MobilePrefix", customer.mobilePrefix || "");
-      setValue("Dob", (customer?.dob && new Date(customer.dob)) || new Date());
-      setValue("Address", customer.address || "");
-      // setValue("State", customer.state || "");
-      setValue("City", customer.city || "");
-      setValue("Township", customer.township || "");
-      setValue(
-        "Gender",
-        getId({ lists: genderStatuslists, value: customer.gender }) || 0
-      );
-      setValue(
-        "Status",
-        getId({ lists: customerStatusLists, value: customer.status }) || 0
-      );
-      setValue(
-        "KycStatus",
-        getId({ lists: kycStatusLists, value: customer.kycStatus }) || 0
-      );
+      // setValue("MobilePrefix", customer.mobilePrefix || "");
+      // setValue("Dob", (customer?.dob && new Date(customer.dob)) || new Date());
+      // setValue("Address", customer.address || "");
+      // // setValue("State", customer.state || "");
+      // setValue("City", customer.city || "");
+      // setValue("Township", customer.township || "");
+      // setValue(
+      //   "Gender",
+      //   getId({ lists: genderStatuslists, value: customer.gender }) || 0
+      // );
+      // setValue(
+      //   "Status",
+      //   getId({ lists: customerStatusLists, value: customer.status }) || 0
+      // );
+      // setValue(
+      //   "KycStatus",
+      //   getId({ lists: kycStatusLists, value: customer.kycStatus }) || 0
+      // );
       // setValue("Profile", customer.profile || "");
       // setValue("NrcImageFront", customer.nrcImageFront || "");
       // setValue("NrcImageBack", customer.nrcImageBack || "");
@@ -191,8 +191,8 @@ const CustomerUpdate = () => {
                 <FormHelperText>{errors.Phone?.message}</FormHelperText>
               </FormControl>
             </Grid2>
-
-            <Grid2 size={{ xs: 6, md: 3 }}>
+          </Grid2>
+          {/* <Grid2 size={{ xs: 6, md: 3 }}>
               <FormControl
                 variant="filled"
                 fullWidth
@@ -207,36 +207,36 @@ const CustomerUpdate = () => {
                 />
                 <FormHelperText>{errors.MobilePrefix?.message}</FormHelperText>
               </FormControl>
-            </Grid2>
+            </Grid2> */}
 
-            <Grid2 size={{ xs: 6, md: 3 }}>
-              <FormControl variant="filled" fullWidth error={!!errors.Password}>
-                <InputLabel htmlFor="password">Password</InputLabel>
-                <FilledInput
-                  size="small"
-                  id="password"
-                  disabled={loading}
-                  type={showPassword ? "text" : "password"}
-                  {...register("Password")}
-                  endAdornment={
-                    <InputAdornment position="end">
-                      <IconButton
-                        aria-label="toggle password visibility"
-                        disabled={loading}
-                        onClick={handleClickShowPassword}
-                        onMouseDown={handleMouseDownPassword}
-                        edge="end"
-                      >
-                        {!showPassword ? <VisibilityOff /> : <Visibility />}
-                      </IconButton>
-                    </InputAdornment>
-                  }
-                />
-                <FormHelperText>{errors.Password?.message}</FormHelperText>
-              </FormControl>
-            </Grid2>
+          <Grid2 size={{ xs: 6, md: 3 }}>
+            <FormControl variant="filled" fullWidth error={!!errors.Password}>
+              <InputLabel htmlFor="password">Password</InputLabel>
+              <FilledInput
+                size="small"
+                id="password"
+                disabled={loading}
+                type={showPassword ? "text" : "password"}
+                {...register("Password")}
+                endAdornment={
+                  <InputAdornment position="end">
+                    <IconButton
+                      aria-label="toggle password visibility"
+                      disabled={loading}
+                      onClick={handleClickShowPassword}
+                      onMouseDown={handleMouseDownPassword}
+                      edge="end"
+                    >
+                      {!showPassword ? <VisibilityOff /> : <Visibility />}
+                    </IconButton>
+                  </InputAdornment>
+                }
+              />
+              <FormHelperText>{errors.Password?.message}</FormHelperText>
+            </FormControl>
+          </Grid2>
 
-            <Grid2 size={{ xs: 6, md: 3 }}>
+          {/* <Grid2 size={{ xs: 6, md: 3 }}>
               <FormControl fullWidth error={!!errors.Dob}>
                 <Controller
                   name="Dob"
@@ -260,9 +260,9 @@ const CustomerUpdate = () => {
                 />
                 <FormHelperText>{errors.Dob?.message}</FormHelperText>
               </FormControl>
-            </Grid2>
+            </Grid2> */}
 
-            {/* <Grid2 size={{ xs: 6, md: 3 }}>
+          {/* <Grid2 size={{ xs: 6, md: 3 }}>
               <FormControl variant="filled" fullWidth error={!!errors.Nrc}>
                 <InputLabel htmlFor="Nrc">Nrc</InputLabel>
                 <FilledInput
@@ -275,7 +275,7 @@ const CustomerUpdate = () => {
               </FormControl>
             </Grid2> */}
 
-            {/* <Grid2 size={{ xs: 6, md: 3, xl: 3 }}>
+          {/* <Grid2 size={{ xs: 6, md: 3, xl: 3 }}>
               <FormControl
                 variant="filled"
                 fullWidth
@@ -342,7 +342,7 @@ const CustomerUpdate = () => {
               </FormControl>
             </Grid2> */}
 
-            <Grid2 size={{ xs: 6, md: 3, xl: 3 }}>
+          {/* <Grid2 size={{ xs: 6, md: 3, xl: 3 }}>
               <FormControl
                 variant="filled"
                 fullWidth
@@ -373,9 +373,9 @@ const CustomerUpdate = () => {
                   )}
                 />
               </FormControl>
-            </Grid2>
+            </Grid2> */}
 
-            <Grid2 size={{ xs: 6, md: 3 }}>
+          {/* <Grid2 size={{ xs: 6, md: 3 }}>
               <FormControl variant="filled" fullWidth error={!!errors.Address}>
                 <InputLabel htmlFor="address">Address</InputLabel>
                 <FilledInput
@@ -386,9 +386,9 @@ const CustomerUpdate = () => {
                 />
                 <FormHelperText>{errors.Address?.message}</FormHelperText>
               </FormControl>
-            </Grid2>
+            </Grid2> */}
 
-            {/* <Grid2 size={{ xs: 6, md: 3 }}>
+          {/* <Grid2 size={{ xs: 6, md: 3 }}>
               <FormControl variant="filled" fullWidth error={!!errors.State}>
                 <InputLabel htmlFor="state">State</InputLabel>
                 <FilledInput
@@ -401,7 +401,7 @@ const CustomerUpdate = () => {
               </FormControl>
             </Grid2> */}
 
-            <Grid2 size={{ xs: 6, md: 3 }}>
+          {/* <Grid2 size={{ xs: 6, md: 3 }}>
               <FormControl variant="filled" fullWidth error={!!errors.City}>
                 <InputLabel htmlFor="city">City</InputLabel>
                 <FilledInput
@@ -520,7 +520,7 @@ const CustomerUpdate = () => {
                 <FormHelperText>{errors.Status?.message}</FormHelperText>
               </FormControl>
             </Grid2>
-          </Grid2>
+          </Grid2> */}
 
           {/* footer */}
           <Box
