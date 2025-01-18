@@ -34,7 +34,7 @@ export const authService = {
   ) => {
     try {
       const response = await axios.post(
-        `https://localhost:7181/api/v1/Auth/refresh-token`,
+        `http://4.145.97.143:81/api/v1/Auth/refresh-token`,
         {
           accessToken: currentAccessToken,
           refreshToken: currentRefreshToken,
@@ -113,7 +113,7 @@ export const authService = {
     console.log(payload);
 
     const response = await axios.post(
-      "https://localhost:7181/api/v1/Auth/refresh-token",
+      "http://4.145.97.143:81/api/v1/Auth/refresh-token",
       payload,
       {
         headers: {
@@ -122,7 +122,6 @@ export const authService = {
         },
       }
     );
-
     if (response.status === 200) {
       setData(keys.API_TOKEN, response.data.accessToken);
       setData(keys.REFRESH_TOKEN, response.data.refreshToken);

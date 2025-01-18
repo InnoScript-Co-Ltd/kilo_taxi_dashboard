@@ -60,7 +60,11 @@ const ReviewCreate = () => {
         null,
         dispatch
       );
-      const driverResponse: any = await getRequest(`${endpoints.driver}`, null, dispatch);
+      const driverResponse: any = await getRequest(
+        `${endpoints.driver}`,
+        null,
+        dispatch
+      );
 
       await httpServiceHandler(dispatch, customerResponse);
       await httpServiceHandler(dispatch, driverResponse);
@@ -70,14 +74,14 @@ const ReviewCreate = () => {
         "data" in customerResponse &&
         customerResponse.status === 200
       ) {
-        setCustomerLists(customerResponse.data.customers);
+        setCustomerLists(customerResponse.data.payload.customers);
       }
       if (
         driverResponse &&
         "data" in driverResponse &&
         driverResponse.status === 200
       ) {
-        setDriverLists(driverResponse.data.drivers);
+        setDriverLists(driverResponse.data.payload.drivers);
       }
     } catch (error) {
       await httpErrorHandler(error, dispatch);

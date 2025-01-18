@@ -59,7 +59,7 @@ const PaymentChannelCreate = () => {
         dispatch,
         notifications
       );
-      if (response.status === 201) {
+      if (response.statusCode === 201) {
         navigate(`${paths.paymentChannelList}`);
       }
     } catch (error) {

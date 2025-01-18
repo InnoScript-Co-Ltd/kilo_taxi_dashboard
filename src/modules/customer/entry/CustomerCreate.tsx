@@ -60,14 +60,12 @@ const CustomerCreate = () => {
   const onSubmit = async (data: CustomerFormInputs) => {
     try {
       const formData = formBuilder(data, customerSchema);
-      console.log("formData:", formData);
       const response = await customerService.store(
         formData,
         dispatch,
         notifications
       );
-      console.log("response", response);
-      if (response.data.statusCode === 201) {
+      if (response.statusCode === 201) {
         navigate(`${paths.customerList}`);
       }
     } catch (error) {
@@ -128,7 +126,7 @@ const CustomerCreate = () => {
               </FormControl>
             </Grid2>
 
-            {/* <Grid2 size={{ xs: 6, md: 3 }}>
+            <Grid2 size={{ xs: 6, md: 3 }}>
               <FormControl
                 variant="filled"
                 fullWidth
@@ -143,7 +141,7 @@ const CustomerCreate = () => {
                 />
                 <FormHelperText>{errors.MobilePrefix?.message}</FormHelperText>
               </FormControl>
-            </Grid2> */}
+            </Grid2>
 
             <Grid2 size={{ xs: 6, md: 3 }}>
               <FormControl variant="filled" fullWidth error={!!errors.Password}>
@@ -171,8 +169,8 @@ const CustomerCreate = () => {
                 <FormHelperText>{errors.Password?.message}</FormHelperText>
               </FormControl>
             </Grid2>
-          </Grid2>
-          {/* <Grid2 size={{ xs: 6, md: 3 }}>
+
+            <Grid2 size={{ xs: 6, md: 3 }}>
               <FormControl fullWidth error={!!errors.Dob}>
                 <Controller
                   name="Dob"
@@ -196,9 +194,9 @@ const CustomerCreate = () => {
                 />
                 <FormHelperText>{errors.Dob?.message}</FormHelperText>
               </FormControl>
-            </Grid2> */}
+            </Grid2>
 
-          {/* <Grid2 size={{ xs: 6, md: 3 }}>
+            {/* <Grid2 size={{ xs: 6, md: 3 }}>
               <FormControl variant="filled" fullWidth error={!!errors.Nrc}>
                 <InputLabel htmlFor="Nrc">Nrc</InputLabel>
                 <FilledInput
@@ -211,7 +209,7 @@ const CustomerCreate = () => {
               </FormControl>
             </Grid2> */}
 
-          {/* <Grid2 size={{ xs: 6, md: 3, xl: 3 }}>
+            {/* <Grid2 size={{ xs: 6, md: 3, xl: 3 }}>
               <FormControl
                 variant="filled"
                 fullWidth
@@ -276,7 +274,7 @@ const CustomerCreate = () => {
               </FormControl>
             </Grid2> */}
 
-          {/* <Grid2 size={{ xs: 6, md: 3, xl: 3 }}>
+            <Grid2 size={{ xs: 6, md: 3, xl: 3 }}>
               <FormControl
                 variant="filled"
                 fullWidth
@@ -319,9 +317,9 @@ const CustomerCreate = () => {
                 />
                 <FormHelperText>{errors.Address?.message}</FormHelperText>
               </FormControl>
-            </Grid2> */}
+            </Grid2>
 
-          {/* <Grid2 size={{ xs: 6, md: 3 }}>
+            {/* <Grid2 size={{ xs: 6, md: 3 }}>
               <FormControl variant="filled" fullWidth error={!!errors.State}>
                 <InputLabel htmlFor="state">State</InputLabel>
                 <FilledInput
@@ -334,7 +332,7 @@ const CustomerCreate = () => {
               </FormControl>
             </Grid2> */}
 
-          {/* <Grid2 size={{ xs: 6, md: 3 }}>
+            <Grid2 size={{ xs: 6, md: 3 }}>
               <FormControl variant="filled" fullWidth error={!!errors.City}>
                 <InputLabel htmlFor="city">City</InputLabel>
                 <FilledInput
@@ -453,7 +451,7 @@ const CustomerCreate = () => {
                 <FormHelperText>{errors.KycStatus?.message}</FormHelperText>
               </FormControl>
             </Grid2>
-          </Grid2> */}
+          </Grid2>
 
           {/* footer */}
           <Box

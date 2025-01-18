@@ -22,8 +22,7 @@ http.interceptors.request.use(
     // Common headers for all requests
     config.headers = {
       ...config.headers,
-      Accept: "*/*",
-      "Content-Type": "application/json",
+      Accept: "Application/json",
     };
 
     return config;

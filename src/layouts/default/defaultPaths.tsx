@@ -21,7 +21,7 @@ export const navigationList = [
     segment: "auth",
     title: "Auth",
     icon: null,
-    isParent: false
+    isParent: false,
   },
   {
     segment: "admin",
@@ -240,7 +240,7 @@ export const navigationList = [
     segment: "topupTransaction",
     title: "TopupTransaction",
     isParent: true,
-    icon: <CreditCardIcon />,
+    icon: <CreditCardIcon style={{ color: "red" }} />,
     children: [
       {
         segment: "list",

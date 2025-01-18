@@ -5,7 +5,7 @@ export const customerSchema = z.object({
   id: z.number().min(0, { message: "id" }).default(0),
   Name: z
     .string()
-    .min(2, { message: " Name must be at least 2 characters long" }),
+    .min(2, { message: "Country Name must be at least 2 characters long" }),
   Email: z.string().email(),
   Phone: z.string().min(8, { message: "phone number is at least 8 digit" }),
   Password: z
@@ -22,23 +22,23 @@ export const customerSchema = z.object({
       message: "Password must contain at least one special character",
     }), // Special character
   role: z.string().nullable().default("Customer"),
-  // MobilePrefix: z.string(),
-  // Dob: z.date().nullable(), // Date validation
+  MobilePrefix: z.string(),
+  Dob: z.date().nullable(), // Date validation
 
-  // // Nrc: z.string().nullable(),
-  // Address: z.string(),
-  // // State: z.string(),
-  // City: z.string(),
-  // Township: z.string(),
-  // Gender: z.number(),
-  // Status: z.number(),
-  // KycStatus: z.number(),
-  // // file_NrcImageFront: z.instanceof(File).nullable(),
-  // // file_NrcImageBack: z.instanceof(File).nullable(),
-  // // file_Profile: z.instanceof(File).nullable(),
-  // // file_NrcImageFront: z.any().nullable(),
-  // // file_NrcImageBack: z.any().nullable(),
-  // file_Profile: z.any().nullable(),
+  // Nrc: z.string().nullable(),
+  Address: z.string(),
+  // State: z.string(),
+  City: z.string(),
+  Township: z.string(),
+  Gender: z.number(),
+  Status: z.number(),
+  KycStatus: z.number(),
+  // file_NrcImageFront: z.instanceof(File).nullable(),
+  // file_NrcImageBack: z.instanceof(File).nullable(),
+  // file_Profile: z.instanceof(File).nullable(),
+  // file_NrcImageFront: z.any().nullable(),
+  // file_NrcImageBack: z.any().nullable(),
+  file_Profile: z.any().nullable(),
 });
 
 export type CustomerFormInputs = z.infer<typeof customerSchema>;
@@ -55,7 +55,6 @@ export interface CUSTOMER {
   role: string;
   email: string;
   dob: Date | null | string;
-  createdDate: Date;
   // nrc: string | null;
   // nrcImageFront: string;
   // nrcImageBack: string;
@@ -69,8 +68,8 @@ export interface CUSTOMER {
   gender: number;
   status: number;
   kycStatus: number;
-  file_NrcImageFront: string;
-  file_NrcImageBack: string;
+  // file_NrcImageFront: string;
+  // file_NrcImageBack: string;
   file_profile: string;
   action: any;
   // Add other country properties as necessary
@@ -120,16 +119,8 @@ export interface CUSTOMER_PAYLOAD {
  */
 export const columns: readonly Customer_Column[] = [
   {
-    id: "id",
-    label: "Customer ID",
-    minWidth: 170,
-    maxWidth: 300,
-    numeric: false,
-    disablePadding: false,
-  },
-  {
     id: "name",
-    label: "Customer",
+    label: "Name",
     minWidth: 170,
     maxWidth: 300,
     numeric: false,
@@ -152,6 +143,14 @@ export const columns: readonly Customer_Column[] = [
     disablePadding: false,
   },
   {
+    id: "profile",
+    label: "Profile",
+    minWidth: 100,
+    maxWidth: 150,
+    numeric: false,
+    disablePadding: false,
+  },
+  {
     id: "gender",
     label: "Gender",
     minWidth: 50,
@@ -159,23 +158,22 @@ export const columns: readonly Customer_Column[] = [
     numeric: false,
     disablePadding: false,
   },
+  // {
+  //   id: "status",
+  //   label: "Status",
+  //   minWidth: 50,
+  //   maxWidth: 50,
+  //   numeric: false,
+  //   disablePadding: false,
+  // },
   {
-    id: "address",
-    label: "Address",
+    id: "kycStatus",
+    label: "KycStatus",
     minWidth: 50,
     maxWidth: 50,
     numeric: false,
     disablePadding: false,
   },
-  {
-    id: "createdDate",
-    label: "Registered Datetime",
-    minWidth: 100,
-    maxWidth: 150,
-    numeric: false,
-    disablePadding: false,
-  },
-
   {
     id: "action",
     label: "Action",

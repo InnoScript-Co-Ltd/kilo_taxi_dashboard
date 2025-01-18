@@ -48,7 +48,7 @@ const SmsCreate = () => {
   const submitSmsCreate = async (data: SmsFormInputs) => {
     setLoading(true);
     const response = await smsService.store(data, dispatch);
-    if (response.status === 201) {
+    if (response.statusCode === 201) {
       navigate(`${paths.smsList}`);
     }
     setLoading(false);
@@ -57,23 +57,43 @@ const SmsCreate = () => {
   const loadingData = React.useCallback(async () => {
     setLoading(true);
     try {
-      const adminRes: any = await getRequest(`${endpoints.admin}`, null, dispatch);
-      const customerRes: any = await getRequest(`${endpoints.customer}`, null, dispatch);
-      const driverRes: any = await getRequest(`${endpoints.driver}`, null, dispatch);
+      const adminRes: any = await getRequest(
+        `${endpoints.admin}`,
+        null,
+        dispatch
+      );
+      const customerRes: any = await getRequest(
+        `${endpoints.customer}`,
+        null,
+        dispatch
+      );
+      const driverRes: any = await getRequest(
+        `${endpoints.driver}`,
+        null,
+        dispatch
+      );
 
       await httpServiceHandler(dispatch, adminRes);
-      if (adminRes && "data" in adminRes && adminRes.status === 200) {
-        setAdminLists(adminRes.data.admins);
+      if (adminRes && "data" in adminRes && adminRes.data.statusCode === 200) {
+        setAdminLists(adminRes.data.payload.admins);
       }
 
       await httpServiceHandler(dispatch, customerRes);
-      if (customerRes && "data" in customerRes && customerRes.status === 200) {
-        setCustomerLists(customerRes.data.customers);
+      if (
+        customerRes &&
+        "data" in customerRes &&
+        customerRes.data.statusCode === 200
+      ) {
+        setCustomerLists(customerRes.data.payload.customers);
       }
 
       await httpServiceHandler(dispatch, driverRes);
-      if (driverRes && "data" in driverRes && driverRes.status === 200) {
-        setDriverLists(driverRes.data.drivers);
+      if (
+        driverRes &&
+        "data" in driverRes &&
+        driverRes.data.statusCode === 200
+      ) {
+        setDriverLists(driverRes.data.payload.drivers);
       }
     } catch (error) {
       await httpErrorHandler(error, dispatch);

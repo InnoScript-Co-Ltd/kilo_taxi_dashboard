@@ -63,7 +63,7 @@ const SmsUpdate = () => {
   const submitSmsUpdate = async (data: SmsFormInputs) => {
     setLoading(true);
     const response: any = await smsService.update(dispatch, params.id, data);
-    if (response.status === 200) {
+    if (response.statusCode === 200) {
       navigate(`${paths.smsList}`); // Navigate to the state list page on success
     }
     setLoading(false);
@@ -73,23 +73,35 @@ const SmsUpdate = () => {
   const loadingData = useCallback(async () => {
     setLoading(true);
     try {
-      const adminRes: any = await getRequest(`${endpoints.admin}`, null, dispatch);
-      const customerRes: any = await getRequest(`${endpoints.customer}`, null, dispatch);
-      const driverRes: any = await getRequest(`${endpoints.driver}`, null, dispatch);
+      const adminRes: any = await getRequest(
+        `${endpoints.admin}`,
+        null,
+        dispatch
+      );
+      const customerRes: any = await getRequest(
+        `${endpoints.customer}`,
+        null,
+        dispatch
+      );
+      const driverRes: any = await getRequest(
+        `${endpoints.driver}`,
+        null,
+        dispatch
+      );
 
       await httpServiceHandler(dispatch, adminRes);
       if (adminRes && "data" in adminRes && adminRes.status === 200) {
-        setAdminLists(adminRes.data.admins);
+        setAdminLists(adminRes.data.payload.admins);
       }
 
       await httpServiceHandler(dispatch, customerRes);
       if (customerRes && "data" in customerRes && customerRes.status === 200) {
-        setCustomerLists(customerRes.data.customers);
+        setCustomerLists(customerRes.data.payload.customers);
       }
 
       await httpServiceHandler(dispatch, driverRes);
       if (driverRes && "data" in driverRes && driverRes.status === 200) {
-        setDriverLists(driverRes.data.drivers);
+        setDriverLists(driverRes.data.payload.drivers);
       }
     } catch (error) {
       await httpErrorHandler(error, dispatch);
@@ -107,7 +119,7 @@ const SmsUpdate = () => {
       setValue("id", Number(sms.id) || 0);
       setValue("AdminId", sms.adminId || 0);
       setValue("CustomerId", sms.customerId || 0);
-      setValue("DriverId", sms.customerId || 0);
+      setValue("DriverId", sms.driverId || 0);
       setValue("Name", sms.name || "");
       setValue("Title", sms.title || "");
       setValue("Message", sms.message || "");
