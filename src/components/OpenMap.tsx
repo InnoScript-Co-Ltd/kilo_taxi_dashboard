@@ -16,9 +16,9 @@ const OpenMap = () => {
     return new Promise<[number, number][]>((resolve) =>
       setTimeout(() => {
         resolve([
-          [16.825770, 96.130111], // Start point
-          [16.820000, 96.135000],
-          [16.815000, 96.140000],
+          [16.82577, 96.130111], // Start point
+          // [16.820000, 96.135000],
+          // [16.815000, 96.140000],
           [16.808771, 96.154487], // End point
         ]);
       }, 1000)
@@ -43,12 +43,15 @@ const OpenMap = () => {
 
         // Add Tile Layer
         L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
-          attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors',
+          attribution:
+            '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors',
         }).addTo(map);
 
         // Add Routing Machine
         const routingControl = L.Routing.control({
-          waypoints: filteredCoordinates.map(([lat, lng]) => L.latLng(lat, lng)),
+          waypoints: filteredCoordinates.map(([lat, lng]) =>
+            L.latLng(lat, lng)
+          ),
           lineOptions: {
             styles: [{ color: "orange", weight: 5 }],
           },

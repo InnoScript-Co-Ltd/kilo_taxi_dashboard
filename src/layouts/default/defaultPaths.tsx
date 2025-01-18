@@ -263,6 +263,21 @@ export const navigationList = [
     ],
   },
 
+  {
+    segment: "extraDemand",
+    title: "Extra Demand Charges",
+    isParent: true,
+    icon: <DashboardIcon />,
+    children: [
+      {
+        segment: "list",
+        title: "List",
+        icon: <FormatListBulletedIcon />,
+      },
+      
+    ],
+  },
+
   // {
   //   segment: 'country',
   //   title: 'Country',
