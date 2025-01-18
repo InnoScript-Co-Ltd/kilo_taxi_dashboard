@@ -45,7 +45,7 @@ export const payloadHandler = (
 //   }
 
 //   const { status, data } = error.response;
-  
+
 //   if (status === 400 || status === 404 || status === 500 || status === 403 || status === 405) {
 //     return {
 //       status: status,
@@ -76,10 +76,13 @@ export const payloadHandler = (
  * @param {*} error
  * @returns
  */
-export const httpErrorHandler = async (error: any, dispatch : Dispatch): Promise<HTTPErrorResponse> => {
+export const httpErrorHandler = async (
+  error: any,
+  dispatch: Dispatch
+): Promise<HTTPErrorResponse> => {
   if (error.code === "ERR_NETWORK") {
     return {
-      message: "Network Error!",  // Ensure message is set
+      message: "Network Error!", // Ensure message is set
       status: 0,
       notification: {
         show: true,
@@ -95,7 +98,7 @@ export const httpErrorHandler = async (error: any, dispatch : Dispatch): Promise
   if ([400, 404, 500, 403, 405].includes(status)) {
     return {
       status: status,
-      message: error.message || "An error occurred",  // Ensure message is set
+      message: error.message || "An error occurred", // Ensure message is set
       notification: {
         show: true,
         variant: "warning",
@@ -107,7 +110,7 @@ export const httpErrorHandler = async (error: any, dispatch : Dispatch): Promise
   if (status === 422) {
     return {
       status: status,
-      message: "Validation error",  // Add message for 422 status
+      message: "Validation error", // Add message for 422 status
       error: data.data,
     };
   }
@@ -115,7 +118,7 @@ export const httpErrorHandler = async (error: any, dispatch : Dispatch): Promise
   if (status === 401) {
     // removeData(keys.API_TOKEN);
     // window.location.reload();
-    console.log('Unauthorized access');
+    console.log("Unauthorized access");
     dispatch(checkRefreshToken(true));
     // authService.refreshToken();
     // return {
@@ -127,7 +130,7 @@ export const httpErrorHandler = async (error: any, dispatch : Dispatch): Promise
 
   return {
     status: status,
-    message: "Unknown error",  // Fallback for unknown cases
+    message: "Unknown error", // Fallback for unknown cases
     notification: {
       show: true,
       msg: "An unexpected error occurred.",
@@ -136,18 +139,13 @@ export const httpErrorHandler = async (error: any, dispatch : Dispatch): Promise
   };
 };
 
-
-
-
-
 /**
  * Http response handler for api call
  * @param {*} result
  * @returns
  */
 export const httpResponseHandler = (result: any) => {
-
-  const response : HTTPResponse = {
+  const response: HTTPResponse = {
     status: result.status,
     statusText: result.statusText,
     data: result.data,
@@ -165,7 +163,7 @@ export const httpResponseHandler = (result: any) => {
 export const httpServiceHandler = async (
   dispatch: Dispatch,
   result: { status: number; notification?: string | any; error?: string },
-  noti? : any
+  noti?: any
 ) => {
   await dispatch(updateError(null));
   if (
@@ -177,7 +175,7 @@ export const httpServiceHandler = async (
     result.status === 405
   ) {
     noti?.show(result.notification?.msg, {
-      severity : "error",
+      severity: "error",
       autoHideDuration: 3000,
     });
   }
@@ -187,7 +185,7 @@ export const httpServiceHandler = async (
   }
 
   if (result.status === 204) {
-    return null
+    return [];
   }
 
   return;

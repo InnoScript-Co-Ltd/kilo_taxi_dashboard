@@ -202,10 +202,7 @@ const DriverTableView = () => {
                             );
                           case "Kyc Status":
                             return (
-                              <Status 
-                                status={value} 
-                                lists={kycStatusLists} 
-                              />
+                              <Status status={value} lists={kycStatusLists} />
                             );
                           case "Gender":
                             return (
@@ -238,7 +235,7 @@ const DriverTableView = () => {
         disabled={loading}
         rowsPerPageOptions={paginateOptions.rowsPerPageOptions}
         component="div"
-        count={data.paging.totalCount}
+        count={data?.paging?.totalCount}
         rowsPerPage={rowsPerPage}
         page={page}
         onPageChange={handleChangePage}
