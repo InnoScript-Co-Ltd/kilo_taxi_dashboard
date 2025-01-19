@@ -32,4 +32,5 @@ export const endpoints = {
   image: `${baseURL}/storage/images`,
   status: "status",
   refreshToken: "refresh-token",
+  extraDemand: "ExtraDemand",
 };
