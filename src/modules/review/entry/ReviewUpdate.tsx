@@ -57,7 +57,7 @@ const ReviewUpdate = () => {
   const submitReviewUpdate = async (data: ReviewFormInputs) => {
     setLoading(true);
     const response: any = await reviewService.update(dispatch, params.id, data);
-    if (response.status === 200) {
+    if (response.statusCode === 200) {
       navigate(`${paths.reviewList}`); // Navigate to the state list page on success
     }
     setLoading(false);

@@ -59,7 +59,7 @@ const ScheduleBookingDetail = () => {
               </p>
               <p>
                 <strong>Drop Off Location:</strong>{" "}
-                {scheduleBooking.dropOffLocation}
+                {scheduleBooking.destinationLocation}
               </p>
               <p>
                 <strong>Created Date:</strong>{" "}

@@ -32,24 +32,24 @@ export const orderService = {
       null,
       dispatch
     );
-    await httpServiceHandler(dispatch, response);
+    await httpServiceHandler(dispatch, response.data.payload);
 
     if (response.status === 200) {
-      dispatch(show(response.data));
+      dispatch(show(response.data.payload));
     }
-    return response;
+    return response.data;
   },
 
   store: async (payload: any, dispatch: Dispatch, notifications?: any) => {
     const response: any = await postRequest(endpoints.order, payload, dispatch);
-    await httpServiceHandler(dispatch, response);
+    await httpServiceHandler(dispatch, response.data);
 
-    if (response.status === 200) {
+    if (response.data.statusCode === 200) {
       notifications.show("Order created successfully", {
         severity: "success",
         autoHideDuration: 3000,
       });
     }
-    return response;
+    return response.data;
   },
 };

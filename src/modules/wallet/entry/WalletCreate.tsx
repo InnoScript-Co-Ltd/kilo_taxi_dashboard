@@ -41,7 +41,7 @@ const WalletCreate = () => {
   const submitWalletCreate = async (data: WalletFormInputs) => {
     setLoading(true);
     const response = await walletService.store(data, dispatch, notifications);
-    if (response.status === 201) {
+    if (response.statusCode === 201) {
       navigate(`${paths.walletList}`);
     }
     setLoading(false);

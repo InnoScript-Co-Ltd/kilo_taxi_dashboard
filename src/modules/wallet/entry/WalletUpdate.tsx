@@ -54,7 +54,7 @@ const WalletUpdate = () => {
       data,
       notifications
     );
-    if (response.status === 200) {
+    if (response.statusCode === 200) {
       navigate(`${paths.walletList}`); // Navigate to the wallet list page on success
     }
     setLoading(false);

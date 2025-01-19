@@ -85,6 +85,8 @@ const PromotionTableView = () => {
   React.useEffect(() => {
     loadingData();
   }, [pagingParams, loadingData]);
+  console.log("qweew", data);
+
   return (
     <Paper sx={{ width: "100%", overflow: "hidden" }}>
       <Box
