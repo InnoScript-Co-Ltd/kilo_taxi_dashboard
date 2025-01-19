@@ -1,7 +1,6 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { ADMIN, ADMIN_PAYLOAD, adminPayload } from "./admin.payload";
 
-
 /**
  * Interface representing the shape of the country slice in Redux.
  */
@@ -49,8 +48,9 @@ const adminSlice = createSlice({
      * @param action The action containing the payload.
      * @returns The updated state.
      */
-    index: (state, action: PayloadAction<{ admins: ADMIN[]; paging: any }>) => {
-      state.data = action.payload;
+    index: (state, action) => {
+      // index: (state, actions: PayloadAction<{ admins: ADMIN[]; paging: any }>) => {
+      state.data = action.payload.payload;
     },
     /**
      * Updates the current country data in the state.
@@ -76,7 +76,10 @@ const adminSlice = createSlice({
      * @param action The action containing the pagination parameters.
      * @returns The updated state.
      */
-    setPaginate: (state, action: PayloadAction<ADMIN_PAYLOAD["pagingParams"]>) => {
+    setPaginate: (
+      state,
+      action: PayloadAction<ADMIN_PAYLOAD["pagingParams"]>
+    ) => {
       state.pagingParams = action.payload; // Use the full type
     },
   },

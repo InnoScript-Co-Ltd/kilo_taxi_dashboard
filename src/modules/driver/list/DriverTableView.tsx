@@ -236,7 +236,7 @@ const DriverTableView = () => {
         disabled={loading}
         rowsPerPageOptions={paginateOptions.rowsPerPageOptions}
         component="div"
-        count={data.paging.totalCount}
+        count={data?.paging?.totalCount}
         rowsPerPage={rowsPerPage}
         page={page}
         onPageChange={handleChangePage}
