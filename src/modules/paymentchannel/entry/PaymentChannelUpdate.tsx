@@ -103,8 +103,8 @@ const PaymentChannelUpdate = () => {
       params.id,
       formData
     );
-    if (response.status === 200) {
-      navigate(`${paths.customerList}`);
+    if (response.statusCode === 200) {
+      navigate(`${paths.paymentChannelList}`);
     }
     setLoading(false);
   };
@@ -113,7 +113,7 @@ const PaymentChannelUpdate = () => {
     <Box>
       <Breadcrumb />
       <Card sx={{ marginTop: "20px", padding: "20px" }}>
-        <h2>Wallet Update</h2>
+        <h2>PayMentChannel Update</h2>
 
         <form onSubmit={handleSubmit(submitPaymentChannelUpdate)}>
           <Grid2 container spacing={2}>
@@ -182,7 +182,7 @@ const PaymentChannelUpdate = () => {
               </FormControl>
             </Grid2>
 
-            <Grid2 size={{ xs: 6, md: 3 }}>
+            <Grid2 size={{ xs: 6, md: 3, xl: 3 }}>
               <FormControl
                 variant="filled"
                 fullWidth
@@ -191,12 +191,12 @@ const PaymentChannelUpdate = () => {
                 <Controller
                   name="file_Icon"
                   control={control}
-                  defaultValue={undefined}
-                  rules={{ required: "Icon is required" }}
+                  defaultValue={undefined} // Set initial state to null
+                  rules={{ required: "Icon is required" }} // Only use required here
                   render={({ field: { onChange, value } }) => (
                     <FileUploadWithPreview
                       onFileChange={(file) => {
-                        onChange(file);
+                        onChange(file); // Update the field with the selected file
                       }}
                       error={
                         errors.file_Icon
@@ -205,7 +205,9 @@ const PaymentChannelUpdate = () => {
                             : undefined
                           : undefined
                       }
-                      field="Icon"
+                      // Correctly extracting the error message
+                      field="Icon" // Label for the upload button
+                      src={paymentChannel?.icon}
                       disabled={loading}
                     />
                   )}
@@ -216,7 +218,7 @@ const PaymentChannelUpdate = () => {
             {paymentType === 2 && (
               <Grid2 size={{ xs: 6, md: 3 }}>
                 <FormControl variant="filled" fullWidth error={!!errors.Phone}>
-                  <InputLabel htmlFor="phone">Channel Name</InputLabel>
+                  <InputLabel htmlFor="phone">Phone No</InputLabel>
                   <FilledInput size="small" id="phone" {...register("Phone")} />
                   <FormHelperText>{errors.Phone?.message}</FormHelperText>
                 </FormControl>

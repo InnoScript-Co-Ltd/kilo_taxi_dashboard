@@ -17,8 +17,8 @@ const DefaultLayout: React.FC = () => {
   const checkRefresh = useSelector((state: any) => state.share.refreshToken);
 
   const authRedirect = React.useCallback(async () => {
-    if (token && location.pathname === '/') {
-      navigate('/dashboard');
+    if (token && location.pathname === "/") {
+      navigate("/dashboard");
     }
 
     if (!token) {
@@ -35,7 +35,7 @@ const DefaultLayout: React.FC = () => {
 
   const refreshToken = useCallback(() => {
     if (checkRefresh) {
-      console.log('Here the refresh logic will be implemented');
+      console.log("Here the refresh logic will be implemented");
       authService.refreshToken(dispatch);
     }
   }, [checkRefresh]);
@@ -46,11 +46,7 @@ const DefaultLayout: React.FC = () => {
     refreshToken();
   }, [refreshToken]);
 
-  return (
-    <>
-      {token && <BrandLayout />}
-    </>
-  );
+  return <>{token && <BrandLayout />}</>;
 };
 
 export default DefaultLayout;

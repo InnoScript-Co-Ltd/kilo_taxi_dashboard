@@ -45,8 +45,6 @@ const Login = () => {
 
   const submitLogin = async (data: AuthFormInputs) => {
     setLoading(true);
-    console.log(data);
-
     const response = await authService.store(data, dispatch);
     if (response.status === 200) {
       navigate(`${paths.dashboard}`);
@@ -71,7 +69,6 @@ const Login = () => {
                   <FilledInput
                     size="small"
                     id="emailOrPhone"
-                    value="test@email"
                     {...register("emailOrPhone")}
                   />
                   <FormHelperText>
@@ -92,7 +89,6 @@ const Login = () => {
                     size="small"
                     id="password"
                     type={showPassword ? "text" : "password"}
-                    value="123456"
                     {...register("password")}
                     endAdornment={
                       <InputAdornment position="end">

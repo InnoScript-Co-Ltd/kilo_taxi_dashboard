@@ -62,7 +62,7 @@ const TravelRateUpdate = () => {
       params.id,
       data
     );
-    if (response.status === 200) {
+    if (response.statusCode === 200) {
       navigate(`${paths.travelRateList}`); // Navigate to the state list page on success
     }
     setLoading(false);
@@ -81,15 +81,19 @@ const TravelRateUpdate = () => {
       if (
         vehicleTypeRes &&
         "data" in vehicleTypeRes &&
-        vehicleTypeRes.status === 200
+        vehicleTypeRes.data.statusCode === 200
       ) {
-        setVehicleTypeLists(vehicleTypeRes.data.vehicleTypes);
+        setVehicleTypeLists(vehicleTypeRes.data.payload.vehicleTypes);
       }
     } catch (error) {
       await httpErrorHandler(error, dispatch);
     }
     try {
-      const cityRes: any = await getRequest(`${endpoints.city}`, null, dispatch);
+      const cityRes: any = await getRequest(
+        `${endpoints.city}`,
+        null,
+        dispatch
+      );
       await httpServiceHandler(dispatch, cityRes);
       if (cityRes && "data" in cityRes && cityRes.status === 200) {
         setCityLists(cityRes.data.cities);
@@ -130,7 +134,7 @@ const TravelRateUpdate = () => {
     <Box>
       <Breadcrumb />
       <Card sx={{ marginTop: "20px", padding: "20px" }}>
-        <h2>Sms Update</h2>
+        <h2>TravelRate Update</h2>
 
         <form onSubmit={handleSubmit(submitTravelRateUpdate)}>
           <Grid2 container spacing={2}>
@@ -140,7 +144,7 @@ const TravelRateUpdate = () => {
                 fullWidth
                 error={!!errors.vehicleTypeId}
               >
-                <InputLabel htmlFor="vehicleTypeId">Driver</InputLabel>
+                <InputLabel htmlFor="vehicleTypeId">VehicleType</InputLabel>
                 <Controller
                   name="vehicleTypeId"
                   control={control}

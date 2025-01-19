@@ -68,8 +68,8 @@ export interface CUSTOMER {
   gender: number;
   status: number;
   kycStatus: number;
-  file_NrcImageFront: string;
-  file_NrcImageBack: string;
+  // file_NrcImageFront: string;
+  // file_NrcImageBack: string;
   file_profile: string;
   action: any;
   // Add other country properties as necessary

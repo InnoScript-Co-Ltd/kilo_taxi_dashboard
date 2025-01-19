@@ -88,7 +88,7 @@ export const paths = {
 
   sosList: "/sos/list",
   sosReceive: "/sos/receive",
-
+  
   travelRate: "/travelrate",
   travelRateList: "/travelrate/list",
   travelRateCreate: "/travelrate/new",
@@ -96,4 +96,9 @@ export const paths = {
 
   simulation: "/simulation",
   simulationOrderCreate: "/simulation/order",
+
+  extraDemand: "/extraDemand",
+  extraDemandList: "/extraDemand/list",
+  extraDemandCreate: "/extraDemand/new",
+  extraDemandDetail: "/extraDemand/:id",
 };

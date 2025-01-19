@@ -29,48 +29,54 @@ export const payloadHandler = (
  * @param {*} error
  * @returns
  */
-// export const httpErrorHandler = (error: any) => {
-//   if (error.code === "ERR_NETWORK") {
-//     const response = {
-//       message: error.message,
-//       status: 0,
-//       notification: {
-//         show: true,
-//         msg: "Network Error!",
-//         variant: "error",
-//       },
-//     };
+export const httpErrorHandler1 = (error: any) => {
+  if (error.code === "ERR_NETWORK") {
+    const response = {
+      message: error.message,
+      status: 0,
+      notification: {
+        show: true,
+        msg: "Network Error!",
+        variant: "error",
+      },
+    };
 
-//     return response;
-//   }
+    return response;
+  }
 
-//   const { status, data } = error.response;
+  const { status, data } = error.response;
 
-//   if (status === 400 || status === 404 || status === 500 || status === 403 || status === 405) {
-//     return {
-//       status: status,
-//       message: error.message,
-//       notification: {
-//         show: true,
-//         variant: "warning",
-//         msg: error.message,
-//       },
-//     };
-//   }
+  if (
+    status === 400 ||
+    status === 404 ||
+    status === 500 ||
+    status === 403 ||
+    status === 405
+  ) {
+    return {
+      status: status,
+      message: error.message,
+      notification: {
+        show: true,
+        variant: "warning",
+        msg: error.message,
+      },
+    };
+  }
 
-//   if (status === 422) {
-//     return { status: status, error: data.data };
-//   }
+  if (status === 422) {
+    return { status: status, error: data.data };
+  }
 
-//   if (status === 401) {
-//     removeData(keys.API_TOKEN);
-//     window.location.reload();
-//     return {
-//       status: status,
-//       error: data.message,
-//     };
-//   }
-// };
+  if (status === 401) {
+    removeData(keys.API_TOKEN);
+    window.location.reload();
+    return {
+      status: status,
+      error: data.message,
+    };
+  }
+};
 /**
  * Http error handler for api call
  * @param {*} error
@@ -165,6 +171,7 @@ export const httpServiceHandler = async (
   result: { status: number; notification?: string | any; error?: string },
   noti?: any
 ) => {
+  console.log("result:", result);
   await dispatch(updateError(null));
   if (
     result.status === 400 ||
@@ -185,7 +192,7 @@ export const httpServiceHandler = async (
   }
 
   if (result.status === 204) {
-    return [];
+    return null;
   }
 
   return;

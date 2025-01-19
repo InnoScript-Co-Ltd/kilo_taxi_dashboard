@@ -3,6 +3,7 @@ import { endpoints } from "../../constants/endpoints";
 import { getRequest, putRequest } from "../../helpers/api";
 import { httpServiceHandler } from "../../helpers/handler";
 import { index, show, update } from "./driver.slice";
+import { DriverFormInputs } from "./driver.payload";
 
 export const driverService = {
   // Method to fetch the list of drivers
@@ -17,16 +18,11 @@ export const driverService = {
         autoHideDuration: 3000,
       });
       dispatch(
-        index(response.data ? response.data.payload : response.data.payload)
+        index(
+          response.data.payload ? response.data.payload : response.data.payload
+        )
       );
-    } else if (response.status === 204) {
-      notifications.show("Driver list notFound!", {
-        severity: "info",
-        autoHideDuration: 3000,
-      });
-      dispatch(index(response.data ? response.data : response.data));
     }
-
     return response;
   },
 

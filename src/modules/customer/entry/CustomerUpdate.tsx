@@ -136,7 +136,7 @@ const CustomerUpdate = () => {
       params.id,
       formData
     );
-    if (response.data.statusCode === 200) {
+    if (response.statusCode === 200) {
       navigate(`${paths.customerList}`);
     }
     setLoading(false);

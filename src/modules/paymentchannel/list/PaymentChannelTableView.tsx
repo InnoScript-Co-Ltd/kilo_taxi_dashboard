@@ -26,6 +26,7 @@ import {
   InputAdornment,
   TableSortLabel,
 } from "@mui/material";
+import TAvatar from "../../../components/TAvatar";
 import { setPaginate } from "../paymentchannel.slice"; // Adjust the slice if needed
 import SearchIcon from "@mui/icons-material/Search";
 import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
@@ -201,11 +202,7 @@ const PaymentChannelTableView = () => {
                       {(() => {
                         switch (column.label) {
                           case "Icon":
-                            return (
-                              <>
-                                <img src={value} alt={value} />
-                              </>
-                            );
+                            return <TAvatar src={value} />;
                           case "ChannelName":
                             return value;
                           case "Description":

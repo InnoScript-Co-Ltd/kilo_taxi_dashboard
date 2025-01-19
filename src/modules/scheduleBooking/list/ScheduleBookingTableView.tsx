@@ -79,7 +79,6 @@ const ScheduleBookingTableView = () => {
     loadingData();
   }, [pagingParams]);
 
-  console.log(data);
   return (
     <Paper sx={{ width: "100%", overflow: "hidden" }}>
       <Box

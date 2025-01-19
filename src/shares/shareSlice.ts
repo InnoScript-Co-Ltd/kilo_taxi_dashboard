@@ -2,42 +2,42 @@ import { createSlice } from "@reduxjs/toolkit";
 import { getData } from "../helpers/localStorage";
 
 interface Location {
-  vehicleId: string,  // Send as string
-  lat: any,   // Send as string
-  long: any 
+  vehicleId: string; // Send as string
+  lat: any; // Send as string
+  long: any;
 }
 
 export interface SHARE_SLICE {
-      errors: null | any,
-      showSidebar: boolean,
-      statusFilter: string,
-      startFilterDate: null | any,
-      endFilterDate: null | any,
-      signal: Location,
-      refreshToken: boolean
+  errors: null | any;
+  showSidebar: boolean;
+  statusFilter: string;
+  startFilterDate: null | any;
+  endFilterDate: null | any;
+  signal: Location;
+  refreshToken: boolean;
 }
 
 const initialState: SHARE_SLICE = {
-    errors: null,
-    showSidebar: false,
-    statusFilter: "ALL",
-    startFilterDate: null,
-    endFilterDate: null,
-    signal: {
-        vehicleId: "1",  // Send as string
-        lat: [16.825770, 96.130111],   // Send as string
-        long: [16.808771, 96.154487]
-    },
-    refreshToken: false
-  };
+  errors: null,
+  showSidebar: false,
+  statusFilter: "ALL",
+  startFilterDate: null,
+  endFilterDate: null,
+  signal: {
+    vehicleId: "1", // Send as string
+    lat: "", // Send as string
+    long: "",
+  },
+  refreshToken: false,
+};
 
 const shareSlice = createSlice({
   name: "share",
   initialState,
   reducers: {
     // updateNotification: (state, action) => {
-    //   switch (action.payload.show) {        
-    //     case true:    
+    //   switch (action.payload.show) {
+    //     case true:
     //       state.notification.variant = action.payload.variant;
     //       state.notification.msg = action.payload.msg;
     //       state.notification.show = action.payload.show;
@@ -63,19 +63,19 @@ const shareSlice = createSlice({
       state.statusFilter = action.payload;
       return state;
     },
-    setDateFilter: (state,action) => {
-        state.startFilterDate = action.payload.startDate;
-        state.endFilterDate = action.payload.endDate;
-        return state;
+    setDateFilter: (state, action) => {
+      state.startFilterDate = action.payload.startDate;
+      state.endFilterDate = action.payload.endDate;
+      return state;
     },
-    setSignal: (state,action) => {
+    setSignal: (state, action) => {
       state.signal = action.payload;
       return state;
     },
-    checkRefreshToken: (state,action) => {
+    checkRefreshToken: (state, action) => {
       state.refreshToken = action.payload;
-      return state
-    }
+      return state;
+    },
   },
 });
 
@@ -86,6 +86,6 @@ export const {
   setStatusFilter,
   setDateFilter,
   setSignal,
-  checkRefreshToken
+  checkRefreshToken,
 } = shareSlice.actions;
 export default shareSlice.reducer;

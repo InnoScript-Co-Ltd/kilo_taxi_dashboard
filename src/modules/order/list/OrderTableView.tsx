@@ -188,10 +188,12 @@ const OrderTableView = () => {
                             return formatDate(value);
                           case "Wallet Transaction Id":
                             return value;
-                          case "Customer Id":
-                            return value;
-                          case "Driver Id":
-                            return value;
+                          case "Customer":
+                            return `${value?.name ?? ""} ${value?.phone ?? ""}`;
+                          case "Driver":
+                            return `${value?.name ?? ""} ${value?.phone ?? ""}`;
+                          case "Request Datetime":
+                            return formatDate(value);
                           case "Schedule Booking Id":
                             return value;
                           case "Action":

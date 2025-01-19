@@ -17,6 +17,8 @@ import { Breadcrumb } from "../../../components/Breadcrumb";
 import { paths } from "../../../constants/paths";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useNotifications } from "@toolpad/core/useNotifications";
+
 import {
   VehicleTypeFormInputs,
   vehicleTypeSchema,
@@ -25,6 +27,7 @@ import { vehicleTypeService } from "../vehicleType.service";
 
 const VehicleTypeCreate = () => {
   const [loading, setLoading] = useState(false);
+  const notifications = useNotifications();
 
   const navigate = useNavigate();
   const dispatch = useDispatch<AppDispatch>();
@@ -41,8 +44,13 @@ const VehicleTypeCreate = () => {
 
   const submitVehicleTypeCreate = async (data: VehicleTypeFormInputs) => {
     setLoading(true);
-    const response = await vehicleTypeService.store(data, dispatch);
-    if (response.status === 201) {
+    const response = await vehicleTypeService.store(
+      data,
+      dispatch,
+      notifications
+    );
+    console.log("vehicle", response.statusCode);
+    if (response.statusCode === 201) {
       navigate(`${paths.vehicleTypeList}`);
     }
     setLoading(false);

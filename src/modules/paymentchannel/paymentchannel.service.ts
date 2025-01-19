@@ -8,10 +8,14 @@ import { index, show, update } from "./paymentchannel.slice";
 export const paymentChannelService = {
   // Method to create a new wallet
   store: async (payload: any, dispatch: Dispatch, notifications?: any) => {
-    const response: any = await postRequest(endpoints.paymentChannel, payload, dispatch);
-    await httpServiceHandler(dispatch, response);
+    const response: any = await postRequest(
+      endpoints.paymentChannel,
+      payload,
+      dispatch
+    );
+    await httpServiceHandler(dispatch, response.data);
 
-    if (response.status === 201) {
+    if (response.data.statusCode === 201) {
       //'info' | 'success' | 'warning' | 'error'
       console.log("error here");
       notifications.show("PaymentChannel is created successfully", {
@@ -19,23 +23,31 @@ export const paymentChannelService = {
         autoHideDuration: 3000,
       });
     }
-    return response;
+    return response.data;
   },
 
   // Method to retrieve a list of wallets with optional parameters
   index: async (dispatch: Dispatch, params: any, notifications?: any) => {
-    const response: any = await getRequest(endpoints.paymentChannel, params, dispatch);
-    await httpServiceHandler(dispatch, response);
+    const response: any = await getRequest(
+      endpoints.paymentChannel,
+      params,
+      dispatch
+    );
+    await httpServiceHandler(dispatch, response.data);
 
-    if (response.status === 200) {
+    if (response.data.statusCode === 200) {
       //'info' | 'success' | 'warning' | 'error'
       notifications.show("PaymentChannel list is successfully retrieved!", {
         severity: "info",
         autoHideDuration: 3000,
       });
-      dispatch(index(response.data ? response.data : response.data));
+      dispatch(
+        index(
+          response.data.payload ? response.data.payload : response.data.payload
+        )
+      );
     }
-    return response;
+    return response.data;
   },
 
   // Method to update an existing wallet by ID
@@ -52,7 +64,7 @@ export const paymentChannelService = {
     );
     await httpServiceHandler(dispatch, response);
 
-    if (response.status === 200) {
+    if (response.data.status === 200) {
       //'info' | 'success' | 'warning' | 'error'
       notifications?.show("PaymentChannel is updated successfully", {
         severity: "success",
@@ -60,7 +72,7 @@ export const paymentChannelService = {
       });
       dispatch(update(response.data));
     }
-    return response;
+    return response.data;
   },
 
   // Method to fetch details of a specific wallet by ID
@@ -70,11 +82,11 @@ export const paymentChannelService = {
       null,
       dispatch
     );
-    await httpServiceHandler(dispatch, response);
+    await httpServiceHandler(dispatch, response.data.payload);
 
-    if (response.status === 200) {
-      dispatch(show(response.data));
+    if (response.data.statusCode === 200) {
+      dispatch(show(response.data.payload));
     }
-    return response;
+    return response.data;
   },
 };

@@ -60,6 +60,8 @@ export interface DRIVER {
   phone: string;
   email: string;
   dob: Date | null | string;
+  createdDate: Date;
+  type: string;
   nrc: string;
   nrcImageFront: string;
   nrcImageBack: string;
@@ -97,8 +99,10 @@ interface DriverColumn {
     | "name"
     | "profile"
     | "mobilePrefix"
+    | "type"
     | "phone"
     | "email"
+    | "createdDate"
     | "dob"
     | "nrc"
     | "nrcImageFront"
@@ -147,48 +151,24 @@ export interface DRIVER_PAYLOAD {
 export const driverColumns: readonly DriverColumn[] = [
   {
     id: "name",
-    label: "Driver Name",
+    label: "Name",
     minWidth: 130,
     numeric: false,
     disablePadding: false,
     sort: true,
   },
   {
-    id: "profile",
-    label: "Profile",
+    id: "type",
+    label: "Type",
     minWidth: 50,
     numeric: false,
     disablePadding: false,
     sort: true,
   },
   {
-    id: "mobilePrefix",
-    label: "Mobile Prefix",
-    minWidth: 35,
-    numeric: false,
-    disablePadding: false,
-    sort: true,
-  },
-  {
     id: "phone",
-    label: "Phone",
+    label: "Phone Number",
     minWidth: 70,
-    numeric: false,
-    disablePadding: false,
-    sort: true,
-  },
-  {
-    id: "email",
-    label: "Email",
-    minWidth: 100,
-    numeric: false,
-    disablePadding: false,
-    sort: true,
-  },
-  {
-    id: "dob",
-    label: "DOB",
-    minWidth: 135,
     numeric: false,
     disablePadding: false,
     sort: true,
@@ -203,31 +183,7 @@ export const driverColumns: readonly DriverColumn[] = [
   },
   {
     id: "driverLicense",
-    label: "Driver License",
-    minWidth: 70,
-    numeric: false,
-    disablePadding: false,
-    sort: true,
-  },
-  {
-    id: "address",
-    label: "Address",
-    minWidth: 145,
-    numeric: false,
-    disablePadding: false,
-    sort: true,
-  },
-  {
-    id: "state",
-    label: "State",
-    minWidth: 70,
-    numeric: false,
-    disablePadding: false,
-    sort: true,
-  },
-  {
-    id: "city",
-    label: "City",
+    label: "Driver License No",
     minWidth: 70,
     numeric: false,
     disablePadding: false,
@@ -242,9 +198,17 @@ export const driverColumns: readonly DriverColumn[] = [
     sort: true,
   },
   {
-    id: "gender",
-    label: "Gender",
-    minWidth: 50,
+    id: "city",
+    label: "City",
+    minWidth: 70,
+    numeric: false,
+    disablePadding: false,
+    sort: true,
+  },
+  {
+    id: "createdDate",
+    label: "Register DateTime",
+    minWidth: 100,
     numeric: false,
     disablePadding: false,
     sort: true,
@@ -256,14 +220,6 @@ export const driverColumns: readonly DriverColumn[] = [
     numeric: false,
     disablePadding: false,
     sort: true,
-  },
-  {
-    id: "kycStatus",
-    label: "Kyc Status",
-    minWidth: 50,
-    numeric: false,
-    disablePadding: false,
-    sort: false,
   },
   {
     id: "action",

@@ -31,7 +31,7 @@ const UpAndDel = ({
 }) => {
   const [open, setOpen] = React.useState(false);
   const [confirm, setConfrim] = React.useState(false);
-  const dispatch = useDispatch()
+  const dispatch = useDispatch();
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -44,8 +44,9 @@ const UpAndDel = ({
   const navigate = useNavigate();
 
   const dele = useCallback(async () => {
-    const res: any = await delRequest(`${baseURL}${url}`,dispatch);
-    if (res.status === 204) {
+    const res: any = await delRequest(`${baseURL}${url}`, dispatch);
+    console.log(res);
+    if (res.data.statusCode === 204) {
       fn();
     }
   }, [url, fn]);
@@ -74,8 +75,8 @@ const UpAndDel = ({
       >
         <DialogContent>
           <Alert severity="warning">
-                Are you sure to delete this transaction?
-              </Alert>
+            Are you sure to delete this transaction?
+          </Alert>
         </DialogContent>
         <DialogActions>
           <Button onClick={handleClose}>Disagree</Button>

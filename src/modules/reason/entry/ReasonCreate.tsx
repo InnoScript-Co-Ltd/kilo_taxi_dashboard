@@ -29,7 +29,6 @@ import {
   generalStatusLists,
 } from "../../../constants/config";
 
-
 const ReasonCreate = () => {
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
@@ -49,7 +48,7 @@ const ReasonCreate = () => {
   const submitReasonCreate = async (data: ReasonFormInputs) => {
     setLoading(true);
     const response = await reasonService.store(data, dispatch, notifications);
-    if (response.status === 201) {
+    if (response.statusCode === 201) {
       navigate(`${paths.reasonList}`);
     }
     setLoading(false);
@@ -63,12 +62,7 @@ const ReasonCreate = () => {
         <form onSubmit={handleSubmit(submitReasonCreate)}>
           <Grid2 container spacing={2}>
             <Grid2 size={{ xs: 6, md: 3 }}>
-
-              <FormControl
-                variant="filled"
-                fullWidth
-                error={!!errors.name}
-              >
+              <FormControl variant="filled" fullWidth error={!!errors.name}>
                 <InputLabel htmlFor="reason_name">Reason Name</InputLabel>
                 <FilledInput
                   size="small"

@@ -55,13 +55,14 @@ const VehicleTypeUpdate = () => {
       params.id,
       data
     );
-    if (response.status === 200) {
+    if (response.statusCode === 200) {
       navigate(`${paths.vehicleTypeList}`); // Navigate to the state list page on success
     }
     setLoading(false);
   };
 
   useEffect(() => {
+    console.log("vehicleTypes", vehicleTypes);
     if (vehicleTypes) {
       setValue("id", Number(vehicleTypes.id) || 0);
       setValue("Name", vehicleTypes.name || "");

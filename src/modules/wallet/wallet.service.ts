@@ -12,34 +12,41 @@ export const walletService = {
     dispatch: Dispatch,
     notifications?: any
   ) => {
-    const response: any = await postRequest(endpoints.wallet, payload, dispatch);
-    await httpServiceHandler(dispatch, response);
+    const response: any = await postRequest(
+      endpoints.wallet,
+      payload,
+      dispatch
+    );
+    await httpServiceHandler(dispatch, response.data);
 
-    if (response.status === 201) {
+    if (response.data.statusCode === 201) {
       //'info' | 'success' | 'warning' | 'error'
-      console.log("error here");
       notifications.show("Wallet is created successfully", {
         severity: "success",
         autoHideDuration: 3000,
       });
     }
-    return response;
+    return response.data;
   },
 
   // Method to retrieve a list of wallets with optional parameters
   index: async (dispatch: Dispatch, params: any, notifications?: any) => {
     const response: any = await getRequest(endpoints.wallet, params, dispatch);
-    await httpServiceHandler(dispatch, response);
+    await httpServiceHandler(dispatch, response.data);
 
-    if (response.status === 200) {
+    if (response.data.statusCode === 200) {
       //'info' | 'success' | 'warning' | 'error'
       notifications.show("Wallet list is successfully retrieved!", {
         severity: "info",
         autoHideDuration: 3000,
       });
-      dispatch(index(response.data ? response.data : response.data));
+      dispatch(
+        index(
+          response.data.payload ? response.data.payload : response.data.payload
+        )
+      );
     }
-    return response;
+    return response.data;
   },
 
   // Method to update an existing wallet by ID
@@ -56,7 +63,7 @@ export const walletService = {
     );
     await httpServiceHandler(dispatch, response);
 
-    if (response.status === 200) {
+    if (response.data.statusCode === 200) {
       //'info' | 'success' | 'warning' | 'error'
       notifications?.show("Wallet is updated successfully", {
         severity: "success",
@@ -64,17 +71,21 @@ export const walletService = {
       });
       dispatch(update(response.data));
     }
-    return response;
+    return response.data;
   },
 
   // Method to fetch details of a specific wallet by ID
   show: async (dispatch: Dispatch, id: number) => {
-    const response: any = await getRequest(`${endpoints.wallet}/${id}`, null, dispatch);
-    await httpServiceHandler(dispatch, response);
+    const response: any = await getRequest(
+      `${endpoints.wallet}/${id}`,
+      null,
+      dispatch
+    );
+    await httpServiceHandler(dispatch, response.data.payload);
 
     if (response.status === 200) {
-      dispatch(show(response.data));
+      dispatch(show(response.data.payload));
     }
-    return response;
+    return response.data;
   },
 };

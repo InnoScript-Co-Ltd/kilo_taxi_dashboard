@@ -60,7 +60,7 @@ const PromotionCreate = () => {
   const submitPromotionCreate = async (data: PromotionFormInputs) => {
     setLoading(true);
     const response = await promotionService.store(data, dispatch);
-    if (response.status === 201) {
+    if (response.statusCode === 201) {
       navigate(`${paths.promotionList}`);
     }
     setLoading(false);
@@ -69,12 +69,16 @@ const PromotionCreate = () => {
   const loadingData = React.useCallback(async () => {
     setLoading(true);
     try {
-      const response: any = await getRequest(`${endpoints.customer}`, null, dispatch);
+      const response: any = await getRequest(
+        `${endpoints.customer}`,
+        null,
+        dispatch
+      );
       console.log(response);
 
-      await httpServiceHandler(dispatch, response);
-      if (response && "data" in response && response.status === 200) {
-        setCustomerLists(response.data.customers);
+      await httpServiceHandler(dispatch, response.data);
+      if (response && "data" in response && response.data.statusCode === 200) {
+        setCustomerLists(response.data.payload.customers);
       }
     } catch (error) {
       await httpErrorHandler(error, dispatch);
