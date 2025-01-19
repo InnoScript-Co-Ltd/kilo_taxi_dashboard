@@ -74,7 +74,7 @@ const ReasonTableView = () => {
     setLoading(true);
     await reasonService.index(dispatch, pagingParams, notifications);
     setLoading(false);
-  }, [dispatch, pagingParams]);
+  }, [dispatch, pagingParams, notifications]);
 
   React.useEffect(() => {
     loadingData();

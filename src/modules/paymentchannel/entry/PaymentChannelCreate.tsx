@@ -59,7 +59,7 @@ const PaymentChannelCreate = () => {
         dispatch,
         notifications
       );
-      if (response.status === 201) {
+      if (response.statusCode === 201) {
         navigate(`${paths.paymentChannelList}`);
       }
     } catch (error) {
@@ -212,11 +212,11 @@ const PaymentChannelCreate = () => {
           >
             <Button
               variant="outlined"
-              onClick={() => navigate(paths.walletList)}
+              onClick={() => navigate(paths.paymentChannelList)}
             >
               Cancel
             </Button>
-            <Button variant="contained" type="submit">
+            <Button type="submit" disabled={loading} variant="contained">
               Submit
             </Button>
           </Box>

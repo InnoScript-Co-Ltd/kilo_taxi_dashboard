@@ -5,7 +5,6 @@ import { useNotifications } from "@toolpad/core";
 import {
   Box,
   Button,
-  Chip,
   Input,
   InputAdornment,
   Paper,
@@ -19,7 +18,6 @@ import {
 } from "@mui/material";
 import SearchIcon from "@mui/icons-material/Search";
 import RestartAltIcon from "@mui/icons-material/RestartAlt";
-import LoginIcon from "@mui/icons-material/Login";
 import { orderService } from "../order.service";
 import { orderColumns, orderPayload } from "../order.payload";
 import {
@@ -29,7 +27,6 @@ import {
 import Status from "../../../components/Status";
 import { orderStatusLists, paginateOptions } from "../../../constants/config";
 import { setPaginate } from "../order.slice";
-import UpAndDel from "../../../components/UpAndDel";
 import { paths } from "../../../constants/paths";
 import { NavigateId } from "../../../shares/NavigateId";
 import { formatDate } from "../../../helpers/common";
@@ -188,10 +185,12 @@ const OrderTableView = () => {
                             return formatDate(value);
                           case "Wallet Transaction Id":
                             return value;
-                          case "Customer Id":
-                            return value;
-                          case "Driver Id":
-                            return value;
+                          case "Customer":
+                            return `${value?.name ?? ""} ${value?.phone ?? ""}`;
+                          case "Driver":
+                            return `${value?.name ?? ""} ${value?.phone ?? ""}`;
+                          case "Request Datetime":
+                            return formatDate(value);
                           case "Schedule Booking Id":
                             return value;
                           case "Action":

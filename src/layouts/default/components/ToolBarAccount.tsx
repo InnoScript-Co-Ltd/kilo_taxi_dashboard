@@ -24,10 +24,6 @@ export const ToolBarAccount = () => {
   const [selectedIndex, setSelectedIndex] = React.useState(1);
   const dispatch = useDispatch();
 
-  const handleClick = () => {
-    console.info(`You clicked ${options[selectedIndex]}`);
-  };
-
   const handleMenuItemClick = (
     event: React.MouseEvent<HTMLLIElement, MouseEvent>,
     index: number,

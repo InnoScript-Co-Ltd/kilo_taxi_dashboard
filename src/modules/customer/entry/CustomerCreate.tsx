@@ -65,7 +65,7 @@ const CustomerCreate = () => {
         dispatch,
         notifications
       );
-      if (response.data.statusCode === 201) {
+      if (response.statusCode === 201) {
         navigate(`${paths.customerList}`);
       }
     } catch (error) {

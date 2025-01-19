@@ -7,9 +7,9 @@ export const paymentChannelSchema = z.object({
   ChannelName: z.string(),
   Description: z.string(),
   PaymentType: z.number(),
-  Phone: z.string()?.nullable(),
-  UserName: z.string()?.nullable(),
-  file_Icon: z.any().nullable(),
+  Phone: z.string().nullable().optional(), // Allow nullable or undefined
+  UserName: z.string().nullable().optional(),
+  file_Icon: z.any().nullable().optional(),
 });
 
 export type PaymentChannelFormInputs = z.infer<typeof paymentChannelSchema>;

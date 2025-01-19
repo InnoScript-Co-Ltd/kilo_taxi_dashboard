@@ -36,7 +36,7 @@ const ScheduleBookingDetail = () => {
   return (
     <>
       <h2>Booking Detail</h2>
-      {scheduleBooking ? (
+      {loading === false && scheduleBooking ? (
         <div>
           <Accordion
             expanded={expanded === "panel1"}
@@ -59,7 +59,7 @@ const ScheduleBookingDetail = () => {
               </p>
               <p>
                 <strong>Drop Off Location:</strong>{" "}
-                {scheduleBooking.dropOffLocation}
+                {scheduleBooking.destinationLocation}
               </p>
               <p>
                 <strong>Created Date:</strong>{" "}

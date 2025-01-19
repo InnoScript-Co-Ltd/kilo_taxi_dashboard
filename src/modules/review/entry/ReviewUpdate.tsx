@@ -21,7 +21,6 @@ import { getRequest } from "../../../helpers/api";
 import { endpoints } from "../../../constants/endpoints";
 import { Controller, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { getId } from "../../../helpers/updateHelper";
 import { ReviewFormInputs, reviewSchema } from "../review.payload";
 import { reviewService } from "../review.service";
 
@@ -57,7 +56,7 @@ const ReviewUpdate = () => {
   const submitReviewUpdate = async (data: ReviewFormInputs) => {
     setLoading(true);
     const response: any = await reviewService.update(dispatch, params.id, data);
-    if (response.status === 200) {
+    if (response.statusCode === 200) {
       navigate(`${paths.reviewList}`); // Navigate to the state list page on success
     }
     setLoading(false);
@@ -72,7 +71,11 @@ const ReviewUpdate = () => {
         null,
         dispatch
       );
-      const driverResponse: any = await getRequest(`${endpoints.driver}`, null, dispatch);
+      const driverResponse: any = await getRequest(
+        `${endpoints.driver}`,
+        null,
+        dispatch
+      );
 
       await httpServiceHandler(dispatch, customerResponse);
       await httpServiceHandler(dispatch, driverResponse);
@@ -82,14 +85,14 @@ const ReviewUpdate = () => {
         "data" in customerResponse &&
         customerResponse.status === 200
       ) {
-        setCustomerLists(customerResponse.data.customers);
+        setCustomerLists(customerResponse.data.payload.customers);
       }
       if (
         driverResponse &&
         "data" in driverResponse &&
         driverResponse.status === 200
       ) {
-        setDriverLists(driverResponse.data.drivers);
+        setDriverLists(driverResponse.data.payload.drivers);
       }
     } catch (error) {
       await httpErrorHandler(error, dispatch);

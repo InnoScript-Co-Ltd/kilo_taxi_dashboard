@@ -17,6 +17,7 @@ import smsSlice from "./modules/sms/sms.slice";
 import sosSlice from "./modules/sos/sos.slice";
 import citySlice from "./modules/city/city.slice";
 import travelRateSlice from "./modules/travelrate/travelrate.slice";
+import ExtraDemandSlice from "./modules/extraDemand/extraDemand.slice";
 
 // interface RootState {
 //     share: SHARE_SLICE;
@@ -50,6 +51,7 @@ export const stores = configureStore({
     sms: smsSlice,
     sos: sosSlice,
     travelRate: travelRateSlice,
+    extraDemand: ExtraDemandSlice,
   },
 });
 

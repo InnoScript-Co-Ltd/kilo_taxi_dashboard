@@ -17,7 +17,6 @@ import {
   paginateOptions,
   paymentTypeStatusLists,
 } from "../../../constants/config";
-import { NavigateId } from "../../../shares/NavigateId";
 import { paths } from "../../../constants/paths";
 import {
   Box,
@@ -26,6 +25,7 @@ import {
   InputAdornment,
   TableSortLabel,
 } from "@mui/material";
+import TAvatar from "../../../components/TAvatar";
 import { setPaginate } from "../paymentchannel.slice"; // Adjust the slice if needed
 import SearchIcon from "@mui/icons-material/Search";
 import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
@@ -80,7 +80,7 @@ const PaymentChannelTableView = () => {
     setLoading(true);
     await paymentChannelService.index(dispatch, pagingParams, notifications);
     setLoading(false);
-  }, [dispatch, pagingParams]);
+  }, [dispatch, pagingParams, notifications]);
 
   React.useEffect(() => {
     loadingData();
@@ -201,11 +201,7 @@ const PaymentChannelTableView = () => {
                       {(() => {
                         switch (column.label) {
                           case "Icon":
-                            return (
-                              <>
-                                <img src={value} alt={value} />
-                              </>
-                            );
+                            return <TAvatar src={value} />;
                           case "ChannelName":
                             return value;
                           case "Description":

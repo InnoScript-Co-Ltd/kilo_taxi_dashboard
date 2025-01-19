@@ -18,11 +18,8 @@ import { useNavigate, useParams } from "react-router";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, AppRootState } from "../../../stores";
 import { driverService } from "../driver.service"; // Service for handling state API requests
-import { httpErrorHandler, httpServiceHandler } from "../../../helpers/handler";
 import { paths } from "../../../constants/paths";
 import { Breadcrumb } from "../../../components/Breadcrumb";
-import { getRequest } from "../../../helpers/api";
-import { endpoints } from "../../../constants/endpoints";
 import { Controller, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { DatePicker } from "@mui/x-date-pickers";
@@ -30,7 +27,6 @@ import { Visibility, VisibilityOff } from "@mui/icons-material";
 import {
   driverStatusLists,
   genderStatuslists,
-  generalStatusLists,
   kycStatusLists,
   propertyStatusLists,
 } from "../../../constants/config";
@@ -41,7 +37,6 @@ import { formBuilder } from "../../../helpers/formBuilder";
 const DriverUpdate = () => {
   const [loading, setLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
-  const [customerLists, setCustomerLists] = useState<Array<any>>([]);
 
   const params: any = useParams();
   const navigate = useNavigate();

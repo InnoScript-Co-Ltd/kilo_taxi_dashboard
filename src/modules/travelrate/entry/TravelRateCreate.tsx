@@ -22,14 +22,15 @@ import { getRequest } from "../../../helpers/api";
 import { endpoints } from "../../../constants/endpoints";
 import { useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { smsStatusLists } from "../../../constants/config";
 import { TravelRateFormInputs, travelRateSchema } from "../travelrate.payload";
 import { travelRateService } from "../travelrate.service";
+import { useNotifications } from "@toolpad/core/useNotifications";
 
 const TravelRateCreate = () => {
   const [loading, setLoading] = useState(false);
   const [cityLists, setCityLists] = useState<Array<any>>([]);
   const [vehicleLists, setVehicleTypeLists] = useState<Array<any>>([]);
+  const notifications = useNotifications();
 
   const navigate = useNavigate();
   const dispatch = useDispatch<AppDispatch>();
@@ -46,8 +47,13 @@ const TravelRateCreate = () => {
 
   const submitTravelRateCreate = async (data: TravelRateFormInputs) => {
     setLoading(true);
-    const response = await travelRateService.store(data, dispatch);
-    if (response.status === 201) {
+    const response = await travelRateService.store(
+      data,
+      dispatch,
+      notifications
+    );
+    console.log("create", response);
+    if (response.statusCode === 201) {
       navigate(`${paths.travelRateList}`);
     }
     setLoading(false);
@@ -56,8 +62,13 @@ const TravelRateCreate = () => {
   const loadingData = React.useCallback(async () => {
     setLoading(true);
     try {
-      const cityRes: any = await getRequest(`${endpoints.city}`, null, dispatch);
-      await httpServiceHandler(dispatch, cityRes);
+      const cityRes: any = await getRequest(
+        `${endpoints.city}`,
+        null,
+        dispatch
+      );
+
+      await httpServiceHandler(dispatch, cityRes.data);
       if (cityRes && "data" in cityRes && cityRes.status === 200) {
         setCityLists(cityRes.data.cities);
       }
@@ -70,14 +81,14 @@ const TravelRateCreate = () => {
         null,
         dispatch
       );
-      console.log(vehicleTypeRes);
-      await httpServiceHandler(dispatch, vehicleTypeRes);
+      console.log(vehicleTypeRes.data.payload.vehicleTypes);
+      await httpServiceHandler(dispatch, vehicleTypeRes.data);
       if (
         vehicleTypeRes &&
         "data" in vehicleTypeRes &&
-        vehicleTypeRes.status === 200
+        vehicleTypeRes.data.statusCode === 200
       ) {
-        setVehicleTypeLists(vehicleTypeRes.data.vehicleTypes);
+        setVehicleTypeLists(vehicleTypeRes.data.payload.vehicleTypes);
       }
     } catch (error) {
       await httpErrorHandler(error, dispatch);
