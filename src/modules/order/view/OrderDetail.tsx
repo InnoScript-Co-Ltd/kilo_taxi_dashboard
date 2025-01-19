@@ -35,7 +35,7 @@ const OrderDetail = () => {
   return (
     <>
       <h2>Driver Detail</h2>
-      {order ? (
+      {loading === false && order ? (
         <div>
           <Accordion
             expanded={expanded === "panel1"}

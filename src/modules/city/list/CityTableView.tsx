@@ -73,7 +73,7 @@ const CityTableView = () => {
     setLoading(true);
     await cityService.index(dispatch, pagingParams, notifications);
     setLoading(false);
-  }, [dispatch, pagingParams]);
+  }, [dispatch, pagingParams, notifications]);
 
   React.useEffect(() => {
     loadingData();

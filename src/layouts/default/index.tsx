@@ -5,7 +5,6 @@ import { keys } from "../../constants/config";
 import { getData } from "../../helpers/localStorage";
 import { authService } from "../../modules/auth/auth.service";
 import { useDispatch, useSelector } from "react-redux";
-import { checkRefreshToken } from "../../shares/shareSlice";
 
 const DefaultLayout: React.FC = () => {
   const navigate = useNavigate();
@@ -13,7 +12,7 @@ const DefaultLayout: React.FC = () => {
   const dispatch = useDispatch();
 
   const token = getData(keys.API_TOKEN);
-  const refToken = getData(keys.REFRESH_TOKEN);
+  // const refToken = getData(keys.REFRESH_TOKEN);
   const checkRefresh = useSelector((state: any) => state.share.refreshToken);
 
   const authRedirect = React.useCallback(async () => {
@@ -27,9 +26,9 @@ const DefaultLayout: React.FC = () => {
   }, [token, location, navigate]);
 
   React.useEffect(() => {
-    console.log("Token:", token);
-    console.log("Refresh Token:", refToken);
-    console.log("Current Path:", location.pathname);
+    // console.log("Token:", token);
+    // console.log("Refresh Token:", refToken);
+    // console.log("Current Path:", location.pathname);
     authRedirect();
   }, [authRedirect]);
 
@@ -38,7 +37,7 @@ const DefaultLayout: React.FC = () => {
       console.log("Here the refresh logic will be implemented");
       authService.refreshToken(dispatch);
     }
-  }, [checkRefresh]);
+  }, [checkRefresh, dispatch]);
 
   console.log("Check Refresh:", checkRefresh);
 

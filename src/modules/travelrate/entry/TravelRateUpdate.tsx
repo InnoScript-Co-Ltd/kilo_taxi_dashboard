@@ -21,8 +21,6 @@ import { getRequest } from "../../../helpers/api";
 import { endpoints } from "../../../constants/endpoints";
 import { Controller, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { smsStatusLists } from "../../../constants/config";
-import { getId } from "../../../helpers/updateHelper";
 import { TravelRateFormInputs, travelRateSchema } from "../travelrate.payload";
 import { travelRateService } from "../travelrate.service";
 

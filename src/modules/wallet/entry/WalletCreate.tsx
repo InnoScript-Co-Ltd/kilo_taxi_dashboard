@@ -17,9 +17,8 @@ import { AppDispatch } from "../../../stores";
 import { walletService } from "../wallet.service"; // Import wallet service
 import { Breadcrumb } from "../../../components/Breadcrumb";
 import { paths } from "../../../constants/paths";
-import { useForm, Controller } from "react-hook-form";
+import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { DatePicker } from "@mui/x-date-pickers";
 import { useNotifications } from "@toolpad/core/useNotifications";
 
 const WalletCreate = () => {
@@ -30,7 +29,6 @@ const WalletCreate = () => {
 
   // Set up React Hook Form with Zod schema
   const {
-    control,
     register,
     handleSubmit,
     formState: { errors },
@@ -87,7 +85,7 @@ const WalletCreate = () => {
             >
               Cancel
             </Button>
-            <Button variant="contained" type="submit">
+            <Button disabled={loading} variant="contained" type="submit">
               Submit
             </Button>
           </Box>

@@ -34,7 +34,6 @@ const VehicleTypeCreate = () => {
 
   // Set up React Hook Form with Zod schema
   const {
-    control,
     register,
     handleSubmit,
     formState: { errors },

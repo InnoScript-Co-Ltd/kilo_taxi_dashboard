@@ -21,13 +21,8 @@ import { Breadcrumb } from "../../../components/Breadcrumb";
 import { paths } from "../../../constants/paths";
 import { useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { DatePicker } from "@mui/x-date-pickers";
 import { useNotifications } from "@toolpad/core/useNotifications";
-
-import {
-  genderStatuslists,
-  generalStatusLists,
-} from "../../../constants/config";
+import { generalStatusLists } from "../../../constants/config";
 
 const ReasonCreate = () => {
   const [loading, setLoading] = useState(false);

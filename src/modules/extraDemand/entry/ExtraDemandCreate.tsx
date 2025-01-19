@@ -10,7 +10,10 @@ import {
   InputLabel,
 } from "@mui/material";
 import { useState } from "react";
-import { ExtraDemandFormInputs, extraDemandSchema } from "../extraDemand.payload"; // Import wallet schema
+import {
+  ExtraDemandFormInputs,
+  extraDemandSchema,
+} from "../extraDemand.payload"; // Import wallet schema
 import { useNavigate } from "react-router";
 import { useDispatch } from "react-redux";
 import { AppDispatch } from "../../../stores";
@@ -19,7 +22,6 @@ import { Breadcrumb } from "../../../components/Breadcrumb";
 import { paths } from "../../../constants/paths";
 import { useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { DatePicker } from "@mui/x-date-pickers";
 import { useNotifications } from "@toolpad/core/useNotifications";
 
 const ExtraDemandCreate = () => {
@@ -41,7 +43,11 @@ const ExtraDemandCreate = () => {
   const submitExtraDemadCreate = async (data: ExtraDemandFormInputs) => {
     console.log("Submitting data:", data);
     setLoading(true);
-    const response = await extraDemandService.store(data, dispatch, notifications);
+    const response = await extraDemandService.store(
+      data,
+      dispatch,
+      notifications
+    );
     console.log("API Response:", response);
     if (response.status === 201) {
       navigate(`${paths.extraDemandList}`);
@@ -59,11 +65,7 @@ const ExtraDemandCreate = () => {
             <Grid2 size={{ xs: 6, md: 3 }}>
               <FormControl variant="filled" fullWidth error={!!errors.title}>
                 <InputLabel htmlFor="title">Charges Name</InputLabel>
-                <FilledInput
-                  size="small"
-                  id="title"
-                  {...register("title")}
-                />
+                <FilledInput size="small" id="title" {...register("title")} />
                 <FormHelperText>{errors.title?.message}</FormHelperText>
               </FormControl>
             </Grid2>
@@ -72,23 +74,33 @@ const ExtraDemandCreate = () => {
                 name="amount"
                 control={control}
                 render={({ field }) => (
-                  <FormControl variant="filled" fullWidth error={!!errors.amount}>
+                  <FormControl
+                    variant="filled"
+                    fullWidth
+                    error={!!errors.amount}
+                  >
                     <InputLabel htmlFor="amount">Amount</InputLabel>
                     <FilledInput
                       size="small"
                       id="amount"
                       type="number"
                       {...field}
-                      onChange={(e) => field.onChange(parseFloat(e.target.value) || 0)}
+                      onChange={(e) =>
+                        field.onChange(parseFloat(e.target.value) || 0)
+                      }
                     />
                     <FormHelperText>{errors.amount?.message}</FormHelperText>
                   </FormControl>
                 )}
               />
-           </Grid2>
+            </Grid2>
 
-           <Grid2 size={{ xs: 12, md: 6 }}>
-              <FormControl variant="filled" fullWidth error={!!errors.description}>
+            <Grid2 size={{ xs: 12, md: 6 }}>
+              <FormControl
+                variant="filled"
+                fullWidth
+                error={!!errors.description}
+              >
                 <InputLabel htmlFor="description">Description</InputLabel>
                 <FilledInput
                   size="small"
@@ -100,7 +112,6 @@ const ExtraDemandCreate = () => {
                 <FormHelperText>{errors.description?.message}</FormHelperText>
               </FormControl>
             </Grid2>
-
           </Grid2>
 
           {/* Footer with Cancel and Submit buttons */}
@@ -113,10 +124,13 @@ const ExtraDemandCreate = () => {
               marginTop: "20px",
             }}
           >
-            <Button variant="outlined" onClick={() => navigate(paths.extraDemandList)}>
+            <Button
+              variant="outlined"
+              onClick={() => navigate(paths.extraDemandList)}
+            >
               Cancel
             </Button>
-            <Button variant="contained" type="submit">
+            <Button disabled={loading} variant="contained" type="submit">
               Submit
             </Button>
           </Box>

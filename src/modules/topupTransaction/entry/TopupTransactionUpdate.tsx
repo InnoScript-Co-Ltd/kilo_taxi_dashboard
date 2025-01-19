@@ -11,7 +11,10 @@ import {
   Select,
 } from "@mui/material";
 import { useCallback, useEffect, useState } from "react";
-import { TopupTransactionFormInputs, topupTransactionSchema } from "../topupTransaction.payload"; // Assuming topupTransactionSchema for validation
+import {
+  TopupTransactionFormInputs,
+  topupTransactionSchema,
+} from "../topupTransaction.payload"; // Assuming topupTransactionSchema for validation
 import { useNavigate, useParams } from "react-router";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, AppRootState } from "../../../stores";
@@ -21,7 +24,6 @@ import { paths } from "../../../constants/paths";
 import { Breadcrumb } from "../../../components/Breadcrumb";
 import { Controller, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { DatePicker } from "@mui/x-date-pickers";
 import { useNotifications } from "@toolpad/core/useNotifications";
 import { topUpTransactionStatus } from "../../../constants/config";
 import { getId } from "../../../helpers/updateHelper";
@@ -31,12 +33,16 @@ import FileUploadWithPreview from "../../../components/FileUploadWithPreview";
 
 const TopupTransactionUpdate = () => {
   const [loading, setLoading] = useState(false);
-  const [paymentChannelLists, setPaymentChannelLists] = useState<Array<any>>([]);
+  const [paymentChannelLists, setPaymentChannelLists] = useState<Array<any>>(
+    []
+  );
 
   const params: any = useParams();
   const navigate = useNavigate();
   const dispatch = useDispatch<AppDispatch>();
-  const { topupTransaction } = useSelector((state: AppRootState) => state.topUpTransaction); // Selecting topupTransaction data from the store
+  const { topupTransaction } = useSelector(
+    (state: AppRootState) => state.topUpTransaction
+  ); // Selecting topupTransaction data from the store
   const notifications = useNotifications();
 
   // Set up React Hook Form with Zod schema
@@ -57,7 +63,9 @@ const TopupTransactionUpdate = () => {
   });
 
   // Function to handle form submission and topupTransaction update
-  const submitTopupTransactionUpdate = async (data: TopupTransactionFormInputs) => {
+  const submitTopupTransactionUpdate = async (
+    data: TopupTransactionFormInputs
+  ) => {
     setLoading(true);
     const response: any = await topupTransactionService.update(
       dispatch,
@@ -75,7 +83,11 @@ const TopupTransactionUpdate = () => {
   const loadingData = useCallback(async () => {
     setLoading(true);
     try {
-      const response: any = await getRequest(`${endpoints.paymentChannel}`, null, dispatch);
+      const response: any = await getRequest(
+        `${endpoints.paymentChannel}`,
+        null,
+        dispatch
+      );
       await httpServiceHandler(dispatch, response);
       if (response && "data" in response && response.status === 200) {
         setPaymentChannelLists(response.data.paymentchannel);
@@ -99,7 +111,10 @@ const TopupTransactionUpdate = () => {
       setValue("phoneNumber", topupTransaction.phoneNumber || "");
       setValue(
         "status",
-        getId({ lists: topUpTransactionStatus, value: topupTransaction.status }) || 0
+        getId({
+          lists: topUpTransactionStatus,
+          value: topupTransaction.status,
+        }) || 0
       );
     }
   }, [topupTransaction, setValue]);
@@ -128,7 +143,9 @@ const TopupTransactionUpdate = () => {
                 fullWidth
                 error={!!errors.paymentChannelId}
               >
-                <InputLabel htmlFor="payment_channel_name">Payment Channel</InputLabel>
+                <InputLabel htmlFor="payment_channel_name">
+                  Payment Channel
+                </InputLabel>
                 <Controller
                   name="paymentChannelId"
                   control={control}
@@ -144,7 +161,10 @@ const TopupTransactionUpdate = () => {
                       onChange={(event) => field.onChange(event.target.value)} // Ensure onChange value is a string
                     >
                       {paymentChannelLists.map((paymentChannel: any) => (
-                        <MenuItem key={paymentChannel.id} value={paymentChannel.id}>
+                        <MenuItem
+                          key={paymentChannel.id}
+                          value={paymentChannel.id}
+                        >
                           {paymentChannel.name}
                         </MenuItem>
                       ))}
@@ -157,12 +177,10 @@ const TopupTransactionUpdate = () => {
             </Grid2>
 
             <Grid2 size={{ xs: 6, md: 3 }}>
-              <FormControl
-                variant="filled"
-                fullWidth
-                error={!!errors.amount}
-              >
-                <InputLabel htmlFor="topupTransaction_amount">Amount</InputLabel>
+              <FormControl variant="filled" fullWidth error={!!errors.amount}>
+                <InputLabel htmlFor="topupTransaction_amount">
+                  Amount
+                </InputLabel>
                 <FilledInput
                   size="small"
                   id="topupTransaction_amount"
@@ -190,8 +208,8 @@ const TopupTransactionUpdate = () => {
                       }}
                       error={
                         errors.file_transaction_screenshoot
-                          ? typeof errors.file_transaction_screenshoot.message ===
-                            "string"
+                          ? typeof errors.file_transaction_screenshoot
+                              .message === "string"
                             ? errors.file_transaction_screenshoot.message
                             : undefined
                           : undefined
@@ -207,7 +225,11 @@ const TopupTransactionUpdate = () => {
             </Grid2>
 
             <Grid2 size={{ xs: 6, md: 3 }}>
-              <FormControl variant="filled" fullWidth error={!!errors.phoneNumber}>
+              <FormControl
+                variant="filled"
+                fullWidth
+                error={!!errors.phoneNumber}
+              >
                 <InputLabel htmlFor="driver_phone_number">Phone</InputLabel>
                 <FilledInput
                   size="small"
@@ -247,7 +269,6 @@ const TopupTransactionUpdate = () => {
                 <FormHelperText>{errors.status?.message}</FormHelperText>
               </FormControl>
             </Grid2>
-
           </Grid2>
 
           {/* Footer */}

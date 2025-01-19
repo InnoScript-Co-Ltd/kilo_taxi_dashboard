@@ -27,7 +27,6 @@ import {
   customerStatusLists,
 } from "../../../constants/config";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
-import { DatePicker } from "@mui/x-date-pickers";
 import Loading from "../../../components/Loading";
 import { getId } from "../../../helpers/updateHelper";
 

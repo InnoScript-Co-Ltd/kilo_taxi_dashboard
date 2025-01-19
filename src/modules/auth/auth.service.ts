@@ -6,7 +6,6 @@ import { httpServiceHandler } from "../../helpers/handler";
 import { getData, removeAllData, setData } from "../../helpers/localStorage";
 import { keys } from "../../constants/config";
 import { checkRefreshToken } from "../../shares/shareSlice";
-import http from "../../constants/axios";
 import axios from "axios";
 
 export const authService = {
