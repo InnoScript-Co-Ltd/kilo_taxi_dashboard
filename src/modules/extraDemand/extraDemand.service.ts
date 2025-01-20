@@ -20,7 +20,7 @@ export const extraDemandService = {
       );
       await httpServiceHandler(dispatch, response);
 
-      if (response.status === 201) {
+      if (response.data.statusCode === 201) {
         //'info' | 'success' | 'warning' | 'error'
         console.log("error here");
         notifications.show("ExtraDemand is created successfully", {
@@ -28,7 +28,7 @@ export const extraDemandService = {
           autoHideDuration: 3000,
         });
       }
-      return response;
+      return response.data;
     } catch (error: any) {
       console.error(
         "Error creating ExtraDemand:",
@@ -51,17 +51,21 @@ export const extraDemandService = {
       params,
       dispatch
     );
-    await httpServiceHandler(dispatch, response);
+    await httpServiceHandler(dispatch, response.data);
 
-    if (response.status === 200) {
+    if (response.data.statusCode === 200) {
       //'info' | 'success' | 'warning' | 'error'
       notifications.show("ExtraDemand list is successfully retrieved!", {
         severity: "info",
         autoHideDuration: 3000,
       });
-      dispatch(index(response.data ? response.data : response.data));
+      dispatch(
+        index(
+          response.data.payload ? response.data.payload : response.data.payload
+        )
+      );
     }
-    return response;
+    return response.data;
   },
 
   // Method to update an existing extraDemand by ID
@@ -76,9 +80,9 @@ export const extraDemandService = {
       payload,
       dispatch
     );
-    await httpServiceHandler(dispatch, response);
+    await httpServiceHandler(dispatch, response.data);
 
-    if (response.status === 200) {
+    if (response.data.statusCode === 200) {
       //'info' | 'success' | 'warning' | 'error'
       notifications?.show("ExtraDemand is updated successfully", {
         severity: "success",
@@ -86,7 +90,7 @@ export const extraDemandService = {
       });
       dispatch(update(response.data));
     }
-    return response;
+    return response.data;
   },
 
   // Method to fetch details of a specific extraDemand by ID
@@ -96,11 +100,11 @@ export const extraDemandService = {
       null,
       dispatch
     );
-    await httpServiceHandler(dispatch, response);
+    await httpServiceHandler(dispatch, response.data.payload);
 
     if (response.status === 200) {
-      dispatch(show(response.data));
+      dispatch(show(response.data.payload));
     }
-    return response;
+    return response.data;
   },
 };
