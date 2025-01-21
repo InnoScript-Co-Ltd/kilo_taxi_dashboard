@@ -1,5 +1,4 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { getData } from "../helpers/localStorage";
 
 interface Location {
   vehicleId: string; // Send as string

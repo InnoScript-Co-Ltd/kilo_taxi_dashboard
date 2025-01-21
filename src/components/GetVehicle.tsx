@@ -1,22 +1,11 @@
-import { Button, List, ListItem, ListItemText } from "@mui/material";
+import { Button } from "@mui/material";
 import LocalTaxiIcon from "@mui/icons-material/LocalTaxi";
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import signalRService from "../helpers/signalrService";
 import { useDispatch } from "react-redux";
 import { setSignal } from "../shares/shareSlice";
 
-type LocationData = {
-  vehicleId: any;
-  lat: any;
-  long: any;
-};
-
-type Message = {
-  location: LocationData;
-};
-
 const GetVehicle = ({ id }: { id: string }) => {
-  const [messages, setMessages] = useState<Message[]>([]);
   const dispatch = useDispatch();
   const { connection, startConnection, invokeMethod, sendMethod, onReceive } =
     signalRService();
@@ -26,7 +15,7 @@ const GetVehicle = ({ id }: { id: string }) => {
 
     onReceive("ReceiveLocationData", (location: any) => {
       console.log(`Location data received for vehicle:`, location);
-      setMessages((prevMessages: any) => [...prevMessages, { location }]);
+      // setMessages((prevMessages: any) => [...prevMessages, { location }]);
       dispatch(setSignal(location));
     });
 
@@ -38,7 +27,7 @@ const GetVehicle = ({ id }: { id: string }) => {
           console.error("Error stopping SignalR connection:", err)
         );
     };
-  }, [connection, startConnection, onReceive]);
+  }, [connection, startConnection, onReceive, dispatch]);
 
   const handleSend = async () => {
     try {

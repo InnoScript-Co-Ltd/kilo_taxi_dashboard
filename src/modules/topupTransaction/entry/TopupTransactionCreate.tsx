@@ -12,7 +12,10 @@ import {
   Select,
 } from "@mui/material";
 import { useState } from "react";
-import { TopupTransactionFormInputs, topupTransactionSchema } from "../topupTransaction.payload"; // Import topupTransaction schema
+import {
+  TopupTransactionFormInputs,
+  topupTransactionSchema,
+} from "../topupTransaction.payload"; // Import topupTransaction schema
 import { useNavigate } from "react-router";
 import { useDispatch } from "react-redux";
 import { AppDispatch } from "../../../stores";
@@ -21,7 +24,6 @@ import { Breadcrumb } from "../../../components/Breadcrumb";
 import { paths } from "../../../constants/paths";
 import { useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { DatePicker } from "@mui/x-date-pickers";
 import { useNotifications } from "@toolpad/core/useNotifications";
 import { endpoints } from "../../../constants/endpoints";
 import { httpErrorHandler, httpServiceHandler } from "../../../helpers/handler";
@@ -31,7 +33,9 @@ import { topUpTransactionStatus } from "../../../constants/config";
 
 const TopupTransactionCreate = () => {
   const [loading, setLoading] = useState(false);
-  const [paymentChannelLists, setPaymentChannelLists] = useState<Array<any>>([]);
+  const [paymentChannelLists, setPaymentChannelLists] = useState<Array<any>>(
+    []
+  );
 
   const navigate = useNavigate();
   const dispatch = useDispatch<AppDispatch>();
@@ -47,9 +51,15 @@ const TopupTransactionCreate = () => {
     resolver: zodResolver(topupTransactionSchema),
   });
 
-  const submitTopupTransactionCreate = async (data: TopupTransactionFormInputs) => {
+  const submitTopupTransactionCreate = async (
+    data: TopupTransactionFormInputs
+  ) => {
     setLoading(true);
-    const response = await topupTransactionService.store(data, dispatch, notifications);
+    const response = await topupTransactionService.store(
+      data,
+      dispatch,
+      notifications
+    );
     if (response.status === 201) {
       navigate(`${paths.topupTransactionList}`);
     }
@@ -59,8 +69,12 @@ const TopupTransactionCreate = () => {
   const loadingData = React.useCallback(async () => {
     setLoading(true);
     try {
-      const response: any = await getRequest(`${endpoints.paymentChannel}`, null, dispatch);
-     
+      const response: any = await getRequest(
+        `${endpoints.paymentChannel}`,
+        null,
+        dispatch
+      );
+
       await httpServiceHandler(dispatch, response);
       if (response && "data" in response && response.status === 200) {
         setPaymentChannelLists(response.data.customers);
@@ -89,7 +103,9 @@ const TopupTransactionCreate = () => {
                 fullWidth
                 error={!!errors.paymentChannelId}
               >
-                <InputLabel htmlFor="payment_channel_name">Payment Channel</InputLabel>
+                <InputLabel htmlFor="payment_channel_name">
+                  Payment Channel
+                </InputLabel>
                 <Controller
                   name="paymentChannelId"
                   control={control}
@@ -105,7 +121,10 @@ const TopupTransactionCreate = () => {
                       onChange={(event) => field.onChange(event.target.value)} // Ensure onChange value is a string
                     >
                       {paymentChannelLists.map((paymentChannel: any) => (
-                        <MenuItem key={paymentChannel.id} value={paymentChannel.id}>
+                        <MenuItem
+                          key={paymentChannel.id}
+                          value={paymentChannel.id}
+                        >
                           {paymentChannel.name}
                         </MenuItem>
                       ))}
@@ -118,12 +137,10 @@ const TopupTransactionCreate = () => {
             </Grid2>
 
             <Grid2 size={{ xs: 6, md: 3 }}>
-              <FormControl
-                variant="filled"
-                fullWidth
-                error={!!errors.amount}
-              >
-                <InputLabel htmlFor="topupTransaction_amount">Amount</InputLabel>
+              <FormControl variant="filled" fullWidth error={!!errors.amount}>
+                <InputLabel htmlFor="topupTransaction_amount">
+                  Amount
+                </InputLabel>
                 <FilledInput
                   size="small"
                   id="topupTransaction_amount"
@@ -151,8 +168,8 @@ const TopupTransactionCreate = () => {
                       }}
                       error={
                         errors.file_transaction_screenshoot
-                          ? typeof errors.file_transaction_screenshoot.message ===
-                            "string"
+                          ? typeof errors.file_transaction_screenshoot
+                              .message === "string"
                             ? errors.file_transaction_screenshoot.message
                             : undefined
                           : undefined
@@ -167,7 +184,11 @@ const TopupTransactionCreate = () => {
             </Grid2>
 
             <Grid2 size={{ xs: 6, md: 3 }}>
-              <FormControl variant="filled" fullWidth error={!!errors.phoneNumber}>
+              <FormControl
+                variant="filled"
+                fullWidth
+                error={!!errors.phoneNumber}
+              >
                 <InputLabel htmlFor="driver_phone_number">Phone</InputLabel>
                 <FilledInput
                   size="small"
@@ -207,7 +228,6 @@ const TopupTransactionCreate = () => {
                 <FormHelperText>{errors.status?.message}</FormHelperText>
               </FormControl>
             </Grid2>
-
           </Grid2>
 
           {/* Footer with Cancel and Submit buttons */}

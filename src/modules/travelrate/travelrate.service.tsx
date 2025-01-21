@@ -4,7 +4,6 @@ import { getRequest, postRequest, putRequest } from "../../helpers/api";
 import { httpServiceHandler } from "../../helpers/handler";
 import { index, show, update } from "./travelrate.slice";
 import { TravelRateFormInputs } from "./travelrate.payload";
-import { applyLocalizedDigits } from "@mui/x-date-pickers/internals/hooks/useField/useField.utils";
 
 export const travelRateService = {
   store: async (payload: any, dispatch: Dispatch, notifications?: any) => {

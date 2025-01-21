@@ -1,10 +1,7 @@
-import { is } from "date-fns/locale";
 import { HTTPErrorResponse, HTTPResponse, keys } from "../constants/config";
-import { authService } from "../modules/auth/auth.service";
 import { checkRefreshToken, updateError } from "../shares/shareSlice";
-import { getData, removeData, setData } from "./localStorage";
+import { removeData } from "./localStorage";
 import { Dispatch } from "redux";
-import axios from "axios";
 
 /**
  * Payload handler for update state
@@ -99,7 +96,6 @@ export const httpErrorHandler = async (
   }
 
   const { status, data } = error.response;
-  let isRefreshing = false;
 
   if ([400, 404, 500, 403, 405].includes(status)) {
     return {

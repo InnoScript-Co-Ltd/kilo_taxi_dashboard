@@ -3,7 +3,6 @@ import { endpoints } from "../../constants/endpoints";
 import { getRequest, putRequest } from "../../helpers/api";
 import { httpServiceHandler } from "../../helpers/handler";
 import { index, show, update } from "./driver.slice";
-import { DriverFormInputs } from "./driver.payload";
 
 export const driverService = {
   // Method to fetch the list of drivers

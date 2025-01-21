@@ -24,7 +24,6 @@ import { paths } from "../../../constants/paths";
 import { Breadcrumb } from "../../../components/Breadcrumb";
 import { Controller, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useNotifications } from "@toolpad/core/useNotifications";
 import { paymentTypeStatusLists } from "../../../constants/config";
 import { getId } from "../../../helpers/updateHelper";
 import { formBuilder } from "../../../helpers/formBuilder";
@@ -39,7 +38,6 @@ const PaymentChannelUpdate = () => {
   const { paymentChannel } = useSelector(
     (state: AppRootState) => state.paymentChannel
   ); // Selecting wallet data from the store
-  const notifications = useNotifications();
 
   // Set up React Hook Form with Zod schema
   const {

@@ -9,7 +9,7 @@ import TableRow from "@mui/material/TableRow";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, AppRootState } from "../../../stores";
 
-import { smsStatusLists, paginateOptions } from "../../../constants/config";
+import { paginateOptions } from "../../../constants/config";
 import { paths } from "../../../constants/paths";
 import {
   Box,
@@ -28,7 +28,6 @@ import {
   StyledTableRow,
 } from "../../../components/TableCommon";
 import { useNotifications } from "@toolpad/core";
-import Status from "../../../components/Status";
 import { setPaginate } from "../travelrate.slice";
 import { travelRateService } from "../travelrate.service";
 import { travelRateColumns, travelRatePayload } from "../travelrate.payload";

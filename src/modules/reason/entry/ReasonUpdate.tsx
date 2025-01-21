@@ -22,11 +22,7 @@ import { Breadcrumb } from "../../../components/Breadcrumb";
 import { Controller, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useNotifications } from "@toolpad/core/useNotifications";
-import {
-  genderStatuslists,
-  generalStatusLists,
-} from "../../../constants/config";
-
+import { generalStatusLists } from "../../../constants/config";
 import { getId } from "../../../helpers/updateHelper";
 
 const ReasonUpdate = () => {

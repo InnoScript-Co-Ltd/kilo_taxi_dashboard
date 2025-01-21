@@ -17,7 +17,6 @@ import {
   paginateOptions,
   paymentTypeStatusLists,
 } from "../../../constants/config";
-import { NavigateId } from "../../../shares/NavigateId";
 import { paths } from "../../../constants/paths";
 import {
   Box,
@@ -81,7 +80,7 @@ const PaymentChannelTableView = () => {
     setLoading(true);
     await paymentChannelService.index(dispatch, pagingParams, notifications);
     setLoading(false);
-  }, [dispatch, pagingParams]);
+  }, [dispatch, pagingParams, notifications]);
 
   React.useEffect(() => {
     loadingData();

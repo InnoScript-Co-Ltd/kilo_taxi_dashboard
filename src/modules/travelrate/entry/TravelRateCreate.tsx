@@ -22,7 +22,6 @@ import { getRequest } from "../../../helpers/api";
 import { endpoints } from "../../../constants/endpoints";
 import { useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { smsStatusLists } from "../../../constants/config";
 import { TravelRateFormInputs, travelRateSchema } from "../travelrate.payload";
 import { travelRateService } from "../travelrate.service";
 import { useNotifications } from "@toolpad/core/useNotifications";

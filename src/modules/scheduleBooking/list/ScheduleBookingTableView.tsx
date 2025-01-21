@@ -22,10 +22,7 @@ import {
 } from "@mui/material";
 import { setPaginate } from "../scheduleBooking.slice";
 import SearchIcon from "@mui/icons-material/Search";
-import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
 import RestartAltIcon from "@mui/icons-material/RestartAlt";
-import { useNavigate } from "react-router";
-import UpAndDel from "../../../components/UpAndDel";
 import {
   StyledTableCell,
   StyledTableRow,
@@ -41,7 +38,6 @@ const ScheduleBookingTableView = () => {
     (state: AppRootState) => state.scheduleBookings
   );
   const notifications = useNotifications();
-  const navigate = useNavigate();
   const [loading, setLoading] = React.useState(false);
 
   const handleChangePage = (event: unknown, newPage: number) => {
@@ -73,11 +69,11 @@ const ScheduleBookingTableView = () => {
     setLoading(true);
     await scheduleBookingService.index(dispatch, pagingParams, notifications);
     setLoading(false);
-  }, [dispatch, pagingParams]);
+  }, [dispatch, pagingParams, notifications]);
 
   React.useEffect(() => {
     loadingData();
-  }, [pagingParams]);
+  }, [pagingParams, loadingData]);
 
   return (
     <Paper sx={{ width: "100%", overflow: "hidden" }}>
