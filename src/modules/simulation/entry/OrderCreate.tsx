@@ -63,15 +63,17 @@ const OrderCreate = () => {
   const loadingData = React.useCallback(async () => {
     setLoading(true);
     try {
-      const customerRes: any = await getRequest(`${endpoints.customer}`, null);
+      const customerRes: any = await getRequest(`${endpoints.customer}`, null, dispatch);
       const walletTransitionRes: any = await getRequest(
         `${endpoints.wallet}`,
-        null
+        null,
+        dispatch
       );
-      const driverRes: any = await getRequest(`${endpoints.driver}`, null);
+      const driverRes: any = await getRequest(`${endpoints.driver}`, null, dispatch);
       const scheduleBookingRes: any = await getRequest(
         `${endpoints.scheduleBooking}`,
-        null
+        null,
+        dispatch
       );
 
       await httpServiceHandler(dispatch, walletTransitionRes);
@@ -102,7 +104,7 @@ const OrderCreate = () => {
         setScheduleBookingLists(scheduleBookingRes.data.scheduleBookings);
       }
     } catch (error) {
-      await httpErrorHandler(error);
+      await httpErrorHandler(error, dispatch);
     }
 
     setLoading(false);

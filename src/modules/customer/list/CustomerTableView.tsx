@@ -2,7 +2,6 @@ import * as React from "react";
 import Paper from "@mui/material/Paper";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
-
 import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TablePagination from "@mui/material/TablePagination";
@@ -14,11 +13,9 @@ import { customerService } from "../customer.service";
 import {
   customerStatusLists,
   genderStatuslists,
-  generalStatusLists,
   kycStatusLists,
   paginateOptions,
 } from "../../../constants/config";
-import { NavigateId } from "../../../shares/NavigateId";
 import { paths } from "../../../constants/paths";
 import {
   Box,
@@ -205,6 +202,8 @@ const CustomerTableView = () => {
                               return value;
                             case "Profile":
                               return <TAvatar src={value} />; // Render the flag icon as-is
+                            case "Registered Datetime":
+                              return formatDate(value);
                             case "Gender":
                               return (
                                 <Status
@@ -212,6 +211,7 @@ const CustomerTableView = () => {
                                   lists={genderStatuslists}
                                 />
                               );
+
                             case "Status":
                               return (
                                 <Status

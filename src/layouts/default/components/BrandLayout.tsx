@@ -3,18 +3,15 @@ import Box from "@mui/material/Box";
 import { createTheme } from "@mui/material/styles";
 import { AppProvider } from "@toolpad/core/AppProvider";
 import { DashboardLayout } from "@toolpad/core/DashboardLayout";
-import type { Router } from "@toolpad/core";
 import { navigationList } from "../defaultPaths";
 import { Outlet, useLocation, useNavigate } from "react-router";
 import { green, grey, indigo, orange, red, yellow } from "@mui/material/colors";
 import { IconButton } from "@mui/material";
 import NotificationsIcon from "@mui/icons-material/Notifications";
-import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import { NotificationsProvider } from "@toolpad/core/useNotifications";
 import { LocalizationProvider } from "@mui/x-date-pickers";
-import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
-import { getData } from "../../../helpers/localStorage";
-import { keys } from "../../../constants/config";
+import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
+import { ToolBarAccount } from "./ToolBarAccount";
 
 const demoTheme = createTheme({
   cssVariables: {
@@ -30,7 +27,7 @@ const demoTheme = createTheme({
           main: orange[400],
         },
         success: {
-          main: green[500]
+          main: green[500],
         },
         secondary: {
           main: grey[500],
@@ -61,19 +58,19 @@ const demoTheme = createTheme({
       main: orange[400],
     },
     success: {
-      main: green[500]
+      main: green[500],
     },
     secondary: {
       main: grey[500],
     },
     error: {
-      main: red[500]
+      main: red[500],
     },
     info: {
-      main: indigo[500]
+      main: indigo[500],
     },
     warning: {
-      main: yellow[500]
+      main: yellow[500],
     },
   },
 });
@@ -95,45 +92,38 @@ function ToolBarActions() {
   );
 }
 
-function ToolBarAccount() {
-  return (
-    <React.Fragment>
-      <Box>
-        <IconButton>
-          <AccountCircleIcon />
-        </IconButton>
-      </Box>
-    </React.Fragment>
-  );
-}
-
 export default function BrandLayout() {
   const [pathname, setPathname] = React.useState("/");
   const navigate = useNavigate();
   const location = useLocation();
 
   // Handler to navigate, supporting `string | URL`
-  const handleNavigation = (path: string | URL) => {
-    const pathString = typeof path === "string" ? path : path.toString();
-    const normalizedPath = pathString.startsWith("/") ? pathString.slice(1) : pathString;
+  const handleNavigation = React.useCallback(
+    (path: string | URL) => {
+      const pathString = typeof path === "string" ? path : path.toString();
+      const normalizedPath = pathString.startsWith("/")
+        ? pathString.slice(1)
+        : pathString;
 
-    const item = navigationList.find((nav) => nav.segment === normalizedPath);
+      const item = navigationList.find((nav) => nav.segment === normalizedPath);
 
-    if (item?.isParent) {
-      const newPath = `/${normalizedPath}/list`;
-      console.log(newPath);
-      
-      if (pathname !== newPath) {
-        navigate(newPath);
-        setPathname(newPath);
+      if (item?.isParent) {
+        const newPath = `/${normalizedPath}/list`;
+        console.log(newPath);
+
+        if (pathname !== newPath) {
+          navigate(newPath);
+          setPathname(newPath);
+        }
+      } else {
+        if (pathname !== pathString) {
+          navigate(pathString);
+          setPathname(pathString);
+        }
       }
-    } else {
-      if (pathname !== pathString) {
-        navigate(pathString);
-        setPathname(pathString);
-      }
-    }
-  };
+    },
+    [pathname, navigate] // Add dependencies here
+  );
 
   const router = React.useMemo(
     () => ({
@@ -144,15 +134,18 @@ export default function BrandLayout() {
         handleNavigation(pathString);
       },
     }),
-    [location.pathname, location.search]
+    [location.pathname, location.search, handleNavigation]
   );
 
   const memoizedNavigationList = React.useMemo(() => navigationList, []);
   const memoizedTheme = React.useMemo(() => demoTheme, []);
-  const slots = React.useMemo(() => ({
-    toolbarActions: ToolBarActions,
-    toolbarAccount: ToolBarAccount,
-  }), []);
+  const slots = React.useMemo(
+    () => ({
+      toolbarActions: ToolBarActions,
+      toolbarAccount: ToolBarAccount,
+    }),
+    []
+  );
 
   return (
     // preview-start
@@ -162,9 +155,7 @@ export default function BrandLayout() {
       theme={memoizedTheme}
       branding={BRANDING}
     >
-      <DashboardLayout
-        slots={slots}
-      >
+      <DashboardLayout slots={slots}>
         <Box sx={{ width: "100%", padding: "20px" }}>
           <NotificationsProvider>
             <LocalizationProvider dateAdapter={AdapterDateFns}>

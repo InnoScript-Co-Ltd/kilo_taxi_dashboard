@@ -26,7 +26,6 @@ import FileUploadWithPreview from "../../../components/FileUploadWithPreview";
 import {
   genderStatuslists,
   kycStatusLists,
-  generalStatusLists,
   customerStatusLists,
 } from "../../../constants/config";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
@@ -136,7 +135,7 @@ const CustomerUpdate = () => {
       params.id,
       formData
     );
-    if (response.data.statusCode === 200) {
+    if (response.statusCode === 200) {
       navigate(`${paths.customerList}`);
     }
     setLoading(false);

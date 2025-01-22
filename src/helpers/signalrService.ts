@@ -8,15 +8,24 @@ const signalRService = () => {
     .withAutomaticReconnect() // Optional: Automatically reconnect if the connection is lost
     .build();
 
-  const startConnection = async () => {
-    try {
-      await connection.start();
-      console.log("SignalR connected.");
-    } catch (err) {
-      console.error("Error while starting SignalR connection:", err);
-      setTimeout(startConnection, 5000); // Retry connection
-    }
-  };
+    const startConnection = async () => {
+      if (connection.state === "Disconnected") {
+        try {
+          await connection.start();
+          console.log("SignalR connected.");
+        } catch (err) {
+          console.error("Error while starting SignalR connection:", err);
+          setTimeout(startConnection, 5000); // Retry connection
+        }
+      } else {
+        console.log("SignalR connection is already in progress or connected.");
+      }
+    };
+  
+    connection.onclose(async () => {
+      console.log("SignalR connection lost, reconnecting...");
+      await startConnection();
+    });
 
   connection.onclose(async () => {
     console.log("SignalR connection lost, reconnecting...");

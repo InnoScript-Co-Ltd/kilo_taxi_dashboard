@@ -6,7 +6,10 @@ import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TablePagination from "@mui/material/TablePagination";
 import TableRow from "@mui/material/TableRow";
-import { topupTransactionColumns, topupTransactionPayload } from "../topupTransaction.payload"; // Replace with your topupTransaction columns and payload
+import {
+  topupTransactionColumns,
+  topupTransactionPayload,
+} from "../topupTransaction.payload"; // Replace with your topupTransaction columns and payload
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, AppRootState } from "../../../stores";
 import { topupTransactionService } from "../topupTransaction.service";
@@ -73,7 +76,7 @@ const TopupTransactionTableView = () => {
     setLoading(true);
     await topupTransactionService.index(dispatch, pagingParams, notifications);
     setLoading(false);
-  }, [dispatch, pagingParams]);
+  }, [dispatch, pagingParams, notifications]);
 
   React.useEffect(() => {
     loadingData();

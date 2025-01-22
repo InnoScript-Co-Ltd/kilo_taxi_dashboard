@@ -1,5 +1,5 @@
 import { paginateOptions } from "../../constants/config";
-import { nullable, z } from "zod";
+import { z } from "zod";
 
 export const adminSchema = z.object({
   id: z.number().min(0, { message: "id" }).default(0),

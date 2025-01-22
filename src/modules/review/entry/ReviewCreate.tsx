@@ -24,11 +24,13 @@ import { useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { ReviewFormInputs, reviewSchema } from "../review.payload";
 import { reviewService } from "../review.service";
+import { useNotifications } from "@toolpad/core/useNotifications";
 
 const ReviewCreate = () => {
   const [loading, setLoading] = useState(false);
   const [customerLists, setCustomerLists] = useState<Array<any>>([]);
   const [driverLists, setDriverLists] = useState<Array<any>>([]);
+  const notifications = useNotifications();
 
   const navigate = useNavigate();
   const dispatch = useDispatch<AppDispatch>();
@@ -45,8 +47,8 @@ const ReviewCreate = () => {
 
   const submitReviewCreate = async (data: ReviewFormInputs) => {
     setLoading(true);
-    const response = await reviewService.store(data, dispatch);
-    if (response.status === 201) {
+    const response = await reviewService.store(data, dispatch, notifications);
+    if (response.statusCode === 201) {
       navigate(`${paths.reviewList}`);
     }
     setLoading(false);
@@ -57,9 +59,14 @@ const ReviewCreate = () => {
     try {
       const customerResponse: any = await getRequest(
         `${endpoints.customer}`,
-        null
+        null,
+        dispatch
       );
-      const driverResponse: any = await getRequest(`${endpoints.driver}`, null);
+      const driverResponse: any = await getRequest(
+        `${endpoints.driver}`,
+        null,
+        dispatch
+      );
 
       await httpServiceHandler(dispatch, customerResponse);
       await httpServiceHandler(dispatch, driverResponse);
@@ -69,17 +76,17 @@ const ReviewCreate = () => {
         "data" in customerResponse &&
         customerResponse.status === 200
       ) {
-        setCustomerLists(customerResponse.data.customers);
+        setCustomerLists(customerResponse.data.payload.customers);
       }
       if (
         driverResponse &&
         "data" in driverResponse &&
         driverResponse.status === 200
       ) {
-        setDriverLists(driverResponse.data.drivers);
+        setDriverLists(driverResponse.data.payload.drivers);
       }
     } catch (error) {
-      await httpErrorHandler(error);
+      await httpErrorHandler(error, dispatch);
     }
 
     setLoading(false);

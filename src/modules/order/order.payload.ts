@@ -32,6 +32,7 @@ export interface ORDER {
   status: number;
   pickUpLocation: string;
   destinationLocation: string;
+  type: string;
   createdDate: string;
   walletTransactionId: number;
   customerId: number;
@@ -41,6 +42,7 @@ export interface ORDER {
   driver: DRIVER[]; // Use the DRIVER interface as an array
   schedule: SCHEDULE[]; // Use the DRIVER interface as an array
   action: any;
+  orderRouteInfo: Array<any>;
 }
 
 type OrderColumnId = keyof ORDER;
@@ -98,8 +100,8 @@ export const orderColumns: readonly Order_Column[] = [
     sort: true,
   },
   {
-    id: "status",
-    label: "Status",
+    id: "customer",
+    label: "Customer",
     minWidth: 50,
     maxWidth: 50,
     numeric: false,
@@ -107,8 +109,44 @@ export const orderColumns: readonly Order_Column[] = [
     sort: true,
   },
   {
+    id: "driver",
+    label: "Driver",
+    minWidth: 50,
+    maxWidth: 50,
+    numeric: false,
+    disablePadding: false,
+    sort: true,
+  },
+  {
+    id: "pickUpLocation",
+    label: "From",
+    minWidth: 100,
+    maxWidth: 150,
+    numeric: false,
+    disablePadding: false,
+    sort: true,
+  },
+  {
+    id: "destinationLocation",
+    label: "To",
+    minWidth: 100,
+    maxWidth: 150,
+    numeric: false,
+    disablePadding: false,
+    sort: true,
+  },
+  {
+    id: "type",
+    label: "Type",
+    minWidth: 100,
+    maxWidth: 150,
+    numeric: false,
+    disablePadding: false,
+    sort: true,
+  },
+  {
     id: "createdDate",
-    label: "Created Date",
+    label: "Request Datetime",
     minWidth: 100,
     maxWidth: 150,
     numeric: false,
@@ -116,42 +154,6 @@ export const orderColumns: readonly Order_Column[] = [
     sort: true,
   },
 
-  {
-    id: "walletTransactionId",
-    label: "Wallet Transaction Id",
-    minWidth: 50,
-    maxWidth: 50,
-    numeric: false,
-    disablePadding: false,
-    sort: true,
-  },
-  {
-    id: "customerId",
-    label: "Customer Id",
-    minWidth: 50,
-    maxWidth: 50,
-    numeric: false,
-    disablePadding: false,
-    sort: true,
-  },
-  {
-    id: "driverId",
-    label: "Driver Id",
-    minWidth: 50,
-    maxWidth: 50,
-    numeric: false,
-    disablePadding: false,
-    sort: true,
-  },
-  {
-    id: "scheduleBookingId",
-    label: "Schedule Booking Id",
-    minWidth: 50,
-    maxWidth: 50,
-    numeric: false,
-    disablePadding: false,
-    sort: true,
-  },
   {
     id: "action",
     label: "Action",

@@ -12,7 +12,7 @@ export const cityService = {
     dispatch: Dispatch,
     notifications?: any
   ) => {
-    const response: any = await postRequest(endpoints.city, payload);
+    const response: any = await postRequest(endpoints.city, payload, dispatch);
     await httpServiceHandler(dispatch, response);
 
     if (response.status === 201) {
@@ -28,7 +28,7 @@ export const cityService = {
 
   // Method to retrieve a list of wallets with optional parameters
   index: async (dispatch: Dispatch, params: any, notifications?: any) => {
-    const response: any = await getRequest(endpoints.city, params);
+    const response: any = await getRequest(endpoints.city, params, dispatch);
     await httpServiceHandler(dispatch, response);
 
     if (response.status === 200) {
@@ -49,7 +49,7 @@ export const cityService = {
     payload: CityFormInputs,
     notifications?: any
   ) => {
-    const response: any = await putRequest(`${endpoints.city}/${id}`, payload);
+    const response: any = await putRequest(`${endpoints.city}/${id}`, payload, dispatch);
     await httpServiceHandler(dispatch, response);
 
     if (response.status === 200) {
@@ -65,7 +65,7 @@ export const cityService = {
 
   // Method to fetch details of a specific wallet by ID
   show: async (dispatch: Dispatch, id: number) => {
-    const response: any = await getRequest(`${endpoints.city}/${id}`, null);
+    const response: any = await getRequest(`${endpoints.city}/${id}`, null, dispatch);
     await httpServiceHandler(dispatch, response);
 
     if (response.status === 200) {

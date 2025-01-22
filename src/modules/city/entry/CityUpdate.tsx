@@ -17,9 +17,8 @@ import { cityService } from "../city.service"; // Service for handling wallet AP
 import { httpErrorHandler } from "../../../helpers/handler";
 import { paths } from "../../../constants/paths";
 import { Breadcrumb } from "../../../components/Breadcrumb";
-import { Controller, useForm } from "react-hook-form";
+import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { DatePicker } from "@mui/x-date-pickers";
 import { useNotifications } from "@toolpad/core/useNotifications";
 
 const CityUpdate = () => {
@@ -33,7 +32,6 @@ const CityUpdate = () => {
 
   // Set up React Hook Form with Zod schema
   const {
-    control,
     register,
     handleSubmit,
     setValue,
@@ -66,7 +64,7 @@ const CityUpdate = () => {
     try {
       await cityService.show(dispatch, params.id); // Fetch wallet data to populate the form
     } catch (error) {
-      await httpErrorHandler(error);
+      await httpErrorHandler(error, dispatch);
     }
     setLoading(false);
   }, [dispatch, params.id]);
@@ -116,7 +114,7 @@ const CityUpdate = () => {
             <Button variant="outlined" onClick={() => navigate(paths.cityList)}>
               Cancel
             </Button>
-            <Button variant="contained" type="submit">
+            <Button disabled={loading} variant="contained" type="submit">
               Submit
             </Button>
           </Box>

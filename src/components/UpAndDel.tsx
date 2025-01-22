@@ -9,6 +9,7 @@ import { TransitionProps } from "@mui/material/transitions";
 import Dialog from "@mui/material/Dialog";
 import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
+import { useDispatch } from "react-redux";
 
 const Transition = React.forwardRef(function Transition(
   props: TransitionProps & {
@@ -30,6 +31,7 @@ const UpAndDel = ({
 }) => {
   const [open, setOpen] = React.useState(false);
   const [confirm, setConfrim] = React.useState(false);
+  const dispatch = useDispatch();
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -42,11 +44,12 @@ const UpAndDel = ({
   const navigate = useNavigate();
 
   const dele = useCallback(async () => {
-    const res: any = await delRequest(`${baseURL}${url}`);
-    if (res.status === 204) {
+    const res: any = await delRequest(`${baseURL}${url}`, dispatch);
+    console.log(res);
+    if (res.data.statusCode === 204) {
       fn();
     }
-  }, [url, fn]);
+  }, [url, fn, dispatch]);
 
   useEffect(() => {
     if (confirm) {
@@ -72,8 +75,8 @@ const UpAndDel = ({
       >
         <DialogContent>
           <Alert severity="warning">
-                Are you sure to delete this transaction?
-              </Alert>
+            Are you sure to delete this transaction?
+          </Alert>
         </DialogContent>
         <DialogActions>
           <Button onClick={handleClose}>Disagree</Button>

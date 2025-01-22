@@ -5,6 +5,8 @@ export const baseURL = env[0];
 
 export const endpoints = {
   authLogin: "Auth/adminLogin",
+  authLogout: "Auth/logout",
+  authRefreshToken: "Auth/refresh-token",
   admin: "Admin",
   customer: "Customer",
   promotion: "Promotion",
@@ -29,4 +31,6 @@ export const endpoints = {
   login: "auth/login",
   image: `${baseURL}/storage/images`,
   status: "status",
+  refreshToken: "refresh-token",
+  extraDemand: "ExtraDemand",
 };

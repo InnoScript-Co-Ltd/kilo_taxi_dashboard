@@ -28,7 +28,6 @@ import FileUploadWithPreview from "../../../components/FileUploadWithPreview";
 import Loading from "../../../components/Loading";
 import { getId } from "../../../helpers/updateHelper";
 import { formBuilder } from "../../../helpers/formBuilder";
-import { VehicleRoute } from "../vehicle.route";
 
 const VehicleUpdate = () => {
   const [loading, setLoading] = useState(false);
@@ -73,7 +72,11 @@ const VehicleUpdate = () => {
     setLoading(true);
     try {
       await vehicleService.show(dispatch, params.id); // Fetch vehicle data to populate the form
-      const driverResponse: any = await getRequest(endpoints.driver, null);
+      const driverResponse: any = await getRequest(
+        endpoints.driver,
+        null,
+        dispatch
+      );
 
       await httpServiceHandler(dispatch, driverResponse);
 
@@ -85,7 +88,7 @@ const VehicleUpdate = () => {
         setDriversList(driverResponse.data.drivers);
       }
     } catch (error) {
-      await httpErrorHandler(error);
+      await httpErrorHandler(error, dispatch);
     }
     setLoading(false);
   }, [dispatch, params.id]);

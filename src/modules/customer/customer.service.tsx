@@ -2,13 +2,18 @@ import { Dispatch } from "redux";
 import { endpoints } from "../../constants/endpoints";
 import { getRequest, postRequest, putRequest } from "../../helpers/api";
 import { httpServiceHandler } from "../../helpers/handler";
-import { CustomerFormInputs } from "./customer.payload";
 import { index, show, update } from "./customer.slice";
 
 export const customerService = {
   store: async (payload: any, dispatch: Dispatch, notifications: any) => {
-    const response: any = await postRequest(endpoints.customer, payload);
-    await httpServiceHandler(dispatch, response);
+    console.log("payload:", payload);
+
+    const response: any = await postRequest(
+      endpoints.customer,
+      payload,
+      dispatch
+    );
+    await httpServiceHandler(dispatch, response.data);
 
     if (response.data.statusCode === 201) {
       //'info' | 'success' | 'warning' | 'error'
@@ -17,13 +22,17 @@ export const customerService = {
         autoHideDuration: 3000,
       });
     }
-    return response;
+    return response.data;
   },
 
   index: async (dispatch: Dispatch, params: any, notifications: any) => {
-    const response: any = await getRequest(endpoints.customer, params);
+    const response: any = await getRequest(
+      endpoints.customer,
+      params,
+      dispatch
+    );
 
-    await httpServiceHandler(dispatch, response, notifications);
+    await httpServiceHandler(dispatch, response.data, notifications);
     if (response.data.statusCode === 200) {
       //'info' | 'success' | 'warning' | 'error'
       notifications.show("Customer list is successfully retrieved!", {
@@ -34,7 +43,7 @@ export const customerService = {
         index(response.data.payload ? response.data.payload : response.data)
       );
     }
-    return response;
+    return response.data;
   },
 
   update: async (
@@ -45,11 +54,12 @@ export const customerService = {
   ) => {
     const response: any = await putRequest(
       `${endpoints.customer}/${id}`,
-      payload
+      payload,
+      dispatch
     );
     await httpServiceHandler(dispatch, response);
 
-    if (response.status === 200) {
+    if (response.data.statusCode === 200) {
       //'info' | 'success' | 'warning' | 'error'
       notifications?.show("Customer is updated successfully", {
         severity: "success",
@@ -57,17 +67,21 @@ export const customerService = {
       });
       dispatch(update(response.data));
     }
-    return response;
+    return response.data;
   },
 
   show: async (dispatch: Dispatch, id: number) => {
-    const response: any = await getRequest(`${endpoints.customer}/${id}`, null);
-    await httpServiceHandler(dispatch, response);
+    const response: any = await getRequest(
+      `${endpoints.customer}/${id}`,
+      null,
+      dispatch
+    );
+    await httpServiceHandler(dispatch, response.data.payload);
 
-    if (response.status === 200) {
-      dispatch(show(response.data));
+    if (response.data.statusCode === 200) {
+      dispatch(show(response.data.payload));
     }
 
-    return response;
+    return response.data;
   },
 };

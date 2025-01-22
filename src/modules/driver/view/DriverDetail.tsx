@@ -9,27 +9,21 @@ import AccordionDetails from "@mui/material/AccordionDetails";
 import AccordionSummary from "@mui/material/AccordionSummary";
 import ExpandmoreIcon from "@mui/icons-material/ExpandMore";
 import { Box, Button, Card, Typography } from "@mui/material";
-import { getRequest } from "../../../helpers/api";
-import { endpoints } from "../../../constants/endpoints";
 import { Breadcrumb } from "../../../components/Breadcrumb";
 import Loading from "../../../components/Loading";
 import TAvatar from "../../../components/TAvatar";
 import { formatDate } from "../../../helpers/common";
 import Status from "../../../components/Status";
 import {
-  genderStatuslists,
-  kycStatusLists,
-  statusOptions,
   vehicleStatusLists,
   walletStatusLists,
 } from "../../../constants/config";
 import { paths } from "../../../constants/paths";
-import OpenMap from "../../../components/OpenMap";
+import CurrentLocation from "../../../components/CurrentLocation";
 
 const DriverDetail = () => {
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
-  const [vehicleList, setVehicleList] = useState<Array<any>>([]);
   const [expanded, setExpanded] = useState<string | false>(false);
   const handleChange = (isExpanded: boolean, panel: string) => {
     setExpanded(isExpanded ? panel : false);
@@ -91,7 +85,8 @@ const DriverDetail = () => {
                   <strong>Name:</strong> {driver.name}
                 </p>
                 <p>
-                  <strong>Profile:</strong> <img src={driver.profile} />{" "}
+                  <strong>Profile:</strong>{" "}
+                  <img alt="dirver-profile" src={driver.profile} />{" "}
                 </p>
                 <p>
                   <strong>Mobile:</strong> {driver.mobilePrefix}
@@ -109,22 +104,28 @@ const DriverDetail = () => {
                 </p>
                 <p>
                   <strong>NRC Image Front:</strong>{" "}
-                  <img src={driver.nrcImageFront} />{" "}
+                  <img alt={"Nrc front"} src={driver.nrcImageFront} />{" "}
                 </p>
                 <p>
                   <strong>NRC Image Back:</strong>{" "}
-                  <img src={driver.nrcImageBack} />{" "}
+                  <img alt={"Nrc back"} src={driver.nrcImageBack} />{" "}
                 </p>
                 <p>
                   <strong>Driver License:</strong> {driver.driverLicense}
                 </p>
                 <p>
                   <strong>Driver Image License Front:</strong>{" "}
-                  <img src={driver.driverImageLicenseFront} />{" "}
+                  <img
+                    alt={"dirver license front"}
+                    src={driver.driverImageLicenseFront}
+                  />{" "}
                 </p>
                 <p>
                   <strong>Driver Image License Back:</strong>{" "}
-                  <img src={driver.driverImageLicenseBack} />{" "}
+                  <img
+                    alt={"driver licnese back"}
+                    src={driver.driverImageLicenseBack}
+                  />{" "}
                 </p>
                 <p>
                   <strong>Email Verified At:</strong>{" "}
@@ -318,7 +319,7 @@ const DriverDetail = () => {
           <p>No driver details available.</p>
         )}
         <GetVehicle id={params.id} />
-        <OpenMap />
+        <CurrentLocation />
       </Card>
     </Box>
   );

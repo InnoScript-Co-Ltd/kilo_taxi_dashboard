@@ -25,7 +25,6 @@ import { Controller, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { DatePicker } from "@mui/x-date-pickers";
 import {
-  generalStatusLists,
   promotionTypeLists,
   applicableToLists,
   promoStatusLists,
@@ -76,7 +75,7 @@ const PromotionUpdate = () => {
       params.id,
       data
     );
-    if (response.status === 200) {
+    if (response.statusCode === 200) {
       navigate(`${paths.promotionList}`); // Navigate to the state list page on success
     }
     setLoading(false);
@@ -86,13 +85,17 @@ const PromotionUpdate = () => {
   const loadingData = useCallback(async () => {
     setLoading(true);
     try {
-      const response: any = await getRequest(`${endpoints.customer}`, null);
+      const response: any = await getRequest(
+        `${endpoints.customer}`,
+        null,
+        dispatch
+      );
       await httpServiceHandler(dispatch, response);
-      if (response && "data" in response && response.status === 200) {
-        setCustomerLists(response.data.customers);
+      if (response && "data" in response && response.data.statusCode === 200) {
+        setCustomerLists(response.data.payload.customers);
       }
     } catch (error) {
-      await httpErrorHandler(error);
+      await httpErrorHandler(error, dispatch);
     }
 
     setLoading(false);

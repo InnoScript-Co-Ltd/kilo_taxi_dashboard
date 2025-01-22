@@ -12,10 +12,14 @@ export const reasonService = {
     dispatch: Dispatch,
     notifications?: any
   ) => {
-    const response: any = await postRequest(endpoints.reason, payload);
-    await httpServiceHandler(dispatch, response);
+    const response: any = await postRequest(
+      endpoints.reason,
+      payload,
+      dispatch
+    );
+    await httpServiceHandler(dispatch, response.data);
 
-    if (response.status === 201) {
+    if (response.data.statusCode === 201) {
       //'info' | 'success' | 'warning' | 'error'
       console.log("error here");
       notifications.show("Reason is created successfully", {
@@ -23,23 +27,27 @@ export const reasonService = {
         autoHideDuration: 3000,
       });
     }
-    return response;
+    return response.data;
   },
 
   // Method to retrieve a list of reasons with optional parameters
   index: async (dispatch: Dispatch, params: any, notifications?: any) => {
-    const response: any = await getRequest(endpoints.reason, params);
-    await httpServiceHandler(dispatch, response);
+    const response: any = await getRequest(endpoints.reason, params, dispatch);
+    await httpServiceHandler(dispatch, response.data);
 
-    if (response.status === 200) {
+    if (response.data.statusCode === 200) {
       //'info' | 'success' | 'warning' | 'error'
       notifications.show("Reason list is successfully retrieved!", {
         severity: "info",
         autoHideDuration: 3000,
       });
-      dispatch(index(response.data ? response.data : response.data));
+      dispatch(
+        index(
+          response.data.payload ? response.data.payload : response.data.payload
+        )
+      );
     }
-    return response;
+    return response.data;
   },
 
   // Method to update an existing reason by ID
@@ -51,11 +59,12 @@ export const reasonService = {
   ) => {
     const response: any = await putRequest(
       `${endpoints.reason}/${id}`,
-      payload
+      payload,
+      dispatch
     );
-    await httpServiceHandler(dispatch, response);
+    await httpServiceHandler(dispatch, response.data);
 
-    if (response.status === 200) {
+    if (response.data.statusCode === 200) {
       //'info' | 'success' | 'warning' | 'error'
       notifications?.show("Reason is updated successfully", {
         severity: "success",
@@ -63,17 +72,21 @@ export const reasonService = {
       });
       dispatch(update(response.data));
     }
-    return response;
+    return response.data;
   },
 
   // Method to fetch details of a specific reason by ID
   show: async (dispatch: Dispatch, id: number) => {
-    const response: any = await getRequest(`${endpoints.reason}/${id}`, null);
-    await httpServiceHandler(dispatch, response);
+    const response: any = await getRequest(
+      `${endpoints.reason}/${id}`,
+      null,
+      dispatch
+    );
+    await httpServiceHandler(dispatch, response.data.payload);
 
     if (response.status === 200) {
-      dispatch(show(response.data));
+      dispatch(show(response.data.payload));
     }
-    return response;
+    return response.data;
   },
 };

@@ -7,7 +7,7 @@ export const scheduleBookingSchema = z.object({
   CustomerId: z.string(),
   DeliverId: z.string(),
   PickUpLocation: z.string(),
-  DropOffLocation: z.string(),
+  destinationLocation: z.string(),
   ScheduleTime: z.date(),
   CreatedDate: z.date(),
   Status: z.string(),
@@ -23,7 +23,7 @@ export interface SCHEDULE {
   customerId?: string;
   deliverId?: string;
   pickUpLocation: string;
-  dropOffLocation: string;
+  destinationLocation: string;
   scheduleTime: string;
   createdDate: string;
   orders: ORDER[]; // Use the order interface as an array
@@ -68,7 +68,7 @@ export const scheduleColumns: readonly Column[] = [
     sort: true,
   },
   {
-    id: "dropOffLocation",
+    id: "destinationLocation",
     label: "Drop Off Location",
     minWidth: 150,
     numeric: false,

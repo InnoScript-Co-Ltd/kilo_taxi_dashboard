@@ -27,7 +27,6 @@ import {
   customerStatusLists,
 } from "../../../constants/config";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
-import { DatePicker } from "@mui/x-date-pickers";
 import Loading from "../../../components/Loading";
 import { getId } from "../../../helpers/updateHelper";
 
@@ -112,7 +111,7 @@ const AdminUpdate = () => {
     try {
       setLoading(true);
       const response = await adminService.update(dispatch, params.id, data);
-      if (response.status === 200) {
+      if (response.statusCode === 200) {
         setLoading(false);
         navigate(`${paths.adminList}`);
       }

@@ -12,10 +12,14 @@ export const sosService = {
     dispatch: Dispatch,
     notifications?: any
   ) => {
-    const response: any = await postRequest(endpoints.paymentChannel, payload);
-    await httpServiceHandler(dispatch, response);
+    const response: any = await postRequest(
+      endpoints.paymentChannel,
+      payload,
+      dispatch
+    );
+    await httpServiceHandler(dispatch, response.data);
 
-    if (response.status === 201) {
+    if (response.data.statusCode === 201) {
       //'info' | 'success' | 'warning' | 'error'
       console.log("error here");
       notifications.show("Sos is created successfully", {
@@ -23,23 +27,27 @@ export const sosService = {
         autoHideDuration: 3000,
       });
     }
-    return response;
+    return response.data;
   },
 
   // Method to retrieve a list of wallets with optional parameters
   index: async (dispatch: Dispatch, params: any, notifications?: any) => {
-    const response: any = await getRequest(endpoints.sos, params);
-    await httpServiceHandler(dispatch, response);
+    const response: any = await getRequest(endpoints.sos, params, dispatch);
+    await httpServiceHandler(dispatch, response.data);
 
-    if (response.status === 200) {
+    if (response.data.statusCode === 200) {
       //'info' | 'success' | 'warning' | 'error'
       notifications.show("Sos list is successfully retrieved!", {
         severity: "info",
         autoHideDuration: 3000,
       });
-      dispatch(index(response.data ? response.data : response.data));
+      dispatch(
+        index(
+          response.data.payload ? response.data.payload : response.data.payload
+        )
+      );
     }
-    return response;
+    return response.data;
   },
 
   // Method to update an existing wallet by ID
@@ -49,8 +57,12 @@ export const sosService = {
     payload: SosFormInputs,
     notifications?: any
   ) => {
-    const response: any = await putRequest(`${endpoints.sos}/${id}`, payload);
-    await httpServiceHandler(dispatch, response);
+    const response: any = await putRequest(
+      `${endpoints.sos}/${id}`,
+      payload,
+      dispatch
+    );
+    await httpServiceHandler(dispatch, response.data);
 
     if (response.status === 200) {
       //'info' | 'success' | 'warning' | 'error'
@@ -60,17 +72,21 @@ export const sosService = {
       });
       dispatch(update(response.data));
     }
-    return response;
+    return response.data;
   },
 
   // Method to fetch details of a specific wallet by ID
   show: async (dispatch: Dispatch, id: number) => {
-    const response: any = await getRequest(`${endpoints.sos}/${id}`, null);
-    await httpServiceHandler(dispatch, response);
+    const response: any = await getRequest(
+      `${endpoints.sos}/${id}`,
+      null,
+      dispatch
+    );
+    await httpServiceHandler(dispatch, response.data.payload);
 
     if (response.status === 200) {
-      dispatch(show(response.data));
+      dispatch(show(response.data.payload));
     }
-    return response;
+    return response.data;
   },
 };

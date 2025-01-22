@@ -1,19 +1,14 @@
-import DriverTableView from '../list/DriverTableView'
-import { Breadcrumb } from '../../../components/Breadcrumb'
-import OpenMap from '../../../components/OpenMap'
+import DriverTableView from "../list/DriverTableView";
+import { Breadcrumb } from "../../../components/Breadcrumb";
 
-const DriverList = () =>{
-    return (
-        <div>
-    
-            <Breadcrumb />
-    
-            <DriverTableView />
+const DriverList = () => {
+  return (
+    <div>
+      <Breadcrumb />
 
-            <OpenMap />
-    
-        </div>
-      )
-    }
-    
- export default DriverList
+      <DriverTableView />
+    </div>
+  );
+};
+
+export default DriverList;
