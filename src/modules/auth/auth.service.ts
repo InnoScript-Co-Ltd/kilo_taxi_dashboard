@@ -23,6 +23,7 @@ export const authService = {
     if (response.status === 200) {
       setData(keys.API_TOKEN, response.data.accessToken);
       setData(keys.REFRESH_TOKEN, response.data.refreshToken);
+      // setData(keys.USER, response.data.)
       console.log(response);
     }
     return response;

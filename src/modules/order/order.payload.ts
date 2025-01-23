@@ -29,6 +29,7 @@ export type OrderFormInputs = z.infer<typeof orderSchema>;
 export interface ORDER {
   id: string;
   totalAmount: number;
+  estimatedAmount: number;
   status: number;
   pickUpLocation: string;
   destinationLocation: string;
@@ -42,6 +43,7 @@ export interface ORDER {
   driver: DRIVER[]; // Use the DRIVER interface as an array
   schedule: SCHEDULE[]; // Use the DRIVER interface as an array
   action: any;
+  orderRouteInfo: Array<any>;
 }
 
 type OrderColumnId = keyof ORDER;

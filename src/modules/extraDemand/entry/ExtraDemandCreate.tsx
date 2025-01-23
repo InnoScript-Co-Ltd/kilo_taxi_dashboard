@@ -49,7 +49,7 @@ const ExtraDemandCreate = () => {
       notifications
     );
     console.log("API Response:", response);
-    if (response.status === 201) {
+    if (response.statusCode === 201) {
       navigate(`${paths.extraDemandList}`);
     }
     setLoading(false);

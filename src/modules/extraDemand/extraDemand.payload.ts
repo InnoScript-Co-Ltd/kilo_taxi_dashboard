@@ -11,8 +11,7 @@ export const extraDemandSchema = z.object({
     .number()
     .positive("Amount must be a positive number")
     .min(1, "Amount must be greater than or equal to 1"),
-  description: z
-    .string(),
+  description: z.string(),
 });
 
 export type ExtraDemandFormInputs = z.infer<typeof extraDemandSchema>;
@@ -99,7 +98,7 @@ export const extraDemandPayload: ExtraDemand_PAYLOAD = {
   pagingParams: {
     PageSize: paginateOptions.rows,
     CurrentPage: 1,
-    SortField: "name",
+    SortField: "Title",
     SortDir: 0,
     SearchTerm: "",
   },

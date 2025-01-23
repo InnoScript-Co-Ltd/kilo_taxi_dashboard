@@ -8,9 +8,11 @@ import {
   Accordion,
   AccordionDetails,
   AccordionSummary,
+  Chip,
   Typography,
 } from "@mui/material";
 import { formatDate } from "../../../helpers/common";
+import OrderDetailLocation from "../../../components/OrderDetailLocation";
 
 const OrderDetail = () => {
   const [loading, setLoading] = useState(false);
@@ -19,7 +21,6 @@ const OrderDetail = () => {
     setExpanded(isExpanded ? panel : false);
   };
   const params: any = useParams();
-  console.log(params.id);
   const dispatch = useDispatch();
   var { order } = useSelector((state: AppRootState) => state.order);
   const loadingData = useCallback(async () => {
@@ -32,6 +33,9 @@ const OrderDetail = () => {
   useEffect(() => {
     loadingData();
   }, [loadingData]);
+
+  console.log(order);
+
   return (
     <>
       <h2>Driver Detail</h2>
@@ -56,7 +60,16 @@ const OrderDetail = () => {
                 <strong>Total Amount:</strong> {order.totalAmount}
               </p>
               <p>
-                <strong>Status:</strong> {order.status}
+                <strong>Estimated Amount:</strong>{" "}
+                <Chip
+                  label={`${order.estimatedAmount} Ks`}
+                  color="secondary"
+                  variant="outlined"
+                />
+              </p>
+              <p>
+                <strong>Status:</strong>{" "}
+                <Chip label={order.status} color="primary" variant="outlined" />
               </p>
               <p>
                 <strong>Created Date:</strong> {formatDate(order.createdDate)}
@@ -120,6 +133,8 @@ const OrderDetail = () => {
               </AccordionDetails>
             ))}
           </Accordion>
+
+          <OrderDetailLocation detailLocation={order.orderRouteInfo} />
         </div>
       ) : (
         <p>No order details available.</p>
