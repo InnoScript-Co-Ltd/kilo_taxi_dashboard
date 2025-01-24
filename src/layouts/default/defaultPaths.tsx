@@ -250,6 +250,19 @@ export const navigationList = [
     ],
   },
   {
+    segment: "kiloAmount",
+    title: "KiloAmount",
+    isParent: true,
+    icon: <CreditCardIcon />,
+    children: [
+      {
+        segment: "list",
+        title: "List",
+        icon: <FormatListBulletedIcon />,
+      },
+    ],
+  },
+  {
     segment: "simulation",
     title: "Simulation",
     isParent: true,
@@ -274,7 +287,6 @@ export const navigationList = [
         title: "List",
         icon: <FormatListBulletedIcon />,
       },
-      
     ],
   },
 
