@@ -29,6 +29,7 @@ export type OrderFormInputs = z.infer<typeof orderSchema>;
 export interface ORDER {
   id: string;
   totalAmount: number;
+  estimatedAmount: number;
   status: number;
   pickUpLocation: string;
   destinationLocation: string;
