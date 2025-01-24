@@ -48,9 +48,8 @@ const adminSlice = createSlice({
      * @param action The action containing the payload.
      * @returns The updated state.
      */
-    index: (state, action) => {
-      // index: (state, actions: PayloadAction<{ admins: ADMIN[]; paging: any }>) => {
-      state.data = action.payload.payload;
+    index: (state, action: PayloadAction<{ admins: ADMIN[]; paging: any }>) => {
+      state.data = action.payload;
     },
     /**
      * Updates the current country data in the state.
