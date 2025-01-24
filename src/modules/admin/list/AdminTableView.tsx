@@ -86,7 +86,7 @@ const AdminTableView = () => {
   React.useEffect(() => {
     loadingData();
   }, [pagingParams, loadingData]);
-
+  console.log("data", data.admins);
   return (
     <Paper sx={{ width: "100%", overflow: "hidden" }}>
       <Box

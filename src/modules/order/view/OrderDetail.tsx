@@ -8,6 +8,7 @@ import {
   Accordion,
   AccordionDetails,
   AccordionSummary,
+  Chip,
   Typography,
 } from "@mui/material";
 import { formatDate } from "../../../helpers/common";
@@ -33,6 +34,8 @@ const OrderDetail = () => {
     loadingData();
   }, [loadingData]);
 
+  console.log(order);
+
   return (
     <>
       <h2>Driver Detail</h2>
@@ -57,7 +60,16 @@ const OrderDetail = () => {
                 <strong>Total Amount:</strong> {order.totalAmount}
               </p>
               <p>
-                <strong>Status:</strong> {order.status}
+                <strong>Estimated Amount:</strong>{" "}
+                <Chip
+                  label={`${order.estimatedAmount} Ks`}
+                  color="secondary"
+                  variant="outlined"
+                />
+              </p>
+              <p>
+                <strong>Status:</strong>{" "}
+                <Chip label={order.status} color="primary" variant="outlined" />
               </p>
               <p>
                 <strong>Created Date:</strong> {formatDate(order.createdDate)}
