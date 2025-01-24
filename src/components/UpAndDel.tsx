@@ -49,7 +49,7 @@ const UpAndDel = ({
     if (res.data.statusCode === 204) {
       fn();
     }
-  }, [url, fn]);
+  }, [url, fn, dispatch]);
 
   useEffect(() => {
     if (confirm) {

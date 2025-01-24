@@ -26,7 +26,6 @@ import FileUploadWithPreview from "../../../components/FileUploadWithPreview";
 import {
   genderStatuslists,
   kycStatusLists,
-  generalStatusLists,
   customerStatusLists,
 } from "../../../constants/config";
 import { Visibility, VisibilityOff } from "@mui/icons-material";

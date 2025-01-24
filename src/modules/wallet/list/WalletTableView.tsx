@@ -73,7 +73,7 @@ const WalletTableView = () => {
     setLoading(true);
     await walletService.index(dispatch, pagingParams, notifications);
     setLoading(false);
-  }, [dispatch, pagingParams]);
+  }, [dispatch, pagingParams, notifications]);
 
   React.useEffect(() => {
     loadingData();

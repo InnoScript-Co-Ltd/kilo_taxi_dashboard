@@ -25,7 +25,6 @@ import { Controller, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { DatePicker } from "@mui/x-date-pickers";
 import {
-  generalStatusLists,
   promotionTypeLists,
   applicableToLists,
   promoStatusLists,

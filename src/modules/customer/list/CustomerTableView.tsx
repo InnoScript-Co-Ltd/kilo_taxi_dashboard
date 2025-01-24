@@ -13,11 +13,9 @@ import { customerService } from "../customer.service";
 import {
   customerStatusLists,
   genderStatuslists,
-  generalStatusLists,
   kycStatusLists,
   paginateOptions,
 } from "../../../constants/config";
-import { NavigateId } from "../../../shares/NavigateId";
 import { paths } from "../../../constants/paths";
 import {
   Box,

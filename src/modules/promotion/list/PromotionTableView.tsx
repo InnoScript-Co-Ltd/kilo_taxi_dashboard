@@ -12,12 +12,10 @@ import { AppDispatch, AppRootState } from "../../../stores";
 import { promotionService } from "../promotion.service";
 import {
   applicableToLists,
-  generalStatusLists,
   paginateOptions,
   promoStatusLists,
   promotionTypeLists,
 } from "../../../constants/config";
-import { NavigateId } from "../../../shares/NavigateId";
 import { paths } from "../../../constants/paths";
 import {
   Box,

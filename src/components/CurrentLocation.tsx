@@ -19,7 +19,6 @@ const CurrentLocation = () => {
   const mapInstanceRef = useRef<L.Map | null>(null);
   const markerRef = useRef<L.Marker | null>(null);
   const [totalDistance, setTotalDistance] = useState<number>(0);
-  const [coordinates, setCoordinates] = useState<[number, number][]>([]);
   const routingControlRef = useRef<any>(null);
   const signalLocation = useSelector(
     (state: AppRootState) => state.share.signal
@@ -49,8 +48,6 @@ const CurrentLocation = () => {
         console.error("Invalid coordinates returned from API.");
         return;
       }
-
-      setCoordinates(apiCoordinates);
 
       if (!mapInstanceRef.current) {
         // Initialize the map only if it's not already initialized

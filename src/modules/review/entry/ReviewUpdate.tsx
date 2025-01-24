@@ -21,7 +21,6 @@ import { getRequest } from "../../../helpers/api";
 import { endpoints } from "../../../constants/endpoints";
 import { Controller, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { getId } from "../../../helpers/updateHelper";
 import { ReviewFormInputs, reviewSchema } from "../review.payload";
 import { reviewService } from "../review.service";
 

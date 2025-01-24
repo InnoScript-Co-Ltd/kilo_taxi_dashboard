@@ -42,6 +42,7 @@ export interface ORDER {
   driver: DRIVER[]; // Use the DRIVER interface as an array
   schedule: SCHEDULE[]; // Use the DRIVER interface as an array
   action: any;
+  orderRouteInfo: Array<any>;
 }
 
 type OrderColumnId = keyof ORDER;

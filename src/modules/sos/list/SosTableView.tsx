@@ -15,8 +15,6 @@ import {
   paginateOptions,
   walletTypeStatusLists,
 } from "../../../constants/config";
-import { NavigateId } from "../../../shares/NavigateId";
-import { paths } from "../../../constants/paths";
 import {
   Box,
   Button,
@@ -26,10 +24,7 @@ import {
 } from "@mui/material";
 import { setPaginate } from "../sos.slice"; // Adjust the slice if needed
 import SearchIcon from "@mui/icons-material/Search";
-import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
 import RestartAltIcon from "@mui/icons-material/RestartAlt";
-import { useNavigate } from "react-router";
-import UpAndDel from "../../../components/UpAndDel";
 import {
   StyledTableCell,
   StyledTableRow,
@@ -46,7 +41,6 @@ const SosTableView = () => {
   );
 
   const notifications = useNotifications();
-  const navigate = useNavigate();
   const [loading, setLoading] = React.useState(false);
 
   const handleChangePage = (event: unknown, newPage: number) => {
@@ -78,7 +72,7 @@ const SosTableView = () => {
     setLoading(true);
     await sosService.index(dispatch, pagingParams, notifications);
     setLoading(false);
-  }, [dispatch, pagingParams]);
+  }, [dispatch, pagingParams, notifications]);
 
   React.useEffect(() => {
     loadingData();

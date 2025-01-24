@@ -1,7 +1,6 @@
 import { z } from "zod";
 import { paginateOptions } from "../../constants/config"; // Assuming paginateOptions is available here
-import { vehicleSchema, VEHICLE } from "../vehicle/vehicle.payload";
-import { walletSchema, WALLET } from "../wallet/wallet.payload";
+import { VEHICLE } from "../vehicle/vehicle.payload";
 
 // Define Driver Schema
 export const driverSchema = z.object({

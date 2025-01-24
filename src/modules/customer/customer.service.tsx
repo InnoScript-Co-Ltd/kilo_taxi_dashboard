@@ -2,7 +2,6 @@ import { Dispatch } from "redux";
 import { endpoints } from "../../constants/endpoints";
 import { getRequest, postRequest, putRequest } from "../../helpers/api";
 import { httpServiceHandler } from "../../helpers/handler";
-import { CustomerFormInputs } from "./customer.payload";
 import { index, show, update } from "./customer.slice";
 
 export const customerService = {

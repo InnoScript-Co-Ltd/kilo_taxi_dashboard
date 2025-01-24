@@ -14,7 +14,6 @@ import { adminService } from "../admin.service";
 import {
   customerStatusLists,
   genderStatuslists,
-  generalStatusLists,
   paginateOptions,
 } from "../../../constants/config";
 import { NavigateId } from "../../../shares/NavigateId";

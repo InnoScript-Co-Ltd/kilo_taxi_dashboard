@@ -22,7 +22,6 @@ import { Breadcrumb } from "../../../components/Breadcrumb";
 import { paths } from "../../../constants/paths";
 import { useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { DatePicker } from "@mui/x-date-pickers";
 import { useNotifications } from "@toolpad/core/useNotifications";
 
 const ExtraDemandCreate = () => {
@@ -131,7 +130,7 @@ const ExtraDemandCreate = () => {
             >
               Cancel
             </Button>
-            <Button variant="contained" type="submit">
+            <Button disabled={loading} variant="contained" type="submit">
               Submit
             </Button>
           </Box>
