@@ -46,6 +46,7 @@ export const postRequest = async (
 ) => {
   try {
     const result = await http.post(path, payload);
+
     return httpResponseHandler(result);
   } catch (error) {
     return httpErrorHandler(error, dispatch);
