@@ -14,24 +14,15 @@ import {
   FormControl,
   FormHelperText,
   Grid2,
-  IconButton,
-  InputAdornment,
   InputLabel,
   Paper,
 } from "@mui/material";
-import { Visibility, VisibilityOff } from "@mui/icons-material";
+import Password from "../../../components/Password";
 
 const Login = () => {
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
   const dispatch = useDispatch<AppDispatch>();
-
-  const [showPassword, setShowPassword] = useState(false);
-
-  const handleClickShowPassword = () => setShowPassword((show) => !show);
-  const handleMouseDownPassword = (
-    event: React.MouseEvent<HTMLButtonElement>
-  ) => event.preventDefault();
 
   // Set up React Hook Form with Zod schema
   const {
@@ -44,6 +35,8 @@ const Login = () => {
 
   const submitLogin = async (data: AuthFormInputs) => {
     setLoading(true);
+    console.log(process.env.BASE_URL);
+
     const response = await authService.store(data, dispatch);
     console.log("res", response);
     if (response.status === 200) {
@@ -103,34 +96,11 @@ const Login = () => {
                 </Grid2>
 
                 <Grid2 size={{ xs: 12, md: 12 }}>
-                  <FormControl
-                    variant="filled"
-                    fullWidth
-                    error={!!errors.password}
-                  >
-                    <InputLabel htmlFor="password">Password</InputLabel>
-                    <FilledInput
-                      disabled={loading}
-                      size="small"
-                      id="password"
-                      type={showPassword ? "text" : "password"}
-                      {...register("password")}
-                      endAdornment={
-                        <InputAdornment position="end">
-                          <IconButton
-                            disabled={loading}
-                            aria-label="toggle password visibility"
-                            onClick={handleClickShowPassword}
-                            onMouseDown={handleMouseDownPassword}
-                            edge="end"
-                          >
-                            {!showPassword ? <VisibilityOff /> : <Visibility />}
-                          </IconButton>
-                        </InputAdornment>
-                      }
-                    />
-                    <FormHelperText>{errors.password?.message}</FormHelperText>
-                  </FormControl>
+                  <Password
+                    register={register}
+                    loading={loading}
+                    errors={errors}
+                  />
                 </Grid2>
               </Grid2>
 
