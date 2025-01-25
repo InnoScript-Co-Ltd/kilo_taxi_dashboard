@@ -1,4 +1,4 @@
-export const env = ["https://localhost:7181/api/v1"];
+export const env = ["http://localhost:5112/api/v1"];
 export const hadUrl = "https://localhost:7044/dashboard";
 
 // export const env = ["http://4.145.97.143:81/api/v1"];
