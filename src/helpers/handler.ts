@@ -167,7 +167,7 @@ export const httpServiceHandler = async (
   result: { status: number; notification?: string | any; error?: string },
   noti?: any
 ) => {
-  console.log("result:", result);
+  // console.log("result:", result);
   await dispatch(updateError(null));
   if (
     result.status === 400 ||

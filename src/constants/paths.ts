@@ -94,6 +94,10 @@ export const paths = {
   travelRateCreate: "/travelrate/new",
   travelRateDetail: "/travelrate/:id",
 
+  kiloAmount: "/kiloamount",
+  kiloAmountList: "/kiloamount/list",
+  kiloAmountDetail: "/kiloamount/:id",
+
   simulation: "/simulation",
   simulationOrderCreate: "/simulation/order",
   simulationOrderMap: "/simulation/order/map",
