@@ -16,7 +16,6 @@ import { useNavigate } from "react-router";
 import { useDispatch } from "react-redux";
 import { AppDispatch } from "../../../stores";
 import { httpErrorHandler, httpServiceHandler } from "../../../helpers/handler";
-import { Breadcrumb } from "../../../components/Breadcrumb";
 import { paths } from "../../../constants/paths";
 import { getRequest } from "../../../helpers/api";
 import { endpoints } from "../../../constants/endpoints";
@@ -63,13 +62,21 @@ const OrderCreate = () => {
   const loadingData = React.useCallback(async () => {
     setLoading(true);
     try {
-      const customerRes: any = await getRequest(`${endpoints.customer}`, null, dispatch);
+      const customerRes: any = await getRequest(
+        `${endpoints.customer}`,
+        null,
+        dispatch
+      );
       const walletTransitionRes: any = await getRequest(
         `${endpoints.wallet}`,
         null,
         dispatch
       );
-      const driverRes: any = await getRequest(`${endpoints.driver}`, null, dispatch);
+      const driverRes: any = await getRequest(
+        `${endpoints.driver}`,
+        null,
+        dispatch
+      );
       const scheduleBookingRes: any = await getRequest(
         `${endpoints.scheduleBooking}`,
         null,
@@ -116,7 +123,6 @@ const OrderCreate = () => {
 
   return (
     <Box>
-      <Breadcrumb />
       <Card sx={{ marginTop: "20px", padding: "20px" }}>
         <h2>Order Create</h2>
         <form onSubmit={handleSubmit(submitOrderCreate)}>
@@ -138,7 +144,7 @@ const OrderCreate = () => {
                       value={field.value} // Convert field value to a string
                       onChange={(event) => field.onChange(event.target.value)} // Ensure onChange value is a string
                     >
-                      {driverLists.map((driver: any) => (
+                      {driverLists?.map((driver: any) => (
                         <MenuItem key={driver.id} value={driver.id}>
                           {driver.name}
                         </MenuItem>
@@ -172,7 +178,7 @@ const OrderCreate = () => {
                       value={field.value} // Convert field value to a string
                       onChange={(event) => field.onChange(event.target.value)} // Ensure onChange value is a string
                     >
-                      {customerLists.map((customer: any) => (
+                      {customerLists?.map((customer: any) => (
                         <MenuItem key={customer.id} value={customer.id}>
                           {customer.name}
                         </MenuItem>
@@ -208,7 +214,7 @@ const OrderCreate = () => {
                       value={field.value} // Convert field value to a string
                       onChange={(event) => field.onChange(event.target.value)} // Ensure onChange value is a string
                     >
-                      {walletTransitionLists.map((walletTransition: any) => (
+                      {walletTransitionLists?.map((walletTransition: any) => (
                         <MenuItem
                           key={walletTransition.id}
                           value={walletTransition.id}
@@ -249,7 +255,7 @@ const OrderCreate = () => {
                       value={field.value} // Convert field value to a string
                       onChange={(event) => field.onChange(event.target.value)} // Ensure onChange value is a string
                     >
-                      {scheduleBookingLists.map((scheduleBooking: any) => (
+                      {scheduleBookingLists?.map((scheduleBooking: any) => (
                         <MenuItem
                           key={scheduleBooking.id}
                           value={scheduleBooking.id}

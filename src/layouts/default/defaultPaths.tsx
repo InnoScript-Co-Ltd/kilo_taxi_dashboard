@@ -19,12 +19,6 @@ export const navigationList = [
     isParent: false,
   },
   {
-    segment: "auth",
-    title: "Auth",
-    icon: null,
-    isParent: false,
-  },
-  {
     segment: "admin",
     title: "Admin",
     isParent: true,
