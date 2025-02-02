@@ -9,7 +9,7 @@ import PersonIcon from "@mui/icons-material/Person";
 import AccountBalanceWalletIcon from "@mui/icons-material/AccountBalanceWallet";
 import NoteIcon from "@mui/icons-material/Note";
 import CreditCardIcon from "@mui/icons-material/CreditCard";
-import { Map } from "@mui/icons-material";
+import { Map, Password } from "@mui/icons-material";
 
 export const navigationList = [
   {
@@ -272,6 +272,11 @@ export const navigationList = [
         segment: "order/map",
         title: "Order Map Simulation",
         icon: <Map />,
+      },
+      {
+        segment: "forget-password",
+        title: "Forget Password Simulation",
+        icon: <Password />,
       },
     ],
   },

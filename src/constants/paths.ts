@@ -101,6 +101,7 @@ export const paths = {
   simulation: "/simulation",
   simulationOrderCreate: "/simulation/order",
   simulationOrderMap: "/simulation/order/map",
+  simulationForgetPassword: "/simulation/forget-password",
 
   extraDemand: "/extraDemand",
   extraDemandList: "/extraDemand/list",
