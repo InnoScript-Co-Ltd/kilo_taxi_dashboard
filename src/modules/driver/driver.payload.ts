@@ -144,6 +144,14 @@ export interface DRIVER_PAYLOAD {
     SortField: any;
     SortDir: any;
     SearchTerm: string;
+    Id: string;
+    Name: string;
+    Phone: string;
+    RegisterFrom: string;
+    RegisterTo: string;
+    Township: string;
+    City: string;
+    Status: string;
   };
 }
 
@@ -237,5 +245,13 @@ export const driverPayload: DRIVER_PAYLOAD = {
     SortField: "name",
     SortDir: "asc",
     SearchTerm: "",
+    Id: "",
+    Name: "",
+    Phone: "",
+    RegisterFrom: "",
+    RegisterTo: "",
+    Township: "",
+    City: "",
+    Status: "",
   },
 };
