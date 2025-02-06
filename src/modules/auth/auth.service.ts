@@ -21,9 +21,10 @@ export const authService = {
     console.log("response", response);
     await httpServiceHandler(dispatch, response);
 
-    if (response.data.statusCode === 200) {
-      setData(keys.API_TOKEN, response.data.payload.accessToken);
-      setData(keys.REFRESH_TOKEN, response.data.payload.refreshToken);
+    if (response.status === 200) {
+      setData(keys.API_TOKEN, response?.data?.payload?.accessToken);
+      setData(keys.REFRESH_TOKEN, response?.data?.payload?.refreshToken);
+      setData(keys.USER, response.data?.payload.user);
       console.log(response);
     }
     return response;

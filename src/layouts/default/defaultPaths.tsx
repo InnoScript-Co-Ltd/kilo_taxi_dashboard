@@ -9,18 +9,13 @@ import PersonIcon from "@mui/icons-material/Person";
 import AccountBalanceWalletIcon from "@mui/icons-material/AccountBalanceWallet";
 import NoteIcon from "@mui/icons-material/Note";
 import CreditCardIcon from "@mui/icons-material/CreditCard";
+import { Map, Password } from "@mui/icons-material";
 
 export const navigationList = [
   {
     segment: "dashboard",
     title: "Dashboard",
     icon: <DashboardIcon />,
-    isParent: false,
-  },
-  {
-    segment: "auth",
-    title: "Auth",
-    icon: null,
     isParent: false,
   },
   {
@@ -250,6 +245,19 @@ export const navigationList = [
     ],
   },
   {
+    segment: "kiloAmount",
+    title: "KiloAmount",
+    isParent: true,
+    icon: <CreditCardIcon />,
+    children: [
+      {
+        segment: "list",
+        title: "List",
+        icon: <FormatListBulletedIcon />,
+      },
+    ],
+  },
+  {
     segment: "simulation",
     title: "Simulation",
     isParent: true,
@@ -259,6 +267,16 @@ export const navigationList = [
         segment: "order",
         title: "Order Create",
         icon: <FormatListBulletedIcon />,
+      },
+      {
+        segment: "order/map",
+        title: "Order Map Simulation",
+        icon: <Map />,
+      },
+      {
+        segment: "forget-password",
+        title: "Forget Password Simulation",
+        icon: <Password />,
       },
     ],
   },
@@ -274,7 +292,6 @@ export const navigationList = [
         title: "List",
         icon: <FormatListBulletedIcon />,
       },
-      
     ],
   },
 

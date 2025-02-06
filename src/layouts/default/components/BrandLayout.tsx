@@ -11,7 +11,7 @@ import NotificationsIcon from "@mui/icons-material/Notifications";
 import { NotificationsProvider } from "@toolpad/core/useNotifications";
 import { LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
-import { ToolBarAccount } from "./ToolBarAccount";
+import ToolBar from "./ToolBar";
 
 const demoTheme = createTheme({
   cssVariables: {
@@ -142,7 +142,7 @@ export default function BrandLayout() {
   const slots = React.useMemo(
     () => ({
       toolbarActions: ToolBarActions,
-      toolbarAccount: ToolBarAccount,
+      toolbarAccount: ToolBar,
     }),
     []
   );

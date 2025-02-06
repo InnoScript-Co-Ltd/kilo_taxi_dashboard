@@ -88,14 +88,20 @@ export const paths = {
 
   sosList: "/sos/list",
   sosReceive: "/sos/receive",
-  
+
   travelRate: "/travelrate",
   travelRateList: "/travelrate/list",
   travelRateCreate: "/travelrate/new",
   travelRateDetail: "/travelrate/:id",
 
+  kiloAmount: "/kiloamount",
+  kiloAmountList: "/kiloamount/list",
+  kiloAmountDetail: "/kiloamount/:id",
+
   simulation: "/simulation",
   simulationOrderCreate: "/simulation/order",
+  simulationOrderMap: "/simulation/order/map",
+  simulationForgetPassword: "/simulation/forget-password",
 
   extraDemand: "/extraDemand",
   extraDemandList: "/extraDemand/list",

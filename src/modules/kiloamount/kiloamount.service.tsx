@@ -2,20 +2,20 @@ import { Dispatch } from "redux";
 import { endpoints } from "../../constants/endpoints";
 import { getRequest, postRequest, putRequest } from "../../helpers/api";
 import { httpServiceHandler } from "../../helpers/handler";
-import { index, show, update } from "./customer.slice";
+import { index, show, update } from "./kiloamount.slice";
+import { KiloAmountFormInputs } from "./kiloamount.payload";
 
-export const customerService = {
-  store: async (payload: any, dispatch: Dispatch, notifications: any) => {
+export const kiloAmountService = {
+  store: async (payload: any, dispatch: Dispatch, notifications?: any) => {
     const response: any = await postRequest(
-      endpoints.customer,
+      endpoints.kiloAmount,
       payload,
       dispatch
     );
     await httpServiceHandler(dispatch, response.data);
 
     if (response.data.statusCode === 201) {
-      //'info' | 'success' | 'warning' | 'error'
-      notifications.show("Customer is created successfully", {
+      notifications.show("KiloAmount created successfully", {
         severity: "success",
         autoHideDuration: 3000,
       });
@@ -23,21 +23,23 @@ export const customerService = {
     return response.data;
   },
 
-  index: async (dispatch: Dispatch, params: any, notifications: any) => {
+  index: async (dispatch: Dispatch, params: any, notifications?: any) => {
     const response: any = await getRequest(
-      endpoints.customer,
+      endpoints.kiloAmount,
       params,
       dispatch
     );
+    await httpServiceHandler(dispatch, response.data);
 
-    await httpServiceHandler(dispatch, response.data, notifications);
+    console.log(response);
 
     if (response.data.statusCode === 200) {
       //'info' | 'success' | 'warning' | 'error'
-      notifications.show("Customer list is successfully retrieved!", {
+      notifications.show("KiloAmount list successfully retrieved!", {
         severity: "info",
         autoHideDuration: 3000,
       });
+
       dispatch(
         index(response.data.payload ? response.data.payload : response.data)
       );
@@ -45,22 +47,22 @@ export const customerService = {
     return response.data;
   },
 
+  // Method to update an existing state by ID
   update: async (
     dispatch: Dispatch,
     id: number,
-    payload: any,
+    payload: KiloAmountFormInputs,
     notifications?: any
   ) => {
     const response: any = await putRequest(
-      `${endpoints.customer}/${id}`,
+      `${endpoints.kiloAmount}/${id}`,
       payload,
       dispatch
     );
-    await httpServiceHandler(dispatch, response);
+    await httpServiceHandler(dispatch, response.data);
 
     if (response.data.statusCode === 200) {
-      //'info' | 'success' | 'warning' | 'error'
-      notifications?.show("Customer is updated successfully", {
+      notifications?.show("KiloAmount updated successfully", {
         severity: "success",
         autoHideDuration: 3000,
       });
@@ -69,9 +71,10 @@ export const customerService = {
     return response.data;
   },
 
+  // Method to fetch details of a specific state by ID
   show: async (dispatch: Dispatch, id: number) => {
     const response: any = await getRequest(
-      `${endpoints.customer}/${id}`,
+      `${endpoints.kiloAmount}/${id}`,
       null,
       dispatch
     );

@@ -10,28 +10,19 @@ import { authService } from "../auth.service";
 import {
   Box,
   Button,
-  Card,
   FilledInput,
   FormControl,
   FormHelperText,
   Grid2,
-  IconButton,
-  InputAdornment,
   InputLabel,
+  Paper,
 } from "@mui/material";
-import { Visibility, VisibilityOff } from "@mui/icons-material";
+import Password from "../../../components/Password";
 
 const Login = () => {
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
   const dispatch = useDispatch<AppDispatch>();
-
-  const [showPassword, setShowPassword] = useState(false);
-
-  const handleClickShowPassword = () => setShowPassword((show) => !show);
-  const handleMouseDownPassword = (
-    event: React.MouseEvent<HTMLButtonElement>
-  ) => event.preventDefault();
 
   // Set up React Hook Form with Zod schema
   const {
@@ -44,6 +35,8 @@ const Login = () => {
 
   const submitLogin = async (data: AuthFormInputs) => {
     setLoading(true);
+    console.log(process.env.BASE_URL);
+
     const response = await authService.store(data, dispatch);
     console.log("res", response);
     if (response.data.statusCode === 200) {
@@ -53,87 +46,79 @@ const Login = () => {
   };
 
   return (
-    <div className=" w-full h-100vh flex justify-center items-center">
-      <Box>
-        <Card sx={{ marginTop: "20px", padding: "20px" }}>
-          <h2>Login</h2>
-          <form onSubmit={handleSubmit(submitLogin)}>
-            <Grid2 container spacing={2}>
-              <Grid2 size={{ xs: 12, md: 12 }}>
-                <FormControl
-                  variant="filled"
-                  fullWidth
-                  error={!!errors.emailOrPhone}
-                >
-                  <InputLabel htmlFor="emailOrPhone">Email Or Phone</InputLabel>
-                  <FilledInput
-                    size="small"
-                    id="emailOrPhone"
-                    {...register("emailOrPhone")}
+    <Box className=" w-full h-100vh flex justify-center items-center">
+      <Grid2 width={"auto"} container spacing={3}>
+        <Grid2
+          size={{ md: 8 }}
+          sx={{
+            display: "flex",
+            alignItems: "flex-end",
+            justifyContent: "start",
+          }}
+        >
+          <img
+            alt="login bg"
+            width={"auto"}
+            style={{
+              width: "100%",
+              height: "auto",
+            }}
+            src={"/login_bg.svg"}
+          />
+        </Grid2>
+        <Grid2 size={{ md: 4 }}>
+          <Paper elevation={0} sx={{ marginTop: "20px", padding: "20px" }}>
+            <img alt="login logo" src={"/login_logo.svg"} />
+
+            <h2 style={{ textAlign: "center", padding: "50px 0" }}>
+              Admin Login
+            </h2>
+            <form onSubmit={handleSubmit(submitLogin)}>
+              <Grid2 container spacing={2}>
+                <Grid2 size={{ xs: 12, md: 12 }}>
+                  <FormControl
+                    variant="filled"
+                    fullWidth
+                    error={!!errors.emailOrPhone}
+                  >
+                    <InputLabel htmlFor="emailOrPhone">
+                      Email Or Phone
+                    </InputLabel>
+                    <FilledInput
+                      size="small"
+                      id="emailOrPhone"
+                      {...register("emailOrPhone")}
+                    />
+                    <FormHelperText>
+                      {errors.emailOrPhone?.message}
+                    </FormHelperText>
+                  </FormControl>
+                </Grid2>
+
+                <Grid2 size={{ xs: 12, md: 12 }}>
+                  <Password
+                    register={register}
+                    loading={loading}
+                    errors={errors}
                   />
-                  <FormHelperText>
-                    {errors.emailOrPhone?.message}
-                  </FormHelperText>
-                </FormControl>
+                </Grid2>
               </Grid2>
 
-              <Grid2 size={{ xs: 12, md: 12 }}>
-                <FormControl
-                  variant="filled"
-                  fullWidth
-                  error={!!errors.password}
-                >
-                  <InputLabel htmlFor="password">Password</InputLabel>
-                  <FilledInput
-                    disabled={loading}
-                    size="small"
-                    id="password"
-                    type={showPassword ? "text" : "password"}
-                    {...register("password")}
-                    endAdornment={
-                      <InputAdornment position="end">
-                        <IconButton
-                          disabled={loading}
-                          aria-label="toggle password visibility"
-                          onClick={handleClickShowPassword}
-                          onMouseDown={handleMouseDownPassword}
-                          edge="end"
-                        >
-                          {!showPassword ? <VisibilityOff /> : <Visibility />}
-                        </IconButton>
-                      </InputAdornment>
-                    }
-                  />
-                  <FormHelperText>{errors.password?.message}</FormHelperText>
-                </FormControl>
-              </Grid2>
-            </Grid2>
-
-            {/* Footer with Cancel and Submit buttons */}
-            <Box
-              sx={{
-                display: "flex",
-                justifyContent: "end",
-                alignItems: "center",
-                gap: "20px",
-                marginTop: "20px",
-              }}
-            >
-              {/* <Button variant="outlined" onClick={() => navigate(paths.cityList)}>
-                                Cancel
-                            </Button> */}
               <Button
-                style={{ background: "#ffa726" }}
+                fullWidth
+                disabled={loading}
+                size={"large"}
+                style={{ background: "#ffa726", marginTop: "20px" }}
                 variant="contained"
                 type="submit"
               >
                 Submit
               </Button>
-            </Box>
-          </form>
-        </Card>
-      </Box>
-    </div>
+            </form>
+          </Paper>
+        </Grid2>
+      </Grid2>
+    </Box>
   );
 };
 

@@ -28,6 +28,7 @@ export const endpoints = {
   simulation: "Simulation",
   sos: "Sos",
   travelRate: "TravelRate",
+  kiloAmount: "KiloAmount",
   login: "auth/login",
   image: `${baseURL}/storage/images`,
   status: "status",

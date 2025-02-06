@@ -23,6 +23,7 @@ import { TravelRateRoute } from "./modules/travelrate/travelrate.route";
 import { VehicleTypeRoute } from "./modules/vehicleType/vehicleType.route";
 import Login from "./modules/auth/view/Login";
 import { ExtraDemandRoute } from "./modules/extraDemand/extraDemand.route";
+import { KiloAmountRoute } from "./modules/kiloamount/kiloamount.route";
 export const routers = createBrowserRouter([
   {
     path: "/",
@@ -49,6 +50,7 @@ export const routers = createBrowserRouter([
       ...SosRoute,
       ...CityRoute,
       ...TravelRateRoute,
+      ...KiloAmountRoute,
       ...ExtraDemandRoute,
     ],
   },
@@ -60,6 +62,6 @@ export const routers = createBrowserRouter([
   {
     path: "auth/login",
     element: <Login />,
-    errorElement: <NotFound />
-  }
+    errorElement: <NotFound />,
+  },
 ]);
