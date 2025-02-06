@@ -38,6 +38,7 @@ import { useNotifications } from "@toolpad/core/useNotifications";
 import Status from "../../../components/Status";
 import TAvatar from "../../../components/TAvatar";
 import { formatDate } from "../../../helpers/common";
+import FilterComponent from "../../../components/FilterComponent";
 
 const DriverTableView = () => {
   const [page, setPage] = React.useState(0);
@@ -135,6 +136,11 @@ const DriverTableView = () => {
           </Button>
         </Box>
       </Box>
+
+      <FilterComponent
+        driverPayload={driverPayload}
+        setPaginate={setPaginate}
+      />
 
       <TableContainer sx={{ maxHeight: 440 }}>
         <Table stickyHeader aria-label="sticky table">
