@@ -3,6 +3,7 @@ import { z } from "zod";
 import { CUSTOMER } from "../customer/customer.payload";
 import { DRIVER } from "../driver/driver.payload";
 import { SCHEDULE } from "../scheduleBooking/scheduleBooking.payload";
+import { ExtraDemand } from "../extraDemand/extraDemand.payload";
 
 export const orderSchema = z.object({
   id: z.number().min(0, { message: "id" }).default(0),
@@ -41,12 +42,27 @@ export interface ORDER {
   scheduleBookingId: number;
   customer: CUSTOMER[]; // Use the CUSTOMER interface as an array
   driver: DRIVER[]; // Use the DRIVER interface as an array
-  schedule: SCHEDULE[]; // Use the DRIVER interface as an array
+  orderExtends: ORDER_EXTENDS[]; // Use the DRIVER interface as an array
+  orderExtraDemands: ORDER_EXTRA_DEMANDS[]; // Use the DRIVER interface as an array
   action: any;
   orderRouteInfo: Array<any>;
 }
 
 type OrderColumnId = keyof ORDER;
+
+export interface ORDER_EXTENDS {
+  id: string;
+  DestinationLocation: string;
+  DestinationLat: string;
+  DestinationLong: string;
+  CreateDate: string;
+}
+
+export interface ORDER_EXTRA_DEMANDS {
+  id: string;
+  ExtraDemands: ExtraDemand[];
+  Unit: string;
+}
 
 /**
  * Represents the structure of a column in the country table.

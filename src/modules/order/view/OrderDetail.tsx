@@ -99,36 +99,48 @@ const OrderDetail = () => {
               aria-controls="panel2-content"
               expandIcon={<ExpandmoreIcon />}
             >
-              <Typography>Schedule Booking Info</Typography>
+              <Typography>Order Extends Info</Typography>
             </AccordionSummary>
-            {order.schedule?.map((schedule: any) => (
+            {order.orderExtends?.map((orderExt: any) => (
               <AccordionDetails>
                 <p>
-                  <strong>ID:</strong> {schedule.id}
+                  <strong>ID:</strong> {orderExt.id}
                 </p>
                 <p>
-                  <strong>Customer Id:</strong> {schedule.customerId}
+                  <strong>Destination Location:</strong>{" "}
+                  {orderExt?.destinationLocation}
                 </p>
                 <p>
-                  <strong>Deliver Id:</strong> {schedule.deliverId}
+                  <strong>Destination Lat:</strong> {orderExt.destinationLat}
                 </p>
                 <p>
-                  <strong>Pickup Address:</strong> {schedule.pickup_address}
+                  <strong>Destination Long:</strong> {orderExt.destinationLong}
                 </p>
                 <p>
-                  <strong>Destination:</strong> {schedule.destination}
+                  <strong>Create Date:</strong> {orderExt.createDate}
+                </p>
+              </AccordionDetails>
+            ))}
+          </Accordion>
+
+          <Accordion
+            expanded={expanded === "panel3"}
+            onChange={(event, isExpanded) => handleChange(isExpanded, "panel3")}
+          >
+            <AccordionSummary
+              id="panel3-header"
+              aria-controls="panel3-content"
+              expandIcon={<ExpandmoreIcon />}
+            >
+              <Typography>Order Extends Info</Typography>
+            </AccordionSummary>
+            {order.orderExtraDemands?.map((orderExtD: any) => (
+              <AccordionDetails>
+                <p>
+                  <strong>ID:</strong> {orderExtD.id}
                 </p>
                 <p>
-                  <strong>Schedule Time:</strong> {schedule.schedule_time}
-                </p>
-                <p>
-                  <strong>Note:</strong> {schedule.note}
-                </p>
-                <p>
-                  <strong>Kilo Type:</strong> {schedule.kilo_type}
-                </p>
-                <p>
-                  <strong>Status:</strong> {schedule.status}
+                  <strong>Unit:</strong> {orderExtD.unit}
                 </p>
               </AccordionDetails>
             ))}
