@@ -90,8 +90,9 @@ const CityUpdate = () => {
           <Grid2 container spacing={2}>
             <Grid2 size={{ xs: 6, md: 3 }}>
               <FormControl variant="filled" fullWidth error={!!errors.name}>
-                <InputLabel htmlFor="city_name">City Name</InputLabel>
+                <InputLabel htmlFor="city_name" style={{ fontSize: "12px" }}>City Name</InputLabel>
                 <FilledInput
+                  style={{ paddingTop: "20px" , fontSize: "14px"}}
                   size="small"
                   id="city_name"
                   {...register("name")}

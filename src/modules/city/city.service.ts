@@ -30,7 +30,6 @@ export const cityService = {
   index: async (dispatch: Dispatch, params: any, notifications?: any) => {
     const response: any = await getRequest(endpoints.city, params, dispatch);
     await httpServiceHandler(dispatch, response);
-
     if (response.status === 200) {
       //'info' | 'success' | 'warning' | 'error'
       notifications.show("City list is successfully retrieved!", {
