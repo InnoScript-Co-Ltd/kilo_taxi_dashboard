@@ -86,9 +86,8 @@ export const statusOptions: Array<StatusOption> = [
 ];
 
 export const genderStatuslists = [
-  { id: 0, value: "Male", color: "success" },
-  { id: 1, value: "Female", color: "secondary" },
-  { id: 2, value: "Undefined", color: "primary" },
+  { id: "male", value: "MALE" },
+  { id: "female", value: "FEMALE" },
 ];
 
 export const propertyStatusLists = [
@@ -134,10 +133,10 @@ export const scheduleOrderStatusLists = [
 ];
 
 export const customerStatusLists = [
-  { id: 0, value: "Pending", color: "secondary" },
-  { id: 1, value: "Active", color: "success" },
-  { id: 2, value: "Deactivate", color: "warning" },
-  { id: 3, value: "Suspended", color: "error" },
+  { id: "pending", value: "PENDING" },
+  { id: "active", value: "ACTIVE" },
+  { id: "deactive", value: "DEACTIVE" },
+  { id: "suspended", value: "SUSPENDED" },
 ];
 
 export const notiTypeStatusLists = [
