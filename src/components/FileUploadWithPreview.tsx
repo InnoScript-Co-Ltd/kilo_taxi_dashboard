@@ -6,7 +6,8 @@ interface FileUploadWithPreviewProps {
   error?: string;
   field?: string;
   src?: string;
-  disabled: boolean
+  disabled: boolean;
+  name?: string;
 }
 
 function FileUploadWithPreview({
@@ -14,7 +15,8 @@ function FileUploadWithPreview({
   error,
   field,
   src,
-  disabled
+  disabled,
+  name,
 }: FileUploadWithPreviewProps) {
   const [preview, setPreview] = useState<string | null>(null);
 

@@ -21,6 +21,12 @@ export const topupTransactionSchema = z.object({
     .string()
     .min(8, { message: "phone number is at least 8 digit" }),
   status: z.number(),
+  driverId: z.number().min(1, { message: "Driver ID is required" }),
+  driverName: z.string().min(1, { message: "Driver Name is required" }),
+  walletBalance: z
+    .number()
+    .min(0, { message: "Wallet balance cannot be negative" })
+    .max(9999999.99, { message: "Wallet balance must not exceed 9999999.99" }),
 });
 
 export type TopupTransactionFormInputs = z.infer<typeof topupTransactionSchema>;
@@ -37,6 +43,9 @@ export interface TOPUPTRANSACTION {
   status: number;
   file_transaction_screenshoot: string;
   createdDate: Date;
+  driverId: number;
+  driverName: string;
+  walletBalance: number;
   action?: null;
 }
 
@@ -95,6 +104,30 @@ export const topupTransactionColumns: readonly TopupTransactionColumn[] = [
     label: "Top-up Channel",
     minWidth: 125,
     numeric: false,
+    disablePadding: false,
+    sort: true,
+  },
+  {
+    id: "driverId",
+    label: "Driver ID",
+    minWidth: 125,
+    numeric: false,
+    disablePadding: false,
+    sort: true,
+  },
+  {
+    id: "driverName",
+    label: "Driver Name",
+    minWidth: 125,
+    numeric: false,
+    disablePadding: false,
+    sort: true,
+  },
+  {
+    id: "walletBalance",
+    label: "Wallet Balance",
+    minWidth: 125,
+    numeric: true,
     disablePadding: false,
     sort: true,
   },
