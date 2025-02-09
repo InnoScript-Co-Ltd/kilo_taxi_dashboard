@@ -2,55 +2,38 @@ import * as React from "react";
 import Paper from "@mui/material/Paper";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
-
 import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TablePagination from "@mui/material/TablePagination";
 import TableRow from "@mui/material/TableRow";
+import SearchIcon from "@mui/icons-material/Search";
+import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
+import RestartAltIcon from "@mui/icons-material/RestartAlt";
+import TAvatar from "../../../components/TAvatar";
+import UpAndDel from "../../../components/UpAndDel";
+import Status from "../../../components/Status";
 import { columns, adminPayload } from "../admin.payload";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, AppRootState } from "../../../stores";
 import { adminService } from "../admin.service";
-import {
-  customerStatusLists,
-  genderStatuslists,
-  paginateOptions,
-} from "../../../constants/config";
-import { NavigateId } from "../../../shares/NavigateId";
+import { customerStatusLists, paginateOptions } from "../../../constants/config";
 import { paths } from "../../../constants/paths";
-import {
-  Box,
-  Button,
-  Input,
-  InputAdornment,
-  TableSortLabel,
-} from "@mui/material";
+import { Box, Button, Input, InputAdornment, TableSortLabel } from "@mui/material";
 import { setPaginate } from "../admin.slice";
-import SearchIcon from "@mui/icons-material/Search";
-import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
-import RestartAltIcon from "@mui/icons-material/RestartAlt";
 import { useNavigate } from "react-router";
-import UpAndDel from "../../../components/UpAndDel";
-import {
-  StyledTableCell,
-  StyledTableRow,
-} from "../../../components/TableCommon";
-import TAvatar from "../../../components/TAvatar";
+import { StyledTableCell, StyledTableRow } from "../../../components/TableCommon";
 import { useNotifications } from "@toolpad/core/useNotifications";
-import { formatDate } from "../../../helpers/common";
-import Status from "../../../components/Status";
 
 const AdminTableView = () => {
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
-  const dispatch = useDispatch<AppDispatch>();
-  const { data, pagingParams } = useSelector(
-    (state: AppRootState) => state.admin
-  );
+  const [loading, setLoading] = React.useState(false);
+
+  const { data, pagingParams } = useSelector((state: AppRootState) => state.admin);
   const notifications = useNotifications();
 
   const navigate = useNavigate();
-  const [loading, setLoading] = React.useState(false);
+  const dispatch = useDispatch<AppDispatch>();
 
   const handleChangePage = (event: unknown, newPage: number) => {
     setPage(newPage);
@@ -86,7 +69,7 @@ const AdminTableView = () => {
   React.useEffect(() => {
     loadingData();
   }, [pagingParams, loadingData]);
-  console.log("data", data.admins);
+
   return (
     <Paper sx={{ width: "100%", overflow: "hidden" }}>
       <Box
@@ -100,7 +83,7 @@ const AdminTableView = () => {
       >
         <Input
           id="input-with-icon-search"
-          placeholder="Search Country"
+          placeholder="Search Admin"
           value={pagingParams.SearchTerm}
           onChange={(e) => {
             dispatch(
@@ -195,21 +178,14 @@ const AdminTableView = () => {
                       <StyledTableCell key={column.id} align={column.align}>
                         {(() => {
                           switch (column.label) {
-                            case "Name":
-                              return (
-                                <NavigateId
-                                  url={`${paths.admin}/${row.id}`}
-                                  value={value}
-                                />
-                              );
-                            case "Phone":
+                            case "phone":
                               return value; // Render the mobile prefix as-is
-                            case "Email":
+                            case "email":
                               return <TAvatar src={value} />; // Render the flag icon as-is
-                            case "Email Verified":
-                              return formatDate(value);
-                            case "Phone Verified":
-                              return formatDate(value);
+                            // case "Email Verified":
+                            //   return formatDate(value);
+                            // case "Phone Verified":
+                            //   return formatDate(value);
                             case "Status":
                               return (
                                 <Status
@@ -218,12 +194,7 @@ const AdminTableView = () => {
                                 />
                               );
                             case "Gender":
-                              return (
-                                <Status
-                                  status={value}
-                                  lists={genderStatuslists}
-                                />
-                              );
+                              return value.toUpperCase();
                             case "Action":
                               return (
                                 <UpAndDel

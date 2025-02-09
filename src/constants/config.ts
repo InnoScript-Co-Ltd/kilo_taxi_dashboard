@@ -1,11 +1,10 @@
 // export const env = [process.env.REACT_APP_BASE_URL];
-export const env = ["http://localhost:5112/api/v1"];
+// export const env = ["http://localhost:5112/api/v1"];
 
-export const hadUrl =
-  process.env.REACT_APP_HAD_URL || "https://localhost:7044/dashboard";
+// export const hadUrl = process.env.REACT_APP_HAD_URL || "https://localhost:7044/dashboard";
 
-// export const env = ["http://4.145.97.143:81/api/v1"];
-// export const hadUrl = "http://4.145.97.143:83/dashboard";
+export const env = ["http://4.145.97.143:81/api/v1"];
+export const hadUrl = "http://4.145.97.143:83/dashboard";
 
 export const drawerWidth: number = 300;
 
@@ -53,6 +52,14 @@ interface Paginate_Options {
   total: number;
 }
 
+export interface StatusOption {
+  id: number;
+  status: string;
+  background: string;
+  color: string;
+}
+
+
 export const paginateOptions: Paginate_Options = {
   rows: 10,
   rowsPerPageOptions: [10, 50, 100, 150, 500, 1000],
@@ -65,17 +72,17 @@ export const paginateOptions: Paginate_Options = {
   // lazy: true
 };
 
-export const statusOptions = [
-  { id: 1, status: "Active", color: "success" },
-  { id: 1, status: "Disable", color: "secondary" },
-  { id: 1, status: "Deactivate", color: "secondary" },
-  { id: 1, status: "Deleted", color: "error" },
-  { id: 1, status: "Pending", color: "primary" },
-  { id: 1, status: "BLOCK", color: "error" },
-  { id: 1, status: "COMPLETE", color: "success" },
-  { id: 3, status: "Male", color: "secondary" },
-  { id: 1, status: "Female", color: "primary" },
-  { id: 1, status: "Other", color: "error" },
+export const statusOptions: Array<StatusOption> = [
+  { id: 1, status: "ACTIVE", background: "#4CAF50", color: "#000" },
+  { id: 2, status: "DISABLE", background: "secondary", color: "#000" },
+  { id: 3, status: "DEACTIVE", background: "#F44336", color: "#000" },
+  { id: 4, status: "DELETED", background: "error", color: "#000" },
+  { id: 5, status: "PENDING", background: "#FFA726", color: "#000" },
+  { id: 6, status: "BLOCK", background: "error", color: "#000" },
+  { id: 7, status: "COMPLETE", background: "success", color: "#000" },
+  { id: 10, status: "OTHER", background: "error", color: "#000" },
+  { id: 11, status: "UNDEFINED", background: "error", color: "#000" },
+  { id: 12, status: "SUSPENDED", background: "error", color: "#000" },
 ];
 
 export const genderStatuslists = [
