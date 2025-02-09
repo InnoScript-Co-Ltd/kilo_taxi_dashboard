@@ -2,21 +2,22 @@ import { Dispatch } from "redux";
 import { endpoints } from "../../constants/endpoints";
 import { getRequest, postRequest, putRequest } from "../../helpers/api";
 import { httpServiceHandler } from "../../helpers/handler";
-import { AdminFormInputs } from "./admin.payload";
+import { AdminFormInputs, AdminUpdateFormInputs } from "./admin.payload";
 import { index, show, update } from "./admin.slice";
 
 export const adminService = {
   store: async (payload: any, dispatch: Dispatch, notifications: any) => {
     const response: any = await postRequest(endpoints.admin, payload, dispatch);
-    await httpServiceHandler(dispatch, response);
-    if (response.data.statusCode === 201) {
-      //'info' | 'success' | 'warning' | 'error'
+    await httpServiceHandler(dispatch, response, notifications);
+
+    if (response.statusCode === 201) {
       notifications.show("Admin is created successfully", {
         severity: "success",
         autoHideDuration: 3000,
       });
     }
-    return response.data;
+
+    return response;
   },
 
   index: async (dispatch: Dispatch, params: any, notifications: any) => {
@@ -28,20 +29,10 @@ export const adminService = {
     return response.data;
   },
 
-  update: async (
-    dispatch: Dispatch,
-    id: number,
-    payload: AdminFormInputs,
-    notifications?: any
-  ) => {
-    const response: any = await putRequest(
-      `${endpoints.admin}/${id}`,
-      payload,
-      dispatch
-    );
-    await httpServiceHandler(dispatch, response.data);
-
-    if (response.data.statusCode === 200) {
+  update: async (dispatch: Dispatch, id: number, payload: AdminUpdateFormInputs, notifications?: any) => {
+    const response: any = await putRequest(`${endpoints.admin}/${id}`, payload, dispatch);
+    await httpServiceHandler(dispatch, response, notifications);
+    if (response.status === 200) {
       //'info' | 'success' | 'warning' | 'error'
       notifications?.show("Admin is updated successfully", {
         severity: "success",
@@ -49,7 +40,7 @@ export const adminService = {
       });
       dispatch(update(response.data));
     }
-    return response.data;
+    return response;
   },
 
   show: async (dispatch: Dispatch, id: number) => {

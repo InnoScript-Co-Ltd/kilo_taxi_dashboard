@@ -71,7 +71,7 @@ const AdminTableView = () => {
   }, [pagingParams, loadingData]);
 
   return (
-    <Paper sx={{ width: "100%", overflow: "hidden" }}>
+    <Paper sx={{ width: "100%", overflow: "hidden", marginTop: "10px" }}>
       <Box
         sx={{
           my: "20px",
