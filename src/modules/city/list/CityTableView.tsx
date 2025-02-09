@@ -77,10 +77,10 @@ const CityTableView = () => {
 
   React.useEffect(() => {
     loadingData();
-  }, [loadingData]);
+  }, [pagingParams, loadingData]);
 
   return (
-    <Paper sx={{ width: "100%", overflow: "hidden" }}>
+    <Paper sx={{ width: "100%", overflow: "hidden",mt: "15px", }}>
       <Box
         sx={{
           my: "20px",
@@ -92,7 +92,7 @@ const CityTableView = () => {
       >
         <Input
           id="input-with-icon-search"
-          placeholder="Search Wallet"
+          placeholder="Search City"
           value={pagingParams.SearchTerm}
           onChange={(e) => {
             dispatch(
