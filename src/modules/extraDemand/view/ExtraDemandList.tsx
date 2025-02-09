@@ -6,7 +6,7 @@ const ExtraDemandtList = () => {
     <div>
       <Breadcrumb />
 
-      <ExtraDemandTableView />
+      <ExtraDemandTableView/>
     </div>
   );
 };

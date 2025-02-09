@@ -70,10 +70,10 @@ const ExtraDemandTableView = () => {
   };
 
   const loadingData = React.useCallback(async () => {
-    // console.log("fetching data:", data)
+    console.log("fetching data:", data)
     setLoading(true);
     await extraDemandService.index(dispatch, pagingParams, notifications);
-    // console.log("data:", data)
+    console.log("data:", data)
     setLoading(false);
   }, [dispatch, pagingParams, notifications]);
 
