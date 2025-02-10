@@ -6,74 +6,47 @@ import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TablePagination from "@mui/material/TablePagination";
 import TableRow from "@mui/material/TableRow";
-import { cityColumns, cityPayload } from "../city.payload"; // Replace with your wallet columns and payload
+import SearchIcon from "@mui/icons-material/Search";
+import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
+import RestartAltIcon from "@mui/icons-material/RestartAlt";
+import UpAndDel from "../../../components/UpAndDel";
+import { cityColumns, cityPayload } from "../city.payload";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, AppRootState } from "../../../stores";
 import { cityService } from "../city.service";
 import { paginateOptions } from "../../../constants/config";
-import { NavigateId } from "../../../shares/NavigateId";
 import { paths } from "../../../constants/paths";
-import {
-  Box,
-  Button,
-  Input,
-  InputAdornment,
-  TableSortLabel,
-} from "@mui/material";
-import { setPaginate } from "../city.slice"; // Adjust the slice if needed
-import SearchIcon from "@mui/icons-material/Search";
-import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
-import RestartAltIcon from "@mui/icons-material/RestartAlt";
+import { Box, Button, Input, InputAdornment, TableSortLabel } from "@mui/material";
+import { setPaginate } from "../city.slice";
 import { useNavigate } from "react-router";
-import UpAndDel from "../../../components/UpAndDel";
-import {
-  StyledTableCell,
-  StyledTableRow,
-} from "../../../components/TableCommon";
-import { useNotifications } from "@toolpad/core/useNotifications";
+import { StyledTableCell, StyledTableRow } from "../../../components/TableCommon";
 
 const CityTableView = () => {
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
-  const dispatch = useDispatch<AppDispatch>();
-  const { data, pagingParams } = useSelector(
-    (state: AppRootState) => state.city
-  );
-
-  const notifications = useNotifications();
-  const navigate = useNavigate();
   const [loading, setLoading] = React.useState(false);
+
+  const dispatch = useDispatch<AppDispatch>();
+  const navigate = useNavigate();
+
+  const { data, pagingParams } = useSelector((state: AppRootState) => state.city);
 
   const handleChangePage = (event: unknown, newPage: number) => {
     setPage(newPage);
-
-    dispatch(
-      setPaginate({
-        ...pagingParams,
-        CurrentPage: newPage + 1,
-      })
-    );
+    dispatch(setPaginate({...pagingParams, CurrentPage: newPage + 1}));
   };
 
-  const handleChangeRowsPerPage = (
-    event: React.ChangeEvent<HTMLInputElement>
-  ) => {
+  const handleChangeRowsPerPage = (event: React.ChangeEvent<HTMLInputElement>) => {
     setRowsPerPage(+event.target.value);
     setPage(0);
-    dispatch(
-      setPaginate({
-        ...pagingParams,
-        RowsPerPage: +event.target.value,
-        CurrentPage: 1,
-      })
-    );
+    dispatch(setPaginate({ ...pagingParams, RowsPerPage: +event.target.value, CurrentPage: 1 }));
   };
 
   const loadingData = React.useCallback(async () => {
     setLoading(true);
-    await cityService.index(dispatch, pagingParams, notifications);
+    await cityService.index(dispatch, pagingParams);
     setLoading(false);
-  }, [dispatch, pagingParams, notifications]);
+  }, [dispatch, pagingParams]);
 
   React.useEffect(() => {
     loadingData();
@@ -95,12 +68,7 @@ const CityTableView = () => {
           placeholder="Search City"
           value={pagingParams.SearchTerm}
           onChange={(e) => {
-            dispatch(
-              setPaginate({
-                ...pagingParams,
-                SearchTerm: e.target.value,
-              })
-            );
+            dispatch(setPaginate({...pagingParams,SearchTerm: e.target.value}));
           }}
           startAdornment={
             <InputAdornment position="start">
@@ -193,13 +161,6 @@ const CityTableView = () => {
                     <StyledTableCell key={column.id} align={column.align}>
                       {(() => {
                         switch (column.label) {
-                          case "City Name":
-                            return (
-                              <NavigateId
-                                url={`${paths.city}/${row.id}`} // Adjust the path for wallet detail
-                                value={value}
-                              />
-                            );
                           case "Action":
                             return (
                               <UpAndDel
