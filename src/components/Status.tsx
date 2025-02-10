@@ -2,7 +2,7 @@ import { Chip } from "@mui/material";
 import { useCallback, useEffect, useState } from "react";
 import { StatusOption, statusOptions } from "../constants/config";
 
-const Status = ({ status }: { status: string; lists: any }) => {
+const Status = ({ status }: { status: string; lists?: any }) => {
   const [statusValue, setStatusValue] = useState<null | StatusOption | undefined>(null);
 
   const loadData = useCallback(() => {
