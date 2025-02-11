@@ -5,7 +5,7 @@ import { useDispatch } from "react-redux";
 import { DRIVER_PAYLOAD } from "../modules/driver/driver.payload";
 import { FilterAlt, FilterAltOff } from "@mui/icons-material";
 
-const FilterComponent = ({
+export const FilterComponent = ({
   driverPayload,
   setPaginate,
 }: {

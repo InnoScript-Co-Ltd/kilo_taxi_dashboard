@@ -161,8 +161,9 @@ const PromotionUpdate = () => {
                 fullWidth
                 error={!!errors.PromoCode}
               >
-                <InputLabel htmlFor="promo_code">Promo Code</InputLabel>
+                <InputLabel htmlFor="promo_code" style={{ fontSize: "12px" }}>Promo Code</InputLabel>
                 <FilledInput
+                  style={{ paddingTop: "20px", fontSize: "14px" }}
                   size="small"
                   id="promo_code"
                   {...register("PromoCode")}
@@ -220,15 +221,16 @@ const PromotionUpdate = () => {
 
             <Grid2 size={{ xs: 6, md: 3 }}>
               <FormControl variant="filled" fullWidth error={!!errors.Unit}>
-                <InputLabel htmlFor="Unit">Unit</InputLabel>
-                <FilledInput size="small" id="Unit" {...register("Unit")} />
+                <InputLabel htmlFor="Unit" style={{ fontSize:"12px" }}>Unit</InputLabel>
+                <FilledInput style={{ paddingTop: "20px", fontSize: "14px" }} size="small" id="Unit" {...register("Unit")} />
                 <FormHelperText>{errors.Unit?.message}</FormHelperText>
               </FormControl>
             </Grid2>
             <Grid2 size={{ xs: 6, md: 3 }}>
               <FormControl variant="filled" fullWidth error={!!errors.Quantity}>
-                <InputLabel htmlFor="Quantity">Quantity</InputLabel>
+                <InputLabel htmlFor="Quantity" style={{ fontSize:"12px" }}>Quantity</InputLabel>
                 <FilledInput
+                  style={{ paddingTop: "20px", fontSize: "14px" }}
                   size="small"
                   id="Quantity"
                   {...register("Quantity")}
@@ -242,8 +244,9 @@ const PromotionUpdate = () => {
                 fullWidth
                 error={!!errors.Description}
               >
-                <InputLabel htmlFor="description">Description</InputLabel>
+                <InputLabel htmlFor="description" style={{ fontSize:"12px" }}>Description</InputLabel>
                 <FilledInput
+                  style={{ paddingTop: "20px", fontSize: "14px" }}
                   size="small"
                   id="description"
                   {...register("Description")}
@@ -258,12 +261,13 @@ const PromotionUpdate = () => {
                 fullWidth
                 error={!!errors.PromotionType}
               >
-                <InputLabel htmlFor="applicableTo">PromotionType</InputLabel>
+                <InputLabel htmlFor="applicableTo" style={{ fontSize:"12px" }}>Promotion Type</InputLabel>
                 <Controller
                   name="PromotionType"
                   control={control}
                   render={({ field }) => (
                     <Select
+                      style={{ paddingTop: "20px", fontSize: "14px" }}
                       id="promotionType"
                       aria-describedby="promotionType_text"
                       size="small"
@@ -294,12 +298,13 @@ const PromotionUpdate = () => {
                 fullWidth
                 error={!!errors.ApplicableTo}
               >
-                <InputLabel htmlFor="applicableTo">ApplicableTo</InputLabel>
+                <InputLabel htmlFor="applicableTo" style={{ fontSize:"12px" }}>Applicable To</InputLabel>
                 <Controller
                   name="ApplicableTo"
                   control={control}
                   render={({ field }) => (
                     <Select
+                      style={{ paddingTop: "20px", fontSize: "14px" }}
                       id="applicableTo"
                       aria-describedby="applicableTo_text"
                       size="small"
@@ -323,12 +328,13 @@ const PromotionUpdate = () => {
             </Grid2>
             <Grid2 size={{ xs: 6, md: 3 }}>
               <FormControl variant="filled" fullWidth error={!!errors.Status}>
-                <InputLabel htmlFor="status">Status</InputLabel>
+                <InputLabel htmlFor="status" style={{ fontSize: "12px" }}>Status</InputLabel>
                 <Controller
                   name="Status"
                   control={control}
                   render={({ field }) => (
                     <Select
+                      style={{ paddingTop: "20px", fontSize: "14px" }}
                       id="status"
                       aria-describedby="status_text"
                       size="small"
@@ -358,12 +364,13 @@ const PromotionUpdate = () => {
                   fullWidth
                   error={!!errors.CustomerIds}
                 >
-                  <InputLabel htmlFor="customer_name">Customers</InputLabel>
+                  <InputLabel htmlFor="customer_name" style={{ fontSize:"12px" }}>Customers</InputLabel>
                   <Controller
                     name="CustomerIds"
                     control={control}
                     render={({ field }) => (
                       <Select
+                        style={{ paddingTop: "20px", fontSize: "14px" }}
                         size="small"
                         id="customer_name"
                         aria-describedby="customer_name_text"

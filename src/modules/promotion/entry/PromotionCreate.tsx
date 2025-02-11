@@ -104,8 +104,9 @@ const PromotionCreate = () => {
                 fullWidth
                 error={!!errors.PromoCode}
               >
-                <InputLabel htmlFor="promo_code">Promo Code</InputLabel>
+                <InputLabel htmlFor="promo_code" style={{ fontSize: "12px" }}>Promo Code</InputLabel>
                 <FilledInput
+                  style={{ paddingTop: "20px", fontSize: "14px" }}
                   size="small"
                   id="promo_code"
                   {...register("PromoCode")}
@@ -167,8 +168,9 @@ const PromotionCreate = () => {
 
             <Grid2 size={{ xs: 6, md: 3 }}>
               <FormControl variant="filled" fullWidth error={!!errors.Quantity}>
-                <InputLabel htmlFor="Quantity">Quantity</InputLabel>
+                <InputLabel htmlFor="Quantity" style={{ fontSize: "12px" }}>Quantity</InputLabel>
                 <FilledInput
+                  style={{ paddingTop: "20px", fontSize: "14px" }}
                   size="small"
                   id="Quantity"
                   {...register("Quantity")}
@@ -178,8 +180,8 @@ const PromotionCreate = () => {
             </Grid2>
             <Grid2 size={{ xs: 6, md: 3 }}>
               <FormControl variant="filled" fullWidth error={!!errors.Unit}>
-                <InputLabel htmlFor="Unit">Unit</InputLabel>
-                <FilledInput size="small" id="Unit" {...register("Unit")} />
+                <InputLabel htmlFor="Unit" style={{ fontSize: "12px" }}>Unit</InputLabel>
+                <FilledInput style={{ paddingTop: "20px", fontSize: "14px" }} size="small" id="Unit" {...register("Unit")} />
                 <FormHelperText>{errors.Unit?.message}</FormHelperText>
               </FormControl>
             </Grid2>
@@ -189,8 +191,9 @@ const PromotionCreate = () => {
                 fullWidth
                 error={!!errors.Description}
               >
-                <InputLabel htmlFor="description">Description</InputLabel>
+                <InputLabel htmlFor="description" style={{ fontSize: "12px" }}>Description</InputLabel>
                 <FilledInput
+                  style={{ paddingTop: "20px", fontSize: "14px" }}
                   size="small"
                   id="description"
                   {...register("Description")}
@@ -205,12 +208,13 @@ const PromotionCreate = () => {
                 fullWidth
                 error={!!errors.PromotionType}
               >
-                <InputLabel htmlFor="promotionType">PromotionType</InputLabel>
+                <InputLabel htmlFor="promotionType" style={{ fontSize: "12px" }}>PromotionType</InputLabel>
                 <Controller
                   name="PromotionType"
                   control={control}
                   render={({ field }) => (
                     <Select
+                      style={{ paddingTop: "20px", fontSize: "14px" }}
                       id="promotionType"
                       aria-describedby="promotionType_text"
                       size="small"
@@ -241,12 +245,13 @@ const PromotionCreate = () => {
                 fullWidth
                 error={!!errors.ApplicableTo}
               >
-                <InputLabel htmlFor="applicableTo">ApplicableTo</InputLabel>
+                <InputLabel htmlFor="applicableTo" style={{ fontSize: "12px" }}>ApplicableTo</InputLabel>
                 <Controller
                   name="ApplicableTo"
                   control={control}
                   render={({ field }) => (
                     <Select
+                      style={{ paddingTop: "20px", fontSize: "14px" }}
                       id="applicableTo"
                       aria-describedby="applicableTo_text"
                       size="small"

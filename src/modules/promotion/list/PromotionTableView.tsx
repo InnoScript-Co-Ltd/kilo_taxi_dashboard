@@ -86,7 +86,7 @@ const PromotionTableView = () => {
   console.log("qweew", data);
 
   return (
-    <Paper sx={{ width: "100%", overflow: "hidden" }}>
+    <Paper sx={{ width: "100%", overflow: "hidden", mt: "15px" }}>
       <Box
         sx={{
           my: "20px",
@@ -98,7 +98,7 @@ const PromotionTableView = () => {
       >
         <Input
           id="input-with-icon-search"
-          placeholder="Search State"
+          placeholder="Search Promotion"
           value={pagingParams.SearchTerm}
           onChange={(e) => {
             dispatch(
