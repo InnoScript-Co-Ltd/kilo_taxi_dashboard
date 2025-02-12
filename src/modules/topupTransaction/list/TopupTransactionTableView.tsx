@@ -189,7 +189,7 @@ const TopupTransactionTableView = () => {
             </TableRow>
           </TableHead>
           <TableBody>
-            {data.topupTransactions?.map((row: any) => (
+            {data.topUpTransactions?.map((row: any) => (
               <StyledTableRow hover role="checkbox" tabIndex={-1} key={row.id}>
                 {topupTransactionColumns.map((column) => {
                   const value = row[column.id];

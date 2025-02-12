@@ -1,5 +1,9 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { TOPUPTRANSACTION, TOPUPTRANSACTION_PAYLOAD, topupTransactionPayload } from "./topupTransaction.payload";
+import {
+  TOPUPTRANSACTION,
+  TOPUPTRANSACTION_PAYLOAD,
+  topupTransactionPayload,
+} from "./topupTransaction.payload";
 
 // Define a type for pagination parameters, similar to STATE_PAGINATE_PARAMS
 export interface TOPUPTRANSACTION_PAGINATE_PARAMS
@@ -8,7 +12,7 @@ export interface TOPUPTRANSACTION_PAGINATE_PARAMS
 // Define a type for the topupTransaction slice
 export interface TOPUPTRANSACTION_SLICE {
   data: {
-    topupTransactions: Array<TOPUPTRANSACTION>;
+    topUpTransactions: Array<TOPUPTRANSACTION>;
     paging: {
       totalCount: number;
       totalPages: number;
@@ -24,7 +28,7 @@ export interface TOPUPTRANSACTION_SLICE {
 
 const initialState: TOPUPTRANSACTION_SLICE = {
   data: {
-    topupTransactions: [],
+    topUpTransactions: [],
     paging: {
       totalCount: 0,
       totalPages: 0,
@@ -63,7 +67,8 @@ const topupTransactionSlice = createSlice({
 });
 
 // Export actions for use in components
-export const { index, update, show, setPaginate } = topupTransactionSlice.actions;
+export const { index, update, show, setPaginate } =
+  topupTransactionSlice.actions;
 
 // Export the reducer to be included in the store
 export default topupTransactionSlice.reducer;

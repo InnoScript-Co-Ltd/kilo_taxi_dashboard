@@ -26,13 +26,18 @@ import { getRequest } from "../../../helpers/api";
 import FileUploadWithPreview from "../../../components/FileUploadWithPreview";
 import { Breadcrumb } from "../../../components/Breadcrumb";
 import { paths } from "../../../constants/paths";
-import { TopupTransactionFormInputs, topupTransactionSchema } from "../topupTransaction.payload";
+import {
+  TopupTransactionFormInputs,
+  topupTransactionSchema,
+} from "../topupTransaction.payload";
 import { topupTransactionService } from "../topupTransaction.service";
 import { formBuilder } from "../../../helpers/formBuilder";
 
 const TopupTransactionCreate = () => {
   const [loading, setLoading] = useState(false);
-  const [paymentChannelNames, setPaymentChannelNames] = useState<Array<{ id: number; channelName: string }>>([]);
+  const [paymentChannelNames, setPaymentChannelNames] = useState<
+    Array<{ id: number; channelName: string }>
+  >([]);
   const [isFetching, setIsFetching] = useState(false);
   const [driverName, setDriverName] = useState("");
   const [walletBalance, setWalletBalance] = useState(0);
@@ -51,35 +56,42 @@ const TopupTransactionCreate = () => {
     formState: { errors },
   } = useForm<TopupTransactionFormInputs>({
     resolver: zodResolver(topupTransactionSchema),
-    
   });
 
   useEffect(() => {
     const fetchData = async () => {
       setIsFetching(true);
-      const data = await topupTransactionService.fetchPaymentChannelNames(dispatch);
-      setPaymentChannelNames(data); 
+      const data =
+        await topupTransactionService.fetchPaymentChannelNames(dispatch);
+      setPaymentChannelNames(data);
       setIsFetching(false);
     };
     fetchData();
   }, [dispatch]);
 
-   // Function to fetch driver details
-   const fetchDriverDetails = async () => {
+  // Function to fetch driver details
+  const fetchDriverDetails = async () => {
     const phoneNumber = getValues("phoneNumber");
     const driverId = getValues("userId");
-  
 
     if (!phoneNumber && !driverId) {
-      notifications?.show("Please provide either a phone number or driver ID.", {
-        severity: "error",
-        autoHideDuration: 3000,
-      });
+      notifications?.show(
+        "Please provide either a phone number or driver ID.",
+        {
+          severity: "error",
+          autoHideDuration: 3000,
+        }
+      );
       return;
     }
 
     setChecking(true);
-    const response = await topupTransactionService.fetchDriverDetails(dispatch, phoneNumber, driverId, notifications);
+    const response = await topupTransactionService.fetchDriverDetails(
+      dispatch,
+      phoneNumber,
+      driverId,
+      notifications
+    );
 
     if (response) {
       setValue("userId", response.driverId);
@@ -90,12 +102,13 @@ const TopupTransactionCreate = () => {
     setChecking(false);
   };
 
-
-  const submitTopupTransactionCreate = async (data: TopupTransactionFormInputs) => {
+  const submitTopupTransactionCreate = async (
+    data: TopupTransactionFormInputs
+  ) => {
     try {
       console.log("Submitting form data:", data); // Debug log
       setLoading(true);
-      const customPayload  = {
+      const customPayload = {
         paymentChannelId: data.paymentChannelId,
         Amount: Number(data.Amount),
         file_transaction_screenshoot: data.file_transaction_screenshoot,
@@ -103,10 +116,14 @@ const TopupTransactionCreate = () => {
         status: data.status,
         userId: data.userId,
         driverName: data.driverName,
-        walletBalance: data.walletBalance
+        walletBalance: data.walletBalance,
       };
       const formData = formBuilder(customPayload, topupTransactionSchema);
-      const response = await topupTransactionService.store(formData, dispatch, notifications);
+      const response = await topupTransactionService.store(
+        formData,
+        dispatch,
+        notifications
+      );
       if (response.status === 201) {
         navigate(`${paths.topupTransactionList}`);
       }
@@ -120,42 +137,48 @@ const TopupTransactionCreate = () => {
   return (
     <Box>
       <Breadcrumb />
-      <Typography variant="h5" fontWeight="bold">Manual Top-up Form</Typography>
+      <Typography variant="h5" fontWeight="bold">
+        Manual Top-up Form
+      </Typography>
       <Card sx={{ padding: "20px" }}>
         <Typography variant="h6">Top-up Form</Typography>
-       
 
         <form onSubmit={handleSubmit(submitTopupTransactionCreate)}>
-        <Grid container spacing={2} alignItems="center">
-          <Grid item xs={5}>
-            <FormControl fullWidth>
-              <InputLabel>Driver Phone</InputLabel>
-              <FilledInput {...register("phoneNumber")} />
-            </FormControl>
+          <Grid container spacing={2} alignItems="center">
+            <Grid item xs={5}>
+              <FormControl fullWidth>
+                <InputLabel>Driver Phone</InputLabel>
+                <FilledInput {...register("phoneNumber")} />
+              </FormControl>
+            </Grid>
+            <Grid item xs={1} textAlign="center">
+              <strong>Or</strong>
+            </Grid>
+            <Grid item xs={5}>
+              <FormControl fullWidth>
+                <InputLabel>Driver ID</InputLabel>
+                <FilledInput {...register("userId")} />
+              </FormControl>
+            </Grid>
+            <Grid item xs={1}>
+              <Button
+                type="button"
+                variant="contained"
+                color="warning"
+                onClick={fetchDriverDetails}
+                disabled={checking}
+              >
+                {checking ? <CircularProgress size={20} /> : "Check"}
+              </Button>
+            </Grid>
           </Grid>
-          <Grid item xs={1} textAlign="center">
-            <strong>Or</strong>
-          </Grid>
-          <Grid item xs={5}>
-            <FormControl fullWidth>
-              <InputLabel>Driver ID</InputLabel>
-              <FilledInput {...register("userId")} />
-            </FormControl>
-          </Grid>
-          <Grid item xs={1}>
-            <Button type="button" variant="contained" color="warning" onClick={fetchDriverDetails} disabled={checking}>
-              {checking ? <CircularProgress size={20} /> : "Check"}
-            </Button>
-          </Grid>
-        </Grid>
 
-        <Divider sx={{ marginY: "20px" }} />
+          <Divider sx={{ marginY: "20px" }} />
           <Grid container spacing={2}>
             <Grid item xs={6}>
               <FormControl fullWidth>
                 <InputLabel>Driver Name</InputLabel>
-                <FilledInput readOnly {...register("driverName")}/>
-               
+                <FilledInput readOnly {...register("driverName")} />
               </FormControl>
             </Grid>
             <Grid item xs={6}>
@@ -167,7 +190,7 @@ const TopupTransactionCreate = () => {
             <Grid item xs={12}>
               <FormControl fullWidth>
                 <InputLabel>Top-up Amount</InputLabel>
-                <FilledInput {...register("Amount")} type="number"/>
+                <FilledInput {...register("Amount")} type="number" />
               </FormControl>
             </Grid>
             <Grid item xs={12}>
@@ -182,14 +205,16 @@ const TopupTransactionCreate = () => {
                         <MenuItem disabled>
                           <CircularProgress size={20} />
                         </MenuItem>
-                      ) : paymentChannelNames.length > 0 ? (
-                        paymentChannelNames.map((channel) => (
+                      ) : paymentChannelNames?.length > 0 ? (
+                        paymentChannelNames?.map((channel) => (
                           <MenuItem key={channel.id} value={channel.id}>
                             {channel.channelName}
                           </MenuItem>
                         ))
                       ) : (
-                        <MenuItem disabled>No payment channels available</MenuItem>
+                        <MenuItem disabled>
+                          No payment channels available
+                        </MenuItem>
                       )}
                     </Select>
                   )}
@@ -230,8 +255,13 @@ const TopupTransactionCreate = () => {
               </FormControl>
             </Grid2>
             <Grid item xs={12} textAlign="center">
-              <Button type="submit" variant="contained" fullWidth sx={{ backgroundColor: "#FFC107", color: "black" }}>
-              {loading ? "Submitting..." : "Submit"}
+              <Button
+                type="submit"
+                variant="contained"
+                fullWidth
+                sx={{ backgroundColor: "#FFC107", color: "black" }}
+              >
+                {loading ? "Submitting..." : "Submit"}
               </Button>
             </Grid>
           </Grid>
@@ -240,4 +270,4 @@ const TopupTransactionCreate = () => {
     </Box>
   );
 };
-export default TopupTransactionCreate; 
+export default TopupTransactionCreate;
