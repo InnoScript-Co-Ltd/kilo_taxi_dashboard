@@ -9,7 +9,7 @@ import { HTTPErrorResponse, HTTPResponse } from "../../constants/config";
 export const topupTransactionService = {
   // Method to create a new topupTransaction
   store: async (
-    payload: TopupTransactionFormInputs,
+    payload: any,
     dispatch: Dispatch,
     notifications?: any
   ) => {
@@ -100,8 +100,9 @@ export const topupTransactionService = {
     dispatch: Dispatch,
     phoneNumber?: string,
     driverId?: number,
+
     notifications?: any
-  ): Promise<{ driverName: string; walletBalance: number } | null> => {
+  ): Promise<{ driverName: string; walletBalance: number; driverId: number; phoneNumber: string } | null> => {
     try {
       const params: { [key: string]: any } = {};
       if (phoneNumber) params.phone = phoneNumber;
@@ -116,6 +117,8 @@ export const topupTransactionService = {
       // Check if the response is a success response (HTTPResponse)
       if ((response as HTTPResponse)?.status === 200) {
         return {
+          driverId: (response as HTTPResponse).data.id,
+          phoneNumber: (response as HTTPResponse).data.phoneNumber,
           driverName: (response as HTTPResponse).data.driverName,
           walletBalance: (response as HTTPResponse).data.balance,
         };

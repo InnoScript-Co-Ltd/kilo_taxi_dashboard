@@ -7,21 +7,21 @@ export const topupTransactionSchema = z.object({
   paymentChannelId: z
     .number()
     .min(1, { message: "Payment Channel is required" }),
-  amount: z
-    .number()
-    .min(0.01, { message: "Amount must be at least 0.01" })
-    .max(9999999.99, { message: "Amount must not exceed 9999999.99" })
-    .refine((val) => /^\d{1,7}(\.\d{1,2})?$/.test(val.toString()), {
-      message:
-        "Amount must be a valid number with up to 9 digits and 2 decimal places",
-    }),
-  transaction_screenshoot: z.any().nullable(),
+  Amount: z.any(),
+    // .number()
+    // .min(0.01, { message: "Amount must be at least 0.01" })
+    // .max(9999999.99, { message: "Amount must not exceed 9999999.99" })
+    // .refine((val) => /^\d{1,7}(\.\d{1,2})?$/.test(val.toString()), {
+    //   message:
+    //     "Amount must be a valid number with up to 9 digits and 2 decimal places",
+    // }),
+  //transaction_screenshoot: z.any().nullable(),
   file_transaction_screenshoot: z.any().nullable(),
   phoneNumber: z
     .string()
     .min(8, { message: "phone number is at least 8 digit" }),
-  status: z.number(),
-  driverId: z.number().min(1, { message: "Driver ID is required" }),
+  status: z.string().default("Success"),
+  userId: z.number().min(1, { message: "User ID is required" }),
   driverName: z.string().min(1, { message: "Driver Name is required" }),
   walletBalance: z
     .number()
@@ -37,23 +37,22 @@ export type TopupTransactionFormInputs = z.infer<typeof topupTransactionSchema>;
 export interface TOPUPTRANSACTION {
   id: string;
   paymentChannelId?: number;
+  paymentChannelName: string;
   amount: number;
-  transaction_screenshoot: string;
   phoneNumber: string;
   status: number;
   file_transaction_screenshoot: string;
   createdDate: Date;
-  driverId: number;
   driverName: string;
   walletBalance: number;
   action?: null;
 }
 
-type TopupTransactionId = keyof TOPUPTRANSACTION;
+// type TopupTransactionId = keyof TOPUPTRANSACTION;
 
 // Define columns for topupTransaction table
 interface TopupTransactionColumn {
-  id: TopupTransactionId;
+  id: "id" | "driverName" | "phoneNumber" | "amount" | "paymentChannelId" | "walletBalance" | "createdDate" | "action";
   label: string;
   minWidth?: number;
   align?: "right";
@@ -78,7 +77,15 @@ export const topupTransactionColumns: readonly TopupTransactionColumn[] = [
   {
     id: "id",
     label: "Id",
-    minWidth: 130,
+    minWidth: 100,
+    numeric: false,
+    disablePadding: false,
+    sort: true,
+  },
+  {
+    id: "driverName",
+    label: "Driver Name",
+    minWidth: 125,
     numeric: false,
     disablePadding: false,
     sort: true,
@@ -102,22 +109,6 @@ export const topupTransactionColumns: readonly TopupTransactionColumn[] = [
   {
     id: "paymentChannelId",
     label: "Top-up Channel",
-    minWidth: 125,
-    numeric: false,
-    disablePadding: false,
-    sort: true,
-  },
-  {
-    id: "driverId",
-    label: "Driver ID",
-    minWidth: 125,
-    numeric: false,
-    disablePadding: false,
-    sort: true,
-  },
-  {
-    id: "driverName",
-    label: "Driver Name",
     minWidth: 125,
     numeric: false,
     disablePadding: false,
@@ -154,7 +145,7 @@ export const topupTransactionPayload: TOPUPTRANSACTION_PAYLOAD = {
   pagingParams: {
     PageSize: paginateOptions.rows,
     CurrentPage: 1,
-    SortField: "topupTransactionName",
+    SortField: "",
     SortDir: 0,
     SearchTerm: "",
   },

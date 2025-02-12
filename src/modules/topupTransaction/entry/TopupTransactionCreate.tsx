@@ -3,6 +3,7 @@ import {
   Box,
   Button,
   Card,
+  Grid2,
   Grid,
   FilledInput,
   FormControl,
@@ -27,6 +28,7 @@ import { Breadcrumb } from "../../../components/Breadcrumb";
 import { paths } from "../../../constants/paths";
 import { TopupTransactionFormInputs, topupTransactionSchema } from "../topupTransaction.payload";
 import { topupTransactionService } from "../topupTransaction.service";
+import { formBuilder } from "../../../helpers/formBuilder";
 
 const TopupTransactionCreate = () => {
   const [loading, setLoading] = useState(false);
@@ -54,10 +56,9 @@ const TopupTransactionCreate = () => {
 
   useEffect(() => {
     const fetchData = async () => {
-      setValue("status", 1);
       setIsFetching(true);
       const data = await topupTransactionService.fetchPaymentChannelNames(dispatch);
-      setPaymentChannelNames(data);
+      setPaymentChannelNames(data); 
       setIsFetching(false);
     };
     fetchData();
@@ -66,7 +67,8 @@ const TopupTransactionCreate = () => {
    // Function to fetch driver details
    const fetchDriverDetails = async () => {
     const phoneNumber = getValues("phoneNumber");
-    const driverId = getValues("driverId");
+    const driverId = getValues("userId");
+  
 
     if (!phoneNumber && !driverId) {
       notifications?.show("Please provide either a phone number or driver ID.", {
@@ -80,11 +82,10 @@ const TopupTransactionCreate = () => {
     const response = await topupTransactionService.fetchDriverDetails(dispatch, phoneNumber, driverId, notifications);
 
     if (response) {
-      setDriverName(response.driverName);
-      // Set other values if necessary, e.g., walletBalance
-      // setWalletBalance(response.walletBalance);
-      setWalletBalance(response.walletBalance);
-      //setValue("walletBalance", response.walletBalance); 
+      setValue("userId", response.driverId);
+      setValue("phoneNumber", response.phoneNumber);
+      setValue("driverName", response.driverName);
+      setValue("walletBalance", response.walletBalance);
     }
     setChecking(false);
   };
@@ -94,7 +95,18 @@ const TopupTransactionCreate = () => {
     try {
       console.log("Submitting form data:", data); // Debug log
       setLoading(true);
-      const response = await topupTransactionService.store(data, dispatch, notifications);
+      const customPayload  = {
+        paymentChannelId: data.paymentChannelId,
+        Amount: Number(data.Amount),
+        file_transaction_screenshoot: data.file_transaction_screenshoot,
+        phoneNumber: data.phoneNumber,
+        status: data.status,
+        userId: data.userId,
+        driverName: data.driverName,
+        walletBalance: data.walletBalance
+      };
+      const formData = formBuilder(customPayload, topupTransactionSchema);
+      const response = await topupTransactionService.store(formData, dispatch, notifications);
       if (response.status === 201) {
         navigate(`${paths.topupTransactionList}`);
       }
@@ -111,6 +123,9 @@ const TopupTransactionCreate = () => {
       <Typography variant="h5" fontWeight="bold">Manual Top-up Form</Typography>
       <Card sx={{ padding: "20px" }}>
         <Typography variant="h6">Top-up Form</Typography>
+       
+
+        <form onSubmit={handleSubmit(submitTopupTransactionCreate)}>
         <Grid container spacing={2} alignItems="center">
           <Grid item xs={5}>
             <FormControl fullWidth>
@@ -124,36 +139,35 @@ const TopupTransactionCreate = () => {
           <Grid item xs={5}>
             <FormControl fullWidth>
               <InputLabel>Driver ID</InputLabel>
-              <FilledInput {...register("driverId")} />
+              <FilledInput {...register("userId")} />
             </FormControl>
           </Grid>
           <Grid item xs={1}>
-            <Button variant="contained" color="warning" onClick={fetchDriverDetails} disabled={checking}>
+            <Button type="button" variant="contained" color="warning" onClick={fetchDriverDetails} disabled={checking}>
               {checking ? <CircularProgress size={20} /> : "Check"}
             </Button>
           </Grid>
         </Grid>
 
         <Divider sx={{ marginY: "20px" }} />
-
-        <form onSubmit={handleSubmit(submitTopupTransactionCreate)}>
           <Grid container spacing={2}>
             <Grid item xs={6}>
               <FormControl fullWidth>
                 <InputLabel>Driver Name</InputLabel>
-                <FilledInput value={driverName} readOnly />
+                <FilledInput readOnly {...register("driverName")}/>
+               
               </FormControl>
             </Grid>
             <Grid item xs={6}>
               <FormControl fullWidth>
                 <InputLabel>Current Wallet Balance</InputLabel>
-                <FilledInput value={walletBalance} readOnly />
+                <FilledInput readOnly {...register("walletBalance")} />
               </FormControl>
             </Grid>
             <Grid item xs={12}>
               <FormControl fullWidth>
                 <InputLabel>Top-up Amount</InputLabel>
-                <FilledInput {...register("amount")} />
+                <FilledInput {...register("Amount")} type="number"/>
               </FormControl>
             </Grid>
             <Grid item xs={12}>
@@ -182,18 +196,39 @@ const TopupTransactionCreate = () => {
                 />
               </FormControl>
             </Grid>
-            <Grid item xs={12}>
-              <Typography variant="body1" gutterBottom>
-                Upload File Transaction Screenshot
-              </Typography>
-              <FileUploadWithPreview
-                name="transaction_screenshoot"
-                onFileChange={(file?: File) => {
-                  console.log("File uploaded:", file);
-                }}
-                disabled={false}
-              />
-            </Grid>
+            <Grid2 size={{ xs: 6, md: 3, xl: 3 }}>
+              <FormControl
+                variant="filled"
+                fullWidth
+                error={!!errors.file_transaction_screenshoot}
+              >
+                <Controller
+                  name="file_transaction_screenshoot"
+                  control={control}
+                  defaultValue={undefined} // Set initial state to null
+                  rules={{ required: "NRC Front is required" }} // Only use required here
+                  render={({ field: { onChange, value } }) => (
+                    <FileUploadWithPreview
+                      onFileChange={(file) => {
+                        onChange(file); // Update the field with the selected file
+                      }}
+                      error={
+                        errors.file_transaction_screenshoot
+                          ? typeof errors.file_transaction_screenshoot
+                              .message === "string"
+                            ? errors.file_transaction_screenshoot.message
+                            : undefined
+                          : undefined
+                      }
+                      // Correctly extracting the error message
+                      field="NRC Front" // Label for the upload button
+                      //src={topupTransaction?.transaction_screenshoot}
+                      disabled={loading}
+                    />
+                  )}
+                />
+              </FormControl>
+            </Grid2>
             <Grid item xs={12} textAlign="center">
               <Button type="submit" variant="contained" fullWidth sx={{ backgroundColor: "#FFC107", color: "black" }}>
               {loading ? "Submitting..." : "Submit"}

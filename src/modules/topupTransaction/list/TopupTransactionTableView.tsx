@@ -79,6 +79,7 @@ const TopupTransactionTableView = () => {
   }, [dispatch, pagingParams, notifications]);
 
   React.useEffect(() => {
+    console.log("API Response:", data);
     loadingData();
   }, [loadingData]);
 
