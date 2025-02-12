@@ -34,6 +34,7 @@ import {
   StyledTableRow,
 } from "../../../components/TableCommon";
 import { useNotifications } from "@toolpad/core/useNotifications";
+import { format } from "date-fns"; 
 
 const TopupTransactionTableView = () => {
   const [page, setPage] = React.useState(0);
@@ -197,27 +198,22 @@ const TopupTransactionTableView = () => {
                     <StyledTableCell key={column.id} align={column.align}>
                       {(() => {
                         switch (column.label) {
-                          case "TopupTransaction Name":
-                            return (
-                              <NavigateId
-                                url={`${paths.topupTransaction}/${row.id}`} // Adjust the path for topupTransaction detail
-                                value={value}
-                              />
-                            );
-                          case "Create Date":
-                            return value;
-                          case "Update Date":
-                            return value;
-                          case "Action":
-                            return (
-                              <UpAndDel
-                                url={`${paths.topupTransaction}/${row.id}`} // Adjust for topupTransaction delete
-                                fn={loadingData}
-                                priority={true}
-                              />
-                            );
+                          case "Datetime":
+                            // Format dateTime to desired format
+                            const formattedDate = format(new Date(value), "dd MMM yyyy hh:mma");
+                            return formattedDate;
+                            case "Action":
+                              return (
+                                <Button
+                                  variant="outlined"
+                                  color="primary"
+                                  onClick={() => navigate(`${paths.topupTransaction}/${row.id}`)} // Redirect to View Detail page
+                                >
+                                  View Detail
+                                </Button>
+                              );
                           default:
-                            return value; // Fallback case
+                            return value;
                         }
                       })()}
                     </StyledTableCell>

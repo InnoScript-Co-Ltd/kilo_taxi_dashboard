@@ -31,13 +31,15 @@ export const topupTransactionService = {
   index: async (dispatch: Dispatch, params: any, notifications?: any) => {
     const response: any = await getRequest(endpoints.topupTransaction, params, dispatch);
     await httpServiceHandler(dispatch, response.data);
-
+    console.log("Before Sevice:"+ response);
     if (response.data.statusCode === 200) {
+      console.log("Sevice:"+ response.data);
       //'info' | 'success' | 'warning' | 'error'
       notifications.show("TopupTransaction list is successfully retrieved!", {
         severity: "info",
         autoHideDuration: 3000,
       });
+
       dispatch(index(response.data.payload ? response.data.payload : response.data.payload));
     }
     return response.data;

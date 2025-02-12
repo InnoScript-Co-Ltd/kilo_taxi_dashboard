@@ -40,9 +40,8 @@ export interface TOPUPTRANSACTION {
   paymentChannelName: string;
   amount: number;
   phoneNumber: string;
-  status: number;
   file_transaction_screenshoot: string;
-  createdDate: Date;
+  transactionDate: Date;
   driverName: string;
   walletBalance: number;
   action?: null;
@@ -52,7 +51,7 @@ export interface TOPUPTRANSACTION {
 
 // Define columns for topupTransaction table
 interface TopupTransactionColumn {
-  id: "id" | "driverName" | "phoneNumber" | "amount" | "paymentChannelId" | "walletBalance" | "createdDate" | "action";
+  id: "id" | "driverName" | "phoneNumber" | "amount" | "paymentChannelName" | "walletBalance" | "transactionDate" | "action";
   label: string;
   minWidth?: number;
   align?: "right";
@@ -107,7 +106,7 @@ export const topupTransactionColumns: readonly TopupTransactionColumn[] = [
     sort: true,
   },
   {
-    id: "paymentChannelId",
+    id: "paymentChannelName",
     label: "Top-up Channel",
     minWidth: 125,
     numeric: false,
@@ -123,7 +122,7 @@ export const topupTransactionColumns: readonly TopupTransactionColumn[] = [
     sort: true,
   },
   {
-    id: "createdDate",
+    id: "transactionDate",
     label: "Datetime",
     minWidth: 125,
     numeric: false,

@@ -24,7 +24,7 @@ export interface ExtraDemand {
   title: string;
   amount: number;
   description: string;
-  createDate: Date | null;
+  createDate: Date ;
 }
 
 // Define columns for extraDemand table

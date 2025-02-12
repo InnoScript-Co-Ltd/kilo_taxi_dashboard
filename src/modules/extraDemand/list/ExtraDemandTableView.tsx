@@ -31,6 +31,7 @@ import {
   StyledTableRow,
 } from "../../../components/TableCommon";
 import { useNotifications } from "@toolpad/core/useNotifications";
+import { format } from "date-fns"; 
 
 const ExtraDemandTableView = () => {
   const [page, setPage] = React.useState(0);
@@ -202,6 +203,10 @@ const ExtraDemandTableView = () => {
                                 value={value}
                               />
                             );
+                          case "Create Date":
+                          // Format dateTime to desired format
+                          const formattedDate = format(new Date(value), "dd MMM yyyy hh:mma");
+                          return formattedDate;  
                           case "Action":
                             return (
                               <UpAndDel
