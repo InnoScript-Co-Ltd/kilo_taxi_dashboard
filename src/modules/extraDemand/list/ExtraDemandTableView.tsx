@@ -209,11 +209,13 @@ const ExtraDemandTableView = () => {
                           return formattedDate;  
                           case "Action":
                             return (
-                              <UpAndDel
-                                url={`${paths.extraDemand}/${row.id}`} // Adjust for wallet delete
-                                fn={loadingData}
-                                priority={true}
-                              />
+                              <Button
+                                variant="contained"
+                                color="primary"
+                                onClick={() => navigate(`${paths.extraDemand}/${row.id}`)}
+                              >
+                                Edit
+                              </Button>
                             );
                           default:
                             return value; // Fallback case

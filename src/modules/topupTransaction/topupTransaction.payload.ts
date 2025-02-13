@@ -51,7 +51,7 @@ export interface TOPUPTRANSACTION {
 
 // Define columns for topupTransaction table
 interface TopupTransactionColumn {
-  id: "id" | "driverName" | "phoneNumber" | "amount" | "paymentChannelName" | "walletBalance" | "transactionDate" | "action";
+  id: "id" | "driverName" | "phoneNumber" | "amount" | "paymentChannelName" | "transactionDate" | "action";
   label: string;
   minWidth?: number;
   align?: "right";
@@ -113,14 +113,14 @@ export const topupTransactionColumns: readonly TopupTransactionColumn[] = [
     disablePadding: false,
     sort: true,
   },
-  {
-    id: "walletBalance",
-    label: "Wallet Balance",
-    minWidth: 125,
-    numeric: true,
-    disablePadding: false,
-    sort: true,
-  },
+  // {
+  //   id: "walletBalance",
+  //   label: "Wallet Balance",
+  //   minWidth: 125,
+  //   numeric: true,
+  //   disablePadding: false,
+  //   sort: true,
+  // },
   {
     id: "transactionDate",
     label: "Datetime",
