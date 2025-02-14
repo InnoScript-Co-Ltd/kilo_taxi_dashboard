@@ -14,6 +14,11 @@ export const paths = {
   cityCreate: "/city/new",
   cityDetail: "/city/:id",
 
+  township: "/township",
+  townshipList: "/township/list",
+  townshipCreate: "/township/new",
+  townshipDetail: "/township/:id",
+
   customer: "/customer",
   customerList: "/customer/list",
   customerCreate: "/customer/new",

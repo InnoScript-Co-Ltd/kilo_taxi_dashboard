@@ -16,6 +16,7 @@ import paymentChannelSlice from "./modules/paymentchannel/paymentchannel.slice";
 import smsSlice from "./modules/sms/sms.slice";
 import sosSlice from "./modules/sos/sos.slice";
 import citySlice from "./modules/city/city.slice";
+import townshipSlice from "./modules/township/township.slice";
 import travelRateSlice from "./modules/travelrate/travelrate.slice";
 import kiloAmountSlice from "./modules/kiloamount/kiloamount.slice";
 import ExtraDemandSlice from "./modules/extraDemand/extraDemand.slice";
@@ -37,6 +38,7 @@ export const stores = configureStore({
     share: shareSlice,
     admin: adminSlice,
     city: citySlice,
+    township: townshipSlice,
     customer: customerSlice,
     promotion: promotionSlice,
     review: reviewSlice,

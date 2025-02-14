@@ -14,6 +14,7 @@ export const endpoints = {
   scheduleBooking: "scheduleBooking",
   country: "Country",
   city: "City",
+  township: "Township",
   state: "State",
   merchant: "Merchant",
   driver: "Driver",
