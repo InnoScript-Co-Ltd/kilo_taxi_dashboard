@@ -103,6 +103,10 @@ export const paths = {
   kiloAmountList: "/kiloamount/list",
   kiloAmountDetail: "/kiloamount/:id",
 
+  commissionConfig: "/commissionconfig",
+  commissionConfigList: "/commissionconfig/list",
+  commissionConfigDetail: "/commissionconfig/:id",
+
   simulation: "/simulation",
   simulationOrderCreate: "/simulation/order",
   simulationOrderMap: "/simulation/order/map",

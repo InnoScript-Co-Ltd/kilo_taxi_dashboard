@@ -30,6 +30,7 @@ export const endpoints = {
   sos: "Sos",
   travelRate: "TravelRate",
   kiloAmount: "KiloAmount",
+  commissionConfig: "CommissionConfig",
   login: "auth/login",
   image: `${baseURL}/storage/images`,
   status: "status",

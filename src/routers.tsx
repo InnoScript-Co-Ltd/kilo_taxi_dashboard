@@ -25,6 +25,7 @@ import Login from "./modules/auth/view/Login";
 import { ExtraDemandRoute } from "./modules/extraDemand/extraDemand.route";
 import { KiloAmountRoute } from "./modules/kiloamount/kiloamount.route";
 import { TownshipRoute } from "./modules/township/township.route";
+import { CommissionConfigRoute } from "./modules/commissionconfig/commissionconfig.route";
 export const routers = createBrowserRouter([
   {
     path: "/",
@@ -53,6 +54,7 @@ export const routers = createBrowserRouter([
       ...TownshipRoute,
       ...TravelRateRoute,
       ...KiloAmountRoute,
+      ...CommissionConfigRoute,
       ...ExtraDemandRoute,
     ],
   },

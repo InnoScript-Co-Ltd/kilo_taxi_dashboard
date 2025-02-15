@@ -19,6 +19,7 @@ import citySlice from "./modules/city/city.slice";
 import townshipSlice from "./modules/township/township.slice";
 import travelRateSlice from "./modules/travelrate/travelrate.slice";
 import kiloAmountSlice from "./modules/kiloamount/kiloamount.slice";
+import commissionConfigSlice from "./modules/commissionconfig/commissionconfig.slice";
 import ExtraDemandSlice from "./modules/extraDemand/extraDemand.slice";
 
 // interface RootState {
@@ -55,6 +56,7 @@ export const stores = configureStore({
     sos: sosSlice,
     travelRate: travelRateSlice,
     kiloAmount: kiloAmountSlice,
+    commissionConfig: commissionConfigSlice,
     extraDemand: ExtraDemandSlice,
   },
 });

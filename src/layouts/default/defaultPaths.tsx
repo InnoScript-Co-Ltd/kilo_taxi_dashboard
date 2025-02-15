@@ -271,6 +271,19 @@ export const navigationList = [
     ],
   },
   {
+    segment: "commissionConfig",
+    title: "Commission Config",
+    isParent: true,
+    icon: <CreditCardIcon />,
+    children: [
+      {
+        segment: "list",
+        title: "List",
+        icon: <FormatListBulletedIcon />,
+      },
+    ],
+  },
+  {
     segment: "simulation",
     title: "Simulation",
     isParent: true,
