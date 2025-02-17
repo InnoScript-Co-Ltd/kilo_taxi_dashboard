@@ -31,6 +31,7 @@ import {
   StyledTableRow,
 } from "../../../components/TableCommon";
 import { useNotifications } from "@toolpad/core/useNotifications";
+import { format } from "date-fns"; 
 
 const ExtraDemandTableView = () => {
   const [page, setPage] = React.useState(0);
@@ -202,13 +203,19 @@ const ExtraDemandTableView = () => {
                                 value={value}
                               />
                             );
+                          case "Create Date":
+                          // Format dateTime to desired format
+                          const formattedDate = format(new Date(value), "dd MMM yyyy hh:mma");
+                          return formattedDate;  
                           case "Action":
                             return (
-                              <UpAndDel
-                                url={`${paths.extraDemand}/${row.id}`} // Adjust for wallet delete
-                                fn={loadingData}
-                                priority={true}
-                              />
+                              <Button
+                                variant="contained"
+                                color="primary"
+                                onClick={() => navigate(`${paths.extraDemand}/${row.id}`)}
+                              >
+                                Edit
+                              </Button>
                             );
                           default:
                             return value; // Fallback case

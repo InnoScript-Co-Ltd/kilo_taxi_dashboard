@@ -9,7 +9,7 @@ import { HTTPErrorResponse, HTTPResponse } from "../../constants/config";
 export const topupTransactionService = {
   // Method to create a new topupTransaction
   store: async (
-    payload: TopupTransactionFormInputs,
+    payload: any,
     dispatch: Dispatch,
     notifications?: any
   ) => {
@@ -31,13 +31,15 @@ export const topupTransactionService = {
   index: async (dispatch: Dispatch, params: any, notifications?: any) => {
     const response: any = await getRequest(endpoints.topupTransaction, params, dispatch);
     await httpServiceHandler(dispatch, response.data);
-
+    console.log("Before Sevice:"+ response);
     if (response.data.statusCode === 200) {
+      console.log("Sevice:"+ response.data);
       //'info' | 'success' | 'warning' | 'error'
       notifications.show("TopupTransaction list is successfully retrieved!", {
         severity: "info",
         autoHideDuration: 3000,
       });
+
       dispatch(index(response.data.payload ? response.data.payload : response.data.payload));
     }
     return response.data;
@@ -100,8 +102,9 @@ export const topupTransactionService = {
     dispatch: Dispatch,
     phoneNumber?: string,
     driverId?: number,
+
     notifications?: any
-  ): Promise<{ driverName: string; walletBalance: number } | null> => {
+  ): Promise<{ driverName: string; walletBalance: number; driverId: number; phoneNumber: string } | null> => {
     try {
       const params: { [key: string]: any } = {};
       if (phoneNumber) params.phone = phoneNumber;
@@ -116,6 +119,8 @@ export const topupTransactionService = {
       // Check if the response is a success response (HTTPResponse)
       if ((response as HTTPResponse)?.status === 200) {
         return {
+          driverId: (response as HTTPResponse).data.id,
+          phoneNumber: (response as HTTPResponse).data.phoneNumber,
           driverName: (response as HTTPResponse).data.driverName,
           walletBalance: (response as HTTPResponse).data.balance,
         };
