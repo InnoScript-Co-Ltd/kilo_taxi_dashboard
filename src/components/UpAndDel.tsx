@@ -44,12 +44,19 @@ const UpAndDel = ({
   const navigate = useNavigate();
 
   const dele = useCallback(async () => {
-    const res: any = await delRequest(`${baseURL}${url}`, dispatch);
-    console.log(res);
-    if (res.data.statusCode === 204) {
-      fn();
+    try {
+      const res: any = await delRequest(`${baseURL}${url}`, dispatch);
+      console.log(res);
+  
+      if (res.data?.statusCode === 204 || res.status === 204) {
+        console.log(res);
+        fn(); // Ensure fn is fetching the updated list
+      }
+    } catch (error) {
+      console.error("Error deleting:", error);
     }
   }, [url, fn, dispatch]);
+  
 
   useEffect(() => {
     if (confirm) {

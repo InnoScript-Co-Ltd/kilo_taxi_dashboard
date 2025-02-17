@@ -40,7 +40,7 @@ import TAvatar from "../../../components/TAvatar";
 import { formatDate } from "../../../helpers/common";
 import FilterComponent from "../../../components/FilterComponent";
 
-const DriverTableView = () => {
+export const DriverTableView = () => {
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
   const dispatch = useDispatch<AppDispatch>();

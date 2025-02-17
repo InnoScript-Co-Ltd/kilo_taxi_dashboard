@@ -1,6 +1,23 @@
 import { paginateOptions } from "../../constants/config";
 import { z } from "zod";
 
+export const adminCreateSchema = z.object({
+  Name: z.string().min(2, { message: "Name must be at least 2 characters long" }),
+  Email: z.string().email(),
+  role: z.string().nullable().default("Admin"),
+  Phone: z.string().min(8, { message: "phone number is at least 8 digit" }),
+  Gender: z.string().default("MALE"),
+  Address: z.string(),
+});
+
+export const adminUpdateSchema = z.object({
+  Name: z.string().min(2, { message: "Name must be at least 2 characters long" }),
+  Email: z.string().email(),
+  Phone: z.string().min(8, { message: "phone number is at least 8 digit" }),
+  Gender: z.string(),
+  Address: z.string(),
+});
+
 export const adminSchema = z.object({
   id: z.number().min(0, { message: "id" }).default(0),
   Name: z
@@ -23,14 +40,16 @@ export const adminSchema = z.object({
     .regex(/[^a-zA-Z0-9]/, {
       message: "Password must contain at least one special character",
     }), // Special character
-  gender: z.number(),
-  status: z.number(),
+  gender: z.string(),
+  status: z.string(),
   address: z.string(),
   // emailVerifiedAt: z.date().nullable(),
   // phoneVerifiedAt: z.date().nullable()
 });
 
 export type AdminFormInputs = z.infer<typeof adminSchema>;
+export type AdminCreateFormInputs = z.infer<typeof adminCreateSchema>;
+export type AdminUpdateFormInputs = z.infer<typeof adminUpdateSchema>;
 
 /**
  * Interface representing the shape of a country object.
@@ -44,9 +63,9 @@ export interface ADMIN {
   emailVerifiedAt: Date;
   phoneVerifiedAt: Date;
   password: string;
-  gender: number;
+  gender: string;
   address: string;
-  status: number;
+  status: string;
   action: any;
   // Add other country properties as necessary
 }
@@ -112,28 +131,28 @@ export const columns: readonly Admin_Column[] = [
   },
   {
     id: "email",
-    label: "email",
+    label: "Email",
     minWidth: 100,
     maxWidth: 150,
     numeric: false,
     disablePadding: false,
   },
-  {
-    id: "emailVerifiedAt",
-    label: "Email Verified",
-    minWidth: 50,
-    maxWidth: 50,
-    numeric: false,
-    disablePadding: false,
-  },
-  {
-    id: "phoneVerifiedAt",
-    label: "Phone Verified",
-    minWidth: 50,
-    maxWidth: 50,
-    numeric: false,
-    disablePadding: false,
-  },
+  // {
+  //   id: "emailVerifiedAt",
+  //   label: "Email Verified",
+  //   minWidth: 50,
+  //   maxWidth: 50,
+  //   numeric: false,
+  //   disablePadding: false,
+  // },
+  // {
+  //   id: "phoneVerifiedAt",
+  //   label: "Phone Verified",
+  //   minWidth: 50,
+  //   maxWidth: 50,
+  //   numeric: false,
+  //   disablePadding: false,
+  // },
   {
     id: "gender",
     label: "Gender",

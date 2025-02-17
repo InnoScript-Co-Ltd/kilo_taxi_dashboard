@@ -18,15 +18,11 @@ import { Breadcrumb } from "../../../components/Breadcrumb";
 import { paths } from "../../../constants/paths";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Controller, useForm } from "react-hook-form";
-import { AdminFormInputs, adminSchema } from "../admin.payload";
+import { AdminCreateFormInputs, adminCreateSchema } from "../admin.payload";
 import { useNotifications } from "@toolpad/core/useNotifications";
 import { useState } from "react";
-import {
-  genderStatuslists,
-  customerStatusLists,
-} from "../../../constants/config";
+import { genderStatuslists } from "../../../constants/config";
 import Loading from "../../../components/Loading";
-import Password from "../../../components/Password";
 
 const AdminCreate = () => {
   const [loading, setLoading] = useState(false);
@@ -40,21 +36,21 @@ const AdminCreate = () => {
     handleSubmit,
     control,
     formState: { errors },
-  } = useForm<AdminFormInputs>({
-    resolver: zodResolver(adminSchema),
+  } = useForm<AdminCreateFormInputs>({
+    resolver: zodResolver(adminCreateSchema),
   });
 
-  const onSubmit = async (data: AdminFormInputs) => {
+  const onSubmit = async (data: AdminCreateFormInputs) => {
     try {
       setLoading(true);
       const adminData = { ...data, role: "Admin" };
-
       const response = await adminService.store(
         adminData,
         dispatch,
         notifications
       );
-      if (response.statusCode === 201) {
+
+      if (response.status === 201) {
         setLoading(false);
         navigate(paths.adminList);
       }
@@ -78,10 +74,13 @@ const AdminCreate = () => {
         <form onSubmit={handleSubmit(onSubmit)}>
           <Grid2 container spacing={2}>
             <Grid2 size={{ xs: 6, md: 3 }}>
-              <FormControl variant="outlined" fullWidth error={!!errors.Name}>
-                <InputLabel htmlFor="admin_name">Name</InputLabel>
+              <FormControl variant="filled" fullWidth error={!!errors.Name}>
+                <InputLabel htmlFor="admin_name" style={{ fontSize: "12px" }}>
+                  Name
+                </InputLabel>
                 <FilledInput
                   size="small"
+                  style={{ paddingTop: "20px", fontSize: "14px" }}
                   id="admin_name"
                   disabled={loading}
                   {...register("Name")}
@@ -89,10 +88,14 @@ const AdminCreate = () => {
                 <FormHelperText>{errors.Name?.message}</FormHelperText>
               </FormControl>
             </Grid2>
+
             <Grid2 size={{ xs: 6, md: 3 }}>
               <FormControl variant="filled" fullWidth error={!!errors.Email}>
-                <InputLabel htmlFor="email">Email</InputLabel>
+                <InputLabel htmlFor="email" style={{ fontSize: "12px" }}>
+                  Email
+                </InputLabel>
                 <FilledInput
+                  style={{ paddingTop: "20px", fontSize: "14px" }}
                   size="small"
                   disabled={loading}
                   id="email"
@@ -104,8 +107,11 @@ const AdminCreate = () => {
 
             <Grid2 size={{ xs: 6, md: 3 }}>
               <FormControl variant="filled" fullWidth error={!!errors.Phone}>
-                <InputLabel htmlFor="phone">Phone</InputLabel>
+                <InputLabel htmlFor="phone" style={{ fontSize: "12px" }}>
+                  Phone
+                </InputLabel>
                 <FilledInput
+                  style={{ paddingTop: "20px", fontSize: "14px" }}
                   size="small"
                   disabled={loading}
                   id="phone"
@@ -116,93 +122,25 @@ const AdminCreate = () => {
             </Grid2>
 
             <Grid2 size={{ xs: 6, md: 3 }}>
-              <Password register={register} loading={loading} errors={errors} />
-            </Grid2>
-
-            <Grid2 size={{ xs: 6, md: 3 }}>
-              <FormControl variant="filled" fullWidth error={!!errors.address}>
-                <InputLabel htmlFor="address">Address</InputLabel>
-                <FilledInput
-                  size="small"
-                  id="address"
-                  disabled={loading}
-                  {...register("address")}
-                />
-                <FormHelperText>{errors.address?.message}</FormHelperText>
-              </FormControl>
-            </Grid2>
-
-            {/* <Grid2 size={{ xs: 6, md: 3 }}>
-              <FormControl fullWidth error={!!errors.emailVerifiedAt}>
-                <Controller
-                  name="emailVerifiedAt"
-                  control={control}
-                  render={({ field }) => (
-                    <DatePicker
-                      label="Email verified at"
-                      value={field.value}
-                      onChange={(date) => field.onChange(date)}
-                      disabled={loading}
-                      slotProps={{
-                        textField: {
-                          error: !!errors.emailVerifiedAt,
-                          helperText: errors.emailVerifiedAt?.message,
-                        },
-                      }}
-                    />
-                  )}
-                />
-                <FormHelperText>
-                  {errors.emailVerifiedAt?.message}
-                </FormHelperText>
-              </FormControl>
-            </Grid2> */}
-
-            {/* <Grid2 size={{ xs: 6, md: 3 }}>
-              <FormControl fullWidth error={!!errors.phoneVerifiedAt}>
-                <Controller
-                  name="phoneVerifiedAt"
-                  control={control}
-                  render={({ field }) => (
-                    <DatePicker
-                      label="Phone verified at"
-                      value={field.value}
-                      onChange={(date) => field.onChange(date)}
-                      disabled={loading}
-                      slotProps={{
-                        textField: {
-                          error: !!errors.phoneVerifiedAt,
-                          helperText: errors.phoneVerifiedAt?.message,
-                        },
-                      }}
-                    />
-                  )}
-                />
-                <FormHelperText>
-                  {errors.phoneVerifiedAt?.message}
-                </FormHelperText>
-              </FormControl>
-            </Grid2> */}
-
-            <Grid2 size={{ xs: 6, md: 3 }}>
-              <FormControl variant="filled" fullWidth error={!!errors.gender}>
+              <FormControl variant="filled" fullWidth error={!!errors.Gender}>
                 <InputLabel htmlFor="gender">Gender</InputLabel>
                 <Controller
-                  name="gender"
+                  name="Gender"
                   control={control}
                   render={({ field }) => (
                     <Select
+                      style={{ paddingTop: "20px", fontSize: "14px" }}
                       id="gender"
                       aria-describedby="gender_text"
                       size="small"
                       disabled={loading}
                       label="Gender"
                       {...field}
-                      value={field.value || 0} // Convert field value to a string
+                      value={field.value || "MALE"} // Convert field value to a string
                       onChange={(event) => field.onChange(event.target.value)} // Ensure onChange value is a string
                     >
                       {genderStatuslists?.map((gender: any) => (
-                        <MenuItem key={gender.id} value={gender.id}>
+                        <MenuItem key={gender.id} value={gender.value}>
                           {gender.value}
                         </MenuItem>
                       ))}
@@ -210,37 +148,23 @@ const AdminCreate = () => {
                   )}
                 />
 
-                <FormHelperText>{errors.gender?.message}</FormHelperText>
+                <FormHelperText>{errors.Gender?.message}</FormHelperText>
               </FormControl>
             </Grid2>
 
-            <Grid2 size={{ xs: 6, md: 3 }}>
-              <FormControl variant="filled" fullWidth error={!!errors.status}>
-                <InputLabel htmlFor="status">Status</InputLabel>
-                <Controller
-                  name="status"
-                  control={control}
-                  render={({ field }) => (
-                    <Select
-                      id="status"
-                      aria-describedby="status_text"
-                      size="small"
-                      disabled={loading}
-                      label="Status"
-                      {...field}
-                      value={field.value || 0} // Convert field value to a string
-                      onChange={(event) => field.onChange(event.target.value)} // Ensure onChange value is a string
-                    >
-                      {customerStatusLists?.map((status: any) => (
-                        <MenuItem key={status.id} value={status.id}>
-                          {status.value}
-                        </MenuItem>
-                      ))}
-                    </Select>
-                  )}
+            <Grid2 size={{ xs: 6, md: 12 }}>
+              <FormControl variant="filled" fullWidth error={!!errors.Address}>
+                <InputLabel htmlFor="address" style={{ fontSize: "12px" }}>
+                  Address
+                </InputLabel>
+                <FilledInput
+                  style={{ paddingTop: "20px", fontSize: "14px" }}
+                  size="small"
+                  id="address"
+                  disabled={loading}
+                  {...register("Address")}
                 />
-
-                <FormHelperText>{errors.status?.message}</FormHelperText>
+                <FormHelperText>{errors.Address?.message}</FormHelperText>
               </FormControl>
             </Grid2>
           </Grid2>

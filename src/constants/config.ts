@@ -1,10 +1,10 @@
 // export const env = [process.env.REACT_APP_BASE_URL];
-export const hadUrl =
-  process.env.REACT_APP_HAD_URL || "https://localhost:7044/dashboard";
-export const env = ["https://localhost:7181/api/v1"];
+// export const env = ["http://localhost:5112/api/v1"];
 
-// export const env = ["http://4.145.97.143:81/api/v1"];
-// export const hadUrl = "http://4.145.97.143:83/dashboard";
+// export const hadUrl = process.env.REACT_APP_HAD_URL || "https://localhost:7044/dashboard";
+
+export const env = ["http://4.145.97.143:81/api/v1"];
+export const hadUrl = "http://4.145.97.143:81/dashboard";
 
 export const drawerWidth: number = 300;
 
@@ -52,6 +52,13 @@ interface Paginate_Options {
   total: number;
 }
 
+export interface StatusOption {
+  id: number;
+  status: string;
+  background: string;
+  color: string;
+}
+
 export const paginateOptions: Paginate_Options = {
   rows: 10,
   rowsPerPageOptions: [10, 50, 100, 150, 500, 1000],
@@ -64,23 +71,23 @@ export const paginateOptions: Paginate_Options = {
   // lazy: true
 };
 
-export const statusOptions = [
-  { id: 1, status: "Active", color: "success" },
-  { id: 1, status: "Disable", color: "secondary" },
-  { id: 1, status: "Deactivate", color: "secondary" },
-  { id: 1, status: "Deleted", color: "error" },
-  { id: 1, status: "Pending", color: "primary" },
-  { id: 1, status: "BLOCK", color: "error" },
-  { id: 1, status: "COMPLETE", color: "success" },
-  { id: 3, status: "Male", color: "secondary" },
-  { id: 1, status: "Female", color: "primary" },
-  { id: 1, status: "Other", color: "error" },
+export const statusOptions: Array<StatusOption> = [
+  { id: 1, status: "ACTIVE", background: "#4CAF50", color: "#000" },
+  { id: 2, status: "DISABLE", background: "secondary", color: "#000" },
+  { id: 3, status: "DEACTIVE", background: "#F44336", color: "#000" },
+  { id: 4, status: "DELETED", background: "error", color: "#000" },
+  { id: 5, status: "PENDING", background: "#FFA726", color: "#000" },
+  { id: 6, status: "BLOCK", background: "error", color: "#000" },
+  { id: 7, status: "COMPLETE", background: "success", color: "#000" },
+  { id: 10, status: "OTHER", background: "error", color: "#000" },
+  { id: 11, status: "UNDEFINED", background: "error", color: "#000" },
+  { id: 12, status: "SUSPENDED", background: "error", color: "#000" },
+  { id: 13, status: "FULLKYC", background: "error", color: "#000" },
 ];
 
 export const genderStatuslists = [
-  { id: 0, value: "Male", color: "success" },
-  { id: 1, value: "Female", color: "secondary" },
-  { id: 2, value: "Undefined", color: "primary" },
+  { id: "male", value: "MALE" },
+  { id: "female", value: "FEMALE" },
 ];
 
 export const propertyStatusLists = [
@@ -114,9 +121,9 @@ export const paymentStatusLists = [
 ];
 
 export const paymentTypeStatusLists = [
-  { id: 0, value: "Cash", color: "success" },
-  { id: 1, value: "BankTransfer", color: "success" },
-  { id: 2, value: "OnlinePayment", color: "success" },
+  { id: 0, value: "CASH", color: "success" },
+  { id: 1, value: "BANkTRANSFER", color: "success" },
+  { id: 2, value: "ONLINEPAYMENT", color: "success" },
 ];
 
 export const scheduleOrderStatusLists = [
@@ -126,10 +133,10 @@ export const scheduleOrderStatusLists = [
 ];
 
 export const customerStatusLists = [
-  { id: 0, value: "Pending", color: "secondary" },
-  { id: 1, value: "Active", color: "success" },
-  { id: 2, value: "Deactivate", color: "warning" },
-  { id: 3, value: "Suspended", color: "error" },
+  { id: "pending", value: "PENDING" },
+  { id: "active", value: "ACTIVE" },
+  { id: "deactive", value: "DEACTIVE" },
+  { id: "suspended", value: "SUSPENDED" },
 ];
 
 export const notiTypeStatusLists = [
@@ -180,9 +187,9 @@ export const notiStatusLists = [
 ];
 
 export const kycStatusLists = [
-  { id: 0, value: "Pending", color: "secondary" },
-  { id: 1, value: "FullKyc", color: "success" },
-  { id: 2, value: "Reject", color: "error" },
+  { id: "pending", value: "PENDING", color: "secondary" },
+  { id: "fullkyc", value: "FULLKYC", color: "success" },
+  { id: "reject", value: "REJECT", color: "error" },
 ];
 export const driverModeLists = [
   { id: 0, value: "Available", color: "success" },

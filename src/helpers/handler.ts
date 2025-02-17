@@ -162,13 +162,11 @@ export const httpResponseHandler = (result: any) => {
  * @param {*} result
  * @returns
  */
-export const httpServiceHandler = async (
-  dispatch: Dispatch,
-  result: { status: number; notification?: string | any; error?: string },
+export const httpServiceHandler = async (dispatch: Dispatch, result: { status: number; notification?: string | any; error?: string },
   noti?: any
 ) => {
-  // console.log("result:", result);
-  await dispatch(updateError(null));
+
+  dispatch(updateError(null));
   if (
     result.status === 400 ||
     result.status === 0 ||
@@ -184,7 +182,7 @@ export const httpServiceHandler = async (
   }
 
   if (result.status === 422) {
-    await dispatch(updateError(result.error));
+    dispatch(updateError(result.error));
   }
 
   if (result.status === 204) {

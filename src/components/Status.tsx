@@ -1,17 +1,23 @@
 import { Chip } from "@mui/material";
 import { useCallback, useEffect, useState } from "react";
+import { StatusOption, statusOptions } from "../constants/config";
 
-const Status = ({ status, lists }: { status: any; lists: any }) => {
-  const [data, setData] = useState<any>(null);
+const Status = ({ status }: { status: string; lists?: any }) => {
+  const [statusValue, setStatusValue] = useState<
+    null | StatusOption | undefined
+  >(null);
 
   const loadData = useCallback(() => {
-    // Find the matching option in statusOptions
-    const dataSource = lists.find(
-      (option: any) => String(option.value) === String(status) // Ensure proper comparison
-    );
+    if (status) {
+      console.log("status :", status);
+      const statusOption: StatusOption | undefined = statusOptions.find(
+        (option: StatusOption) => option.status === status.toUpperCase()
+      );
+      console.log("option status :", statusOption?.status);
 
-    setData(dataSource || null); // Fallback to null if no matching option
-  }, [status, lists]);
+      setStatusValue(statusOption);
+    }
+  }, [status]);
 
   useEffect(() => {
     loadData();
@@ -19,8 +25,15 @@ const Status = ({ status, lists }: { status: any; lists: any }) => {
 
   return (
     <div>
-      {data ? (
-        <Chip color={data.color} label={data.value} />
+      {statusValue ? (
+        <Chip
+          label={statusValue.status}
+          style={{
+            background: statusValue?.background,
+            color: `${statusValue.color}!important`,
+            fontWeight: "bolder",
+          }}
+        />
       ) : (
         <Chip label="Unknown" color="default" /> // Fallback for invalid status
       )}
