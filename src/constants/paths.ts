@@ -14,6 +14,11 @@ export const paths = {
   cityCreate: "/city/new",
   cityDetail: "/city/:id",
 
+  township: "/township",
+  townshipList: "/township/list",
+  townshipCreate: "/township/new",
+  townshipDetail: "/township/:id",
+
   customer: "/customer",
   customerList: "/customer/list",
   customerCreate: "/customer/new",
@@ -97,6 +102,10 @@ export const paths = {
   kiloAmount: "/kiloamount",
   kiloAmountList: "/kiloamount/list",
   kiloAmountDetail: "/kiloamount/:id",
+
+  commissionConfig: "/commissionconfig",
+  commissionConfigList: "/commissionconfig/list",
+  commissionConfigDetail: "/commissionconfig/:id",
 
   simulation: "/simulation",
   simulationOrderCreate: "/simulation/order",

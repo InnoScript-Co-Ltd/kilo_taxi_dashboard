@@ -23,7 +23,7 @@ export const formatDate = (dateString: string) => {
   const date = new Date(dateString);
 
   if (isNaN(date.getTime())) {
-    return "Invalid Date"; // Fallback for unexpected invalid dates
+    return "--"; // Fallback for unexpected invalid dates
   }
 
   // Format the date to "23 Jan 2023 12:12pm"

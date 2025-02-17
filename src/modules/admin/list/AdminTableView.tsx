@@ -9,17 +9,13 @@ import TableRow from "@mui/material/TableRow";
 import SearchIcon from "@mui/icons-material/Search";
 import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
 import RestartAltIcon from "@mui/icons-material/RestartAlt";
-import TAvatar from "../../../components/TAvatar";
 import UpAndDel from "../../../components/UpAndDel";
 import Status from "../../../components/Status";
 import { columns, adminPayload } from "../admin.payload";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, AppRootState } from "../../../stores";
 import { adminService } from "../admin.service";
-import {
-  customerStatusLists,
-  paginateOptions,
-} from "../../../constants/config";
+import { paginateOptions } from "../../../constants/config";
 import { paths } from "../../../constants/paths";
 import {
   Box,
@@ -35,6 +31,8 @@ import {
   StyledTableRow,
 } from "../../../components/TableCommon";
 import { useNotifications } from "@toolpad/core/useNotifications";
+import { formatDate } from "../../../helpers/common";
+import AdminResetPassword from "../../../components/AdminResetPassword";
 
 const AdminTableView = () => {
   const [page, setPage] = React.useState(0);
@@ -192,23 +190,28 @@ const AdminTableView = () => {
                       <StyledTableCell key={column.id} align={column.align}>
                         {(() => {
                           switch (column.label) {
-                            case "phone":
-                              return value; // Render the mobile prefix as-is
-                            case "email":
-                              return <TAvatar src={value} />; // Render the flag icon as-is
-                            // case "Email Verified":
-                            //   return formatDate(value);
-                            // case "Phone Verified":
-                            //   return formatDate(value);
+                            case "Gender":
+                              return value?.toUpperCase();
                             case "Status":
+                              return <Status status={value} />;
+                            case "Email Verified At":
+                              return formatDate(value);
+                            case "Phone Verified At":
+                              return formatDate(value);
+                            case "Created At":
+                              return formatDate(value);
+                            case "Updated At":
+                              return formatDate(value);
+                            case "Deleted At":
+                              return formatDate(value);
+                            case "Reset Password":
                               return (
-                                <Status
-                                  status={value}
-                                  lists={customerStatusLists}
+                                <AdminResetPassword
+                                  url={`${paths.admin}/${row.id}`}
+                                  fn={loadingData}
+                                  priority={true}
                                 />
                               );
-                            case "Gender":
-                              return value;
                             case "Action":
                               return (
                                 <UpAndDel

@@ -9,7 +9,7 @@ import PersonIcon from "@mui/icons-material/Person";
 import AccountBalanceWalletIcon from "@mui/icons-material/AccountBalanceWallet";
 import NoteIcon from "@mui/icons-material/Note";
 import CreditCardIcon from "@mui/icons-material/CreditCard";
-import { Map, Password } from "@mui/icons-material";
+import { Map, MapOutlined, Password } from "@mui/icons-material";
 
 export const navigationList = [
   {
@@ -36,6 +36,19 @@ export const navigationList = [
     title: "City",
     isParent: true,
     icon: <AdminPanelSettingsIcon />,
+    children: [
+      {
+        segment: "list",
+        title: "List",
+        icon: <FormatListBulletedIcon />,
+      },
+    ],
+  },
+  {
+    segment: "township",
+    title: "Township",
+    isParent: true,
+    icon: <MapOutlined />,
     children: [
       {
         segment: "list",
@@ -247,6 +260,19 @@ export const navigationList = [
   {
     segment: "kiloAmount",
     title: "KiloAmount",
+    isParent: true,
+    icon: <CreditCardIcon />,
+    children: [
+      {
+        segment: "list",
+        title: "List",
+        icon: <FormatListBulletedIcon />,
+      },
+    ],
+  },
+  {
+    segment: "commissionConfig",
+    title: "Commission Config",
     isParent: true,
     icon: <CreditCardIcon />,
     children: [

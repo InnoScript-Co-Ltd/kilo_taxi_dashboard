@@ -153,7 +153,7 @@ const AdminUpdate = () => {
               </FormControl>
             </Grid2>
 
-            <Grid2 size={{ xs: 6, md: 9 }}>
+            <Grid2 size={{ xs: 6, md: 12 }}>
               <FormControl variant="filled" fullWidth error={!!errors.Address}>
                 <InputLabel htmlFor="address" style={{ fontSize: "12px" }}>Address</InputLabel>
                 <FilledInput

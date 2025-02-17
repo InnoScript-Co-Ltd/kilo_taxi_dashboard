@@ -1,12 +1,12 @@
 // export const env = [process.env.REACT_APP_BASE_URL];
-// export const env = ["http://localhost:5112/api/v1"];
+export const env = ["http://localhost:5112/api/v1"];
 
 // export const hadUrl = process.env.REACT_APP_HAD_URL || "https://localhost:7044/dashboard";
 
-export const env = ["http://4.145.97.143:81/api/v1"];
-export const hadUrl = "http://4.145.97.143:81/dashboard";
+// export const hadUrl = "http://4.145.97.143:81/dashboard";
 
 export const drawerWidth: number = 300;
+// export const env = ["http://4.145.97.143:81/api/v1"];
 
 export const keys = {
   API_TOKEN: "TOKEN",
