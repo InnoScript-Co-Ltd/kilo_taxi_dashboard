@@ -1,4 +1,15 @@
-import { Box, Button, Card, FormControl, FormHelperText, Grid2, InputLabel, Select, MenuItem, FilledInput } from "@mui/material";
+import {
+  Box,
+  Button,
+  Card,
+  FormControl,
+  FormHelperText,
+  Grid2,
+  InputLabel,
+  Select,
+  MenuItem,
+  FilledInput,
+} from "@mui/material";
 import { useCallback, useEffect, useState } from "react";
 import { AdminUpdateFormInputs, adminUpdateSchema } from "../admin.payload";
 import { useNavigate, useParams } from "react-router";
@@ -22,13 +33,19 @@ const AdminUpdate = () => {
 
   const notification = useNotifications();
 
-  const { register, handleSubmit, setValue, control, formState: { errors } } = useForm<AdminUpdateFormInputs>({
+  const {
+    register,
+    handleSubmit,
+    setValue,
+    control,
+    formState: { errors },
+  } = useForm<AdminUpdateFormInputs>({
     resolver: zodResolver(adminUpdateSchema),
     defaultValues: {
       Name: "",
       Email: "",
       Phone: "",
-      Gender: "MALE"
+      Gender: "MALE",
     },
   });
 
@@ -46,6 +63,7 @@ const AdminUpdate = () => {
   // Populate form values when country data is available
   useEffect(() => {
     if (admin) {
+      setValue("Id", admin.id);
       setValue("Name", admin.name || "");
       setValue("Phone", admin.phone || "");
       setValue("Email", admin.email || "");
@@ -58,7 +76,12 @@ const AdminUpdate = () => {
   const onSubmit = async (data: AdminUpdateFormInputs) => {
     try {
       setLoading(true);
-      const response = await adminService.update(dispatch, params.id, data, notification);
+      const response = await adminService.update(
+        dispatch,
+        params.id,
+        data,
+        notification
+      );
       if (response.statusCode === 200) {
         setLoading(false);
         navigate(`${paths.adminList}`);
@@ -82,7 +105,9 @@ const AdminUpdate = () => {
           <Grid2 container spacing={2}>
             <Grid2 size={{ xs: 6, md: 3 }}>
               <FormControl variant="filled" fullWidth error={!!errors.Name}>
-                <InputLabel htmlFor="admin_name" style={{ fontSize: "12px" }}>Name</InputLabel>
+                <InputLabel htmlFor="admin_name" style={{ fontSize: "12px" }}>
+                  Name
+                </InputLabel>
                 <FilledInput
                   style={{ paddingTop: "20px", fontSize: "14px" }}
                   disabled={loading}
@@ -96,7 +121,9 @@ const AdminUpdate = () => {
 
             <Grid2 size={{ xs: 6, md: 3 }}>
               <FormControl variant="filled" fullWidth error={!!errors.Email}>
-                <InputLabel htmlFor="email" style={{ fontSize: "12px" }}>Email</InputLabel>
+                <InputLabel htmlFor="email" style={{ fontSize: "12px" }}>
+                  Email
+                </InputLabel>
                 <FilledInput
                   style={{ paddingTop: "20px", fontSize: "14px" }}
                   size="small"
@@ -110,7 +137,9 @@ const AdminUpdate = () => {
 
             <Grid2 size={{ xs: 6, md: 3 }}>
               <FormControl variant="filled" fullWidth error={!!errors.Phone}>
-                <InputLabel htmlFor="phone" style={{ fontSize: "12px" }}>Phone</InputLabel>
+                <InputLabel htmlFor="phone" style={{ fontSize: "12px" }}>
+                  Phone
+                </InputLabel>
                 <FilledInput
                   style={{ paddingTop: "20px", fontSize: "14px" }}
                   size="small"
@@ -155,7 +184,9 @@ const AdminUpdate = () => {
 
             <Grid2 size={{ xs: 6, md: 12 }}>
               <FormControl variant="filled" fullWidth error={!!errors.Address}>
-                <InputLabel htmlFor="address" style={{ fontSize: "12px" }}>Address</InputLabel>
+                <InputLabel htmlFor="address" style={{ fontSize: "12px" }}>
+                  Address
+                </InputLabel>
                 <FilledInput
                   style={{ paddingTop: "20px", fontSize: "14px" }}
                   disabled={loading}

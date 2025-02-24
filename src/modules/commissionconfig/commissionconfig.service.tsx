@@ -41,7 +41,9 @@ export const commissionConfigService = {
       });
 
       dispatch(
-        index(response.data.payload ? response.data.payload : response.data)
+        index(
+          response.data.payload ? response.data.payload : response.data.payload
+        )
       );
     }
     return response.data;
@@ -78,6 +80,8 @@ export const commissionConfigService = {
       null,
       dispatch
     );
+    console.log("data :", response.data);
+
     await httpServiceHandler(dispatch, response.data.payload);
 
     if (response.data.statusCode === 200) {
