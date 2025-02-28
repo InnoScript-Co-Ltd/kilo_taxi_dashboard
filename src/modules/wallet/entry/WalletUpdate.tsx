@@ -20,6 +20,7 @@ import { Breadcrumb } from "../../../components/Breadcrumb";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useNotifications } from "@toolpad/core/useNotifications";
+import { kiloAmountColumns } from "../../kiloamount/kiloamount.payload";
 
 const WalletUpdate = () => {
   const [loading, setLoading] = useState(false);
@@ -40,12 +41,15 @@ const WalletUpdate = () => {
     resolver: zodResolver(walletSchema),
     defaultValues: {
       walletName: "",
+      kilo: "",
+      amount: "",
     },
   });
 
   // Function to handle form submission and wallet update
   const submitWalletUpdate = async (data: WalletFormInputs) => {
     setLoading(true);
+
     const response: any = await walletService.update(
       dispatch,
       params.id,
@@ -77,6 +81,8 @@ const WalletUpdate = () => {
     if (wallet) {
       setValue("id", Number(wallet.id) || 0);
       setValue("walletName", wallet.walletName || "");
+      setValue("kilo", wallet.kilo || "");
+      setValue("amount", wallet.amount || "");
     }
   }, [wallet, setValue]);
 
@@ -101,6 +107,32 @@ const WalletUpdate = () => {
                   {...register("walletName")}
                 />
                 <FormHelperText>{errors.walletName?.message}</FormHelperText>
+              </FormControl>
+            </Grid2>
+
+            <Grid2 size={{ xs: 6, md: 3 }}>
+              <FormControl variant="filled" fullWidth error={!!errors.kilo}>
+                <InputLabel htmlFor="kilo">Kilo</InputLabel>
+                <FilledInput
+                  type="number"
+                  size="small"
+                  id="kilo"
+                  {...register("kilo")}
+                />
+                <FormHelperText>{errors.kilo?.message}</FormHelperText>
+              </FormControl>
+            </Grid2>
+
+            <Grid2 size={{ xs: 6, md: 3 }}>
+              <FormControl variant="filled" fullWidth error={!!errors.amount}>
+                <InputLabel htmlFor="amount">Amount</InputLabel>
+                <FilledInput
+                  type="number"
+                  size="small"
+                  id="amount"
+                  {...register("amount")}
+                />
+                <FormHelperText>{errors.amount?.message}</FormHelperText>
               </FormControl>
             </Grid2>
           </Grid2>

@@ -8,12 +8,8 @@ import { index, show, update } from "./admin.slice";
 export const adminService = {
   store: async (payload: any, dispatch: Dispatch, notifications: any) => {
     const response: any = await postRequest(endpoints.admin, payload, dispatch);
-    console.log("admin created service", response);
-
     await httpServiceHandler(dispatch, response, notifications);
-
     if (response.data.statusCode === 201) {
-      console.log("admin created service");
       notifications.show("Admin is created successfully", {
         severity: "success",
         autoHideDuration: 3000,

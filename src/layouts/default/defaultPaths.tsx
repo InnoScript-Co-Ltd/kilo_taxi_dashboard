@@ -248,7 +248,20 @@ export const navigationList = [
     segment: "topupTransaction",
     title: "TopupTransaction",
     isParent: true,
-    icon: <CreditCardIcon style={{ color: "red" }} />,
+    icon: <CreditCardIcon />,
+    children: [
+      {
+        segment: "list",
+        title: "List",
+        icon: <FormatListBulletedIcon />,
+      },
+    ],
+  },
+  {
+    segment: "withDrawTransaction",
+    title: "WithDrawTransaction",
+    isParent: true,
+    icon: <CreditCardIcon />,
     children: [
       {
         segment: "list",

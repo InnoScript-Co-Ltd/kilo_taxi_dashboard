@@ -23,6 +23,7 @@ export const endpoints = {
   wallet: "Wallet",
   order: "Order",
   topupTransaction: "TopUpTransaction",
+  withDrawTransaction: "WithDrawTransaction",
   reason: "Reason",
   paymentChannel: "PaymentChannel",
   sms: "Sms",

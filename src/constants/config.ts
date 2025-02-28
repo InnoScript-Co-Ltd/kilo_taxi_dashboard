@@ -1,8 +1,9 @@
 // export const env = [process.env.REACT_APP_BASE_URL];
-export const env = ["https://localhost:7181/api/v1"];
 // export const env = ["http://4.145.92.57:81/api/v1"];
+export const env = ["https://localhost:7181/api/v1"];
 
-// export const hadUrl = process.env.REACT_APP_HAD_URL || "https://localhost:7044/dashboard";
+// export const hadUrl =
+//   process.env.REACT_APP_HAD_URL || "https://localhost:7044/dashboard";
 
 export const hadUrl = "https://localhost:7044/dashboard";
 
@@ -157,6 +158,11 @@ export const walletTypeStatusLists = [
   { id: 0, value: "CUSTOMER", color: "primary" },
   { id: 1, value: "DRIVER", color: "info" },
   { id: 2, value: "VIPCUSTOMER", color: "success" },
+];
+export const WithDrawStatus = [
+  { id: 0, value: "PENDING", color: "primary" },
+  { id: 1, value: "REJECTED", color: "info" },
+  { id: 2, value: "COMPLETED", color: "success" },
 ];
 
 export const kiloTypeLists = [

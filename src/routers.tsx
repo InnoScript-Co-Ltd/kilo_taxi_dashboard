@@ -26,6 +26,7 @@ import { ExtraDemandRoute } from "./modules/extraDemand/extraDemand.route";
 import { KiloAmountRoute } from "./modules/kiloamount/kiloamount.route";
 import { TownshipRoute } from "./modules/township/township.route";
 import { CommissionConfigRoute } from "./modules/commissionconfig/commissionconfig.route";
+import { WithDrawTransactionRoute } from "./modules/withDrawTransaction/withDrawTransaction.route";
 export const routers = createBrowserRouter([
   {
     path: "/",
@@ -47,6 +48,7 @@ export const routers = createBrowserRouter([
       ...ReviewRoute,
       ...ReasonRoute,
       ...TopupTransactionRoute,
+      ...WithDrawTransactionRoute,
       ...SmsRoute,
       ...SimulationRoute,
       ...SosRoute,

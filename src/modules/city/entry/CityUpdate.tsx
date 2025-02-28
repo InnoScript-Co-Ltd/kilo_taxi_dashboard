@@ -45,8 +45,9 @@ const CityUpdate = () => {
   } = useForm<CityUpdateFormInputs>({
     resolver: zodResolver(citySchema),
     defaultValues: {
-      Name: "",
-      Status: "ACTIVE",
+      id: 0,
+      name: "",
+      // Status: "ACTIVE",
     },
   });
 
@@ -58,7 +59,7 @@ const CityUpdate = () => {
       data,
       notifications
     );
-    if (response.statusCode === 200) {
+    if (response.status === 200) {
       navigate(`${paths.cityList}`);
     }
     setLoading(false);
@@ -80,8 +81,9 @@ const CityUpdate = () => {
 
   useEffect(() => {
     if (city) {
-      setValue("Name", city.Name || "");
-      setValue("Status", city.Status || "ACTIVE");
+      setValue("id", city.id || 0);
+      setValue("name", city.name || "");
+      // setValue("Status", city.Status || "ACTIVE");
     }
   }, [city, setValue]);
 
@@ -94,7 +96,7 @@ const CityUpdate = () => {
         <form onSubmit={handleSubmit(submitCityUpdate)}>
           <Grid2 container spacing={2}>
             <Grid2 size={{ xs: 6, md: 3 }}>
-              <FormControl variant="filled" fullWidth error={!!errors.Name}>
+              <FormControl variant="filled" fullWidth error={!!errors.name}>
                 <InputLabel htmlFor="city_name" style={{ fontSize: "12px" }}>
                   City Name
                 </InputLabel>
@@ -102,13 +104,13 @@ const CityUpdate = () => {
                   style={{ paddingTop: "20px", fontSize: "14px" }}
                   size="small"
                   id="city_name"
-                  {...register("Name")}
+                  {...register("name")}
                 />
-                <FormHelperText>{errors.Name?.message}</FormHelperText>
+                <FormHelperText>{errors.name?.message}</FormHelperText>
               </FormControl>
             </Grid2>
 
-            <Grid2 size={{ xs: 6, md: 3 }}>
+            {/* <Grid2 size={{ xs: 6, md: 3 }}>
               <FormControl variant="filled" fullWidth error={!!errors.Status}>
                 <InputLabel htmlFor="status"> Status </InputLabel>
                 <Controller
@@ -137,7 +139,7 @@ const CityUpdate = () => {
 
                 <FormHelperText>{errors.Status?.message}</FormHelperText>
               </FormControl>
-            </Grid2>
+            </Grid2> */}
           </Grid2>
 
           {/* Footer */}

@@ -27,9 +27,13 @@ import { Controller, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useNotifications } from "@toolpad/core/useNotifications";
 import { formBuilder } from "../../../helpers/formBuilder";
+import { getRequest } from "../../../helpers/api";
+import { endpoints } from "../../../constants/endpoints";
+import { httpErrorHandler, httpServiceHandler } from "../../../helpers/handler";
 
 const TownshipCreate = () => {
   const [loading, setLoading] = useState(false);
+  const [cityLists, setCityLists] = useState<Array<any>>([]);
 
   const notifications = useNotifications();
   const navigate = useNavigate();
@@ -50,9 +54,9 @@ const TownshipCreate = () => {
 
   const submitTownshipCreate = async (data: TownshipCreateFormInputs) => {
     try {
-      const formData = formBuilder(data, townshipSchema);
+      // const formData = formBuilder(data, townshipSchema);
       const response = await townshipService.store(
-        formData,
+        data,
         dispatch,
         notifications
       );
@@ -65,6 +69,28 @@ const TownshipCreate = () => {
       setLoading(false);
     }
   };
+  const loadingData = React.useCallback(async () => {
+    setLoading(true);
+    try {
+      const cityRes: any = await getRequest(
+        `${endpoints.city}`,
+        null,
+        dispatch
+      );
+
+      await httpServiceHandler(dispatch, cityRes.data);
+      if (cityRes && "data" in cityRes && cityRes.status === 200) {
+        setCityLists(cityRes.data.cities);
+      }
+    } catch (error) {
+      await httpErrorHandler(error, dispatch);
+    }
+    setLoading(false);
+  }, [dispatch]);
+
+  React.useEffect(() => {
+    loadingData();
+  }, [loadingData]);
 
   return (
     <Box>
@@ -90,7 +116,35 @@ const TownshipCreate = () => {
                 <FormHelperText>{errors.Name?.message}</FormHelperText>
               </FormControl>
             </Grid2>
+            <Grid2 size={{ xs: 6, md: 3 }}>
+              <FormControl variant="filled" fullWidth error={!!errors.cityId}>
+                <InputLabel htmlFor="city_name">City Name</InputLabel>
+                <Controller
+                  name="cityId"
+                  control={control}
+                  render={({ field }) => (
+                    <Select
+                      size="small"
+                      id="city_name"
+                      aria-describedby="city_name_text"
+                      disabled={loading}
+                      label="City"
+                      {...field}
+                      value={field.value} // Convert field value to a string
+                      onChange={(event) => field.onChange(event.target.value)} // Ensure onChange value is a string
+                    >
+                      {cityLists.map((city: any) => (
+                        <MenuItem key={city.id} value={city.id}>
+                          {city.name}
+                        </MenuItem>
+                      ))}
+                    </Select>
+                  )}
+                />
 
+                <FormHelperText>{errors.cityId?.message}</FormHelperText>
+              </FormControl>
+            </Grid2>
             <Grid2 size={{ xs: 6, md: 3 }}>
               <FormControl variant="filled" fullWidth error={!!errors.Status}>
                 <InputLabel htmlFor="status"> Status </InputLabel>

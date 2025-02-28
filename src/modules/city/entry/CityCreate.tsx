@@ -43,15 +43,17 @@ const CityCreate = () => {
     resolver: zodResolver(citySchema),
     // defaultValues: {
     //   Name: "",
-    //   Status: "ACTIVE",
+    //   // Status: "ACTIVE",
     // },
   });
 
   const submitCityCreate = async (data: CityCreateFormInputs) => {
     console.log("city");
     setLoading(true);
-    const response = await cityService.store(data, dispatch, notifications);
-    if (response.statusCode === 201) {
+    const cityData = { ...data };
+
+    const response = await cityService.store(cityData, dispatch, notifications);
+    if (response.status === 201) {
       navigate(`${paths.cityList}`);
     }
     setLoading(false);
@@ -65,7 +67,7 @@ const CityCreate = () => {
         <form onSubmit={handleSubmit(submitCityCreate)}>
           <Grid2 container spacing={2}>
             <Grid2 size={{ xs: 6, md: 3 }}>
-              <FormControl variant="filled" fullWidth error={!!errors.Name}>
+              <FormControl variant="filled" fullWidth error={!!errors.name}>
                 <InputLabel htmlFor="city_name" style={{ fontSize: "12px" }}>
                   Name
                 </InputLabel>
@@ -73,13 +75,13 @@ const CityCreate = () => {
                   style={{ paddingTop: "20px", fontSize: "14px" }}
                   size="small"
                   id="city_name"
-                  {...register("Name")}
+                  {...register("name")}
                 />
-                <FormHelperText>{errors.Name?.message}</FormHelperText>
+                <FormHelperText>{errors.name?.message}</FormHelperText>
               </FormControl>
             </Grid2>
 
-            <Grid2 size={{ xs: 6, md: 3 }}>
+            {/* <Grid2 size={{ xs: 6, md: 3 }}>
               <FormControl variant="filled" fullWidth error={!!errors.Status}>
                 <InputLabel htmlFor="status"> Status </InputLabel>
                 <Controller
@@ -108,7 +110,7 @@ const CityCreate = () => {
 
                 <FormHelperText>{errors.Status?.message}</FormHelperText>
               </FormControl>
-            </Grid2>
+            </Grid2> */}
           </Grid2>
 
           <Box

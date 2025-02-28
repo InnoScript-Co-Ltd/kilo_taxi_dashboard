@@ -6,10 +6,13 @@ import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TablePagination from "@mui/material/TablePagination";
 import TableRow from "@mui/material/TableRow";
-import { walletColumns, walletPayload } from "../wallet.payload"; // Replace with your wallet columns and payload
+import {
+  withDrawTransactionColumns,
+  withDrawTransactionPayload,
+} from "../withDrawTransaction.payload"; // Replace with your wallet columns and payload
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, AppRootState } from "../../../stores";
-import { walletService } from "../wallet.service";
+import { withDrawTransactionService } from "../withDrawTransaction.service";
 import { paginateOptions } from "../../../constants/config";
 import { NavigateId } from "../../../shares/NavigateId";
 import { paths } from "../../../constants/paths";
@@ -20,7 +23,7 @@ import {
   InputAdornment,
   TableSortLabel,
 } from "@mui/material";
-import { setPaginate } from "../wallet.slice"; // Adjust the slice if needed
+import { setPaginate } from "../withDrawTransaction.slice"; // Adjust the slice if needed
 import SearchIcon from "@mui/icons-material/Search";
 import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
 import RestartAltIcon from "@mui/icons-material/RestartAlt";
@@ -31,13 +34,14 @@ import {
   StyledTableRow,
 } from "../../../components/TableCommon";
 import { useNotifications } from "@toolpad/core/useNotifications";
+import { formatDate } from "../../../helpers/common";
 
 const WalletTableView = () => {
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
   const dispatch = useDispatch<AppDispatch>();
   const { data, pagingParams } = useSelector(
-    (state: AppRootState) => state.wallet
+    (state: AppRootState) => state.withDrawTransaction
   );
 
   const notifications = useNotifications();
@@ -71,7 +75,11 @@ const WalletTableView = () => {
 
   const loadingData = React.useCallback(async () => {
     setLoading(true);
-    await walletService.index(dispatch, pagingParams, notifications);
+    await withDrawTransactionService.index(
+      dispatch,
+      pagingParams,
+      notifications
+    );
     setLoading(false);
   }, [dispatch, pagingParams, notifications]);
 
@@ -126,7 +134,7 @@ const WalletTableView = () => {
 
           <Button
             onClick={() => {
-              dispatch(setPaginate(walletPayload.pagingParams)); // Adjust the reset payload
+              dispatch(setPaginate(withDrawTransactionPayload.pagingParams)); // Adjust the reset payload
               setPage(0);
               setRowsPerPage(10);
             }}
@@ -142,7 +150,7 @@ const WalletTableView = () => {
         <Table stickyHeader aria-label="sticky table">
           <TableHead>
             <TableRow>
-              {walletColumns.map((column) => (
+              {withDrawTransactionColumns.map((column) => (
                 <StyledTableCell
                   key={column.id}
                   style={{ minWidth: column.minWidth }}
@@ -185,29 +193,38 @@ const WalletTableView = () => {
             </TableRow>
           </TableHead>
           <TableBody>
-            {data.wallets?.map((row: any) => (
+            {data.withDrawTransactions?.map((row: any) => (
               <StyledTableRow hover role="checkbox" tabIndex={-1} key={row.id}>
-                {walletColumns.map((column) => {
+                {withDrawTransactionColumns.map((column) => {
                   const value = row[column.id];
+                  console.log("value :", value);
+
                   return (
                     <StyledTableCell key={column.id} align={column.align}>
                       {(() => {
                         switch (column.label) {
-                          case "Wallet Name":
+                          case "ID":
                             return (
                               <NavigateId
-                                url={`${paths.wallet}/${row.id}`} // Adjust the path for wallet detail
+                                url={`${paths.withDrawTransaction}/${row.id}`} // Adjust the path for wallet detail
                                 value={value}
                               />
                             );
-                          case "Create Date":
+                          case "Amount":
                             return value;
+                          case "Driver Name":
+                            return `${value?.name ?? ""} `;
+                          case "Admin":
+                            return `${value?.name ?? ""}`;
+                          case "Transaction Date":
+                            return formatDate(value);
                           case "Update Date":
-                            return value;
+                            return formatDate(value);
+                          case "Request Datetime":
                           case "Action":
                             return (
                               <UpAndDel
-                                url={`${paths.wallet}/${row.id}`} // Adjust for wallet delete
+                                url={`${paths.withDrawTransaction}/${row.id}`} // Adjust for wallet delete
                                 fn={loadingData}
                                 priority={true}
                               />

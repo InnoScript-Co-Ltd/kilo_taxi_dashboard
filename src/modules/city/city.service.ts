@@ -27,12 +27,9 @@ export const cityService = {
   index: async (dispatch: Dispatch, params: any) => {
     const response: any = await getRequest(endpoints.city, params, dispatch);
     await httpServiceHandler(dispatch, response.data);
-    if (response.data.statusCode === 200) {
-      dispatch(
-        index(
-          response.data.payload ? response.data.payload : response.data.payload
-        )
-      );
+    if (response.status === 200) {
+      console.log(response.data);
+      dispatch(index(response.data ? response.data : response.data));
     }
     return response.data;
   },
@@ -67,10 +64,10 @@ export const cityService = {
       null,
       dispatch
     );
-    await httpServiceHandler(dispatch, response.data.payload);
+    await httpServiceHandler(dispatch, response.data);
 
-    if (response.data.statusCode === 200) {
-      dispatch(show(response.data.payload));
+    if (response.status === 200) {
+      dispatch(show(response.data));
     }
 
     return response.data;

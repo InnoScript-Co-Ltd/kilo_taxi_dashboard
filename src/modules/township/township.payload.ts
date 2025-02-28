@@ -21,6 +21,7 @@ export const townshipCreateSchema = z.object({
     .string()
     .min(0, { message: "Township Name must be at least 2 characters long" }),
   Status: z.string(),
+  cityId: z.number(),
 });
 
 export type TownshipFormInputs = z.infer<typeof townshipSchema>;
@@ -31,6 +32,7 @@ export interface TOWNSHIP {
   id: string;
   Name: string;
   Status: string;
+  cityId: number;
   createdDate: Date;
 }
 
@@ -93,6 +95,6 @@ export const townshipPayload: TOWNSHIP_PAYLOAD = {
 };
 
 export const townshipStatuslists = [
-  { id: 1, value: "ACTIVE" },
-  { id: 2, value: "DISABLE" },
+  { id: 0, value: "ACTIVE" },
+  { id: 1, value: "DISABLE" },
 ];
