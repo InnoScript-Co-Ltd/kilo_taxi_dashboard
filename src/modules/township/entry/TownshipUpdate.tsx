@@ -26,9 +26,13 @@ import { Breadcrumb } from "../../../components/Breadcrumb";
 import { Controller, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useNotifications } from "@toolpad/core/useNotifications";
+import { getRequest } from "../../../helpers/api";
+import { endpoints } from "../../../constants/endpoints";
+import { getId } from "../../../helpers/updateHelper";
 
 const TownshipUpdate = () => {
   const [loading, setLoading] = useState(false);
+  const [cityLists, setCityLists] = useState<Array<any>>([]);
 
   const params: any = useParams();
   const navigate = useNavigate();
@@ -45,8 +49,10 @@ const TownshipUpdate = () => {
   } = useForm<TownshipUpdateFormInputs>({
     resolver: zodResolver(townshipSchema),
     defaultValues: {
+      id: 0,
       Name: "",
-      Status: "ACTIVE",
+      Status: 0,
+      cityId: 0,
     },
   });
 
@@ -74,15 +80,39 @@ const TownshipUpdate = () => {
     setLoading(false);
   }, [dispatch, params.id]);
 
+  const loadCities = useCallback(async () => {
+    try {
+      const cityRes: any = await getRequest(
+        `${endpoints.city}`,
+        null,
+        dispatch
+      );
+      if (cityRes && cityRes.data && cityRes.status === 200) {
+        setCityLists(cityRes.data.cities);
+      }
+    } catch (error) {
+      await httpErrorHandler(error, dispatch);
+    }
+  }, [dispatch]);
+
   useEffect(() => {
     loadingData();
   }, [loadingData]);
 
   useEffect(() => {
+    loadCities();
+  }, [loadCities]);
+
+  useEffect(() => {
     if (township) {
       console.log(township);
-      setValue("Name", township.Name || "");
-      setValue("Status", township.Status || "ACTIVE");
+      setValue("id", township.id || 0);
+      setValue("Name", township.name || "");
+      setValue(
+        "Status",
+        getId({ lists: townshipStatuslists, value: township.status }) || 0
+      );
+      setValue("cityId", township?.cityDto?.id || 0);
     }
   }, [township, setValue]);
 
@@ -127,19 +157,47 @@ const TownshipUpdate = () => {
                       disabled={loading}
                       label="Status"
                       {...field}
-                      value={field.value} // Convert field value to a string
-                      onChange={(event) => field.onChange(event.target.value)} // Ensure onChange value is a string
+                      value={field.value}
+                      onChange={(event) => field.onChange(event.target.value)}
                     >
                       {townshipStatuslists?.map((general: any) => (
-                        <MenuItem key={general.id} value={general.value}>
+                        <MenuItem key={general.id} value={general.id}>
                           {general.value}
                         </MenuItem>
                       ))}
                     </Select>
                   )}
                 />
-
                 <FormHelperText>{errors.Status?.message}</FormHelperText>
+              </FormControl>
+            </Grid2>
+
+            <Grid2 size={{ xs: 6, md: 3 }}>
+              <FormControl variant="filled" fullWidth error={!!errors.cityId}>
+                <InputLabel htmlFor="city_name">City Name</InputLabel>
+                <Controller
+                  name="cityId"
+                  control={control}
+                  render={({ field }) => (
+                    <Select
+                      size="small"
+                      id="city_name"
+                      aria-describedby="city_name_text"
+                      disabled={loading}
+                      label="City Name"
+                      {...field}
+                      value={field.value}
+                      onChange={(event) => field.onChange(event.target.value)}
+                    >
+                      {cityLists.map((city: any) => (
+                        <MenuItem key={city.id} value={city.id}>
+                          {city.name}
+                        </MenuItem>
+                      ))}
+                    </Select>
+                  )}
+                />
+                <FormHelperText>{errors.cityId?.message}</FormHelperText>
               </FormControl>
             </Grid2>
           </Grid2>

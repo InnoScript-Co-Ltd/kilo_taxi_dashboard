@@ -1,7 +1,22 @@
 import * as React from "react";
-import { Box, Button, Card, FilledInput, FormControl, FormHelperText, Grid2, InputLabel, MenuItem, Select } from "@mui/material";
+import {
+  Box,
+  Button,
+  Card,
+  FilledInput,
+  FormControl,
+  FormHelperText,
+  Grid2,
+  InputLabel,
+  MenuItem,
+  Select,
+} from "@mui/material";
 import { useState } from "react";
-import { CityCreateFormInputs, citySchema, cityStatuslists } from "../city.payload";
+import {
+  CityCreateFormInputs,
+  citySchema,
+  cityStatuslists,
+} from "../city.payload";
 import { useNavigate } from "react-router";
 import { useDispatch } from "react-redux";
 import { AppDispatch } from "../../../stores";
@@ -19,17 +34,25 @@ const CityCreate = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch<AppDispatch>();
 
-  const { register, handleSubmit, control, formState: { errors } } = useForm<CityCreateFormInputs>({
+  const {
+    register,
+    handleSubmit,
+    control,
+    formState: { errors },
+  } = useForm<CityCreateFormInputs>({
     resolver: zodResolver(citySchema),
-    defaultValues: {
-      Name: "",
-      Status: "ACTIVE"
-    }
+    // defaultValues: {
+    //   Name: "",
+    //   // Status: "ACTIVE",
+    // },
   });
 
   const submitCityCreate = async (data: CityCreateFormInputs) => {
+    console.log("city");
     setLoading(true);
-    const response = await cityService.store(data, dispatch, notifications);
+    const cityData = { ...data };
+
+    const response = await cityService.store(cityData, dispatch, notifications);
     if (response.status === 201) {
       navigate(`${paths.cityList}`);
     }
@@ -44,19 +67,21 @@ const CityCreate = () => {
         <form onSubmit={handleSubmit(submitCityCreate)}>
           <Grid2 container spacing={2}>
             <Grid2 size={{ xs: 6, md: 3 }}>
-              <FormControl variant="filled" fullWidth error={!!errors.Name}>
-                <InputLabel htmlFor="city_name" style={{ fontSize: "12px" }}>Name</InputLabel>
+              <FormControl variant="filled" fullWidth error={!!errors.name}>
+                <InputLabel htmlFor="city_name" style={{ fontSize: "12px" }}>
+                  Name
+                </InputLabel>
                 <FilledInput
-                   style={{ paddingTop: "20px", fontSize: "14px" }}
+                  style={{ paddingTop: "20px", fontSize: "14px" }}
                   size="small"
                   id="city_name"
-                  {...register("Name")}
+                  {...register("name")}
                 />
-                <FormHelperText>{errors.Name?.message}</FormHelperText>
+                <FormHelperText>{errors.name?.message}</FormHelperText>
               </FormControl>
             </Grid2>
 
-            <Grid2 size={{ xs: 6, md: 3 }}>
+            {/* <Grid2 size={{ xs: 6, md: 3 }}>
               <FormControl variant="filled" fullWidth error={!!errors.Status}>
                 <InputLabel htmlFor="status"> Status </InputLabel>
                 <Controller
@@ -71,7 +96,7 @@ const CityCreate = () => {
                       disabled={loading}
                       label="Status"
                       {...field}
-                      value={field.value} // Convert field value to a string
+                      value={field.value || "ACTIVE"} // Convert field value to a string
                       onChange={(event) => field.onChange(event.target.value)} // Ensure onChange value is a string
                     >
                       {cityStatuslists?.map((general: any) => (
@@ -85,9 +110,8 @@ const CityCreate = () => {
 
                 <FormHelperText>{errors.Status?.message}</FormHelperText>
               </FormControl>
-            </Grid2>
+            </Grid2> */}
           </Grid2>
-
 
           <Box
             sx={{
@@ -102,7 +126,7 @@ const CityCreate = () => {
               Cancel
             </Button>
 
-            <Button disabled={loading} variant="contained" type="submit">
+            <Button type="submit" disabled={loading} variant="contained">
               Submit
             </Button>
           </Box>

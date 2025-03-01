@@ -6,11 +6,15 @@ import { CityCreateFormInputs, CityUpdateFormInputs } from "./city.payload";
 import { index, show, update } from "./city.slice";
 
 export const cityService = {
-  store: async (payload: CityCreateFormInputs, dispatch: Dispatch, notifications?: any) => {
+  store: async (
+    payload: CityCreateFormInputs,
+    dispatch: Dispatch,
+    notifications?: any
+  ) => {
     const response: any = await postRequest(endpoints.city, payload, dispatch);
-    await httpServiceHandler(dispatch, response);
+    await httpServiceHandler(dispatch, response, notifications);
 
-    if (response.status === 201) {
+    if (response.statusCode === 201) {
       notifications.show("City is created successfully", {
         severity: "success",
         autoHideDuration: 3000,
@@ -22,17 +26,25 @@ export const cityService = {
 
   index: async (dispatch: Dispatch, params: any) => {
     const response: any = await getRequest(endpoints.city, params, dispatch);
-    await httpServiceHandler(dispatch, response);
-
+    await httpServiceHandler(dispatch, response.data);
     if (response.status === 200) {
+      console.log(response.data);
       dispatch(index(response.data ? response.data : response.data));
     }
-
-    return response;
+    return response.data;
   },
 
-  update: async (dispatch: Dispatch, id: number, payload: CityUpdateFormInputs, notifications?: any) => {
-    const response: any = await putRequest(`${endpoints.city}/${id}`, payload, dispatch);
+  update: async (
+    dispatch: Dispatch,
+    id: number,
+    payload: CityUpdateFormInputs,
+    notifications?: any
+  ) => {
+    const response: any = await putRequest(
+      `${endpoints.city}/${id}`,
+      payload,
+      dispatch
+    );
     await httpServiceHandler(dispatch, response);
 
     if (response.status === 200) {
@@ -47,13 +59,17 @@ export const cityService = {
   },
 
   show: async (dispatch: Dispatch, id: number) => {
-    const response: any = await getRequest(`${endpoints.city}/${id}`, null, dispatch);
-    await httpServiceHandler(dispatch, response);
+    const response: any = await getRequest(
+      `${endpoints.city}/${id}`,
+      null,
+      dispatch
+    );
+    await httpServiceHandler(dispatch, response.data);
 
     if (response.status === 200) {
       dispatch(show(response.data));
     }
 
-    return response;
+    return response.data;
   },
 };

@@ -17,14 +17,14 @@ export const townshipService = {
     );
     await httpServiceHandler(dispatch, response);
 
-    if (response.status === 201) {
+    if (response.data.statusCode === 201) {
       notifications.show("Township is created successfully", {
         severity: "success",
         autoHideDuration: 3000,
       });
     }
 
-    return response;
+    return response.data;
   },
 
   index: async (dispatch: Dispatch, params: any) => {
@@ -35,7 +35,7 @@ export const townshipService = {
     );
     await httpServiceHandler(dispatch, response);
 
-    if (response.status === 200) {
+    if (response.data.statusCode === 200) {
       dispatch(index(response.data ? response.data : response.data));
     }
 
@@ -55,7 +55,7 @@ export const townshipService = {
     );
     await httpServiceHandler(dispatch, response);
 
-    if (response.status === 200) {
+    if (response.data.statusCode === 200) {
       notifications?.show("Township is updated successfully", {
         severity: "success",
         autoHideDuration: 3000,
@@ -74,7 +74,7 @@ export const townshipService = {
     );
     await httpServiceHandler(dispatch, response);
 
-    if (response.status === 200) {
+    if (response.data.statusCode === 200) {
       dispatch(show(response.data));
     }
 

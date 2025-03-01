@@ -3,24 +3,28 @@ import { paginateOptions } from "../../constants/config"; // Assuming paginateOp
 
 export const townshipSchema = z.object({
   id: z.number().min(0, { message: "id" }).default(0),
-  name: z
+  Name: z
     .string()
     .min(2, { message: "Township Name must be at least 2 characters long" }),
-  status: z.number(),
+  Status: z.number(),
+  cityId: z.number().int(),
 });
 
 export const townshipUpdateSchema = z.object({
+  id: z.number().min(0, { message: "id" }).default(0),
   Name: z
     .string()
     .min(0, { message: "Township Name must be at least 2 characters long" }),
-  Status: z.string(),
+  Status: z.number(),
+  cityId: z.number().int(),
 });
 
 export const townshipCreateSchema = z.object({
   Name: z
     .string()
     .min(0, { message: "Township Name must be at least 2 characters long" }),
-  Status: z.string(),
+  Status: z.number(),
+  cityId: z.number().int(),
 });
 
 export type TownshipFormInputs = z.infer<typeof townshipSchema>;
@@ -28,14 +32,17 @@ export type TownshipUpdateFormInputs = z.infer<typeof townshipUpdateSchema>;
 export type TownshipCreateFormInputs = z.infer<typeof townshipCreateSchema>;
 
 export interface TOWNSHIP {
-  id: string;
-  Name: string;
-  Status: string;
+  id: number;
+  name: string;
+  status: number;
   createdDate: Date;
+  cityId: number;
+  cityName: string;
+  cityDto: any;
 }
 
 interface TownshipColumn {
-  id: "id" | "name" | "status" | "action";
+  id: "id" | "name" | "status" | "cityName" | "action";
   label: string;
   minWidth?: number;
   align?: "right";
@@ -73,6 +80,14 @@ export const townshipColumns: readonly TownshipColumn[] = [
     sort: true,
   },
   {
+    id: "cityName",
+    label: "City Name",
+    minWidth: 100,
+    numeric: false,
+    disablePadding: false,
+    sort: true,
+  },
+  {
     id: "action",
     label: "Action",
     minWidth: 60,
@@ -93,6 +108,6 @@ export const townshipPayload: TOWNSHIP_PAYLOAD = {
 };
 
 export const townshipStatuslists = [
-  { id: 1, value: "ACTIVE" },
-  { id: 2, value: "DISABLE" },
+  { id: 0, value: "ACTIVE" },
+  { id: 1, value: "DISABLE" },
 ];

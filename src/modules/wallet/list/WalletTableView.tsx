@@ -117,12 +117,12 @@ const WalletTableView = () => {
             gap: 3,
           }}
         >
-          <Button
+          {/* <Button
             startIcon={<AddCircleOutlineIcon />}
             onClick={() => navigate(paths.walletCreate)} // Adjust path for wallet create page
           >
             Create
-          </Button>
+          </Button> */}
 
           <Button
             onClick={() => {

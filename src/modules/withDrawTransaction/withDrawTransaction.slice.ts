@@ -1,18 +1,18 @@
 import { createSlice } from "@reduxjs/toolkit";
 import {
-  TOPUPTRANSACTION,
-  TOPUPTRANSACTION_PAYLOAD,
-  topupTransactionPayload,
-} from "./topupTransaction.payload";
+  WITHDRAWTRANSACTION,
+  WITHDRAWTRANSACTION_PAYLOAD,
+  withDrawTransactionPayload,
+} from "./withDrawTransaction.payload";
 
 // Define a type for pagination parameters, similar to STATE_PAGINATE_PARAMS
-export interface TOPUPTRANSACTION_PAGINATE_PARAMS
-  extends Pick<TOPUPTRANSACTION_PAYLOAD, "pagingParams"> {}
+export interface WALLET_PAGINATE_PARAMS
+  extends Pick<WITHDRAWTRANSACTION_PAYLOAD, "pagingParams"> {}
 
-// Define a type for the topupTransaction slice
-export interface TOPUPTRANSACTION_SLICE {
+// Define a type for the wallet slice
+export interface WITHDRAWTRANSACTION_SLICE {
   data: {
-    topUpTransactions: Array<TOPUPTRANSACTION>;
+    withDrawTransactions: Array<WITHDRAWTRANSACTION>;
     paging: {
       totalCount: number;
       totalPages: number;
@@ -22,13 +22,13 @@ export interface TOPUPTRANSACTION_SLICE {
       lastRowOnPage: number;
     };
   };
-  topupTransaction: null | TOPUPTRANSACTION;
-  pagingParams: TOPUPTRANSACTION_PAYLOAD["pagingParams"];
+  withDrawTransaction: null | WITHDRAWTRANSACTION;
+  pagingParams: WITHDRAWTRANSACTION_PAYLOAD["pagingParams"];
 }
 
-const initialState: TOPUPTRANSACTION_SLICE = {
+const initialState: WITHDRAWTRANSACTION_SLICE = {
   data: {
-    topUpTransactions: [],
+    withDrawTransactions: [],
     paging: {
       totalCount: 0,
       totalPages: 0,
@@ -38,13 +38,13 @@ const initialState: TOPUPTRANSACTION_SLICE = {
       lastRowOnPage: 0,
     },
   },
-  topupTransaction: null,
-  pagingParams: topupTransactionPayload.pagingParams,
+  withDrawTransaction: null,
+  pagingParams: withDrawTransactionPayload.pagingParams,
 };
 
-// Create the topupTransaction slice
-const topupTransactionSlice = createSlice({
-  name: "topupTransaction",
+// Create the wallet slice
+const withDrawTransactionSlice = createSlice({
+  name: "withDrawTransaction",
   initialState: initialState,
   reducers: {
     index: (state, action) => {
@@ -52,11 +52,11 @@ const topupTransactionSlice = createSlice({
       return state;
     },
     update: (state, action) => {
-      state.topupTransaction = action.payload;
+      state.withDrawTransaction = action.payload;
       return state;
     },
     show: (state, action) => {
-      state.topupTransaction = action.payload;
+      state.withDrawTransaction = action.payload;
       return state;
     },
     setPaginate: (state, action) => {
@@ -68,7 +68,7 @@ const topupTransactionSlice = createSlice({
 
 // Export actions for use in components
 export const { index, update, show, setPaginate } =
-  topupTransactionSlice.actions;
+  withDrawTransactionSlice.actions;
 
 // Export the reducer to be included in the store
-export default topupTransactionSlice.reducer;
+export default withDrawTransactionSlice.reducer;

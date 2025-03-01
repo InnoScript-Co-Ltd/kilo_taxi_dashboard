@@ -28,9 +28,9 @@ export interface PROMOTION {
   quantity?: string;
   unit: string;
   description?: string;
-  promotionType: string;
-  applicableTo: string;
-  status: string;
+  promotionType: number;
+  applicableTo: number;
+  status: number;
   customerIds?: number[] | null;
   action?: null;
 }

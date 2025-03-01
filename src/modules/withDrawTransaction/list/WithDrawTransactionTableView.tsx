@@ -7,12 +7,12 @@ import TableHead from "@mui/material/TableHead";
 import TablePagination from "@mui/material/TablePagination";
 import TableRow from "@mui/material/TableRow";
 import {
-  topupTransactionColumns,
-  topupTransactionPayload,
-} from "../topupTransaction.payload"; // Replace with your topupTransaction columns and payload
+  withDrawTransactionColumns,
+  withDrawTransactionPayload,
+} from "../withDrawTransaction.payload"; // Replace with your wallet columns and payload
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, AppRootState } from "../../../stores";
-import { topupTransactionService } from "../topupTransaction.service";
+import { withDrawTransactionService } from "../withDrawTransaction.service";
 import { paginateOptions } from "../../../constants/config";
 import { NavigateId } from "../../../shares/NavigateId";
 import { paths } from "../../../constants/paths";
@@ -23,7 +23,7 @@ import {
   InputAdornment,
   TableSortLabel,
 } from "@mui/material";
-import { setPaginate } from "../topupTransaction.slice"; // Adjust the slice if needed
+import { setPaginate } from "../withDrawTransaction.slice"; // Adjust the slice if needed
 import SearchIcon from "@mui/icons-material/Search";
 import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
 import RestartAltIcon from "@mui/icons-material/RestartAlt";
@@ -34,14 +34,14 @@ import {
   StyledTableRow,
 } from "../../../components/TableCommon";
 import { useNotifications } from "@toolpad/core/useNotifications";
-import { format } from "date-fns"; 
+import { formatDate } from "../../../helpers/common";
 
-const TopupTransactionTableView = () => {
+const WalletTableView = () => {
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
   const dispatch = useDispatch<AppDispatch>();
   const { data, pagingParams } = useSelector(
-    (state: AppRootState) => state.topUpTransaction
+    (state: AppRootState) => state.withDrawTransaction
   );
 
   const notifications = useNotifications();
@@ -75,12 +75,15 @@ const TopupTransactionTableView = () => {
 
   const loadingData = React.useCallback(async () => {
     setLoading(true);
-    await topupTransactionService.index(dispatch, pagingParams, notifications);
+    await withDrawTransactionService.index(
+      dispatch,
+      pagingParams,
+      notifications
+    );
     setLoading(false);
   }, [dispatch, pagingParams, notifications]);
 
   React.useEffect(() => {
-    console.log("API Response:", data);
     loadingData();
   }, [loadingData]);
 
@@ -97,7 +100,7 @@ const TopupTransactionTableView = () => {
       >
         <Input
           id="input-with-icon-search"
-          placeholder="Search TopupTransaction"
+          placeholder="Search Wallet"
           value={pagingParams.SearchTerm}
           onChange={(e) => {
             dispatch(
@@ -122,16 +125,16 @@ const TopupTransactionTableView = () => {
             gap: 3,
           }}
         >
-          <Button
+          {/* <Button
             startIcon={<AddCircleOutlineIcon />}
-            onClick={() => navigate(paths.topupTransactionCreate)} // Adjust path for topupTransaction create page
+            onClick={() => navigate(paths.walletCreate)} // Adjust path for wallet create page
           >
             Create
-          </Button>
+          </Button> */}
 
           <Button
             onClick={() => {
-              dispatch(setPaginate(topupTransactionPayload.pagingParams)); // Adjust the reset payload
+              dispatch(setPaginate(withDrawTransactionPayload.pagingParams)); // Adjust the reset payload
               setPage(0);
               setRowsPerPage(10);
             }}
@@ -147,7 +150,7 @@ const TopupTransactionTableView = () => {
         <Table stickyHeader aria-label="sticky table">
           <TableHead>
             <TableRow>
-              {topupTransactionColumns.map((column) => (
+              {withDrawTransactionColumns.map((column) => (
                 <StyledTableCell
                   key={column.id}
                   style={{ minWidth: column.minWidth }}
@@ -190,30 +193,44 @@ const TopupTransactionTableView = () => {
             </TableRow>
           </TableHead>
           <TableBody>
-            {data.topUpTransactions?.map((row: any) => (
+            {data.withDrawTransactions?.map((row: any) => (
               <StyledTableRow hover role="checkbox" tabIndex={-1} key={row.id}>
-                {topupTransactionColumns.map((column) => {
+                {withDrawTransactionColumns.map((column) => {
                   const value = row[column.id];
+                  console.log("value :", value);
+
                   return (
                     <StyledTableCell key={column.id} align={column.align}>
                       {(() => {
                         switch (column.label) {
-                          case "Datetime":
-                            // Format dateTime to desired format
-                            const formattedDate = format(new Date(value), "dd MMM yyyy hh:mma");
-                            return formattedDate;
-                            case "Action":
-                              return (
-                                <Button
-                                  variant="outlined"
-                                  color="primary"
-                                  onClick={() => navigate(`${paths.topupTransaction}/${row.id}`)} // Redirect to View Detail page
-                                >
-                                  View Detail
-                                </Button>
-                              );
-                          default:
+                          case "ID":
+                            return (
+                              <NavigateId
+                                url={`${paths.withDrawTransaction}/${row.id}`} // Adjust the path for wallet detail
+                                value={value}
+                              />
+                            );
+                          case "Amount":
                             return value;
+                          case "Driver Name":
+                            return `${value?.name ?? ""} `;
+                          case "Admin":
+                            return `${value?.name ?? ""}`;
+                          case "Transaction Date":
+                            return formatDate(value);
+                          case "Update Date":
+                            return formatDate(value);
+                          case "Request Datetime":
+                          case "Action":
+                            return (
+                              <UpAndDel
+                                url={`${paths.withDrawTransaction}/${row.id}`} // Adjust for wallet delete
+                                fn={loadingData}
+                                priority={true}
+                              />
+                            );
+                          default:
+                            return value; // Fallback case
                         }
                       })()}
                     </StyledTableCell>
@@ -238,4 +255,4 @@ const TopupTransactionTableView = () => {
   );
 };
 
-export default TopupTransactionTableView;
+export default WalletTableView;

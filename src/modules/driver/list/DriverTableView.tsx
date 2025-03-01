@@ -185,17 +185,20 @@ export const DriverTableView = () => {
               <StyledTableRow hover role="checkbox" tabIndex={-1} key={row.id}>
                 {driverColumns.map((column) => {
                   const value = row[column.id];
+                  console.log("value:", value);
                   return (
                     <StyledTableCell key={column.id} align={column.align}>
                       {(() => {
                         switch (column.label) {
-                          case "Driver Name":
+                          case "Name":
                             return (
                               <NavigateId
                                 url={`${paths.driver}/${row.id}`} // Driver detail path
                                 value={value}
                               />
                             );
+                          case "Type":
+                            return value?.walletName;
                           case "Register DateTime":
                             return formatDate(value);
                           case "Profile":

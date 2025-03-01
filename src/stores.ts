@@ -21,6 +21,7 @@ import travelRateSlice from "./modules/travelrate/travelrate.slice";
 import kiloAmountSlice from "./modules/kiloamount/kiloamount.slice";
 import commissionConfigSlice from "./modules/commissionconfig/commissionconfig.slice";
 import ExtraDemandSlice from "./modules/extraDemand/extraDemand.slice";
+import withDrawTransactionSlice from "./modules/withDrawTransaction/withDrawTransaction.slice";
 
 // interface RootState {
 //     share: SHARE_SLICE;
@@ -51,6 +52,7 @@ export const stores = configureStore({
     order: orderSlice,
     reason: reasonSlice,
     topUpTransaction: topupTransactionSlice,
+    withDrawTransaction: withDrawTransactionSlice,
     paymentChannel: paymentChannelSlice,
     sms: smsSlice,
     sos: sosSlice,

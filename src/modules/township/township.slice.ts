@@ -57,7 +57,7 @@ const townshipSlice = createSlice({
       return state;
     },
     show: (state, action) => {
-      state.township = action.payload;
+      state.township = action.payload?.payload;
       return state;
     },
     setPaginate: (state, action) => {

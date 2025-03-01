@@ -1,4 +1,15 @@
-import { Box, Button, Card, FilledInput, FormControl, FormHelperText, Grid2, InputLabel, MenuItem, Select } from "@mui/material";
+import {
+  Box,
+  Button,
+  Card,
+  FilledInput,
+  FormControl,
+  FormHelperText,
+  Grid2,
+  InputLabel,
+  MenuItem,
+  Select,
+} from "@mui/material";
 import { useNavigate } from "react-router";
 import { useDispatch } from "react-redux";
 import { AppDispatch } from "../../../stores";
@@ -20,17 +31,26 @@ const AdminCreate = () => {
   const notifications = useNotifications();
 
   // Set up React Hook Form with Zod schema
-  const { register, handleSubmit, control, formState: { errors } } = useForm<AdminCreateFormInputs>({
-    resolver: zodResolver(adminCreateSchema)
+  const {
+    register,
+    handleSubmit,
+    control,
+    formState: { errors },
+  } = useForm<AdminCreateFormInputs>({
+    resolver: zodResolver(adminCreateSchema),
   });
 
   const onSubmit = async (data: AdminCreateFormInputs) => {
     try {
       setLoading(true);
       const adminData = { ...data };
-      const response = await adminService.store(adminData, dispatch,notifications);
+      const response = await adminService.store(
+        adminData,
+        dispatch,
+        notifications
+      );
 
-      if (response.status === 201) {
+      if (response.statusCode === 201) {
         setLoading(false);
         navigate(paths.adminList);
       }
@@ -55,7 +75,9 @@ const AdminCreate = () => {
           <Grid2 container spacing={2}>
             <Grid2 size={{ xs: 6, md: 3 }}>
               <FormControl variant="filled" fullWidth error={!!errors.Name}>
-                <InputLabel htmlFor="admin_name" style={{ fontSize: "12px" }}>Name</InputLabel>
+                <InputLabel htmlFor="admin_name" style={{ fontSize: "12px" }}>
+                  Name
+                </InputLabel>
                 <FilledInput
                   size="small"
                   style={{ paddingTop: "20px", fontSize: "14px" }}
@@ -69,7 +91,9 @@ const AdminCreate = () => {
 
             <Grid2 size={{ xs: 6, md: 3 }}>
               <FormControl variant="filled" fullWidth error={!!errors.Email}>
-                <InputLabel htmlFor="email" style={{ fontSize: "12px" }}>Email</InputLabel>
+                <InputLabel htmlFor="email" style={{ fontSize: "12px" }}>
+                  Email
+                </InputLabel>
                 <FilledInput
                   style={{ paddingTop: "20px", fontSize: "14px" }}
                   size="small"
@@ -83,7 +107,9 @@ const AdminCreate = () => {
 
             <Grid2 size={{ xs: 6, md: 3 }}>
               <FormControl variant="filled" fullWidth error={!!errors.Phone}>
-                <InputLabel htmlFor="phone" style={{ fontSize: "12px" }}>Phone</InputLabel>
+                <InputLabel htmlFor="phone" style={{ fontSize: "12px" }}>
+                  Phone
+                </InputLabel>
                 <FilledInput
                   style={{ paddingTop: "20px", fontSize: "14px" }}
                   size="small"
@@ -128,7 +154,9 @@ const AdminCreate = () => {
 
             <Grid2 size={{ xs: 6, md: 12 }}>
               <FormControl variant="filled" fullWidth error={!!errors.Address}>
-                <InputLabel htmlFor="address" style={{ fontSize: "12px" }}>Address</InputLabel>
+                <InputLabel htmlFor="address" style={{ fontSize: "12px" }}>
+                  Address
+                </InputLabel>
                 <FilledInput
                   style={{ paddingTop: "20px", fontSize: "14px" }}
                   size="small"

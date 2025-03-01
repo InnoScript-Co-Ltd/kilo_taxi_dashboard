@@ -1,6 +1,7 @@
 import { z } from "zod";
 import { paginateOptions } from "../../constants/config"; // Assuming paginateOptions is available here
 import { VEHICLE } from "../vehicle/vehicle.payload";
+import { WALLET } from "../wallet/wallet.payload";
 
 // Define Driver Schema
 export const driverSchema = z.object({
@@ -41,7 +42,6 @@ export const driverSchema = z.object({
   // file_nrcImageBack: z.any().nullable(),
   file_driverImageLicenseFront: z.any().nullable(),
   file_driverImageLicenseBack: z.any().nullable(),
-
   // vehicle: z.array(vehicleSchema), // Use vehicleSchema as an array
   // wallet: z.array(walletSchema), // Use walletSchema as an array
 });
@@ -88,6 +88,7 @@ export interface DRIVER {
   file_driverImageLicenseBack: string;
   vehicle: VEHICLE[]; // Use the VEHICLE interface as an array
   walletUserMapping: WALLETUSERMAPPING[]; // Use the WALLET interface as an array
+  wallet: WALLET;
   action: any;
 }
 
@@ -96,9 +97,9 @@ interface DriverColumn {
   id:
     | "id"
     | "name"
+    | "walletInfo"
     | "profile"
     | "mobilePrefix"
-    | "type"
     | "phone"
     | "email"
     | "createdDate"
@@ -126,7 +127,7 @@ interface DriverColumn {
   numeric: boolean;
   disablePadding: boolean;
   sort?: boolean;
-  format?: (value: string) => string;
+  format?: (value: any) => string | number | object | null; // Allow object return type
 }
 export interface WALLETUSERMAPPING {
   id: string;
@@ -165,9 +166,9 @@ export const driverColumns: readonly DriverColumn[] = [
     sort: true,
   },
   {
-    id: "type",
+    id: "walletInfo",
     label: "Type",
-    minWidth: 50,
+    minWidth: 70,
     numeric: false,
     disablePadding: false,
     sort: true,

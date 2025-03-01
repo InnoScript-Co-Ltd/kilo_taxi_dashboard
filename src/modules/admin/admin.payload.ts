@@ -2,7 +2,9 @@ import { paginateOptions } from "../../constants/config";
 import { z } from "zod";
 
 export const adminCreateSchema = z.object({
-  Name: z.string().min(2, { message: "Name must be at least 2 characters long" }),
+  Name: z
+    .string()
+    .min(2, { message: "Name must be at least 2 characters long" }),
   Email: z.string().email(),
   Role: z.string().nullable().default("Admin"),
   Phone: z.string().min(8, { message: "phone number is at least 8 digit" }),
@@ -11,7 +13,10 @@ export const adminCreateSchema = z.object({
 });
 
 export const adminUpdateSchema = z.object({
-  Name: z.string().min(2, { message: "Name must be at least 2 characters long" }),
+  Id: z.number().min(0, { message: "id" }).default(0),
+  Name: z
+    .string()
+    .min(2, { message: "Name must be at least 2 characters long" }),
   Email: z.string().email(),
   Phone: z.string().min(8, { message: "phone number is at least 8 digit" }),
   Gender: z.string(),
@@ -66,9 +71,9 @@ export interface ADMIN {
   status: string;
   emailVerifiedAt: Date;
   phoneVerifiedAt: Date;
-  createdAt: Date;
-  updatedAt: Date;
-  deletedAt: Date;
+  createdDate: Date;
+  updatedDate: Date;
+  deletedDate: Date;
   resetPassword: any;
   action: any;
   // Add other country properties as necessary
@@ -195,7 +200,7 @@ export const columns: readonly Admin_Column[] = [
     disablePadding: false,
   },
   {
-    id: "createdAt",
+    id: "createdDate",
     label: "Created At",
     minWidth: 200,
     maxWidth: 200,
@@ -203,7 +208,7 @@ export const columns: readonly Admin_Column[] = [
     disablePadding: false,
   },
   {
-    id: "updatedAt",
+    id: "updatedDate",
     label: "Updated At",
     minWidth: 200,
     maxWidth: 200,
@@ -211,7 +216,7 @@ export const columns: readonly Admin_Column[] = [
     disablePadding: false,
   },
   {
-    id: "deletedAt",
+    id: "deletedDate",
     label: "Deleted At",
     minWidth: 200,
     maxWidth: 200,

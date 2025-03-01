@@ -136,7 +136,7 @@ const DriverUpdate = () => {
     setLoading(true);
     const formData = formBuilder(data, driverSchema);
     const response = await driverService.update(dispatch, params.id, formData);
-    if (response.status === 200) {
+    if (response.statusCode === 200) {
       navigate(`${paths.driverList}`);
     }
     setLoading(false);

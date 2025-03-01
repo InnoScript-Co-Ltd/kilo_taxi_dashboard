@@ -17,10 +17,19 @@ import { AppDispatch, AppRootState } from "../../../stores";
 import { adminService } from "../admin.service";
 import { paginateOptions } from "../../../constants/config";
 import { paths } from "../../../constants/paths";
-import { Box, Button, Input, InputAdornment, TableSortLabel } from "@mui/material";
+import {
+  Box,
+  Button,
+  Input,
+  InputAdornment,
+  TableSortLabel,
+} from "@mui/material";
 import { setPaginate } from "../admin.slice";
 import { useNavigate } from "react-router";
-import { StyledTableCell, StyledTableRow } from "../../../components/TableCommon";
+import {
+  StyledTableCell,
+  StyledTableRow,
+} from "../../../components/TableCommon";
 import { useNotifications } from "@toolpad/core/useNotifications";
 import { formatDate } from "../../../helpers/common";
 import AdminResetPassword from "../../../components/AdminResetPassword";
@@ -30,7 +39,9 @@ const AdminTableView = () => {
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
   const [loading, setLoading] = React.useState(false);
 
-  const { data, pagingParams } = useSelector((state: AppRootState) => state.admin);
+  const { data, pagingParams } = useSelector(
+    (state: AppRootState) => state.admin
+  );
   const notifications = useNotifications();
 
   const navigate = useNavigate();
@@ -182,7 +193,7 @@ const AdminTableView = () => {
                             case "Gender":
                               return value?.toUpperCase();
                             case "Status":
-                              return (<Status status={value} />)
+                              return <Status status={value} />;
                             case "Email Verified At":
                               return formatDate(value);
                             case "Phone Verified At":
@@ -194,7 +205,13 @@ const AdminTableView = () => {
                             case "Deleted At":
                               return formatDate(value);
                             case "Reset Password":
-                              return <AdminResetPassword url={`${paths.admin}/${row.id}`} fn={loadingData} priority={true} />
+                              return (
+                                <AdminResetPassword
+                                  url={`${paths.admin}/${row.id}`}
+                                  fn={loadingData}
+                                  priority={true}
+                                />
+                              );
                             case "Action":
                               return (
                                 <UpAndDel

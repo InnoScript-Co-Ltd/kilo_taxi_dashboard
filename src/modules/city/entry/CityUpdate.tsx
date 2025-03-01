@@ -1,6 +1,21 @@
-import { Box, Button, Card, FilledInput, FormControl, FormHelperText, Grid2, InputLabel, MenuItem, Select } from "@mui/material";
+import {
+  Box,
+  Button,
+  Card,
+  FilledInput,
+  FormControl,
+  FormHelperText,
+  Grid2,
+  InputLabel,
+  MenuItem,
+  Select,
+} from "@mui/material";
 import { useCallback, useEffect, useState } from "react";
-import { citySchema, cityStatuslists, CityUpdateFormInputs } from "../city.payload";
+import {
+  citySchema,
+  cityStatuslists,
+  CityUpdateFormInputs,
+} from "../city.payload";
 import { useNavigate, useParams } from "react-router";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, AppRootState } from "../../../stores";
@@ -21,17 +36,29 @@ const CityUpdate = () => {
   const { city } = useSelector((state: AppRootState) => state.city);
   const notifications = useNotifications();
 
-  const { register, handleSubmit, setValue, control, formState: { errors } } = useForm<CityUpdateFormInputs>({
+  const {
+    register,
+    handleSubmit,
+    setValue,
+    control,
+    formState: { errors },
+  } = useForm<CityUpdateFormInputs>({
     resolver: zodResolver(citySchema),
     defaultValues: {
-      Name: "",
-      Status: "ACTIVE"
+      id: 0,
+      name: "",
+      // Status: "ACTIVE",
     },
   });
 
   const submitCityUpdate = async (data: CityUpdateFormInputs) => {
     setLoading(true);
-    const response: any = await cityService.update(dispatch, params.id, data, notifications);
+    const response: any = await cityService.update(
+      dispatch,
+      params.id,
+      data,
+      notifications
+    );
     if (response.status === 200) {
       navigate(`${paths.cityList}`);
     }
@@ -54,9 +81,9 @@ const CityUpdate = () => {
 
   useEffect(() => {
     if (city) {
-      console.log(city);
-      setValue("Name", city.Name || "");
-      setValue("Status", city.Status || "ACTIVE")
+      setValue("id", city.id || 0);
+      setValue("name", city.name || "");
+      // setValue("Status", city.Status || "ACTIVE");
     }
   }, [city, setValue]);
 
@@ -69,19 +96,21 @@ const CityUpdate = () => {
         <form onSubmit={handleSubmit(submitCityUpdate)}>
           <Grid2 container spacing={2}>
             <Grid2 size={{ xs: 6, md: 3 }}>
-              <FormControl variant="filled" fullWidth error={!!errors.Name}>
-                <InputLabel htmlFor="city_name" style={{ fontSize: "12px" }}>City Name</InputLabel>
+              <FormControl variant="filled" fullWidth error={!!errors.name}>
+                <InputLabel htmlFor="city_name" style={{ fontSize: "12px" }}>
+                  City Name
+                </InputLabel>
                 <FilledInput
                   style={{ paddingTop: "20px", fontSize: "14px" }}
                   size="small"
                   id="city_name"
-                  {...register("Name")}
+                  {...register("name")}
                 />
-                <FormHelperText>{errors.Name?.message}</FormHelperText>
+                <FormHelperText>{errors.name?.message}</FormHelperText>
               </FormControl>
             </Grid2>
 
-            <Grid2 size={{ xs: 6, md: 3 }}>
+            {/* <Grid2 size={{ xs: 6, md: 3 }}>
               <FormControl variant="filled" fullWidth error={!!errors.Status}>
                 <InputLabel htmlFor="status"> Status </InputLabel>
                 <Controller
@@ -110,10 +139,8 @@ const CityUpdate = () => {
 
                 <FormHelperText>{errors.Status?.message}</FormHelperText>
               </FormControl>
-            </Grid2>
+            </Grid2> */}
           </Grid2>
-
-
 
           {/* Footer */}
           <Box

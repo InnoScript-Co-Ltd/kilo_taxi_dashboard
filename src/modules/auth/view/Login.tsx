@@ -39,7 +39,7 @@ const Login = () => {
 
     const response = await authService.store(data, dispatch);
     console.log("res", response);
-    if (response.status === 200) {
+    if (response.data.statusCode === 200) {
       navigate(`${paths.dashboard}`);
     }
     setLoading(false);

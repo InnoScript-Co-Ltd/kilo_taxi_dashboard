@@ -205,12 +205,7 @@ const CustomerTableView = () => {
                             case "Registered Datetime":
                               return formatDate(value);
                             case "Gender":
-                              return (
-                                <Status
-                                  status={value}
-                                  lists={genderStatuslists}
-                                />
-                              );
+                              return value;
 
                             case "Status":
                               return (

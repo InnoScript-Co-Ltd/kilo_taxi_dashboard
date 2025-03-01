@@ -3,17 +3,24 @@ import { paginateOptions } from "../../constants/config"; // Assuming paginateOp
 
 export const citySchema = z.object({
   id: z.number().min(0, { message: "id" }).default(0),
-  name: z.string().min(2, { message: "City Name must be at least 2 characters long" }),
+  name: z
+    .string()
+    .min(2, { message: "City Name must be at least 2 characters long" }),
 });
 
 export const cityUpdateSchema = z.object({
-  Name: z.string().min(0, {message: "City Name must be at least 2 characters long"}),
-  Status: z.string()
+  id: z.number().min(0, { message: "id" }).default(0),
+  name: z
+    .string()
+    .min(0, { message: "City Name must be at least 2 characters long" }),
+  // Status: z.string(),
 });
 
 export const cityCreateSchema = z.object({
-  Name: z.string().min(0, {message: "City Name must be at least 2 characters long"}),
-  Status: z.string()
+  name: z
+    .string()
+    .min(0, { message: "City Name must be at least 2 characters long" }),
+  // Status: z.string()
 });
 
 export type CityFormInputs = z.infer<typeof citySchema>;
@@ -21,9 +28,9 @@ export type CityUpdateFormInputs = z.infer<typeof cityUpdateSchema>;
 export type CityCreateFormInputs = z.infer<typeof cityCreateSchema>;
 
 export interface CITY {
-  id: string;
-  Name: string;
-  Status: string;
+  id: number;
+  name: string;
+  // Status: string;
 }
 
 interface CityColumn {

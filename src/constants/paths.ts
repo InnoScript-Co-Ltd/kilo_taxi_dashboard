@@ -86,6 +86,10 @@ export const paths = {
   topupTransactionCreate: "/topupTransaction/new",
   topupTransactionDetail: "/topupTransaction/:id",
 
+  withDrawTransaction: "/withDrawTransaction",
+  withDrawTransactionList: "/withDrawTransaction/list",
+  withDrawTransactionDetail: "/withDrawTransaction/:id",
+
   sms: "/sms",
   smsList: "/sms/list",
   smsCreate: "/sms/new",
