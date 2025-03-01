@@ -115,7 +115,7 @@ const VehicleTableView = () => {
             display: "flex",
             justifyContent: "start",
             alignItems: "center",
-            gap: 3,
+            gap: 2,
           }}
         >
           <Button

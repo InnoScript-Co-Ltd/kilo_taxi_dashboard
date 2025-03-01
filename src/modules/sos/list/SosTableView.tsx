@@ -21,6 +21,8 @@ import {
   Input,
   InputAdornment,
   TableSortLabel,
+  ToggleButton,
+  ToggleButtonGroup,
 } from "@mui/material";
 import { setPaginate } from "../sos.slice"; // Adjust the slice if needed
 import SearchIcon from "@mui/icons-material/Search";
@@ -31,10 +33,15 @@ import {
 } from "../../../components/TableCommon";
 import { useNotifications } from "@toolpad/core/useNotifications";
 import Status from "../../../components/Status";
+import CurrentLocation from "../../../components/CurrentLocation";
+import { NavigateId } from "../../../shares/NavigateId";
+import { paths } from "../../../constants/paths";
+import { format } from "date-fns";
 
 const SosTableView = () => {
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
+  const [status, setStatus] = React.useState<string>("customer");
   const dispatch = useDispatch<AppDispatch>();
   const { data, pagingParams } = useSelector(
     (state: AppRootState) => state.sos
@@ -68,6 +75,15 @@ const SosTableView = () => {
     );
   };
 
+  const handleStatusChange = (
+    event: React.MouseEvent<HTMLElement>,
+    newStatus: string
+  ) => {
+    if (newStatus !== null) {
+      setStatus(newStatus);
+    }
+  };
+
   const loadingData = React.useCallback(async () => {
     setLoading(true);
     await sosService.index(dispatch, pagingParams, notifications);
@@ -78,20 +94,60 @@ const SosTableView = () => {
     loadingData();
   }, [loadingData]);
 
+  const handleSolve = async (id: number) => {
+    const confirmed = window.confirm("Are you sure you want to solve this SOS?");
+    if (!confirmed) return;
+
+    try {
+      const response = await sosService.solve(dispatch, id, notifications);
+
+      if (response.statusCode === 200) {
+        alert("SOS solved successfully!");
+        // Refresh the SOS list
+        sosService.index(dispatch, {});
+      } else {
+        alert("Failed to solve SOS.");
+      }
+    } catch (error) {
+      console.error("Error solving SOS:", error);
+    }
+  };
+
+  const filteredData = React.useMemo(() => {
+    if (status === "customer") {
+      return data.sos.filter((row: any) => row.userType === "CUSTOMER");
+    } else if (status === "driver") {
+      return data.sos.filter((row: any) => row.userType === "DRIVER");
+    } else if (status === "solved") {
+      return data.sos.filter((row: any) => row.updatedDate !== null);
+    } else {
+      return data.sos; // Fallback to show all data if status is invalid
+    }
+  }, [data.sos, status]);
+
+  const displayedColumns = React.useMemo(() => {
+  return sosColumns.filter((col) => {
+    if (status === "solved" && col.id === "action") return false; // Hide Action Column
+    if (status !== "solved" && col.id === "updatedDate") return false; // Hide Solved DateTime Column
+    return true;
+  });
+}, [status]);
+
   return (
-    <Paper sx={{ width: "100%", overflow: "hidden" }}>
+    <Paper sx={{ width: "100%", overflow: "hidden", p: 2 }}>
+      {/* Search and Reset Container */}
       <Box
         sx={{
           my: "20px",
           px: "20px",
           display: "flex",
-          justifyContent: "start",
+          alignItems: "center",
           gap: 5,
         }}
       >
         <Input
           id="input-with-icon-search"
-          placeholder="Search Wallet"
+          placeholder="Search SOS"
           value={pagingParams.SearchTerm}
           onChange={(e) => {
             dispatch(
@@ -108,112 +164,130 @@ const SosTableView = () => {
           }
         />
 
-        <Box
-          sx={{
-            display: "flex",
-            justifyContent: "start",
-            alignItems: "center",
-            gap: 3,
+        <Button
+          onClick={() => {
+            dispatch(setPaginate(sosPayload.pagingParams)); // Adjust the reset payload
+            setPage(0);
+            setRowsPerPage(10);
           }}
+          startIcon={<RestartAltIcon />}
+          color="secondary"
         >
-          <Button
-            onClick={() => {
-              dispatch(setPaginate(sosPayload.pagingParams)); // Adjust the reset payload
-              setPage(0);
-              setRowsPerPage(10);
-            }}
-            startIcon={<RestartAltIcon />}
-            color="secondary"
-          >
-            Reset
-          </Button>
-        </Box>
+          Reset
+        </Button>
       </Box>
+
+      {/* Toggle Buttons - Now Below Search and Reset */}
+      <Box sx={{ display: "flex", justifyContent: "start", mb: 2, px: "20px" }}>
+        <ToggleButtonGroup
+          value={status}
+          exclusive
+          onChange={handleStatusChange}
+          aria-label="SOS Status"
+        >
+          <ToggleButton value="customer" sx={{ textTransform: "none" }}>
+            Customer
+          </ToggleButton>
+          <ToggleButton value="driver" sx={{ textTransform: "none" }}>
+            Driver
+          </ToggleButton>
+          <ToggleButton value="solved" sx={{ textTransform: "none" }}>
+            Solved
+          </ToggleButton>
+        </ToggleButtonGroup>
+      </Box>
+
 
       <TableContainer sx={{ maxHeight: 440 }}>
         <Table stickyHeader aria-label="sticky table">
           <TableHead>
-            <TableRow>
-              {sosColumns.map((column) => (
-                <StyledTableCell
-                  key={column.id}
-                  style={{ minWidth: column.minWidth }}
-                  align={column.numeric ? "right" : "left"}
-                  padding={column.disablePadding ? "none" : "normal"}
-                  sortDirection={
-                    column.sort === true && pagingParams.SortDir === column.id
-                      ? pagingParams.SortField
-                      : false
-                  }
-                >
-                  <TableSortLabel
-                    hideSortIcon={column.sort === false ? true : false}
-                    active={
-                      column.sort === true
-                        ? pagingParams.SortDir === column.id
+          <TableRow>
+              {sosColumns.map((column) => {
+                // Hide the "Action" column when status is "solved"
+                if (status === "solved" && column.id === "action") {
+                  return null;
+                }
+                // Hide the "Solved DateTime" column when status is not "solved"
+                if (status !== "solved" && column.id === "updatedDate") {
+                  return null;
+                }
+
+                return (
+                  <StyledTableCell
+                    key={column.id}
+                    style={{ minWidth: column.minWidth }}
+                    align={column.numeric ? "right" : "left"}
+                    padding={column.disablePadding ? "none" : "normal"}
+                    sortDirection={
+                      column.sort === true && pagingParams.SortDir === column.id
+                        ? pagingParams.SortField
                         : false
                     }
-                    direction={
-                      column.sort === true && pagingParams.SortDir === 0
-                        ? "asc"
-                        : "desc"
-                    }
-                    onClick={() => {
-                      if (column.sort) {
-                        dispatch(
-                          setPaginate({
-                            ...pagingParams,
-                            SortField: column.id,
-                            SortDir: pagingParams.SortDir === 0 ? 1 : 0,
-                          })
-                        );
-                      }
-                    }}
                   >
-                    {column.label}
-                  </TableSortLabel>
-                </StyledTableCell>
-              ))}
+                    <TableSortLabel
+                      hideSortIcon={column.sort === false ? true : false}
+                      active={
+                        column.sort === true
+                          ? pagingParams.SortDir === column.id
+                          : false
+                      }
+                      direction={
+                        column.sort === true && pagingParams.SortDir === 0
+                          ? "asc"
+                          : "desc"
+                      }
+                      onClick={() => {
+                        if (column.sort) {
+                          dispatch(
+                            setPaginate({
+                              ...pagingParams,
+                              SortField: column.id,
+                              SortDir: pagingParams.SortDir === 0 ? 1 : 0,
+                            })
+                          );
+                        }
+                      }}
+                    >
+                      {column.label}
+                    </TableSortLabel>
+                  </StyledTableCell>
+                );
+              })}
             </TableRow>
           </TableHead>
           <TableBody>
-            {data.sos?.map((row: any) => (
+            {filteredData.map((row: any) => (
               <StyledTableRow hover role="checkbox" tabIndex={-1} key={row.id}>
                 {sosColumns.map((column) => {
+                  // Hide the "Action" column when status is "solved"
+                  if (status === "solved" && column.id === "action") {
+                    return null;
+                  }
+                  // Hide the "Solved Date" column when status is not "solved"
+                  if (status !== "solved" && column.id === "updatedDate") {
+                    return null;
+                  }
                   const value = row[column.id];
                   return (
                     <StyledTableCell key={column.id} align={column.align}>
                       {(() => {
                         switch (column.label) {
-                          case "Address":
-                            return value;
-
-                          case "Status":
+                          case "Request DateTime":
+                            return value ? format(new Date(value), "d MMM yyyy hh:mm a") : "N/A";
+                          case "Solved DateTime":
+                            return value ? format(new Date(value), "d MMM yyyy hh:mm a") : "N/A";
+                          case "Action":
                             return (
-                              <Status
-                                status={value}
-                                lists={generalStatusLists}
-                              />
+                              <Button
+                                variant="contained"
+                                color="primary"
+                                onClick={() => handleSolve(row.id)}
+                              >
+                                Solve
+                              </Button>
                             );
-                          case "WalletType":
-                            return (
-                              <Status
-                                status={value}
-                                lists={walletTypeStatusLists}
-                              />
-                            );
-                          case "ReasonName":
-                            return value;
-                          // case "Action":
-                          //   return (
-                          //     <UpAndDel
-                          //       url={`${paths.paymentChannel}/${row.id}`} // Adjust for wallet delete
-                          //       fn={loadingData}
-                          //       priority={true}
-                          //     />
-                          //   );
                           default:
-                            return value; // Fallback case
+                            return value ?? "N/A";
                         }
                       })()}
                     </StyledTableCell>
@@ -228,7 +302,7 @@ const SosTableView = () => {
         disabled={loading}
         rowsPerPageOptions={paginateOptions.rowsPerPageOptions}
         component="div"
-        count={data.paging.totalCount}
+        count={filteredData.length}
         rowsPerPage={rowsPerPage}
         page={page}
         onPageChange={handleChangePage}

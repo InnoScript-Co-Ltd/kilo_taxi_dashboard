@@ -63,7 +63,7 @@ const sosSlice = createSlice({
 });
 
 // Export actions for use in components
-export const { index, update, show, setPaginate } = sosSlice.actions;
+export const { index, show, setPaginate } = sosSlice.actions;
 
 // Export the reducer to be included in the store
 export default sosSlice.reducer;

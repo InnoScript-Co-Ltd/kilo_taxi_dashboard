@@ -1,34 +1,48 @@
 import { z } from "zod";
+import { format } from "date-fns";
 import { paginateOptions } from "../../constants/config"; // Assuming paginateOptions is available here
 
-// Define Wallet Schema
+// Define Sos Schema
 export const sosSchema = z.object({
   id: z.number().min(0, { message: "id" }).default(0),
-  address: z
-    .string()
-    .min(2, { message: "Channel name must be at least 2 characters long" }),
-  description: z
-    .string()
-    .min(2, { message: "Description must be at least 2 characters long" }),
+  userType: z.string().min(1, { message: "User type is required" }),
+  location: z.string().min(1, { message: "Location is required" }),
+  lat: z.string().optional(), // Latitude is optional
+  long: z.string().optional(), // Longitude is optional
+  status: z.string().min(1, { message: "Status is required" }),
+  driverId: z.number().min(0, { message: "Driver ID must be a positive number" }),
+  driverName: z.string().optional(),
+  customerId: z.number().min(0, { message: "Customer ID must be a positive number" }),
+  createdDate: z.string().datetime({ message: "Invalid date format" }), // Assuming ISO string format
+  updatedDate: z.string().datetime({ message: "Invalid date format" }).optional(), // Optional, as it can be null
+  reasonId: z.number().min(0, { message: "Reason ID must be a positive number" }),
 });
 
 export type SosFormInputs = z.infer<typeof sosSchema>;
 
 /**
- * Interface representing the shape of a wallet object.
+ * Interface representing the shape of an SOS object.
  */
 export interface Sos {
   id: string;
-  address: string;
+  userType: string;
+  location: string;
+  lat?: string;
+  long?: string;
   status: string;
-  walletType: string;
-  reasonId: string;
-  reasonName: string;
+  driverId: number;
+  driverName?: string;
+  customerId: number;
+  customerName?: string;
+  reasonId: number;
+  reasonName?: string;
+  createdDate: Date;
+  updatedDate?: Date;
 }
 
-// Define columns for wallet table
+// Define columns for SOS table
 interface SosColumn {
-  id: "id" | "address" | "status" | "walletType" | "reasonName" | "action";
+  id: keyof Sos | "action";
   label: string;
   minWidth?: number;
   align?: "right";
@@ -38,7 +52,7 @@ interface SosColumn {
   format?: (value: number) => string;
 }
 
-// Define Wallet Payload
+// Define SOS Payload
 export interface Sos_PAYLOAD {
   pagingParams: {
     PageSize: number;
@@ -51,45 +65,78 @@ export interface Sos_PAYLOAD {
 
 export const sosColumns: readonly SosColumn[] = [
   {
-    id: "address",
-    label: "Address",
-    minWidth: 130,
+    id: "id",
+    label: "Issue Id",
+    minWidth: 30,
     numeric: false,
     disablePadding: false,
     sort: true,
   },
   {
-    id: "status",
-    label: "Status",
-    minWidth: 125,
+    id: "customerName",
+    label: "Customer",
+    minWidth: 60,
     numeric: false,
     disablePadding: false,
     sort: true,
   },
   {
-    id: "walletType",
-    label: "Wallet Type",
-    minWidth: 125,
+    id: "driverName",
+    label: "Driver",
+    minWidth: 60,
     numeric: false,
     disablePadding: false,
     sort: true,
   },
   {
     id: "reasonName",
-    label: "Reason name",
+    label: "Reason",
     minWidth: 60,
     numeric: false,
     disablePadding: false,
     sort: false,
   },
+  {
+    id: "location",
+    label: "Location",
+    minWidth: 60,
+    numeric: false,
+    disablePadding: false,
+    sort: true,
+  },
+  {
+    id: "createdDate",
+    label: "Request DateTime",
+    minWidth: 60,
+    numeric: false,
+    disablePadding: false,
+    sort: true,
+  },
+  {
+    id: "updatedDate",
+    label: "Solved DateTime",
+    minWidth: 60,
+    numeric: false,
+    disablePadding: false,
+    sort: true,
+  },
+  {
+    id: "action",
+    label: "Action",
+    minWidth: 60,
+    numeric: false,
+    disablePadding: false,
+    sort: false,
+  },
+  
 ];
 
-// Wallet payload example
+// SOS payload example
 export const sosPayload: Sos_PAYLOAD = {
   pagingParams: {
     PageSize: paginateOptions.rows,
     CurrentPage: 1,
-    SortField: "address",
+    SortField: "location",
     SortDir: 0,
     SearchTerm: "",
   },
