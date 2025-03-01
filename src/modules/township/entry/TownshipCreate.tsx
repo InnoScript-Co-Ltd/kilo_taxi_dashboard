@@ -11,12 +11,7 @@ import {
   MenuItem,
   Select,
 } from "@mui/material";
-import { useState } from "react";
-import {
-  TownshipCreateFormInputs,
-  townshipSchema,
-  townshipStatuslists,
-} from "../township.payload";
+import { useState, useCallback, useEffect } from "react";
 import { useNavigate } from "react-router";
 import { useDispatch } from "react-redux";
 import { AppDispatch } from "../../../stores";
@@ -25,8 +20,12 @@ import { Breadcrumb } from "../../../components/Breadcrumb";
 import { paths } from "../../../constants/paths";
 import { Controller, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
+import {
+  TownshipCreateFormInputs,
+  townshipSchema,
+  townshipStatuslists,
+} from "../township.payload";
 import { useNotifications } from "@toolpad/core/useNotifications";
-import { formBuilder } from "../../../helpers/formBuilder";
 import { getRequest } from "../../../helpers/api";
 import { endpoints } from "../../../constants/endpoints";
 import { httpErrorHandler, httpServiceHandler } from "../../../helpers/handler";
@@ -34,7 +33,6 @@ import { httpErrorHandler, httpServiceHandler } from "../../../helpers/handler";
 const TownshipCreate = () => {
   const [loading, setLoading] = useState(false);
   const [cityLists, setCityLists] = useState<Array<any>>([]);
-
   const notifications = useNotifications();
   const navigate = useNavigate();
   const dispatch = useDispatch<AppDispatch>();
@@ -48,20 +46,21 @@ const TownshipCreate = () => {
     resolver: zodResolver(townshipSchema),
     defaultValues: {
       Name: "",
-      Status: "ACTIVE",
+      Status: 0,
+      cityId: 0,
     },
   });
 
   const submitTownshipCreate = async (data: TownshipCreateFormInputs) => {
+    setLoading(true);
     try {
-      // const formData = formBuilder(data, townshipSchema);
       const response = await townshipService.store(
         data,
         dispatch,
         notifications
       );
       if (response.statusCode === 201) {
-        navigate(`${paths.townshipList}`);
+        navigate(paths.townshipList);
       }
     } catch (error) {
       console.error("Error submitting form:", error);
@@ -116,38 +115,10 @@ const TownshipCreate = () => {
                 <FormHelperText>{errors.Name?.message}</FormHelperText>
               </FormControl>
             </Grid2>
-            <Grid2 size={{ xs: 6, md: 3 }}>
-              <FormControl variant="filled" fullWidth error={!!errors.cityId}>
-                <InputLabel htmlFor="city_name">City Name</InputLabel>
-                <Controller
-                  name="cityId"
-                  control={control}
-                  render={({ field }) => (
-                    <Select
-                      size="small"
-                      id="city_name"
-                      aria-describedby="city_name_text"
-                      disabled={loading}
-                      label="City"
-                      {...field}
-                      value={field.value} // Convert field value to a string
-                      onChange={(event) => field.onChange(event.target.value)} // Ensure onChange value is a string
-                    >
-                      {cityLists.map((city: any) => (
-                        <MenuItem key={city.id} value={city.id}>
-                          {city.name}
-                        </MenuItem>
-                      ))}
-                    </Select>
-                  )}
-                />
 
-                <FormHelperText>{errors.cityId?.message}</FormHelperText>
-              </FormControl>
-            </Grid2>
             <Grid2 size={{ xs: 6, md: 3 }}>
               <FormControl variant="filled" fullWidth error={!!errors.Status}>
-                <InputLabel htmlFor="status"> Status </InputLabel>
+                <InputLabel htmlFor="status">Status</InputLabel>
                 <Controller
                   name="Status"
                   control={control}
@@ -160,19 +131,47 @@ const TownshipCreate = () => {
                       disabled={loading}
                       label="Status"
                       {...field}
-                      value={field.value} // Convert field value to a string
-                      onChange={(event) => field.onChange(event.target.value)} // Ensure onChange value is a string
+                      value={field.value}
+                      onChange={(event) => field.onChange(event.target.value)}
                     >
-                      {townshipStatuslists?.map((general: any) => (
-                        <MenuItem key={general.id} value={general.id}>
-                          {general.value}
+                      {townshipStatuslists.map((status: any) => (
+                        <MenuItem key={status.id} value={status.id}>
+                          {status.value}
                         </MenuItem>
                       ))}
                     </Select>
                   )}
                 />
-
                 <FormHelperText>{errors.Status?.message}</FormHelperText>
+              </FormControl>
+            </Grid2>
+
+            <Grid2 size={{ xs: 6, md: 3 }}>
+              <FormControl variant="filled" fullWidth error={!!errors.cityId}>
+                <InputLabel htmlFor="city_name">City Name</InputLabel>
+                <Controller
+                  name="cityId"
+                  control={control}
+                  render={({ field }) => (
+                    <Select
+                      size="small"
+                      id="city_name"
+                      aria-describedby="city_name_text"
+                      disabled={loading}
+                      label="City Name"
+                      {...field}
+                      value={field.value}
+                      onChange={(event) => field.onChange(event.target.value)}
+                    >
+                      {cityLists.map((city: any) => (
+                        <MenuItem key={city.id} value={city.id}>
+                          {city.name}
+                        </MenuItem>
+                      ))}
+                    </Select>
+                  )}
+                />
+                <FormHelperText>{errors.cityId?.message}</FormHelperText>
               </FormControl>
             </Grid2>
           </Grid2>
@@ -192,7 +191,6 @@ const TownshipCreate = () => {
             >
               Cancel
             </Button>
-
             <Button disabled={loading} variant="contained" type="submit">
               Submit
             </Button>

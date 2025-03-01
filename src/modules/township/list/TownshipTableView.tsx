@@ -108,14 +108,14 @@ const TownshipTableView = () => {
         >
           <Button
             startIcon={<AddCircleOutlineIcon />}
-            onClick={() => navigate(paths.townshipCreate)} // Adjust path for wallet create page
+            onClick={() => navigate(paths.townshipCreate)}
           >
             Create
           </Button>
 
           <Button
             onClick={() => {
-              dispatch(setPaginate(townshipPayload.pagingParams)); // Adjust the reset payload
+              dispatch(setPaginate(townshipPayload.pagingParams));
               setPage(0);
               setRowsPerPage(10);
             }}
@@ -185,13 +185,15 @@ const TownshipTableView = () => {
                           case "Action":
                             return (
                               <UpAndDel
-                                url={`${paths.township}/${row.id}`} // Adjust for wallet delete
+                                url={`${paths.township}/${row.id}`}
                                 fn={loadingData}
                                 priority={true}
                               />
                             );
+                          case "City Name":
+                            return row.cityDto.name; // Display city name
                           default:
-                            return value; // Fallback case
+                            return value; // Fallback: display the value
                         }
                       })()}
                     </StyledTableCell>

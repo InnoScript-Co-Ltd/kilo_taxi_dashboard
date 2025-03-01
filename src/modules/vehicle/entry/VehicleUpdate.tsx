@@ -85,7 +85,7 @@ const VehicleUpdate = () => {
         "data" in driverResponse &&
         driverResponse.status === 200
       ) {
-        setDriversList(driverResponse.data.drivers);
+        setDriversList(driverResponse.data.payload.drivers);
       }
     } catch (error) {
       await httpErrorHandler(error, dispatch);

@@ -207,9 +207,10 @@ const PromotionTableView = () => {
                           case "Expired Date":
                             return formatDate(value);
                           case "Status":
-                            return (
-                              <Status status={value} lists={promoStatusLists} />
-                            );
+                            return value;
+                          // return (
+                          //   <Status status={value} lists={promoStatusLists} />
+                          // );
                           case "Unit":
                             return value;
                           case "Quantity":
@@ -217,19 +218,23 @@ const PromotionTableView = () => {
                           case "Description":
                             return value;
                           case "Promotion Type":
-                            return (
-                              <Status
-                                status={value}
-                                lists={promotionTypeLists}
-                              />
-                            );
+                            return value;
+
+                          // return (
+                          //   <Status
+                          //     status={value}
+                          //     lists={promotionTypeLists}
+                          //   />
+                          // );
                           case "Applicable To":
-                            return (
-                              <Status
-                                status={value}
-                                lists={applicableToLists}
-                              />
-                            );
+                            return value;
+
+                          // return (
+                          //   <Status
+                          //     status={value}
+                          //     lists={applicableToLists}
+                          //   />
+                          // );
                           case "Action":
                             return (
                               <UpAndDel

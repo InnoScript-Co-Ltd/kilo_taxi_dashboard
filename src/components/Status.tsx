@@ -1,4 +1,4 @@
-import { Chip } from "@mui/material";
+import { Chip, listSubheaderClasses } from "@mui/material";
 import { useCallback, useEffect, useState } from "react";
 import { StatusOption, statusOptions } from "../constants/config";
 
@@ -13,8 +13,6 @@ const Status = ({ status }: { status: string; lists?: any }) => {
       const statusOption: StatusOption | undefined = statusOptions.find(
         (option: StatusOption) => option.status === status.toUpperCase()
       );
-      console.log("option status :", statusOption?.status);
-
       setStatusValue(statusOption);
     }
   }, [status]);

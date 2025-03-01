@@ -24,7 +24,7 @@ export const townshipService = {
       });
     }
 
-    return response;
+    return response.data;
   },
 
   index: async (dispatch: Dispatch, params: any) => {
