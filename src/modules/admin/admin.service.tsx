@@ -9,7 +9,7 @@ export const adminService = {
   store: async (payload: any, dispatch: Dispatch, notifications: any) => {
     const response: any = await postRequest(endpoints.admin, payload, dispatch);
     await httpServiceHandler(dispatch, response, notifications);
-    if (response.data.statusCode === 201) {
+    if (response.data?.statusCode === 201) {
       notifications.show("Admin is created successfully", {
         severity: "success",
         autoHideDuration: 3000,
@@ -22,7 +22,7 @@ export const adminService = {
   index: async (dispatch: Dispatch, params: any, notifications: any) => {
     const response: any = await getRequest(endpoints.admin, params, dispatch);
     await httpServiceHandler(dispatch, response.data, notifications);
-    if (response.data.statusCode === 200) {
+    if (response.data?.statusCode === 200) {
       dispatch(
         index(
           response.data.payload ? response.data.payload : response.data.payload
@@ -44,7 +44,7 @@ export const adminService = {
       dispatch
     );
     await httpServiceHandler(dispatch, response, notifications);
-    if (response.status === 200) {
+    if (response?.status === 200) {
       //'info' | 'success' | 'warning' | 'error'
       notifications?.show("Admin is updated successfully", {
         severity: "success",
@@ -62,7 +62,7 @@ export const adminService = {
       dispatch
     );
     await httpServiceHandler(dispatch, response.data.payload);
-    if (response.data.statusCode === 200) {
+    if (response.data?.statusCode === 200) {
       dispatch(show(response.data.payload));
     }
 

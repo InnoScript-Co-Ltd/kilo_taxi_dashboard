@@ -1,5 +1,5 @@
 // export const env = [process.env.REACT_APP_BASE_URL];
-export const env = ["https://localhost:7181/api/v1"];
+export const env = ["http://localhost:5112/api/v1"];
 
 // export const hadUrl =
 //   process.env.REACT_APP_HAD_URL || "https://localhost:7044/dashboard";

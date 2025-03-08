@@ -110,4 +110,5 @@ export const townshipPayload: TOWNSHIP_PAYLOAD = {
 export const townshipStatuslists = [
   { id: 0, value: "ACTIVE" },
   { id: 1, value: "DISABLE" },
+  { id: 2, value: "DELETED" },
 ];
