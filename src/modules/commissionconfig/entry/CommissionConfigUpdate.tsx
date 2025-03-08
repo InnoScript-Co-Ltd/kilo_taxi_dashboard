@@ -48,7 +48,7 @@ const CommissionConfigUpdate = () => {
     resolver: zodResolver(commissionConfigSchema),
     defaultValues: {
       id: 0,
-      commissionRate: 0,
+      commissionRate: "",
     },
   });
 
@@ -71,7 +71,7 @@ const CommissionConfigUpdate = () => {
   useEffect(() => {
     if (commissionConfig) {
       setValue("id", Number(commissionConfig.id) || 0);
-      setValue("commissionRate", Number(commissionConfig.commissionRate) || 0);
+      setValue("commissionRate", commissionConfig.commissionRate || "");
     }
   }, [commissionConfig, setValue]);
 
@@ -104,7 +104,7 @@ const CommissionConfigUpdate = () => {
                   Commission Rate
                 </InputLabel>
                 <FilledInput
-                  type="number"
+                  type="text"
                   size="small"
                   id="commissionRate"
                   {...register("commissionRate")}

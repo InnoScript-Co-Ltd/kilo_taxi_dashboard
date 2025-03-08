@@ -21,6 +21,8 @@ const Status = ({ status }: { status: string; lists?: any }) => {
     loadData();
   }, [loadData]);
 
+  console.log(statusValue);
+
   return (
     <div>
       {statusValue ? (

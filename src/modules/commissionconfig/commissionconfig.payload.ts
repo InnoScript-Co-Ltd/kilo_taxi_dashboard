@@ -3,7 +3,7 @@ import { z } from "zod";
 
 export const commissionConfigSchema = z.object({
   id: z.number().min(0, { message: "id" }).default(0),
-  commissionRate: z.number(),
+  commissionRate: z.string(),
 });
 
 export type CommissionConfigFormInputs = z.infer<typeof commissionConfigSchema>;
@@ -13,7 +13,7 @@ export type CommissionConfigFormInputs = z.infer<typeof commissionConfigSchema>;
  */
 export interface COMMISSIONCONFIG {
   id: string;
-  commissionRate: number;
+  commissionRate: string;
   createdDate: Date;
   updatedDate: Date;
   action?: null;
@@ -52,7 +52,7 @@ export const commissionConfigColumns: readonly CommissionConfig_Column[] = [
     label: "Commission Rate",
     minWidth: 100,
     maxWidth: 200,
-    numeric: true,
+    numeric: false,
     disablePadding: false,
     sort: true,
   },

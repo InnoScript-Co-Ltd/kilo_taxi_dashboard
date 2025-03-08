@@ -376,7 +376,7 @@ const CustomerCreate = () => {
                       onChange={(event) => field.onChange(event.target.value)} // Ensure onChange value is a string
                     >
                       {genderStatuslists?.map((gender: any) => (
-                        <MenuItem key={gender.id} value={gender.value}>
+                        <MenuItem key={gender.id} value={gender.id}>
                           {gender.value}
                         </MenuItem>
                       ))}

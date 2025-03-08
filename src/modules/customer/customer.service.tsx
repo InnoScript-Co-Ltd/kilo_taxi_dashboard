@@ -13,7 +13,7 @@ export const customerService = {
     );
     await httpServiceHandler(dispatch, response.data);
 
-    if (response.data.statusCode === 201) {
+    if (response.data?.statusCode === 201) {
       //'info' | 'success' | 'warning' | 'error'
       notifications.show("Customer is created successfully", {
         severity: "success",
@@ -32,7 +32,7 @@ export const customerService = {
 
     await httpServiceHandler(dispatch, response.data, notifications);
 
-    if (response.data.statusCode === 200) {
+    if (response.data?.statusCode === 200) {
       //'info' | 'success' | 'warning' | 'error'
       notifications.show("Customer list is successfully retrieved!", {
         severity: "info",
@@ -58,7 +58,7 @@ export const customerService = {
     );
     await httpServiceHandler(dispatch, response);
 
-    if (response.data.statusCode === 200) {
+    if (response.data?.statusCode === 200) {
       //'info' | 'success' | 'warning' | 'error'
       notifications?.show("Customer is updated successfully", {
         severity: "success",
@@ -77,7 +77,7 @@ export const customerService = {
     );
     await httpServiceHandler(dispatch, response.data.payload);
 
-    if (response.data.statusCode === 200) {
+    if (response.data?.statusCode === 200) {
       dispatch(show(response.data.payload));
     }
 

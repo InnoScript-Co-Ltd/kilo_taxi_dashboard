@@ -84,11 +84,14 @@ export const statusOptions: Array<StatusOption> = [
   { id: 11, status: "UNDEFINED", background: "error", color: "#000" },
   { id: 12, status: "SUSPENDED", background: "error", color: "#000" },
   { id: 13, status: "FULLKYC", background: "error", color: "#000" },
+  { id: 14, status: "CASH", background: "#4CAF50", color: "#000" },
+  { id: 15, status: "BANkTRANSFER", background: "#4CAF50", color: "#000" },
+  { id: 16, status: "ONLINEPAYMENT", background: "#4CAF50", color: "#000" },
 ];
 
 export const genderStatuslists = [
-  { id: "male", value: "MALE" },
-  { id: "female", value: "FEMALE" },
+  { id: 0, value: "MALE" },
+  { id: 1, value: "FEMALE" },
 ];
 
 export const propertyStatusLists = [
@@ -134,10 +137,10 @@ export const scheduleOrderStatusLists = [
 ];
 
 export const customerStatusLists = [
-  { id: "pending", value: "PENDING" },
-  { id: "active", value: "ACTIVE" },
-  { id: "deactive", value: "DEACTIVE" },
-  { id: "suspended", value: "SUSPENDED" },
+  { id: 0, value: "PENDING" },
+  { id: 1, value: "ACTIVE" },
+  { id: 2, value: "DEACTIVE" },
+  { id: 3, value: "SUSPENDED" },
 ];
 
 export const notiTypeStatusLists = [
@@ -193,9 +196,9 @@ export const notiStatusLists = [
 ];
 
 export const kycStatusLists = [
-  { id: "pending", value: "PENDING", color: "secondary" },
-  { id: "fullkyc", value: "FULLKYC", color: "success" },
-  { id: "reject", value: "REJECT", color: "error" },
+  { id: 0, value: "PENDING", color: "secondary" },
+  { id: 1, value: "FULLKYC", color: "success" },
+  { id: 2, value: "REJECT", color: "error" },
 ];
 export const driverModeLists = [
   { id: 0, value: "AVAILABLE", color: "success" },

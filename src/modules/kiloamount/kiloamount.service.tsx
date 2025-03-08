@@ -14,7 +14,7 @@ export const kiloAmountService = {
     );
     await httpServiceHandler(dispatch, response.data);
 
-    if (response.data.statusCode === 201) {
+    if (response.data?.statusCode === 201) {
       notifications.show("KiloAmount created successfully", {
         severity: "success",
         autoHideDuration: 3000,
@@ -33,7 +33,7 @@ export const kiloAmountService = {
 
     console.log(response);
 
-    if (response.data.statusCode === 200) {
+    if (response.data?.statusCode === 200) {
       //'info' | 'success' | 'warning' | 'error'
       notifications.show("KiloAmount list successfully retrieved!", {
         severity: "info",
@@ -61,7 +61,7 @@ export const kiloAmountService = {
     );
     await httpServiceHandler(dispatch, response.data);
 
-    if (response.data.statusCode === 200) {
+    if (response.data?.statusCode === 200) {
       notifications?.show("KiloAmount updated successfully", {
         severity: "success",
         autoHideDuration: 3000,
@@ -80,7 +80,7 @@ export const kiloAmountService = {
     );
     await httpServiceHandler(dispatch, response.data.payload);
 
-    if (response.data.statusCode === 200) {
+    if (response.data?.statusCode === 200) {
       dispatch(show(response.data.payload));
     }
 
