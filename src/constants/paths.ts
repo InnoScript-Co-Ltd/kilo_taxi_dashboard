@@ -30,6 +30,7 @@ export const paths = {
   promotionDetail: "/promotion/:id",
 
   scheduleBooking: "/schedule",
+  scheduleBookingUpdate: "/schedule/update/:id",
   scheduleBookingList: "/schedule/list",
   scheduleBookingDetail: "/schedule/:id",
 
@@ -63,6 +64,7 @@ export const paths = {
   walletDetail: "/wallet/:id",
 
   order: "/order",
+  orderUpdate: "/order/update/:id",
   orderList: "/order/list",
   orderDetail: "/order/:id",
 
@@ -107,9 +109,9 @@ export const paths = {
   kiloAmountList: "/kiloamount/list",
   kiloAmountDetail: "/kiloamount/:id",
 
-  commissionConfig: "/commissionconfig",
-  commissionConfigList: "/commissionconfig/list",
-  commissionConfigDetail: "/commissionconfig/:id",
+  configSetting: "/configsetting",
+  configSettingList: "/configsetting/list",
+  configSettingDetail: "/configsetting/:id",
 
   simulation: "/simulation",
   simulationOrderCreate: "/simulation/order",

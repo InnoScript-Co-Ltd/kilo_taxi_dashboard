@@ -68,7 +68,7 @@ const AdminUpdate = () => {
       setValue("Phone", admin.phone || "");
       setValue("Email", admin.email || "");
       setValue("Address", admin.address || "");
-      setValue("Gender", admin.gender.toUpperCase() || "MALE");
+      setValue("Gender", admin.gender || "MALE");
     }
   }, [admin, setValue]);
 

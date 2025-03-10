@@ -27,10 +27,10 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { DatePicker } from "@mui/x-date-pickers";
 import { useNotifications } from "@toolpad/core/useNotifications";
 import FileUploadWithPreview from "../../../components/FileUploadWithPreview";
-import { WithDrawStatus } from "../../../constants/config";
 import { getId } from "../../../helpers/updateHelper";
 import { formBuilder } from "../../../helpers/formBuilder";
 import { getRequest } from "../../../helpers/api";
+import { WithDrawStatuLists } from "../../../constants/config";
 
 import { endpoints } from "../../../constants/endpoints";
 
@@ -124,7 +124,13 @@ const WithDrawTransactionUpdate = () => {
       setValue("id", Number(withDrawTransaction.id) || 0);
       setValue("amount", withDrawTransaction.amount || "");
       setValue("driverId", withDrawTransaction.driverInfoDto.id || 0);
-
+      setValue(
+        "status",
+        getId({
+          lists: WithDrawStatuLists,
+          value: withDrawTransaction.status,
+        }) || 0
+      );
       setValue(
         "transactionDate",
         (withDrawTransaction?.transactionDate &&
@@ -271,7 +277,7 @@ const WithDrawTransactionUpdate = () => {
                       value={field.value || 0} // Convert field value to a string
                       onChange={(event) => field.onChange(event.target.value)} // Ensure onChange value is a string
                     >
-                      {WithDrawStatus?.map((status: any) => (
+                      {WithDrawStatuLists?.map((status: any) => (
                         <MenuItem key={status.id} value={status.id}>
                           {status.value}
                         </MenuItem>

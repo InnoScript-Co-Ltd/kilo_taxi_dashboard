@@ -231,19 +231,19 @@ export const navigationList = [
       },
     ],
   },
-  {
-    segment: "sms",
-    title: "Sms",
-    isParent: true,
-    icon: <DashboardIcon />,
-    children: [
-      {
-        segment: "list",
-        title: "List",
-        icon: <FormatListBulletedIcon />,
-      },
-    ],
-  },
+  // {
+  //   segment: "sms",
+  //   title: "Sms",
+  //   isParent: true,
+  //   icon: <DashboardIcon />,
+  //   children: [
+  //     {
+  //       segment: "list",
+  //       title: "List",
+  //       icon: <FormatListBulletedIcon />,
+  //     },
+  //   ],
+  // },
   {
     segment: "topupTransaction",
     title: "TopupTransaction",
@@ -271,21 +271,8 @@ export const navigationList = [
     ],
   },
   {
-    segment: "kiloAmount",
-    title: "KiloAmount",
-    isParent: true,
-    icon: <CreditCardIcon />,
-    children: [
-      {
-        segment: "list",
-        title: "List",
-        icon: <FormatListBulletedIcon />,
-      },
-    ],
-  },
-  {
-    segment: "commissionConfig",
-    title: "Commission Config",
+    segment: "configSetting",
+    title: "Config Setting",
     isParent: true,
     icon: <CreditCardIcon />,
     children: [

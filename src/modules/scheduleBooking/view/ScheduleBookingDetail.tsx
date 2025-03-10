@@ -50,7 +50,7 @@ const ScheduleBookingDetail = () => {
               <Typography>Scheduled Booking Info</Typography>
             </AccordionSummary>
             <AccordionDetails>
-              <p>
+              {/* <p>
                 <strong>ID:</strong> {scheduleBooking.id}
               </p>
               <p>
@@ -71,7 +71,7 @@ const ScheduleBookingDetail = () => {
               </p>
               <p>
                 <strong>Status:</strong> {scheduleBooking.status}
-              </p>
+              </p> */}
             </AccordionDetails>
           </Accordion>
 
@@ -86,7 +86,7 @@ const ScheduleBookingDetail = () => {
             >
               <Typography>Order Info</Typography>
             </AccordionSummary>
-            {scheduleBooking.orders?.map((order: any) => (
+            {/* {scheduleBooking.orders?.map((order: any) => (
               <AccordionDetails>
                 <p>
                   <strong>ID:</strong> {order.id}
@@ -105,7 +105,7 @@ const ScheduleBookingDetail = () => {
                   {order.walletTransactionId}
                 </p>
               </AccordionDetails>
-            ))}
+            ))} */}
           </Accordion>
         </div>
       ) : (

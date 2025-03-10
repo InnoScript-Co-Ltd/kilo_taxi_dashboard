@@ -25,7 +25,11 @@ import {
   StyledTableRow,
 } from "../../../components/TableCommon";
 import Status from "../../../components/Status";
-import { orderStatusLists, paginateOptions } from "../../../constants/config";
+import {
+  orderStatusLists,
+  orderTypeLists,
+  paginateOptions,
+} from "../../../constants/config";
 import { setPaginate } from "../order.slice";
 import { paths } from "../../../constants/paths";
 import { NavigateId } from "../../../shares/NavigateId";
@@ -38,7 +42,7 @@ const OrderTableView = () => {
   const { data, pagingParams } = useSelector(
     (state: AppRootState) => state.order // Adjust to your order slice state
   );
-
+  console.log("order", data);
   const notifications = useNotifications();
   const [loading, setLoading] = React.useState(false);
 
@@ -171,6 +175,7 @@ const OrderTableView = () => {
               <StyledTableRow hover role="checkbox" tabIndex={-1} key={row.id}>
                 {orderColumns.map((column) => {
                   const value = row[column.id];
+                  console.log(value);
                   return (
                     <StyledTableCell key={column.id} align={column.align}>
                       {(() => {
@@ -181,6 +186,11 @@ const OrderTableView = () => {
                             return (
                               <Status status={value} lists={orderStatusLists} />
                             );
+                          case "Type":
+                            return value;
+                          // return (
+                          //   <Status status={value} lists={orderTypeLists} />
+                          // );
                           case "Created Date":
                             return formatDate(value);
                           case "Wallet Transaction Id":

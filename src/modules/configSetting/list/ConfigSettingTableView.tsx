@@ -27,13 +27,14 @@ import {
   StyledTableRow,
 } from "../../../components/TableCommon";
 import { useNotifications } from "@toolpad/core";
-import { setPaginate } from "../commissionconfig.slice";
-import { commissionConfigService } from "../commissionconfig.service";
+import { setPaginate } from "../configsetting.slice";
+import { configSettingService } from "../configsetting.service";
 import {
-  commissionConfigColumns,
-  commissionConfigPayload,
-} from "../commissionconfig.payload";
+  configSettingColumns,
+  configSettingPayload,
+} from "../configsetting.payload";
 import { NavigateId } from "../../../shares/NavigateId";
+import { formatDate } from "../../../helpers/common";
 
 const CommissionConfigTableView = () => {
   const [page, setPage] = React.useState(0);
@@ -41,7 +42,7 @@ const CommissionConfigTableView = () => {
   const dispatch = useDispatch<AppDispatch>();
 
   const { data, pagingParams } = useSelector(
-    (state: AppRootState) => state.commissionConfig
+    (state: AppRootState) => state.configSetting
   );
   const notifications = useNotifications();
   const navigate = useNavigate();
@@ -74,7 +75,7 @@ const CommissionConfigTableView = () => {
 
   const loadingData = React.useCallback(async () => {
     setLoading(true);
-    await commissionConfigService.index(dispatch, pagingParams, notifications);
+    await configSettingService.index(dispatch, pagingParams, notifications);
     setLoading(false);
   }, [dispatch, pagingParams, notifications]);
 
@@ -84,7 +85,7 @@ const CommissionConfigTableView = () => {
 
   console.log("data", data);
   return (
-    <Paper sx={{ width: "100%", overflow: "hidden" }}>
+    <Paper sx={{ width: "100%", overflow: "hidden", mt: "15px" }}>
       <Box
         sx={{
           my: "20px",
@@ -123,7 +124,7 @@ const CommissionConfigTableView = () => {
         >
           <Button
             onClick={() => {
-              dispatch(setPaginate(commissionConfigPayload.pagingParams));
+              dispatch(setPaginate(configSettingPayload.pagingParams));
               setPage(0);
               setRowsPerPage(10);
             }}
@@ -139,7 +140,7 @@ const CommissionConfigTableView = () => {
         <Table stickyHeader aria-label="sticky table">
           <TableHead>
             <TableRow>
-              {commissionConfigColumns.map((column) => (
+              {configSettingColumns.map((column) => (
                 <StyledTableCell
                   key={column.id}
                   style={{ minWidth: column.minWidth }}
@@ -182,9 +183,9 @@ const CommissionConfigTableView = () => {
             </TableRow>
           </TableHead>
           <TableBody>
-            {data.commissionConfigs?.map((row: any) => (
+            {data.configSettings?.map((row: any) => (
               <StyledTableRow hover role="checkbox" tabIndex={-1} key={row.id}>
-                {commissionConfigColumns.map((column) => {
+                {configSettingColumns.map((column) => {
                   const value = row[column.id];
                   return (
                     <StyledTableCell key={column.id} align={column.align}>
@@ -193,13 +194,13 @@ const CommissionConfigTableView = () => {
                           case "Commission Rate":
                             return value;
                           case "Created Date":
-                            return value;
+                            return formatDate(value);
                           case "Updated Date":
-                            return value;
+                            return formatDate(value);
                           case "Action":
                             return (
                               <NavigateId
-                                url={`${`${paths.commissionConfig}/${row.id}`}`}
+                                url={`${`${paths.configSetting}/${row.id}`}`}
                                 value={
                                   <>
                                     <Button startIcon={<></>} color="secondary">

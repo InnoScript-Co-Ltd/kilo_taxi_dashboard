@@ -1,11 +1,11 @@
 // export const env = [process.env.REACT_APP_BASE_URL];
-export const env = ["https://localhost:7181/api/v1"];
+export const env = ["http://4.145.92.57:81/api/v1"];
 
 // export const hadUrl =
 //   process.env.REACT_APP_HAD_URL || "https://localhost:7044/dashboard";
 
 // export const env = ["http://4.145.97.143:81/api/v1"];
-export const hadUrl = "https://localhost:7044/dashboard";
+export const hadUrl = "http://4.145.92.57:83/dashboard";
 
 export const drawerWidth: number = 300;
 
@@ -87,8 +87,8 @@ export const statusOptions: Array<StatusOption> = [
 ];
 
 export const genderStatuslists = [
-  { id: "male", value: "MALE" },
-  { id: "female", value: "FEMALE" },
+  { id: 0, value: "MALE" },
+  { id: 1, value: "FEMALE" },
 ];
 
 export const propertyStatusLists = [
@@ -134,10 +134,10 @@ export const scheduleOrderStatusLists = [
 ];
 
 export const customerStatusLists = [
-  { id: "pending", value: "PENDING" },
-  { id: "active", value: "ACTIVE" },
-  { id: "deactive", value: "DEACTIVE" },
-  { id: "suspended", value: "SUSPENDED" },
+  { id: 0, value: "PENDING" },
+  { id: 1, value: "ACTIVE" },
+  { id: 2, value: "DEACTIVE" },
+  { id: 3, value: "SUSPENDED" },
 ];
 
 export const notiTypeStatusLists = [
@@ -159,7 +159,7 @@ export const walletTypeStatusLists = [
   { id: 1, value: "DRIVER", color: "info" },
   { id: 2, value: "VIPCUSTOMER", color: "success" },
 ];
-export const WithDrawStatus = [
+export const WithDrawStatuLists = [
   { id: 0, value: "PENDING", color: "primary" },
   { id: 1, value: "REJECTED", color: "info" },
   { id: 2, value: "COMPLETED", color: "success" },
@@ -193,9 +193,9 @@ export const notiStatusLists = [
 ];
 
 export const kycStatusLists = [
-  { id: "pending", value: "PENDING", color: "secondary" },
-  { id: "fullkyc", value: "FULLKYC", color: "success" },
-  { id: "reject", value: "REJECT", color: "error" },
+  { id: 0, value: "PENDING", color: "secondary" },
+  { id: 1, value: "FULLKYC", color: "success" },
+  { id: 2, value: "REJECT", color: "error" },
 ];
 export const driverModeLists = [
   { id: 0, value: "AVAILABLE", color: "success" },
@@ -229,7 +229,15 @@ export const topUpTransactionStatus = [
 ];
 
 export const orderStatusLists = [
-  { id: 0, value: "COMPLETED", color: "success" },
-  { id: 1, value: "CANCELLED", color: "error" },
-  { id: 2, value: "INPROGESS", color: "info" },
+  { id: 0, value: "PENDING", color: "success" },
+  { id: 1, value: "COMPLETED", color: "error" },
+  { id: 2, value: "CANCELLED", color: "info" },
+  { id: 3, value: "INPROGRESS", color: "info" },
+  { id: 4, value: "DRIVERACCEPTED", color: "info" },
+  { id: 5, value: "WAITING", color: "info" },
+];
+export const orderTypeLists = [
+  { id: 0, value: "INAPP", color: "success" },
+  { id: 1, value: "INSTANT", color: "error" },
+  { id: 2, value: "SCHEDULE", color: "info" },
 ];

@@ -20,7 +20,6 @@ import { Breadcrumb } from "../../../components/Breadcrumb";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useNotifications } from "@toolpad/core/useNotifications";
-import { kiloAmountColumns } from "../../kiloamount/kiloamount.payload";
 
 const WalletUpdate = () => {
   const [loading, setLoading] = useState(false);

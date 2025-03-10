@@ -1,16 +1,22 @@
 import { paginateOptions } from "../../constants/config";
 import { z } from "zod";
-import { ORDER } from "../order/order.payload";
+import { CUSTOMER } from "../customer/customer.payload";
+import { DRIVER } from "../driver/driver.payload";
 
 export const scheduleBookingSchema = z.object({
   id: z.number().min(0, { message: "id" }).default(0),
-  CustomerId: z.string(),
-  DeliverId: z.string(),
-  PickUpLocation: z.string(),
+  customerId: z.number().min(1, { message: "Customer ID is required" }),
+  driverId: z.number().min(1, { message: "Driver ID is required" }),
+  pickUpLat: z.string(),
+  pickUpLong: z.string(),
+  pickUpLocation: z.string(),
   destinationLocation: z.string(),
-  ScheduleTime: z.date(),
-  CreatedDate: z.date(),
-  Status: z.string(),
+  destinationLat: z.string(),
+  destinationLong: z.string(),
+  walletId: z.number(),
+  scheduleTime: z.date().nullable(),
+  orderType: z.number(),
+  status: z.number(),
 });
 
 export type ScheduleBookingFormInputs = z.infer<typeof scheduleBookingSchema>;
@@ -20,15 +26,27 @@ export type ScheduleBookingFormInputs = z.infer<typeof scheduleBookingSchema>;
  */
 export interface SCHEDULE {
   id: string;
-  customerId?: string;
-  deliverId?: string;
-  pickUpLocation: string;
-  destinationLocation: string;
-  scheduleTime: string;
-  createdDate: string;
-  orders: ORDER[]; // Use the order interface as an array
+  totalAmount: number;
+  estimatedAmount: number;
   status: string;
-  action?: null;
+  pickUpLocation: string;
+  pickUpLat: string;
+  pickUpLong: string;
+  destinationLocation: string;
+  destinationLat: string;
+  destinationLong: string;
+  orderType: string;
+  createdDate: string;
+  walletId: number;
+  walletTransactionId: number;
+  customerId: number;
+  driverId: number;
+  scheduleTime: Date | null | string;
+  scheduleBookingId: number;
+  customer: CUSTOMER[]; // Use the CUSTOMER interface as an array
+  driver: DRIVER[]; // Use the DRIVER interface as an array
+  action: any;
+  orderRouteInfo: Array<any>;
 }
 
 type ScheduleColumnId = keyof SCHEDULE;
@@ -43,7 +61,7 @@ interface Column {
   numeric: boolean;
   disablePadding: boolean;
   sort?: boolean;
-  format?: (value: number) => string;
+  format?: (value: any) => string | number | object | null; // Allow object return type
 }
 
 // Define State Payload
@@ -60,38 +78,86 @@ export interface SCHEDULE_PAYLOAD {
 // Define columns structure for the state table
 export const scheduleColumns: readonly Column[] = [
   {
+    id: "id",
+    label: "Order Id",
+    minWidth: 100,
+    maxWidth: 250,
+    numeric: false,
+    disablePadding: false,
+    sort: true,
+  },
+  {
+    id: "customer",
+    label: "Customer",
+    minWidth: 50,
+    maxWidth: 50,
+    numeric: false,
+    disablePadding: false,
+    sort: true,
+  },
+  {
+    id: "driver",
+    label: "Driver",
+    minWidth: 50,
+    maxWidth: 50,
+    numeric: false,
+    disablePadding: false,
+    sort: true,
+  },
+  {
     id: "pickUpLocation",
-    label: "Pickup Location",
-    minWidth: 170,
+    label: "From",
+    minWidth: 100,
+    maxWidth: 150,
     numeric: false,
     disablePadding: false,
     sort: true,
   },
   {
     id: "destinationLocation",
-    label: "Drop Off Location",
-    minWidth: 150,
+    label: "To",
+    minWidth: 100,
+    maxWidth: 150,
     numeric: false,
     disablePadding: false,
     sort: true,
   },
   {
     id: "scheduleTime",
-    label: "Schedule Time",
-    minWidth: 150,
+    label: "Schedule DateTime",
+    minWidth: 100,
+    numeric: false,
+    disablePadding: false,
+    sort: true,
+  },
+  {
+    id: "status",
+    label: "Status",
+    minWidth: 100,
+    maxWidth: 150,
+    numeric: false,
+    disablePadding: false,
+    sort: true,
+  },
+  {
+    id: "orderType",
+    label: "Type",
+    minWidth: 100,
+    maxWidth: 150,
+    numeric: false,
+    disablePadding: false,
+    sort: true,
+  },
+  {
+    id: "createdDate",
+    label: "Request Datetime",
+    minWidth: 100,
+    maxWidth: 150,
     numeric: false,
     disablePadding: false,
     sort: true,
   },
 
-  {
-    id: "createdDate",
-    label: "Created Date",
-    minWidth: 150,
-    numeric: false,
-    disablePadding: false,
-    sort: false,
-  },
   {
     id: "action",
     label: "Action",
@@ -99,6 +165,7 @@ export const scheduleColumns: readonly Column[] = [
     maxWidth: 300,
     numeric: false,
     disablePadding: false,
+    sort: false,
   },
 ];
 

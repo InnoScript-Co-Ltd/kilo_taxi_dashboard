@@ -32,7 +32,7 @@ export interface WITHDRAWTRANSACTION {
   file_transactionScreenShoot: string;
   status: number;
   driverInfoDto: DRIVER;
-  admin: ADMIN[];
+  adminInfoDto: ADMIN;
 }
 
 // Define columns for wallet table
@@ -41,7 +41,7 @@ interface WithDrawTransactionColumn {
     | "id"
     | "amount"
     | "driverInfoDto"
-    | "admin"
+    | "adminInfoDto"
     | "transactionDate"
     | "updatedDate"
     | "status"
@@ -93,7 +93,7 @@ export const withDrawTransactionColumns: readonly WithDrawTransactionColumn[] =
       sort: true,
     },
     {
-      id: "admin",
+      id: "adminInfoDto",
       label: "Admin Name",
       minWidth: 125,
       numeric: false,

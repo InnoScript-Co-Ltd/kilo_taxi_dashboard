@@ -2,10 +2,10 @@ import { Dispatch } from "redux";
 import { endpoints } from "../../constants/endpoints";
 import { getRequest, postRequest, putRequest } from "../../helpers/api";
 import { httpServiceHandler } from "../../helpers/handler";
-import { index, show, update } from "./commissionconfig.slice";
-import { CommissionConfigFormInputs } from "./commissionconfig.payload";
+import { index, show, update } from "./configsetting.slice";
+import { ConfigSettingFormInputs } from "./configsetting.payload";
 
-export const commissionConfigService = {
+export const configSettingService = {
   store: async (payload: any, dispatch: Dispatch, notifications?: any) => {
     const response: any = await postRequest(
       endpoints.commissionConfig,
@@ -15,7 +15,7 @@ export const commissionConfigService = {
     await httpServiceHandler(dispatch, response.data);
 
     if (response.data.statusCode === 201) {
-      notifications.show("CommissionConfig created successfully", {
+      notifications.show("ConfigSetting created successfully", {
         severity: "success",
         autoHideDuration: 3000,
       });
@@ -35,7 +35,7 @@ export const commissionConfigService = {
 
     if (response.data.statusCode === 200) {
       //'info' | 'success' | 'warning' | 'error'
-      notifications.show("CommissionConfig list successfully retrieved!", {
+      notifications.show("ConfigSetting list successfully retrieved!", {
         severity: "info",
         autoHideDuration: 3000,
       });
@@ -53,7 +53,7 @@ export const commissionConfigService = {
   update: async (
     dispatch: Dispatch,
     id: number,
-    payload: CommissionConfigFormInputs,
+    payload: ConfigSettingFormInputs,
     notifications?: any
   ) => {
     const response: any = await putRequest(
@@ -64,7 +64,7 @@ export const commissionConfigService = {
     await httpServiceHandler(dispatch, response.data);
 
     if (response.data.statusCode === 200) {
-      notifications?.show("CommissionConfig updated successfully", {
+      notifications?.show("ConfigSetting updated successfully", {
         severity: "success",
         autoHideDuration: 3000,
       });

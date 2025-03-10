@@ -34,7 +34,7 @@ export interface ORDER {
   status: number;
   pickUpLocation: string;
   destinationLocation: string;
-  type: string;
+  orderType: string;
   createdDate: string;
   walletTransactionId: number;
   customerId: number;
@@ -153,7 +153,7 @@ export const orderColumns: readonly Order_Column[] = [
     sort: true,
   },
   {
-    id: "type",
+    id: "orderType",
     label: "Type",
     minWidth: 100,
     maxWidth: 150,

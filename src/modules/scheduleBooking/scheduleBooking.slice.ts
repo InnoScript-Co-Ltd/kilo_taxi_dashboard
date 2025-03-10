@@ -8,7 +8,7 @@ import {
 // Define a type for the state slice, similar to CITY_SLICE
 export interface SCHEDULE_SLICE {
   data: {
-    scheduleBookings: Array<any>;
+    orders: Array<any>;
     paging: {
       totalCount: number;
       totalPages: number;
@@ -24,7 +24,7 @@ export interface SCHEDULE_SLICE {
 
 const initialState: SCHEDULE_SLICE = {
   data: {
-    scheduleBookings: [],
+    orders: [],
     paging: {
       totalCount: 0,
       totalPages: 0,
@@ -45,7 +45,7 @@ const scheduleSlice = createSlice({
   reducers: {
     index: (
       state,
-      action: PayloadAction<{ scheduleBookings: SCHEDULE[]; paging: any }>
+      action: PayloadAction<{ orders: SCHEDULE[]; paging: any }>
     ) => {
       state.data = action.payload;
       return state;

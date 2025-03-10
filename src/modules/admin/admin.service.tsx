@@ -52,7 +52,7 @@ export const adminService = {
       });
       dispatch(update(response.data));
     }
-    return response;
+    return response.data;
   },
 
   show: async (dispatch: Dispatch, id: number) => {

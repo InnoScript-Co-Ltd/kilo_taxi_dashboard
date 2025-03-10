@@ -57,8 +57,8 @@ export const customerService = {
       dispatch
     );
     await httpServiceHandler(dispatch, response);
-
-    if (response.data.statusCode === 200) {
+    console.log("customer", response);
+    if (response.statusCode === 200) {
       //'info' | 'success' | 'warning' | 'error'
       notifications?.show("Customer is updated successfully", {
         severity: "success",

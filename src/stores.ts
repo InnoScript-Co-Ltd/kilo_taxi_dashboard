@@ -18,8 +18,7 @@ import sosSlice from "./modules/sos/sos.slice";
 import citySlice from "./modules/city/city.slice";
 import townshipSlice from "./modules/township/township.slice";
 import travelRateSlice from "./modules/travelrate/travelrate.slice";
-import kiloAmountSlice from "./modules/kiloamount/kiloamount.slice";
-import commissionConfigSlice from "./modules/commissionconfig/commissionconfig.slice";
+import configSettingSlice from "./modules/configSetting/configsetting.slice";
 import ExtraDemandSlice from "./modules/extraDemand/extraDemand.slice";
 import withDrawTransactionSlice from "./modules/withDrawTransaction/withDrawTransaction.slice";
 
@@ -57,8 +56,7 @@ export const stores = configureStore({
     sms: smsSlice,
     sos: sosSlice,
     travelRate: travelRateSlice,
-    kiloAmount: kiloAmountSlice,
-    commissionConfig: commissionConfigSlice,
+    configSetting: configSettingSlice,
     extraDemand: ExtraDemandSlice,
   },
 });

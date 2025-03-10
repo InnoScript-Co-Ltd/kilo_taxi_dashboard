@@ -174,7 +174,7 @@ const ScheduleBookingTableView = () => {
             </TableRow>
           </TableHead>
           <TableBody>
-            {data.scheduleBookings?.map((row: any) => (
+            {data.orders?.map((row: any) => (
               <StyledTableRow hover role="checkbox" tabIndex={-1} key={row.id}>
                 {scheduleColumns.map((column) => {
                   const value = row[column.id];
@@ -182,29 +182,35 @@ const ScheduleBookingTableView = () => {
                     <StyledTableCell key={column.id} align={column.align}>
                       {(() => {
                         switch (column.label) {
-                          case "Pickup Address":
+                          case "Type":
                             return value;
-                          case "Drop Off Location":
+
+                          case "Status":
                             return value;
-                          case "Destination":
-                            return value;
-                          case "Created Date":
+
+                          case "Customer":
+                            return `${value?.name ?? ""} ${value?.phone ?? ""}`;
+                          case "Driver":
+                            return `${value?.name ?? ""} ${value?.phone ?? ""}`;
+                          case "Schedule DateTime":
+                            return formatDate(value);
+                          case "Request Datetime":
                             return formatDate(value);
                           case "Action":
                             return (
                               <NavigateId
-                                url={`${paths.scheduleBooking}/${row.id}`}
+                                url={`${`${paths.scheduleBooking}/${"update"}/${row.id}`}`}
                                 value={
                                   <>
                                     <Button startIcon={<></>} color="secondary">
-                                      View Detail
+                                      Update Detail
                                     </Button>
                                   </>
                                 }
                               />
                             );
                           default:
-                            return value; // Fallback case
+                            return value; // Fallback for other columns
                         }
                       })()}
                     </StyledTableCell>

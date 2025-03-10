@@ -6,7 +6,7 @@ const Status = ({ status }: { status: string; lists?: any }) => {
   const [statusValue, setStatusValue] = useState<
     null | StatusOption | undefined
   >(null);
-
+  console.log(status);
   const loadData = useCallback(() => {
     if (status) {
       console.log("status :", status);

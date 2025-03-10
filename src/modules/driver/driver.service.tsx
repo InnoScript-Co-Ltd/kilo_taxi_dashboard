@@ -37,7 +37,7 @@ export const driverService = {
       payload,
       dispatch
     );
-    await httpServiceHandler(dispatch, response.data.payload);
+    await httpServiceHandler(dispatch, response.data);
 
     if (response.data.statusCode === 200) {
       //'info' | 'success' | 'warning' | 'error'

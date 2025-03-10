@@ -214,7 +214,7 @@ const WalletTableView = () => {
                             return value;
                           case "Driver Name":
                             return `${value?.name ?? ""} `;
-                          case "Admin":
+                          case "Admin Name":
                             return `${value?.name ?? ""}`;
                           case "Transaction Date":
                             return formatDate(value);
