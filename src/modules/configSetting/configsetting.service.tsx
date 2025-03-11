@@ -33,7 +33,7 @@ export const configSettingService = {
 
     console.log(response);
 
-    if (response.data.statusCode === 200) {
+    if (response.data?.statusCode === 200) {
       //'info' | 'success' | 'warning' | 'error'
       notifications.show("ConfigSetting list successfully retrieved!", {
         severity: "info",
@@ -84,7 +84,7 @@ export const configSettingService = {
 
     await httpServiceHandler(dispatch, response.data.payload);
 
-    if (response.data.statusCode === 200) {
+    if (response.data?.statusCode === 200) {
       dispatch(show(response.data.payload));
     }
 

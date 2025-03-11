@@ -1,11 +1,11 @@
 // export const env = [process.env.REACT_APP_BASE_URL];
-export const env = ["http://4.145.92.57:81/api/v1"];
+export const env = ["https://localhost:7181/api/v1"];
 
 // export const hadUrl =
 //   process.env.REACT_APP_HAD_URL || "https://localhost:7044/dashboard";
 
 // export const env = ["http://4.145.97.143:81/api/v1"];
-export const hadUrl = "http://4.145.92.57:83/dashboard";
+export const hadUrl = "https://localhost:7044/dashboard";
 
 export const drawerWidth: number = 300;
 
@@ -84,6 +84,9 @@ export const statusOptions: Array<StatusOption> = [
   { id: 11, status: "UNDEFINED", background: "error", color: "#000" },
   { id: 12, status: "SUSPENDED", background: "error", color: "#000" },
   { id: 13, status: "FULLKYC", background: "error", color: "#000" },
+  { id: 14, status: "CASH", background: "#4CAF50", color: "#000" },
+  { id: 15, status: "BANkTRANSFER", background: "#4CAF50", color: "#000" },
+  { id: 16, status: "ONLINEPAYMENT", background: "#4CAF50", color: "#000" },
 ];
 
 export const genderStatuslists = [
