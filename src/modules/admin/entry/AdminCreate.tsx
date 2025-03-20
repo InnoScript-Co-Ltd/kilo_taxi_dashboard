@@ -20,12 +20,16 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { Controller, useForm } from "react-hook-form";
 import { AdminCreateFormInputs, adminCreateSchema } from "../admin.payload";
 import { useNotifications } from "@toolpad/core/useNotifications";
-import { useState } from "react";
+import React, { useState } from "react";
 import { genderStatuslists } from "../../../constants/config";
 import Loading from "../../../components/Loading";
+import { getRequest } from "../../../helpers/api";
+import { endpoints } from "../../../constants/endpoints";
+import { httpErrorHandler, httpServiceHandler } from "../../../helpers/handler";
 
 const AdminCreate = () => {
   const [loading, setLoading] = useState(false);
+  const [roleLists, setRoleLists] = useState<Array<any>>([]);
   const navigate = useNavigate();
   const dispatch = useDispatch<AppDispatch>();
   const notifications = useNotifications();
@@ -39,6 +43,29 @@ const AdminCreate = () => {
   } = useForm<AdminCreateFormInputs>({
     resolver: zodResolver(adminCreateSchema),
   });
+
+  const loadingData = React.useCallback(async () => {
+    setLoading(true);
+    try {
+      const roleRes: any = await getRequest(
+        `${endpoints?.role}`,
+        null,
+        dispatch
+      );
+
+      await httpServiceHandler(dispatch, roleRes.data);
+      if (roleRes && "data" in roleRes && roleRes.status === 200) {
+        setRoleLists(roleRes?.data?.payload?.roleInfoDtos);
+      }
+    } catch (error) {
+      await httpErrorHandler(error, dispatch);
+    }
+    setLoading(false);
+  }, [dispatch]);
+
+  React.useEffect(() => {
+    loadingData();
+  }, [loadingData]);
 
   const onSubmit = async (data: AdminCreateFormInputs) => {
     try {
@@ -152,7 +179,40 @@ const AdminCreate = () => {
               </FormControl>
             </Grid2>
 
-            <Grid2 size={{ xs: 6, md: 12 }}>
+            <Grid2 size={{ xs: 6, md: 4 }}>
+              <FormControl variant="filled" fullWidth error={!!errors.roleIds}>
+                <InputLabel htmlFor="role_name">Roles</InputLabel>
+                <Controller
+                  name="roleIds"
+                  control={control}
+                  render={({ field }) => (
+                    <Select
+                      style={{ paddingTop: "20px", fontSize: "14px" }}
+                      size="small"
+                      id="role_name"
+                      aria-describedby="role_name_text"
+                      disabled={loading}
+                      multiple
+                      label="Roles"
+                      value={field.value || []} // Ensure it's an empty array if no values
+                      onChange={(event) => {
+                        // Ensure the new value is correctly handled for multiple selections
+                        field.onChange(event.target.value);
+                      }}
+                    >
+                      {roleLists?.map((role: any) => (
+                        <MenuItem key={role.id} value={role.id}>
+                          {role.name}
+                        </MenuItem>
+                      ))}
+                    </Select>
+                  )}
+                />
+                <FormHelperText>{errors.roleIds?.message}</FormHelperText>
+              </FormControl>
+            </Grid2>
+
+            <Grid2 size={{ xs: 6, md: 8 }}>
               <FormControl variant="filled" fullWidth error={!!errors.Address}>
                 <InputLabel htmlFor="address" style={{ fontSize: "12px" }}>
                   Address

@@ -26,6 +26,7 @@ import { ExtraDemandRoute } from "./modules/extraDemand/extraDemand.route";
 import { TownshipRoute } from "./modules/township/township.route";
 import { ConfigSettingRoute } from "./modules/configSetting/configsetting.route";
 import { WithDrawTransactionRoute } from "./modules/withDrawTransaction/withDrawTransaction.route";
+import { RoleRoute } from "./modules/role/role.route";
 export const routers = createBrowserRouter([
   {
     path: "/",
@@ -35,6 +36,7 @@ export const routers = createBrowserRouter([
       // ...AuthRoute,
       ...DashboardRoute,
       ...AdminRoute,
+      ...RoleRoute,
       ...CustomerRoute,
       ...PromotionRoute,
       ...ScheduleBookingRoute,

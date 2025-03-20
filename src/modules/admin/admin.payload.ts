@@ -6,7 +6,9 @@ export const adminCreateSchema = z.object({
     .string()
     .min(2, { message: "Name must be at least 2 characters long" }),
   Email: z.string().email(),
-  Role: z.string().nullable().default("Admin"),
+  roleIds: z.array(
+    z.number().min(1, { message: "Role ID must be a positive number" })
+  ), // Ensure it's an array of positive numbers
   Phone: z.string().min(8, { message: "phone number is at least 8 digit" }),
   Gender: z.string().default("MALE"),
   Address: z.string(),
@@ -18,6 +20,9 @@ export const adminUpdateSchema = z.object({
     .string()
     .min(2, { message: "Name must be at least 2 characters long" }),
   Email: z.string().email(),
+  roleIds: z.array(
+    z.number().min(1, { message: "Role ID must be a positive number" })
+  ), // Ensure it's an array of positive numbers
   Phone: z.string().min(8, { message: "phone number is at least 8 digit" }),
   Gender: z.string(),
   Address: z.string(),
@@ -65,7 +70,7 @@ export interface ADMIN {
   name: string;
   phone: string;
   email: string;
-  role: string;
+  roleIds: number[];
   gender: string;
   address: string;
   status: string;
@@ -168,8 +173,8 @@ export const columns: readonly Admin_Column[] = [
     disablePadding: false,
   },
   {
-    id: "role",
-    label: "Role",
+    id: "roleIds",
+    label: "Roles",
     minWidth: 50,
     maxWidth: 50,
     numeric: false,

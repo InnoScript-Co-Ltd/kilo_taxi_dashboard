@@ -16,6 +16,7 @@ import paymentChannelSlice from "./modules/paymentchannel/paymentchannel.slice";
 import smsSlice from "./modules/sms/sms.slice";
 import sosSlice from "./modules/sos/sos.slice";
 import citySlice from "./modules/city/city.slice";
+import roleSlice from "./modules/role/role.slice";
 import townshipSlice from "./modules/township/township.slice";
 import travelRateSlice from "./modules/travelrate/travelrate.slice";
 import configSettingSlice from "./modules/configSetting/configsetting.slice";
@@ -38,6 +39,7 @@ export const stores = configureStore({
   reducer: {
     share: shareSlice,
     admin: adminSlice,
+    role: roleSlice,
     city: citySlice,
     township: townshipSlice,
     customer: customerSlice,

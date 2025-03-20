@@ -32,6 +32,19 @@ export const navigationList = [
     ],
   },
   {
+    segment: "role",
+    title: "Role",
+    isParent: true,
+    icon: <AdminPanelSettingsIcon />,
+    children: [
+      {
+        segment: "list",
+        title: "List",
+        icon: <FormatListBulletedIcon />,
+      },
+    ],
+  },
+  {
     segment: "city",
     title: "City",
     isParent: true,
