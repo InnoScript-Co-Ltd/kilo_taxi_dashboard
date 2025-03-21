@@ -6,7 +6,7 @@ export const adminCreateSchema = z.object({
     .string()
     .min(2, { message: "Name must be at least 2 characters long" }),
   Email: z.string().email(),
-  Role: z.string().nullable().default("Admin"),
+  Role: z.string().nullable().default("ADMIN"),
   Phone: z.string().min(8, { message: "phone number is at least 8 digit" }),
   Gender: z.string().default("MALE"),
   Address: z.string(),

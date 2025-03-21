@@ -11,6 +11,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, AppRootState } from "../../../stores";
 import { driverService } from "../driver.service"; // Assuming you have a driver service
 import UpAndDel from "../../../components/UpAndDel";
+import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
 
 import {
   driverStatusLists,
@@ -39,6 +40,7 @@ import Status from "../../../components/Status";
 import TAvatar from "../../../components/TAvatar";
 import { formatDate } from "../../../helpers/common";
 import FilterComponent from "../../../components/FilterComponent";
+import { useNavigate } from "react-router";
 
 export const DriverTableView = () => {
   const [page, setPage] = React.useState(0);
@@ -49,6 +51,8 @@ export const DriverTableView = () => {
   );
 
   const notifications = useNotifications();
+  const navigate = useNavigate();
+
   const [loading, setLoading] = React.useState(false);
 
   const handleChangePage = (event: unknown, newPage: number) => {
@@ -123,6 +127,13 @@ export const DriverTableView = () => {
             gap: 3,
           }}
         >
+          <Button
+            startIcon={<AddCircleOutlineIcon />}
+            onClick={() => navigate(paths.driverCreate)}
+          >
+            Create
+          </Button>
+
           <Button
             onClick={() => {
               dispatch(setPaginate(driverPayload.pagingParams)); // Reset the paginate

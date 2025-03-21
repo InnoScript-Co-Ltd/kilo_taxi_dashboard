@@ -98,6 +98,10 @@ export const propertyStatusLists = [
   { id: 0, value: "CAROWNER", color: "success" },
   { id: 1, value: "RENT", color: "success" },
 ];
+export const commissionTypeLists = [
+  { id: 0, value: "PERCENTAGE", color: "success" },
+  { id: 1, value: "FIXAMOUNT", color: "success" },
+];
 
 export const otpStatusLists = [
   { id: 0, value: "PENDING", color: "info" },
@@ -243,4 +247,12 @@ export const orderTypeLists = [
   { id: 0, value: "INAPP", color: "success" },
   { id: 1, value: "INSTANT", color: "error" },
   { id: 2, value: "SCHEDULE", color: "info" },
+];
+export const roleLists = [
+  { id: "SYSTEMADMIN", value: "SYSTEMADMIN", color: "success" },
+  { id: "ADMIN", value: "ADMIN", color: "error" },
+  { id: "ORDERADMIN", value: "ORDERADMIN", color: "info" },
+  { id: "TOPUPADMIN", value: "TOPUPADMIN", color: "info" },
+  { id: "WITHDRAWADMIN", value: "WITHDRAWADMIN", color: "info" },
+  { id: "PROMOTIONADMIN", value: "PROMOTIONADMIN", color: "info" },
 ];

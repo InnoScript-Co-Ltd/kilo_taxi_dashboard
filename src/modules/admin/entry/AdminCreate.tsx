@@ -21,7 +21,8 @@ import { Controller, useForm } from "react-hook-form";
 import { AdminCreateFormInputs, adminCreateSchema } from "../admin.payload";
 import { useNotifications } from "@toolpad/core/useNotifications";
 import { useState } from "react";
-import { genderStatuslists } from "../../../constants/config";
+import { genderStatuslists, roleLists } from "../../../constants/config";
+
 import Loading from "../../../components/Loading";
 
 const AdminCreate = () => {
@@ -151,7 +152,35 @@ const AdminCreate = () => {
                 <FormHelperText>{errors.Gender?.message}</FormHelperText>
               </FormControl>
             </Grid2>
+            <Grid2 size={{ xs: 6, md: 3 }}>
+              <FormControl variant="filled" fullWidth error={!!errors.Role}>
+                <InputLabel htmlFor="payment_type">Role</InputLabel>
+                <Controller
+                  name="Role"
+                  control={control}
+                  render={({ field }) => (
+                    <Select
+                      id="Role"
+                      aria-describedby="role_type_text"
+                      size="small"
+                      disabled={loading}
+                      label="Role"
+                      {...field}
+                      value={field.value || "SYSTEMADMIN"} // Convert field value to a string
+                      onChange={(event) => field.onChange(event.target.value)} // Ensure onChange value is a string
+                    >
+                      {roleLists?.map((role: any) => (
+                        <MenuItem key={role.id} value={role.id}>
+                          {role.value}
+                        </MenuItem>
+                      ))}
+                    </Select>
+                  )}
+                />
 
+                <FormHelperText>{errors?.Role?.message}</FormHelperText>
+              </FormControl>
+            </Grid2>
             <Grid2 size={{ xs: 6, md: 12 }}>
               <FormControl variant="filled" fullWidth error={!!errors.Address}>
                 <InputLabel htmlFor="address" style={{ fontSize: "12px" }}>

@@ -47,6 +47,7 @@ export const paths = {
   driver: "/driver",
   driverList: "/driver/list",
   driverDetail: "/driver/:id",
+  driverCreate: "/driver/new",
   driverUpdate: "/driver/update/:id",
 
   vehicle: "/vehicle",

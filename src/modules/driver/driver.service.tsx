@@ -1,6 +1,6 @@
 import { Dispatch } from "redux";
 import { endpoints } from "../../constants/endpoints";
-import { getRequest, putRequest } from "../../helpers/api";
+import { getRequest, putRequest, postRequest } from "../../helpers/api";
 import { httpServiceHandler } from "../../helpers/handler";
 import { index, show, update } from "./driver.slice";
 
@@ -21,6 +21,25 @@ export const driverService = {
           response.data.payload ? response.data.payload : response.data.payload
         )
       );
+    }
+    return response.data;
+  },
+
+  store: async (payload: any, dispatch: Dispatch, notifications?: any) => {
+    const response: any = await postRequest(
+      endpoints.driver + "/DriverRegister",
+      payload,
+      dispatch
+    );
+    await httpServiceHandler(dispatch, response.data);
+
+    if (response.data.statusCode === 201) {
+      //'info' | 'success' | 'warning' | 'error'
+      console.log("error here");
+      notifications.show("DriverCreate is created successfully", {
+        severity: "success",
+        autoHideDuration: 3000,
+      });
     }
     return response.data;
   },
