@@ -23,9 +23,14 @@ import { paths } from "../../../constants/paths";
 import { genderStatuslists } from "../../../constants/config";
 import Loading from "../../../components/Loading";
 import { useNotifications } from "@toolpad/core";
+import { getRequest } from "../../../helpers/api";
+import { endpoints } from "../../../constants/endpoints";
+import { httpErrorHandler, httpServiceHandler } from "../../../helpers/handler";
 
 const AdminUpdate = () => {
   const [loading, setLoading] = useState(false);
+  const [roleLists, setRoleLists] = useState<Array<any>>([]);
+
   const params: any = useParams();
   const navigate = useNavigate();
   const dispatch = useDispatch<AppDispatch>();
@@ -46,6 +51,7 @@ const AdminUpdate = () => {
       Email: "",
       Phone: "",
       Gender: "MALE",
+      roleIds: [],
     },
   });
 
@@ -69,8 +75,30 @@ const AdminUpdate = () => {
       setValue("Email", admin.email || "");
       setValue("Address", admin.address || "");
       setValue("Gender", admin.gender || "MALE");
+      setValue("roleIds", admin.roleIds || []);
     }
   }, [admin, setValue]);
+
+  const loadRoles = useCallback(async () => {
+    try {
+      const roleRes: any = await getRequest(
+        `${endpoints?.role}`,
+        null,
+        dispatch
+      );
+
+      await httpServiceHandler(dispatch, roleRes.data);
+      if (roleRes && "data" in roleRes && roleRes.status === 200) {
+        setRoleLists(roleRes?.data?.payload?.roleInfoDtos);
+      }
+    } catch (error) {
+      await httpErrorHandler(error, dispatch);
+    }
+  }, [dispatch]);
+
+  useEffect(() => {
+    loadRoles();
+  }, [loadRoles]);
 
   // Submit form data
   const onSubmit = async (data: AdminUpdateFormInputs) => {
@@ -182,7 +210,38 @@ const AdminUpdate = () => {
               </FormControl>
             </Grid2>
 
-            <Grid2 size={{ xs: 6, md: 12 }}>
+            <Grid2 size={{ xs: 6, md: 4 }}>
+              <FormControl variant="filled" fullWidth error={!!errors.roleIds}>
+                <InputLabel htmlFor="role_name">Roles</InputLabel>
+                <Controller
+                  name="roleIds"
+                  control={control}
+                  render={({ field }) => (
+                    <Select
+                      style={{ paddingTop: "20px", fontSize: "14px" }}
+                      size="small"
+                      id="role_name"
+                      aria-describedby="role_name_text"
+                      disabled={loading}
+                      label="Roles"
+                      multiple
+                      {...field}
+                      value={field.value}
+                      onChange={(event) => field.onChange(event.target.value)}
+                    >
+                      {roleLists.map((role: any) => (
+                        <MenuItem key={role.id} value={role.id}>
+                          {role.name}
+                        </MenuItem>
+                      ))}
+                    </Select>
+                  )}
+                />
+                <FormHelperText>{errors.roleIds?.message}</FormHelperText>
+              </FormControl>
+            </Grid2>
+
+            <Grid2 size={{ xs: 6, md: 8 }}>
               <FormControl variant="filled" fullWidth error={!!errors.Address}>
                 <InputLabel htmlFor="address" style={{ fontSize: "12px" }}>
                   Address
