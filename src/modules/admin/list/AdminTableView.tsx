@@ -204,6 +204,8 @@ const AdminTableView = () => {
                               return formatDate(value);
                             case "Deleted At":
                               return formatDate(value);
+                            case "Roles":
+                              return value?.map((v: any) => v.name).join(", ");
                             case "Reset Password":
                               return (
                                 <AdminResetPassword
