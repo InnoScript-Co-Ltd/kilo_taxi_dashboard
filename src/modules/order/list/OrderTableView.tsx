@@ -17,6 +17,7 @@ import {
   TableSortLabel,
 } from "@mui/material";
 import SearchIcon from "@mui/icons-material/Search";
+import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
 import RestartAltIcon from "@mui/icons-material/RestartAlt";
 import { orderService } from "../order.service";
 import { orderColumns, orderPayload } from "../order.payload";
@@ -34,6 +35,7 @@ import { setPaginate } from "../order.slice";
 import { paths } from "../../../constants/paths";
 import { NavigateId } from "../../../shares/NavigateId";
 import { formatDate } from "../../../helpers/common";
+import { useNavigate } from "react-router";
 
 const OrderTableView = () => {
   const [page, setPage] = React.useState(0);
@@ -45,6 +47,7 @@ const OrderTableView = () => {
   console.log("order", data);
   const notifications = useNotifications();
   const [loading, setLoading] = React.useState(false);
+  const navigate = useNavigate();
 
   const handleChangePage = (event: unknown, newPage: number) => {
     setPage(newPage);
@@ -118,6 +121,12 @@ const OrderTableView = () => {
             gap: 3,
           }}
         >
+          <Button
+            startIcon={<AddCircleOutlineIcon />}
+            onClick={() => navigate(paths.orderCreate)}
+          >
+            Create
+          </Button>
           <Button
             onClick={() => {
               dispatch(setPaginate(orderPayload.pagingParams)); // Reset the paginate

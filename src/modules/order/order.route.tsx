@@ -1,4 +1,5 @@
 import { paths } from "../../constants/paths"; // Ensure this path is correct
+import OrderCreate from "./entry/OrderCreate";
 import OrderDetail from "./view/OrderDetail";
 import OrderList from "./view/OrderList";
 
@@ -12,6 +13,20 @@ export const OrderRoute = [
         breadcrumbs: [
           { label: "Dashboard", url: paths.dashboard },
           { label: "Orders", url: paths.orderList },
+        ],
+      };
+    },
+  },
+  {
+    id: "order-new",
+    path: paths.orderCreate,
+    element: <OrderCreate />,
+    loader: () => {
+      return {
+        breadcrumbs: [
+          { label: "Dashboard", url: paths.dashboard },
+          { label: "Order", url: paths.orderList },
+          { label: "Create", url: paths.orderCreate },
         ],
       };
     },
