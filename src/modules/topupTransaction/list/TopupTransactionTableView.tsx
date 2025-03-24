@@ -34,7 +34,8 @@ import {
   StyledTableRow,
 } from "../../../components/TableCommon";
 import { useNotifications } from "@toolpad/core/useNotifications";
-import { format } from "date-fns"; 
+import { format } from "date-fns";
+import useRoleValidator from "../../../helpers/roleValidator";
 
 const TopupTransactionTableView = () => {
   const [page, setPage] = React.useState(0);
@@ -47,6 +48,8 @@ const TopupTransactionTableView = () => {
   const notifications = useNotifications();
   const navigate = useNavigate();
   const [loading, setLoading] = React.useState(false);
+
+  const { isTopUpAdmin } = useRoleValidator();
 
   const handleChangePage = (event: unknown, newPage: number) => {
     setPage(newPage);
@@ -122,12 +125,17 @@ const TopupTransactionTableView = () => {
             gap: 3,
           }}
         >
-          <Button
-            startIcon={<AddCircleOutlineIcon />}
-            onClick={() => navigate(paths.topupTransactionCreate)} // Adjust path for topupTransaction create page
-          >
-            Create
-          </Button>
+          {isTopUpAdmin() ? (
+            <Button
+              disabled={!isTopUpAdmin()}
+              startIcon={<AddCircleOutlineIcon />}
+              onClick={() => navigate(paths.topupTransactionCreate)} // Adjust path for topupTransaction create page
+            >
+              Create
+            </Button>
+          ) : (
+            <></>
+          )}
 
           <Button
             onClick={() => {
@@ -200,18 +208,25 @@ const TopupTransactionTableView = () => {
                         switch (column.label) {
                           case "Datetime":
                             // Format dateTime to desired format
-                            const formattedDate = format(new Date(value), "dd MMM yyyy hh:mma");
+                            const formattedDate = format(
+                              new Date(value),
+                              "dd MMM yyyy hh:mma"
+                            );
                             return formattedDate;
-                            case "Action":
-                              return (
-                                <Button
-                                  variant="outlined"
-                                  color="primary"
-                                  onClick={() => navigate(`${paths.topupTransaction}/${row.id}`)} // Redirect to View Detail page
-                                >
-                                  View Detail
-                                </Button>
-                              );
+                          case "Action":
+                            return (
+                              <Button
+                                variant="outlined"
+                                color="primary"
+                                onClick={() =>
+                                  navigate(
+                                    `${paths.topupTransaction}/${row.id}`
+                                  )
+                                } // Redirect to View Detail page
+                              >
+                                View Detail
+                              </Button>
+                            );
                           default:
                             return value;
                         }

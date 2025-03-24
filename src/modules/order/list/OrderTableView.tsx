@@ -26,16 +26,13 @@ import {
   StyledTableRow,
 } from "../../../components/TableCommon";
 import Status from "../../../components/Status";
-import {
-  orderStatusLists,
-  orderTypeLists,
-  paginateOptions,
-} from "../../../constants/config";
+import { orderStatusLists, paginateOptions } from "../../../constants/config";
 import { setPaginate } from "../order.slice";
 import { paths } from "../../../constants/paths";
 import { NavigateId } from "../../../shares/NavigateId";
 import { formatDate } from "../../../helpers/common";
 import { useNavigate } from "react-router";
+import useRoleValidator from "../../../helpers/roleValidator";
 
 const OrderTableView = () => {
   const [page, setPage] = React.useState(0);
@@ -44,10 +41,11 @@ const OrderTableView = () => {
   const { data, pagingParams } = useSelector(
     (state: AppRootState) => state.order // Adjust to your order slice state
   );
-  console.log("order", data);
   const notifications = useNotifications();
   const [loading, setLoading] = React.useState(false);
   const navigate = useNavigate();
+
+  const { isOrderAdmin } = useRoleValidator();
 
   const handleChangePage = (event: unknown, newPage: number) => {
     setPage(newPage);
@@ -121,12 +119,18 @@ const OrderTableView = () => {
             gap: 3,
           }}
         >
-          <Button
-            startIcon={<AddCircleOutlineIcon />}
-            onClick={() => navigate(paths.orderCreate)}
-          >
-            Create
-          </Button>
+          {isOrderAdmin() ? (
+            <Button
+              disabled={!isOrderAdmin()}
+              startIcon={<AddCircleOutlineIcon />}
+              onClick={() => navigate(paths.orderCreate)}
+            >
+              Create
+            </Button>
+          ) : (
+            <></>
+          )}
+
           <Button
             onClick={() => {
               dispatch(setPaginate(orderPayload.pagingParams)); // Reset the paginate
@@ -184,7 +188,6 @@ const OrderTableView = () => {
               <StyledTableRow hover role="checkbox" tabIndex={-1} key={row.id}>
                 {orderColumns.map((column) => {
                   const value = row[column.id];
-                  console.log(value);
                   return (
                     <StyledTableCell key={column.id} align={column.align}>
                       {(() => {

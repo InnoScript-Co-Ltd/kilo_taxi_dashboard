@@ -25,6 +25,8 @@ export default function UserProfile() {
     };
   }, [session, dispatch]);
 
+  console.log(session);
+
   const loadUserData = React.useCallback(() => {
     const data: any = getData(keys.USER);
     if (data) {

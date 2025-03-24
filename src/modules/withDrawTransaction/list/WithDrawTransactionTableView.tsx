@@ -35,6 +35,7 @@ import {
 } from "../../../components/TableCommon";
 import { useNotifications } from "@toolpad/core/useNotifications";
 import { formatDate } from "../../../helpers/common";
+import useRoleValidator from "../../../helpers/roleValidator";
 
 const WalletTableView = () => {
   const [page, setPage] = React.useState(0);
@@ -47,6 +48,8 @@ const WalletTableView = () => {
   const notifications = useNotifications();
   const navigate = useNavigate();
   const [loading, setLoading] = React.useState(false);
+
+  const { isWithdrawAdmin } = useRoleValidator();
 
   const handleChangePage = (event: unknown, newPage: number) => {
     setPage(newPage);
