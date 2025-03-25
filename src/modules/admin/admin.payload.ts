@@ -71,6 +71,7 @@ export interface ADMIN {
   phone: string;
   email: string;
   roleIds: number[];
+  roleInfoDtos: object[];
   gender: string;
   address: string;
   status: string;
@@ -173,10 +174,10 @@ export const columns: readonly Admin_Column[] = [
     disablePadding: false,
   },
   {
-    id: "roleIds",
+    id: "roleInfoDtos",
     label: "Roles",
-    minWidth: 50,
-    maxWidth: 50,
+    minWidth: 300,
+    maxWidth: 500,
     numeric: false,
     disablePadding: false,
   },

@@ -71,6 +71,7 @@ export const paths = {
 
   order: "/order",
   orderUpdate: "/order/update/:id",
+  orderCreate: "/order/new",
   orderList: "/order/list",
   driverTrips: "/order/tripHistory",
   orderDetail: "/order/:id",

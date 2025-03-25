@@ -123,7 +123,7 @@ const OrderCreate = () => {
 
   return (
     <Box>
-      <Card sx={{ marginTop: "20px", padding: "20px" }}>
+      {/* <Card sx={{ marginTop: "20px", padding: "20px" }}>
         <h2>Order Create</h2>
         <form onSubmit={handleSubmit(submitOrderCreate)}>
           <Grid2 container spacing={2}>
@@ -347,7 +347,6 @@ const OrderCreate = () => {
             </Grid2>
           </Grid2>
 
-          {/* footer */}
           <Box
             sx={{
               display: "flex",
@@ -368,7 +367,7 @@ const OrderCreate = () => {
             </Button>
           </Box>
         </form>
-      </Card>
+      </Card> */}
     </Box>
   );
 };

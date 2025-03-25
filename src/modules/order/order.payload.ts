@@ -5,27 +5,66 @@ import { DRIVER } from "../driver/driver.payload";
 import { SCHEDULE } from "../scheduleBooking/scheduleBooking.payload";
 import { ExtraDemand } from "../extraDemand/extraDemand.payload";
 
+// Updated schema with new fields and consistent key names
 export const orderSchema = z.object({
   id: z.number().min(0, { message: "id" }).default(0),
-  TotalAmount: z
+  totalAmount: z
     .number()
-    .min(1, { message: "Total Amount must be at least 1 characters long" }),
-  Status: z.number(),
-  CreatedDate: z.date(),
-  WalletTransactionId: z
+    .min(1, { message: "Total Amount must be at least 1 characters long" })
+    .optional(),
+  status: z.number(),
+  createdDate: z.date().optional(),
+  walletTransactionId: z
     .number()
-    .min(1, { message: "Wallet Transaction ID is required" }),
-  CustomerId: z.number().min(1, { message: "Customer ID is required" }),
-  DriverId: z.number().min(1, { message: "Driver ID is required" }),
-  ScheduleBookingId: z
+    .min(1, { message: "Wallet Transaction ID is required" })
+    .optional(),
+  customerId: z.number().min(1, { message: "Customer ID is required" }),
+  driverId: z.number().min(1, { message: "Driver ID is required" }).optional(),
+  scheduleBookingId: z
     .number()
-    .min(1, { message: "Schedule Booking ID is required" }),
+    .min(1, { message: "Schedule Booking ID is required" })
+    .optional(),
+  // New fields
+  pickUpLocation: z
+    .string()
+    .min(1, { message: "Pick Up Location is required" }),
+  destinationLocation: z
+    .string()
+    .min(1, { message: "Destination Location is required" }),
+  orderType: z.string().min(1, { message: "Order Type is required" }),
+  walletId: z.number().min(1, { message: "Wallet is required" }),
+  // Existing latitude/longitude fields
+  pickUpLat: z.string(),
+  pickUpLong: z.string(),
+  destinationLat: z.string(),
+  destinationLong: z.string(),
 });
 
-export type OrderFormInputs = z.infer<typeof orderSchema>;
+export const orderCreateSchema = z.object({
+  pickUpLocation: z
+    .string()
+    .min(1, { message: "Pick Up Location is required" }),
+  pickUpLat: z.string().min(1, { message: "Pick Up Latitude is required" }),
+  pickUpLong: z.string().min(1, { message: "Pick Up Longitude is required" }),
+  destinationLocation: z
+    .string()
+    .min(1, { message: "Destination Location is required" }),
+  destinationLat: z
+    .string()
+    .min(1, { message: "Destination Latitude is required" }),
+  destinationLong: z
+    .string()
+    .min(1, { message: "Destination Longitude is required" }),
+  orderType: z.string().min(1, { message: "Order Type is required" }),
+  walletId: z.number().min(1, { message: "Wallet ID is required" }),
+  customerId: z.number().min(1, { message: "Customer ID is required" }),
+  status: z.number(),
+});
+
+export type OrderFormInputs = z.infer<typeof orderCreateSchema>;
 
 /**
- * Interface representing the shape of a country object.
+ * Interface representing the shape of an order object.
  */
 export interface ORDER {
   id: string;
@@ -33,17 +72,22 @@ export interface ORDER {
   estimatedAmount: number;
   status: number;
   pickUpLocation: string;
+  pickUpLat: string;
+  pickUpLong: string;
   destinationLocation: string;
+  destinationLat: string;
+  destinationLong: string;
   orderType: string;
   createdDate: string;
   walletTransactionId: number;
+  walletId: number;
   customerId: number;
   driverId: number;
   scheduleBookingId: number;
   customer: CUSTOMER[]; // Use the CUSTOMER interface as an array
   driver: DRIVER[]; // Use the DRIVER interface as an array
-  orderExtends: ORDER_EXTENDS[]; // Use the DRIVER interface as an array
-  orderExtraDemands: ORDER_EXTRA_DEMANDS[]; // Use the DRIVER interface as an array
+  orderExtends: ORDER_EXTENDS[]; // Use the appropriate interface as an array
+  orderExtraDemands: ORDER_EXTRA_DEMANDS[]; // Use the appropriate interface as an array
   action: any;
   orderRouteInfo: Array<any>;
 }
@@ -65,7 +109,7 @@ export interface ORDER_EXTRA_DEMANDS {
 }
 
 /**
- * Represents the structure of a column in the country table.
+ * Represents the structure of a column in the order table.
  */
 export interface Order_Column {
   /** Unique identifier for the column */
@@ -82,14 +126,14 @@ export interface Order_Column {
   numeric: boolean;
   /** Specifies if padding should be disabled for the column */
   disablePadding: boolean;
-  /** Optional function to format the value in the column */
+  /** Indicates whether the column is sortable */
   sort: boolean;
   /** Optional function to format the value in the column */
   format?: (value: number) => string;
 }
 
 /**
- * Payload structure for creating and updating a country,
+ * Payload structure for creating and updating orders,
  * as well as pagination parameters.
  */
 export interface ORDER_PAYLOAD {
@@ -104,7 +148,7 @@ export interface ORDER_PAYLOAD {
 }
 
 /**
- * An array of columns for displaying the country table.
+ * An array of columns for displaying the order table.
  */
 export const orderColumns: readonly Order_Column[] = [
   {
@@ -170,7 +214,6 @@ export const orderColumns: readonly Order_Column[] = [
     disablePadding: false,
     sort: true,
   },
-
   {
     id: "action",
     label: "Action",
@@ -181,8 +224,9 @@ export const orderColumns: readonly Order_Column[] = [
     sort: false,
   },
 ];
+
 /**
- * Default payload object for country operations.
+ * Default payload object for order operations.
  */
 export const orderPayload: ORDER_PAYLOAD = {
   pagingParams: {

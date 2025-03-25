@@ -8,7 +8,12 @@ export const walletSchema = z.object({
     .string()
     .min(2, { message: "wallet Name must be at least 2 characters long" }),
   kilo: z.string().min(1, { message: "kilo must be at least 1 number" }),
-  amount: z.string().min(1, { message: "amoint must be at least 1 number" }),
+  downTownAmount: z
+    .string()
+    .min(1, { message: "downTownAmount must be at least 1 number" }),
+  outTownAmount: z
+    .string()
+    .min(1, { message: "outTownAmount must be at least 1 number" }),
 });
 
 export type WalletFormInputs = z.infer<typeof walletSchema>;
@@ -20,7 +25,8 @@ export interface WALLET {
   id: string;
   walletName: string;
   kilo: string;
-  amount: string;
+  downTownAmount: string;
+  outTownAmount: string;
   createDate: Date | null;
   updateDate?: Date | null;
 }
@@ -31,7 +37,8 @@ interface WalletColumn {
     | "id"
     | "walletName"
     | "kilo"
-    | "amount"
+    | "downTownAmount"
+    | "outTownAmount"
     | "createDate"
     | "updateDate"
     | "action";
@@ -73,8 +80,16 @@ export const walletColumns: readonly WalletColumn[] = [
     sort: true,
   },
   {
-    id: "amount",
-    label: "Amount",
+    id: "downTownAmount",
+    label: "DownTown Amount",
+    minWidth: 130,
+    numeric: false,
+    disablePadding: false,
+    sort: true,
+  },
+  {
+    id: "outTownAmount",
+    label: "OutTown Amount",
     minWidth: 130,
     numeric: false,
     disablePadding: false,

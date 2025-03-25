@@ -1,5 +1,4 @@
 import * as React from "react";
-import Paper from "@mui/material/Paper";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
 import TableContainer from "@mui/material/TableContainer";
@@ -18,11 +17,17 @@ import { adminService } from "../admin.service";
 import { paginateOptions } from "../../../constants/config";
 import { paths } from "../../../constants/paths";
 import {
+  Paper,
   Box,
   Button,
   Input,
   InputAdornment,
   TableSortLabel,
+  TextField,
+  FormControl,
+  InputLabel,
+  Select,
+  MenuItem,
 } from "@mui/material";
 import { setPaginate } from "../admin.slice";
 import { useNavigate } from "react-router";
@@ -38,6 +43,9 @@ const AdminTableView = () => {
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
   const [loading, setLoading] = React.useState(false);
+  const [fromDate, setFromDate] = React.useState("");
+  const [toDate, setToDate] = React.useState("");
+  const [status, setStatus] = React.useState("");
 
   const { data, pagingParams } = useSelector(
     (state: AppRootState) => state.admin
@@ -70,6 +78,35 @@ const AdminTableView = () => {
     );
     setRowsPerPage(+event.target.value);
     setPage(0);
+  };
+  const handleDownloadReport = async () => {
+    try {
+      const response = await fetch(
+        `https://localhost:7181/api/v1/Admin/admin-report?fromDate=${fromDate}&toDate=${toDate}`,
+        {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+
+      if (!response.ok) {
+        throw new Error("Failed to download report");
+      }
+
+      const blob = await response.blob();
+      const url = window.URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = "AdminReport.xlsx";
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      window.URL.revokeObjectURL(url);
+    } catch (error) {
+      console.error("Error downloading report:", error);
+    }
   };
 
   const loadingData = React.useCallback(async () => {
@@ -126,7 +163,40 @@ const AdminTableView = () => {
           >
             Create
           </Button>
+          <Box sx={{ my: "20px", px: "20px", display: "flex", gap: 3 }}>
+            <TextField
+              label="From Date"
+              type="date"
+              InputLabelProps={{ shrink: true }}
+              value={fromDate}
+              onChange={(e) => setFromDate(e.target.value)}
+            />
+            <TextField
+              label="To Date"
+              type="date"
+              InputLabelProps={{ shrink: true }}
+              value={toDate}
+              onChange={(e) => setToDate(e.target.value)}
+            />
+            <FormControl variant="filled" sx={{ minWidth: 150 }}>
+              <InputLabel>Status</InputLabel>
+              <Select
+                value={status}
+                onChange={(e) => setStatus(e.target.value)}
+                size="small"
+              >
+                <MenuItem value="">All</MenuItem>
+                <MenuItem value="Active">Active</MenuItem>
+                <MenuItem value="PENDING">PENDING</MenuItem>
+                <MenuItem value="DEACTIVE">DEACTIVE</MenuItem>
+                <MenuItem value="SUSPENDED">SUSPENDED</MenuItem>
+              </Select>
+            </FormControl>
 
+            <Button variant="contained" onClick={handleDownloadReport}>
+              Download Report
+            </Button>
+          </Box>
           <Button
             onClick={() => {
               dispatch(setPaginate(adminPayload.pagingParams));
@@ -204,6 +274,8 @@ const AdminTableView = () => {
                               return formatDate(value);
                             case "Deleted At":
                               return formatDate(value);
+                            case "Roles":
+                              return value?.map((v: any) => v.name).join(", ");
                             case "Reset Password":
                               return (
                                 <AdminResetPassword

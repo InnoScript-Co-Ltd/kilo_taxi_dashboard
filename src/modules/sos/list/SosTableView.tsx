@@ -95,7 +95,9 @@ const SosTableView = () => {
   }, [loadingData]);
 
   const handleSolve = async (id: number) => {
-    const confirmed = window.confirm("Are you sure you want to solve this SOS?");
+    const confirmed = window.confirm(
+      "Are you sure you want to solve this SOS?"
+    );
     if (!confirmed) return;
 
     try {
@@ -114,7 +116,7 @@ const SosTableView = () => {
   };
 
   const filteredData = React.useMemo(() => {
-    if (status === "customer") {
+    if (status === "CUSTOMER") {
       return data.sos.filter((row: any) => row.userType === "CUSTOMER");
     } else if (status === "driver") {
       return data.sos.filter((row: any) => row.userType === "DRIVER");
@@ -126,12 +128,12 @@ const SosTableView = () => {
   }, [data.sos, status]);
 
   const displayedColumns = React.useMemo(() => {
-  return sosColumns.filter((col) => {
-    if (status === "solved" && col.id === "action") return false; // Hide Action Column
-    if (status !== "solved" && col.id === "updatedDate") return false; // Hide Solved DateTime Column
-    return true;
-  });
-}, [status]);
+    return sosColumns.filter((col) => {
+      if (status === "solved" && col.id === "action") return false; // Hide Action Column
+      if (status !== "solved" && col.id === "updatedDate") return false; // Hide Solved DateTime Column
+      return true;
+    });
+  }, [status]);
 
   return (
     <Paper sx={{ width: "100%", overflow: "hidden", p: 2 }}>
@@ -197,11 +199,10 @@ const SosTableView = () => {
         </ToggleButtonGroup>
       </Box>
 
-
       <TableContainer sx={{ maxHeight: 440 }}>
         <Table stickyHeader aria-label="sticky table">
           <TableHead>
-          <TableRow>
+            <TableRow>
               {sosColumns.map((column) => {
                 // Hide the "Action" column when status is "solved"
                 if (status === "solved" && column.id === "action") {
@@ -273,9 +274,13 @@ const SosTableView = () => {
                       {(() => {
                         switch (column.label) {
                           case "Request DateTime":
-                            return value ? format(new Date(value), "d MMM yyyy hh:mm a") : "N/A";
+                            return value
+                              ? format(new Date(value), "d MMM yyyy hh:mm a")
+                              : "N/A";
                           case "Solved DateTime":
-                            return value ? format(new Date(value), "d MMM yyyy hh:mm a") : "N/A";
+                            return value
+                              ? format(new Date(value), "d MMM yyyy hh:mm a")
+                              : "N/A";
                           case "Action":
                             return (
                               <Button

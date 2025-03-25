@@ -49,6 +49,7 @@ const ConfigSettingUpdate = () => {
     defaultValues: {
       id: 0,
       commissionRate: 0,
+      commissionAmount: 0,
       defaultTime: "00:00:00",
       matchDistance: 0,
       maxMatchDistance: 0,
@@ -77,6 +78,7 @@ const ConfigSettingUpdate = () => {
     if (configSetting) {
       setValue("id", Number(configSetting.id) || 0);
       setValue("commissionRate", Number(configSetting.commissionRate) || 0);
+      setValue("commissionAmount", configSetting.commissionAmount);
       setValue("defaultTime", configSetting.defaultTime || "00:00:00");
       setValue("matchDistance", configSetting.matchDistance);
       setValue("maxMatchDistance", configSetting.matchDistance);
@@ -121,6 +123,27 @@ const ConfigSettingUpdate = () => {
                 />
                 <FormHelperText>
                   {errors.commissionRate?.message}
+                </FormHelperText>
+              </FormControl>
+            </Grid2>
+
+            <Grid2 size={{ xs: 6, md: 3 }}>
+              <FormControl
+                variant="filled"
+                fullWidth
+                error={!!errors.commissionAmount}
+              >
+                <InputLabel htmlFor="commissionAmount">
+                  Commission Amount
+                </InputLabel>
+                <FilledInput
+                  type="number"
+                  size="small"
+                  id="commissionAmount"
+                  {...register("commissionAmount", { valueAsNumber: true })}
+                />
+                <FormHelperText>
+                  {errors.commissionAmount?.message}
                 </FormHelperText>
               </FormControl>
             </Grid2>

@@ -84,6 +84,7 @@ const WithDrawTransactionUpdate = () => {
     //   notifications
     // );
     if (response.statusCode === 200) {
+      console.log("success");
       navigate(`${paths.withDrawTransactionList}`); // Navigate to the wallet list page on success
     }
     setLoading(false);
@@ -121,6 +122,7 @@ const WithDrawTransactionUpdate = () => {
 
   useEffect(() => {
     if (withDrawTransaction) {
+      console.log("withdraw", withDrawTransaction.id);
       setValue("id", Number(withDrawTransaction.id) || 0);
       setValue("amount", withDrawTransaction.amount || "");
       setValue("driverId", withDrawTransaction.driverInfoDto.id || 0);

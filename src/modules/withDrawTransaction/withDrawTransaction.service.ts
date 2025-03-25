@@ -19,7 +19,8 @@ export const withDrawTransactionService = {
     );
     await httpServiceHandler(dispatch, response.data);
 
-    if (response.data.statusCode === 201) {
+    if (response.data.statusCode === 200) {
+      console.log("service success");
       //'info' | 'success' | 'warning' | 'error'
       notifications.show("Wallet is created successfully", {
         severity: "success",

@@ -53,7 +53,7 @@ const RoleCreate = () => {
     const roleData = { ...data };
 
     const response = await roleService.store(roleData, dispatch, notifications);
-    if (response.status === 201) {
+    if (response?.data?.statusCode === 201) {
       navigate(`${paths.roleList}`);
     }
     setLoading(false);

@@ -37,7 +37,6 @@ const CityCreate = () => {
   const {
     register,
     handleSubmit,
-    control,
     formState: { errors },
   } = useForm<CityCreateFormInputs>({
     resolver: zodResolver(citySchema),

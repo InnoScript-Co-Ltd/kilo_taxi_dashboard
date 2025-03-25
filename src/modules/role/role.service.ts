@@ -14,7 +14,9 @@ export const roleService = {
     const response: any = await postRequest(endpoints.role, payload, dispatch);
     await httpServiceHandler(dispatch, response, notifications);
 
-    if (response.statusCode === 201) {
+    console.log(response);
+
+    if (response?.data.statusCode === 201) {
       notifications.show("Role is created successfully", {
         severity: "success",
         autoHideDuration: 3000,

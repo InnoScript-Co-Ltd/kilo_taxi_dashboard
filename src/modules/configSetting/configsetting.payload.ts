@@ -4,6 +4,7 @@ import { z } from "zod";
 export const configSettingSchema = z.object({
   id: z.number().min(0, { message: "id" }).default(0),
   commissionRate: z.number(),
+  commissionAmount: z.number(),
   matchDistance: z.number(),
   maxMatchDistance: z.number(),
   defaultTime: z.string(),
@@ -24,6 +25,7 @@ export interface CONFIGSETTING {
   minute: number;
   minutePerRate: number;
   commissionRate: number;
+  commissionAmount: number;
   createdDate: Date;
   updatedDate: Date;
   action?: null;
@@ -100,6 +102,14 @@ export const configSettingColumns: readonly ConfigSetting_Column[] = [
   {
     id: "commissionRate",
     label: "Commission Rate",
+    minWidth: 100,
+    numeric: false,
+    disablePadding: false,
+    sort: true,
+  },
+  {
+    id: "commissionAmount",
+    label: "Commission Amount",
     minWidth: 100,
     numeric: false,
     disablePadding: false,

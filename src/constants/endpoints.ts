@@ -12,7 +12,7 @@ export const endpoints = {
   customer: "Customer",
   promotion: "Promotion",
   review: "Review",
-  scheduleBooking: "Order",
+  scheduleBooking: "ScheduleBooking",
   country: "Country",
   city: "City",
   township: "Township",

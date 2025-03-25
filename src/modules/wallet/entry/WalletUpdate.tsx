@@ -41,7 +41,8 @@ const WalletUpdate = () => {
     defaultValues: {
       walletName: "",
       kilo: "",
-      amount: "",
+      downTownAmount: "",
+      outTownAmount: "",
     },
   });
 
@@ -81,7 +82,8 @@ const WalletUpdate = () => {
       setValue("id", Number(wallet.id) || 0);
       setValue("walletName", wallet.walletName || "");
       setValue("kilo", wallet.kilo || "");
-      setValue("amount", wallet.amount || "");
+      setValue("downTownAmount", wallet.downTownAmount || "");
+      setValue("outTownAmount", wallet.outTownAmount || "");
     }
   }, [wallet, setValue]);
 
@@ -123,15 +125,39 @@ const WalletUpdate = () => {
             </Grid2>
 
             <Grid2 size={{ xs: 6, md: 3 }}>
-              <FormControl variant="filled" fullWidth error={!!errors.amount}>
-                <InputLabel htmlFor="amount">Amount</InputLabel>
+              <FormControl
+                variant="filled"
+                fullWidth
+                error={!!errors.downTownAmount}
+              >
+                <InputLabel htmlFor="downTownAmount">
+                  DownTown Amount
+                </InputLabel>
                 <FilledInput
                   type="number"
                   size="small"
-                  id="amount"
-                  {...register("amount")}
+                  id="downTownAmount"
+                  {...register("downTownAmount")}
                 />
-                <FormHelperText>{errors.amount?.message}</FormHelperText>
+                <FormHelperText>
+                  {errors.downTownAmount?.message}
+                </FormHelperText>
+              </FormControl>
+            </Grid2>
+            <Grid2 size={{ xs: 6, md: 3 }}>
+              <FormControl
+                variant="filled"
+                fullWidth
+                error={!!errors.outTownAmount}
+              >
+                <InputLabel htmlFor="outTownAmount">OutTown Amount</InputLabel>
+                <FilledInput
+                  type="number"
+                  size="small"
+                  id="outTownAmount"
+                  {...register("outTownAmount")}
+                />
+                <FormHelperText>{errors.outTownAmount?.message}</FormHelperText>
               </FormControl>
             </Grid2>
           </Grid2>

@@ -4,11 +4,11 @@ import OrderCreate from "./entry/OrderCreate";
 import OrderMap from "./entry/OrderMap";
 
 export const SimulationRoute = [
-  {
-    id: "order-new",
-    path: paths.simulationOrderCreate,
-    element: <OrderCreate />,
-  },
+  // {
+  //   id: "order-new",
+  //   path: paths.simulationOrderCreate,
+  //   element: <OrderCreate />,
+  // },
 
   {
     id: "order-map",

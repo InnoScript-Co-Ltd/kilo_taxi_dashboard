@@ -57,12 +57,12 @@ const OrderDetail = () => {
                 <strong>ID:</strong> {order.id}
               </p>
               <p>
-                <strong>Total Amount:</strong> {order.totalAmount}
+                <strong>Total Amount:</strong> {order?.totalAmount}
               </p>
               <p>
                 <strong>Estimated Amount:</strong>{" "}
                 <Chip
-                  label={`${order.estimatedAmount} Ks`}
+                  label={`${order?.estimatedAmount} Ks`}
                   color="secondary"
                   variant="outlined"
                 />

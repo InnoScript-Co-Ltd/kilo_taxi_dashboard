@@ -30,7 +30,7 @@ export const scheduleBookingService = {
 
   index: async (dispatch: Dispatch, params: any, notifications?: any) => {
     const response: any = await getRequest(
-      endpoints.scheduleBooking + "/Schedule-Orders",
+      endpoints.order + "/Schedule-Orders",
       params,
       dispatch
     );
@@ -76,11 +76,11 @@ export const scheduleBookingService = {
   // Method to fetch details of a specific state by ID
   show: async (dispatch: Dispatch, id: number) => {
     const response: any = await getRequest(
-      `${endpoints.scheduleBooking}/${id}`,
+      `${endpoints.order}/${id}`,
       null,
       dispatch
     );
-    await httpServiceHandler(dispatch, response);
+    await httpServiceHandler(dispatch, response.data.payload);
 
     if (response.status === 200) {
       dispatch(show(response.data.payload));
