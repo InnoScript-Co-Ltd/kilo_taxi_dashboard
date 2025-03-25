@@ -72,6 +72,7 @@ export const paths = {
   order: "/order",
   orderUpdate: "/order/update/:id",
   orderList: "/order/list",
+  driverTrips: "/order/tripHistory",
   orderDetail: "/order/:id",
 
   paymentChannel: "/paymentchannel",

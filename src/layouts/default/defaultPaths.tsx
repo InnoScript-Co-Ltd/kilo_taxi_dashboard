@@ -172,6 +172,11 @@ export const navigationList = [
         title: "List",
         icon: <FormatListBulletedIcon />,
       },
+      {
+        segment: "tripHistory",
+        title: "Drivers-Trips-Histories",
+        icon: <FormatListBulletedIcon />,
+      },
     ],
   },
   {
@@ -211,11 +216,11 @@ export const navigationList = [
         title: "List",
         icon: <FormatListBulletedIcon />,
       },
-      {
-        segment: "receive",
-        title: "Sos Receive",
-        icon: <FormatListBulletedIcon />,
-      },
+      // {
+      //   segment: "receive",
+      //   title: "Sos Receive",
+      //   icon: <FormatListBulletedIcon />,
+      // },
     ],
   },
   {
