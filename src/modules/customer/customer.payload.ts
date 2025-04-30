@@ -68,6 +68,8 @@ export interface CUSTOMER {
   gender: number;
   status: number;
   kycStatus: number;
+  createdBy: string;
+  updatedBy: string;
   // file_NrcImageFront: string;
   // file_NrcImageBack: string;
   file_profile: string;
@@ -169,6 +171,22 @@ export const columns: readonly Customer_Column[] = [
   {
     id: "kycStatus",
     label: "KycStatus",
+    minWidth: 50,
+    maxWidth: 50,
+    numeric: false,
+    disablePadding: false,
+  },
+  {
+    id: "createdBy",
+    label: "Created By",
+    minWidth: 50,
+    maxWidth: 50,
+    numeric: false,
+    disablePadding: false,
+  },
+  {
+    id: "updatedBy",
+    label: "Updated By",
     minWidth: 50,
     maxWidth: 50,
     numeric: false,

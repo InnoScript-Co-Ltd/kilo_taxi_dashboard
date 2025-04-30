@@ -71,7 +71,7 @@ export const withDrawTransactionService = {
     );
     await httpServiceHandler(dispatch, response);
 
-    if (response.data.statusCode === 200) {
+    if (response.data.status === 200) {
       //'info' | 'success' | 'warning' | 'error'
       notifications?.show("WithDrawTransaction is updated successfully", {
         severity: "success",

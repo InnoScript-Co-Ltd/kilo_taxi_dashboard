@@ -54,53 +54,6 @@ const AdminUpdate = () => {
       roleIds: [],
     },
   });
-
-  // Load data into form fields on component mount
-  const loadingData = useCallback(async () => {
-    setLoading(true);
-    await adminService.show(dispatch, params.id);
-    setLoading(false);
-  }, [dispatch, params.id]);
-
-  useEffect(() => {
-    loadingData();
-  }, [loadingData]);
-
-  // Populate form values when country data is available
-  useEffect(() => {
-    if (admin) {
-      setValue("Id", admin.id);
-      setValue("Name", admin.name || "");
-      setValue("Phone", admin.phone || "");
-      setValue("Email", admin.email || "");
-      setValue("Address", admin.address || "");
-      setValue("Gender", admin.gender || "MALE");
-      setValue("roleIds", admin.roleIds || []);
-    }
-  }, [admin, setValue]);
-
-  const loadRoles = useCallback(async () => {
-    try {
-      const roleRes: any = await getRequest(
-        `${endpoints?.role}`,
-        null,
-        dispatch
-      );
-
-      await httpServiceHandler(dispatch, roleRes.data);
-      if (roleRes && "data" in roleRes && roleRes.status === 200) {
-        setRoleLists(roleRes?.data?.payload?.roleInfoDtos);
-      }
-    } catch (error) {
-      await httpErrorHandler(error, dispatch);
-    }
-  }, [dispatch]);
-
-  useEffect(() => {
-    loadRoles();
-  }, [loadRoles]);
-
-  // Submit form data
   const onSubmit = async (data: AdminUpdateFormInputs) => {
     try {
       setLoading(true);
@@ -119,6 +72,58 @@ const AdminUpdate = () => {
       console.error("Admin Update Error :", error);
     }
   };
+
+  // Load data into form fields on component mount
+  const loadingData = useCallback(async () => {
+    setLoading(true);
+    await adminService.show(dispatch, params.id);
+    setLoading(false);
+  }, [dispatch, params.id]);
+
+  useEffect(() => {
+    loadingData();
+  }, [loadingData]);
+
+  // Populate form values when country data is available
+  useEffect(() => {
+    if (admin) {
+      console.log("admin:", admin.roleInfoDtos);
+      setValue("Id", admin.id);
+      setValue("Name", admin.name || "");
+      setValue("Phone", admin.phone || "");
+      setValue("Email", admin.email || "");
+      setValue("Address", admin.address || "");
+      setValue("Gender", admin.gender || "MALE");
+      setValue(
+        "roleIds",
+        (admin?.roleInfoDtos || []).map((r) => Number(r.id))
+      );
+    }
+  }, [admin, setValue]);
+
+  const loadRoles = useCallback(async () => {
+    try {
+      const roleRes: any = await getRequest(
+        `${endpoints?.role}`,
+        null,
+        dispatch
+      );
+
+      await httpServiceHandler(dispatch, roleRes.data);
+      if (roleRes && "data" in roleRes && roleRes.status === 200) {
+        console.log("roles :", roleRes.data.payload.roleInfoDtos[2].name);
+        setRoleLists(roleRes?.data?.payload?.roleInfoDtos);
+      }
+    } catch (error) {
+      await httpErrorHandler(error, dispatch);
+    }
+  }, [dispatch]);
+
+  useEffect(() => {
+    loadRoles();
+  }, [loadRoles]);
+
+  // Submit form data
 
   return (
     <Box>

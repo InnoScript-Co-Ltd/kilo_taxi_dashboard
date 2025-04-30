@@ -7,12 +7,14 @@ import { ADMIN } from "../admin/admin.payload";
 export const withDrawtransactionSchema = z.object({
   id: z.number().min(0, { message: "id" }).default(0),
   amount: z
-    .string()
+    .number()
     .min(2, { message: "wallet Name must be at least 2 characters long" }),
   transactionDate: z.date().nullable(),
   transactionScreenShoot: z.string(),
   file_transactionScreenShoot: z.any().nullable(),
   driverId: z.number().min(0, { message: "id" }).default(0),
+  adminId: z.number().min(0, { message: "id" }).default(0),
+
   status: z.number(),
 });
 
@@ -25,7 +27,7 @@ export type WithDrawTransactionFormInputs = z.infer<
  */
 export interface WITHDRAWTRANSACTION {
   id: string;
-  amount: string;
+  amount: number;
   transactionDate: Date;
   updateDate?: Date;
   transactionScreenShoot?: string;

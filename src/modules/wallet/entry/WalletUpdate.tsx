@@ -40,9 +40,9 @@ const WalletUpdate = () => {
     resolver: zodResolver(walletSchema),
     defaultValues: {
       walletName: "",
-      kilo: "",
-      downTownAmount: "",
-      outTownAmount: "",
+      kilo: 0,
+      downTownAmount: 0,
+      outTownAmount: 0,
     },
   });
 
@@ -81,9 +81,9 @@ const WalletUpdate = () => {
     if (wallet) {
       setValue("id", Number(wallet.id) || 0);
       setValue("walletName", wallet.walletName || "");
-      setValue("kilo", wallet.kilo || "");
-      setValue("downTownAmount", wallet.downTownAmount || "");
-      setValue("outTownAmount", wallet.outTownAmount || "");
+      setValue("kilo", wallet.kilo || 0);
+      setValue("downTownAmount", wallet.downTownAmount || 0);
+      setValue("outTownAmount", wallet.outTownAmount || 0);
     }
   }, [wallet, setValue]);
 
@@ -118,7 +118,7 @@ const WalletUpdate = () => {
                   type="number"
                   size="small"
                   id="kilo"
-                  {...register("kilo")}
+                  {...register("kilo", { valueAsNumber: true })}
                 />
                 <FormHelperText>{errors.kilo?.message}</FormHelperText>
               </FormControl>
@@ -137,7 +137,7 @@ const WalletUpdate = () => {
                   type="number"
                   size="small"
                   id="downTownAmount"
-                  {...register("downTownAmount")}
+                  {...register("downTownAmount", { valueAsNumber: true })}
                 />
                 <FormHelperText>
                   {errors.downTownAmount?.message}
@@ -155,7 +155,7 @@ const WalletUpdate = () => {
                   type="number"
                   size="small"
                   id="outTownAmount"
-                  {...register("outTownAmount")}
+                  {...register("outTownAmount", { valueAsNumber: true })}
                 />
                 <FormHelperText>{errors.outTownAmount?.message}</FormHelperText>
               </FormControl>

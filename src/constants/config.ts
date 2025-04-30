@@ -6,7 +6,7 @@ export const env = ["https://localhost:7181/api/v1"];
 // process.env.REACT_APP_HAD_URL || "https://localhost:7044/dashboard";
 
 // export const env = ["http://4.145.92.57:81/api/v1"];
-export const hadUrl = "https://localhost:7044/dashboard";
+export const hadUrl = "http://4.145.92.57:83/dashboard";
 
 export const drawerWidth: number = 300;
 

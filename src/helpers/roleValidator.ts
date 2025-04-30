@@ -37,6 +37,7 @@ const useRoleValidator = () => {
 
   // Specific role checkers
   const isSuperAdmin = (): boolean => isRolePresent("systemadmin");
+  const isAdmin = (): boolean => isRolePresent("admin");
   const isOrderAdmin = (): boolean => isRolePresent("orderadmin");
   const isTopUpAdmin = (): boolean => isRolePresent("topupadmin");
   const isWithdrawAdmin = (): boolean => isRolePresent("withdrawadmin");
@@ -44,6 +45,7 @@ const useRoleValidator = () => {
   return {
     userRoles,
     isSuperAdmin,
+    isAdmin,
     isOrderAdmin,
     isTopUpAdmin,
     isWithdrawAdmin,

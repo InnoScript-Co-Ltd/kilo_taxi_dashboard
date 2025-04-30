@@ -28,6 +28,7 @@ export interface CONFIGSETTING {
   commissionAmount: number;
   createdDate: Date;
   updatedDate: Date;
+  updatedBy: string;
   action?: null;
 }
 
@@ -126,6 +127,14 @@ export const configSettingColumns: readonly ConfigSetting_Column[] = [
   {
     id: "updatedDate",
     label: "Updated Date",
+    minWidth: 100,
+    numeric: false,
+    disablePadding: false,
+    sort: true,
+  },
+  {
+    id: "updatedBy",
+    label: "Updated By",
     minWidth: 100,
     numeric: false,
     disablePadding: false,

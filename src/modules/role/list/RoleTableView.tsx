@@ -109,13 +109,6 @@ const RoleTableView = () => {
           }}
         >
           <Button
-            startIcon={<AddCircleOutlineIcon />}
-            onClick={() => navigate(paths.roleCreate)} // Adjust path for wallet create page
-          >
-            Create
-          </Button>
-
-          <Button
             onClick={() => {
               dispatch(setPaginate(rolePayload.pagingParams)); // Adjust the reset payload
               setPage(0);
@@ -184,14 +177,6 @@ const RoleTableView = () => {
                     <StyledTableCell key={column.id} align={column.align}>
                       {(() => {
                         switch (column.label) {
-                          case "Action":
-                            return (
-                              <UpAndDel
-                                url={`${paths.role}/${row.id}`} // Adjust for wallet delete
-                                fn={loadingData}
-                                priority={true}
-                              />
-                            );
                           default:
                             return value; // Fallback case
                         }

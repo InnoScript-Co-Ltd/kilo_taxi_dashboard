@@ -46,7 +46,7 @@ import { formatDate } from "../../../helpers/common";
 import Status from "../../../components/Status";
 import useRoleValidator from "../../../helpers/roleValidator";
 
-const CustomerTableView = () => {
+const CustomerDeletedTableView = () => {
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
   const [fromDate, setFromDate] = React.useState("");
@@ -119,7 +119,7 @@ const CustomerTableView = () => {
 
   const loadingData = React.useCallback(async () => {
     setLoading(true);
-    await customerService.index(dispatch, pagingParams, notifications);
+    await customerService.deleted(dispatch, pagingParams, notifications);
     setLoading(false);
   }, [dispatch, pagingParams, notifications]);
 
@@ -156,74 +156,6 @@ const CustomerTableView = () => {
             </InputAdornment>
           }
         />
-
-        <Box
-          sx={{
-            display: "flex",
-            justifyContent: "start",
-            alignItems: "center",
-            gap: 3,
-          }}
-        >
-          {isSuperAdmin() || isAdmin() ? (
-            <Button
-              startIcon={<AddCircleOutlineIcon />}
-              onClick={() => navigate(paths.customerCreate)}
-            >
-              Create
-            </Button>
-          ) : (
-            <></>
-          )}
-          {isSuperAdmin() || isAdmin() ? (
-            <Box sx={{ my: "20px", px: "20px", display: "flex", gap: 3 }}>
-              <TextField
-                label="From Date"
-                type="date"
-                InputLabelProps={{ shrink: true }}
-                value={fromDate}
-                onChange={(e) => setFromDate(e.target.value)}
-              />
-              <TextField
-                label="To Date"
-                type="date"
-                InputLabelProps={{ shrink: true }}
-                value={toDate}
-                onChange={(e) => setToDate(e.target.value)}
-              />
-              <FormControl variant="filled" sx={{ minWidth: 150 }}>
-                <InputLabel>Status</InputLabel>
-                <Select
-                  value={status}
-                  onChange={(e) => setStatus(e.target.value)}
-                  size="small"
-                >
-                  <MenuItem value="">All</MenuItem>
-                  <MenuItem value="ACTIVE">ACTIVE</MenuItem>
-                  <MenuItem value="PENDING">PENDING</MenuItem>
-                  <MenuItem value="DEACTIVE">DEACTIVE</MenuItem>
-                  <MenuItem value="SUSPENDED">SUSPENDED</MenuItem>
-                </Select>
-              </FormControl>
-
-              <Button variant="contained" onClick={handleDownloadReport}>
-                Download Report
-              </Button>
-            </Box>
-          ) : (
-            <></>
-          )}
-
-          <Button
-            onClick={() => {
-              dispatch(setPaginate(customerPayload.pagingParams));
-            }}
-            startIcon={<RestartAltIcon />}
-            color="secondary"
-          >
-            Reset
-          </Button>
-        </Box>
       </Box>
 
       <TableContainer sx={{ maxHeight: 440 }}>
@@ -336,4 +268,4 @@ const CustomerTableView = () => {
   );
 };
 
-export default CustomerTableView;
+export default CustomerDeletedTableView;

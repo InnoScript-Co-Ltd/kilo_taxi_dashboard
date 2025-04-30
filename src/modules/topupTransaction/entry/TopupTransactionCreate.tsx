@@ -231,7 +231,9 @@ const TopupTransactionCreate = () => {
                   name="file_transaction_screenshoot"
                   control={control}
                   defaultValue={undefined} // Set initial state to null
-                  rules={{ required: "NRC Front is required" }} // Only use required here
+                  rules={{
+                    required: "file_transaction_screenshoot  is required",
+                  }} // Only use required here
                   render={({ field: { onChange, value } }) => (
                     <FileUploadWithPreview
                       onFileChange={(file) => {
@@ -246,7 +248,7 @@ const TopupTransactionCreate = () => {
                           : undefined
                       }
                       // Correctly extracting the error message
-                      field="NRC Front" // Label for the upload button
+                      field="TopUp Transaction Screen shoot " // Label for the upload button
                       //src={topupTransaction?.transaction_screenshoot}
                       disabled={loading}
                     />

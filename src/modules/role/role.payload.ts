@@ -63,15 +63,6 @@ export const roleColumns: readonly RoleColumn[] = [
     disablePadding: false,
     sort: true,
   },
-
-  {
-    id: "action",
-    label: "Action",
-    minWidth: 60,
-    numeric: false,
-    disablePadding: false,
-    sort: false,
-  },
 ];
 
 export const rolePayload: ROLE_PAYLOAD = {

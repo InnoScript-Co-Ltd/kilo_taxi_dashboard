@@ -24,12 +24,22 @@ export interface ExtraDemand {
   title: string;
   amount: number;
   description: string;
-  createDate: Date ;
+  createDate: Date;
+  createdBy: string;
+  updatedBy: string;
 }
 
 // Define columns for extraDemand table
 interface ExtraDemandColumn {
-  id: "id" | "title" | "amount" | "description" | "createDate" | "action";
+  id:
+    | "id"
+    | "title"
+    | "amount"
+    | "description"
+    | "createDate"
+    | "createdBy"
+    | "updatedBy"
+    | "action";
   label: string;
   minWidth?: number;
   align?: "right";
@@ -78,6 +88,22 @@ export const extraDemandColumns: readonly ExtraDemandColumn[] = [
   {
     id: "createDate",
     label: "Create Date",
+    minWidth: 125,
+    numeric: false,
+    disablePadding: false,
+    sort: true,
+  },
+  {
+    id: "createdBy",
+    label: "Created By",
+    minWidth: 125,
+    numeric: false,
+    disablePadding: false,
+    sort: true,
+  },
+  {
+    id: "updatedBy",
+    label: "Updated By",
     minWidth: 125,
     numeric: false,
     disablePadding: false,

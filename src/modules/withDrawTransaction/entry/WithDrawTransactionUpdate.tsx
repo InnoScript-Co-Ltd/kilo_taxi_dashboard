@@ -57,15 +57,71 @@ const WithDrawTransactionUpdate = () => {
     resolver: zodResolver(withDrawtransactionSchema),
     defaultValues: {
       id: 0,
-      amount: "",
+      amount: 0,
       driverId: 0,
+      adminId: 0,
       transactionDate: null,
       transactionScreenShoot: "",
       status: 0,
     },
   });
 
-  // Function to handle form submission and wallet update
+  // Function to load wallet data based on the ID from params
+  const loadingData = useCallback(async () => {
+    setLoading(true);
+    try {
+      await withDrawTransactionService.show(dispatch, params.id);
+      const driverResponse: any = await getRequest(
+        endpoints.driver,
+        null,
+        dispatch
+      );
+      await httpServiceHandler(dispatch, driverResponse);
+
+      if (
+        driverResponse &&
+        "data" in driverResponse &&
+        driverResponse.status === 200
+      ) {
+        setDriversList(driverResponse.data.payload.drivers);
+      }
+    } catch (error) {
+      await httpErrorHandler(error, dispatch);
+    }
+    setLoading(false);
+  }, [dispatch, params.id]);
+
+  useEffect(() => {
+    loadingData();
+  }, [loadingData]);
+
+  useEffect(() => {
+    if (withDrawTransaction) {
+      setValue("id", Number(withDrawTransaction.id) || 0);
+      setValue("amount", withDrawTransaction.amount);
+      setValue("driverId", withDrawTransaction.driverInfoDto.id);
+      // setValue("adminId", withDrawTransaction.adminInfoDto.id || 0);
+
+      setValue(
+        "status",
+        getId({
+          lists: WithDrawStatuLists,
+          value: withDrawTransaction.status,
+        }) || 0
+      );
+      setValue(
+        "transactionDate",
+        (withDrawTransaction?.transactionDate &&
+          new Date(withDrawTransaction.transactionDate)) ||
+          null
+      );
+
+      // setValue(
+      //   "transactionDate",
+      //   withDrawTransaction.transactionDate || new Date()
+      // );
+    }
+  }, [withDrawTransaction, setValue]);
   const submitWithDrawTransactionUpdate = async (
     data: WithDrawTransactionFormInputs
   ) => {
@@ -89,63 +145,6 @@ const WithDrawTransactionUpdate = () => {
     }
     setLoading(false);
   };
-
-  // Function to load wallet data based on the ID from params
-  const loadingData = useCallback(async () => {
-    setLoading(true);
-    try {
-      await withDrawTransactionService.show(dispatch, params.id); // Fetch vehicle data to populate the form
-      const driverResponse: any = await getRequest(
-        endpoints.driver,
-        null,
-        dispatch
-      );
-      console.log("driver", driverResponse);
-      await httpServiceHandler(dispatch, driverResponse);
-
-      if (
-        driverResponse &&
-        "data" in driverResponse &&
-        driverResponse.data.statusCode === 200
-      ) {
-        setDriversList(driverResponse.data.payload.drivers);
-      }
-    } catch (error) {
-      await httpErrorHandler(error, dispatch);
-    }
-    setLoading(false);
-  }, [dispatch, params.id]);
-
-  useEffect(() => {
-    loadingData();
-  }, [loadingData]);
-
-  useEffect(() => {
-    if (withDrawTransaction) {
-      console.log("withdraw", withDrawTransaction.id);
-      setValue("id", Number(withDrawTransaction.id) || 0);
-      setValue("amount", withDrawTransaction.amount || "");
-      setValue("driverId", withDrawTransaction.driverInfoDto.id || 0);
-      setValue(
-        "status",
-        getId({
-          lists: WithDrawStatuLists,
-          value: withDrawTransaction.status,
-        }) || 0
-      );
-      setValue(
-        "transactionDate",
-        (withDrawTransaction?.transactionDate &&
-          new Date(withDrawTransaction.transactionDate)) ||
-          null
-      );
-
-      // setValue(
-      //   "transactionDate",
-      //   withDrawTransaction.transactionDate || new Date()
-      // );
-    }
-  }, [withDrawTransaction, setValue]);
 
   return (
     <Box>
@@ -171,7 +170,12 @@ const WithDrawTransactionUpdate = () => {
             <Grid2 size={{ xs: 6, md: 3 }}>
               <FormControl variant="filled" fullWidth error={!!errors.amount}>
                 <InputLabel htmlFor="amount">Amount</InputLabel>
-                <FilledInput size="small" id="amount" {...register("amount")} />
+                <FilledInput
+                  size="small"
+                  disabled
+                  id="amount"
+                  {...register("amount", { valueAsNumber: true })}
+                />
                 <FormHelperText>{errors.amount?.message}</FormHelperText>
               </FormControl>
             </Grid2>

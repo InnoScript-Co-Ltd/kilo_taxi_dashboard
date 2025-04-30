@@ -1,23 +1,23 @@
 import * as React from "react";
-import Paper from "@mui/material/Paper";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
 import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TablePagination from "@mui/material/TablePagination";
 import TableRow from "@mui/material/TableRow";
-import { columns, customerPayload } from "../customer.payload";
+import SearchIcon from "@mui/icons-material/Search";
+import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
+import RestartAltIcon from "@mui/icons-material/RestartAlt";
+import UpAndDel from "../../../components/UpAndDel";
+import Status from "../../../components/Status";
+import { columns, adminPayload } from "../admin.payload";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, AppRootState } from "../../../stores";
-import { customerService } from "../customer.service";
-import {
-  customerStatusLists,
-  genderStatuslists,
-  kycStatusLists,
-  paginateOptions,
-} from "../../../constants/config";
+import { adminService } from "../admin.service";
+import { paginateOptions } from "../../../constants/config";
 import { paths } from "../../../constants/paths";
 import {
+  Paper,
   Box,
   Button,
   Input,
@@ -29,39 +29,33 @@ import {
   Select,
   MenuItem,
 } from "@mui/material";
-
-import { setPaginate } from "../customer.slice";
-import SearchIcon from "@mui/icons-material/Search";
-import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
-import RestartAltIcon from "@mui/icons-material/RestartAlt";
+import { setPaginate } from "../admin.slice";
 import { useNavigate } from "react-router";
-import UpAndDel from "../../../components/UpAndDel";
 import {
   StyledTableCell,
   StyledTableRow,
 } from "../../../components/TableCommon";
-import TAvatar from "../../../components/TAvatar";
 import { useNotifications } from "@toolpad/core/useNotifications";
 import { formatDate } from "../../../helpers/common";
-import Status from "../../../components/Status";
+import AdminResetPassword from "../../../components/AdminResetPassword";
 import useRoleValidator from "../../../helpers/roleValidator";
 
-const CustomerTableView = () => {
+const AdminDeletedTableView = () => {
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
+  const [loading, setLoading] = React.useState(false);
   const [fromDate, setFromDate] = React.useState("");
   const [toDate, setToDate] = React.useState("");
   const [status, setStatus] = React.useState("");
-  const { isSuperAdmin, isAdmin } = useRoleValidator();
 
-  const dispatch = useDispatch<AppDispatch>();
   const { data, pagingParams } = useSelector(
-    (state: AppRootState) => state.customer
+    (state: AppRootState) => state.admin
   );
   const notifications = useNotifications();
 
   const navigate = useNavigate();
-  const [loading, setLoading] = React.useState(false);
+  const dispatch = useDispatch<AppDispatch>();
+  const { isSuperAdmin } = useRoleValidator();
 
   const handleChangePage = (event: unknown, newPage: number) => {
     setPage(newPage);
@@ -90,7 +84,7 @@ const CustomerTableView = () => {
   const handleDownloadReport = async () => {
     try {
       const response = await fetch(
-        `http://4.145.92.57:81/api/v1/Customer/customer-report?fromDate=${fromDate}&toDate=${toDate}&status=${status}`,
+        `http://4.145.92.57:81/api/v1/Admin/admin-report?fromDate=${fromDate}&toDate=${toDate}&status=${status}`,
         {
           method: "GET",
           headers: {
@@ -107,7 +101,7 @@ const CustomerTableView = () => {
       const url = window.URL.createObjectURL(blob);
       const a = document.createElement("a");
       a.href = url;
-      a.download = "CustomerReport.xlsx";
+      a.download = "AdminReport.xlsx";
       document.body.appendChild(a);
       a.click();
       document.body.removeChild(a);
@@ -119,7 +113,7 @@ const CustomerTableView = () => {
 
   const loadingData = React.useCallback(async () => {
     setLoading(true);
-    await customerService.index(dispatch, pagingParams, notifications);
+    await adminService.deleted(dispatch, pagingParams, notifications);
     setLoading(false);
   }, [dispatch, pagingParams, notifications]);
 
@@ -128,7 +122,7 @@ const CustomerTableView = () => {
   }, [pagingParams, loadingData]);
 
   return (
-    <Paper sx={{ width: "100%", overflow: "hidden" }}>
+    <Paper sx={{ width: "100%", overflow: "hidden", marginTop: "10px" }}>
       <Box
         sx={{
           my: "20px",
@@ -140,7 +134,7 @@ const CustomerTableView = () => {
       >
         <Input
           id="input-with-icon-search"
-          placeholder="Search Customers"
+          placeholder="Search Admin"
           value={pagingParams.SearchTerm}
           onChange={(e) => {
             dispatch(
@@ -156,74 +150,6 @@ const CustomerTableView = () => {
             </InputAdornment>
           }
         />
-
-        <Box
-          sx={{
-            display: "flex",
-            justifyContent: "start",
-            alignItems: "center",
-            gap: 3,
-          }}
-        >
-          {isSuperAdmin() || isAdmin() ? (
-            <Button
-              startIcon={<AddCircleOutlineIcon />}
-              onClick={() => navigate(paths.customerCreate)}
-            >
-              Create
-            </Button>
-          ) : (
-            <></>
-          )}
-          {isSuperAdmin() || isAdmin() ? (
-            <Box sx={{ my: "20px", px: "20px", display: "flex", gap: 3 }}>
-              <TextField
-                label="From Date"
-                type="date"
-                InputLabelProps={{ shrink: true }}
-                value={fromDate}
-                onChange={(e) => setFromDate(e.target.value)}
-              />
-              <TextField
-                label="To Date"
-                type="date"
-                InputLabelProps={{ shrink: true }}
-                value={toDate}
-                onChange={(e) => setToDate(e.target.value)}
-              />
-              <FormControl variant="filled" sx={{ minWidth: 150 }}>
-                <InputLabel>Status</InputLabel>
-                <Select
-                  value={status}
-                  onChange={(e) => setStatus(e.target.value)}
-                  size="small"
-                >
-                  <MenuItem value="">All</MenuItem>
-                  <MenuItem value="ACTIVE">ACTIVE</MenuItem>
-                  <MenuItem value="PENDING">PENDING</MenuItem>
-                  <MenuItem value="DEACTIVE">DEACTIVE</MenuItem>
-                  <MenuItem value="SUSPENDED">SUSPENDED</MenuItem>
-                </Select>
-              </FormControl>
-
-              <Button variant="contained" onClick={handleDownloadReport}>
-                Download Report
-              </Button>
-            </Box>
-          ) : (
-            <></>
-          )}
-
-          <Button
-            onClick={() => {
-              dispatch(setPaginate(customerPayload.pagingParams));
-            }}
-            startIcon={<RestartAltIcon />}
-            color="secondary"
-          >
-            Reset
-          </Button>
-        </Box>
       </Box>
 
       <TableContainer sx={{ maxHeight: 440 }}>
@@ -263,7 +189,7 @@ const CustomerTableView = () => {
           </TableHead>
 
           <TableBody>
-            {data?.customers?.map((row: any) => {
+            {data.admins?.map((row: any) => {
               return (
                 <StyledTableRow
                   hover
@@ -277,38 +203,25 @@ const CustomerTableView = () => {
                       <StyledTableCell key={column.id} align={column.align}>
                         {(() => {
                           switch (column.label) {
-                            case "Name":
-                              return value;
-                            case "Phone":
-                              return value; // Render the mobile prefix as-is
-                            case "Email":
-                              return value;
-                            case "Profile":
-                              return <TAvatar src={value} />; // Render the flag icon as-is
-                            case "Registered Datetime":
-                              return formatDate(value);
                             case "Gender":
-                              return value;
-
+                              return value?.toUpperCase();
                             case "Status":
-                              return (
-                                <Status
-                                  status={value}
-                                  lists={customerStatusLists}
-                                />
-                              );
-                            case "KycStatus":
-                              return (
-                                <Status status={value} lists={kycStatusLists} />
-                              );
-                            case "Action":
-                              return isSuperAdmin() || isAdmin() ? (
-                                <UpAndDel
-                                  url={`${paths.customer}/${row.id}`}
-                                  fn={loadingData}
-                                  priority={true}
-                                />
-                              ) : null;
+                              return <Status status={value} />;
+                            case "Email Verified At":
+                              return formatDate(value);
+                            case "Phone Verified At":
+                              return formatDate(value);
+                            case "Created At":
+                              return formatDate(value);
+                            case "Updated At":
+                              return formatDate(value);
+                            case "Created By":
+                              return value;
+                            case "Updated By":
+                              return value;
+                            case "Roles":
+                              return value?.map((v: any) => v.name).join(", ");
+
                             default:
                               return value; // Fallback case
                           }
@@ -336,4 +249,4 @@ const CustomerTableView = () => {
   );
 };
 
-export default CustomerTableView;
+export default AdminDeletedTableView;

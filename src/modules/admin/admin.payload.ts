@@ -1,5 +1,6 @@
 import { paginateOptions } from "../../constants/config";
 import { z } from "zod";
+import { Role } from "../../helpers/roleValidator";
 
 export const adminCreateSchema = z.object({
   Name: z
@@ -71,7 +72,7 @@ export interface ADMIN {
   phone: string;
   email: string;
   roleIds: number[];
-  roleInfoDtos: object[];
+  roleInfoDtos: Role[];
   gender: string;
   address: string;
   status: string;
@@ -81,6 +82,8 @@ export interface ADMIN {
   updatedDate: Date;
   deletedDate: Date;
   resetPassword: any;
+  createdBy: string;
+  updatedBy: string;
   action: any;
   // Add other country properties as necessary
 }
@@ -206,6 +209,22 @@ export const columns: readonly Admin_Column[] = [
     disablePadding: false,
   },
   {
+    id: "createdBy",
+    label: "Created By",
+    minWidth: 200,
+    maxWidth: 200,
+    numeric: false,
+    disablePadding: false,
+  },
+  {
+    id: "updatedBy",
+    label: "Updated By",
+    minWidth: 200,
+    maxWidth: 200,
+    numeric: false,
+    disablePadding: false,
+  },
+  {
     id: "createdDate",
     label: "Created At",
     minWidth: 200,
@@ -216,14 +235,6 @@ export const columns: readonly Admin_Column[] = [
   {
     id: "updatedDate",
     label: "Updated At",
-    minWidth: 200,
-    maxWidth: 200,
-    numeric: false,
-    disablePadding: false,
-  },
-  {
-    id: "deletedDate",
-    label: "Deleted At",
     minWidth: 200,
     maxWidth: 200,
     numeric: false,

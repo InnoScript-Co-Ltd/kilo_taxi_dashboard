@@ -5,7 +5,8 @@ import DriverList from "./view/DriverList"; // Adjust the import path as necessa
 import DriverDetail from "./view/DriverDetail"; // Adjust the import path as necessary
 import DriverUpdate from "./entry/DriverUpdate";
 import DriverCreate from "./entry/DriverCreate";
-
+import DriverDeletedList from "./view/DriverDeletedList";
+import DriverFixAmountList from "./view/DriverFixAmountList";
 export const DriverRoute = [
   {
     id: "driver-list",
@@ -16,6 +17,32 @@ export const DriverRoute = [
         breadcrumbs: [
           { label: "Dashboard", url: paths.dashboard },
           { label: "Drivers", url: paths.driverList },
+        ],
+      };
+    },
+  },
+  {
+    id: "driver-fixAmountList",
+    path: paths.driverFixAmountList, // Ensure this is defined in your paths constant
+    element: <DriverFixAmountList />,
+    loader: () => {
+      return {
+        breadcrumbs: [
+          { label: "Dashboard", url: paths.dashboard },
+          { label: "Drivers", url: paths.driverFixAmountList },
+        ],
+      };
+    },
+  },
+  {
+    id: "driver-deletedlist",
+    path: paths.driverDeletedList, // Ensure this is defined in your paths constant
+    element: <DriverDeletedList />,
+    loader: () => {
+      return {
+        breadcrumbs: [
+          { label: "Dashboard", url: paths.dashboard },
+          { label: "Drivers", url: paths.driverDeletedList },
         ],
       };
     },

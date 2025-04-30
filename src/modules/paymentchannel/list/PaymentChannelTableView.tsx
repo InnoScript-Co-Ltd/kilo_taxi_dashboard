@@ -38,6 +38,7 @@ import {
 } from "../../../components/TableCommon";
 import { useNotifications } from "@toolpad/core/useNotifications";
 import Status from "../../../components/Status";
+import useRoleValidator from "../../../helpers/roleValidator";
 
 const PaymentChannelTableView = () => {
   const [page, setPage] = React.useState(0);
@@ -50,6 +51,7 @@ const PaymentChannelTableView = () => {
   const notifications = useNotifications();
   const navigate = useNavigate();
   const [loading, setLoading] = React.useState(false);
+  const { isSuperAdmin, isAdmin } = useRoleValidator();
 
   const handleChangePage = (event: unknown, newPage: number) => {
     setPage(newPage);
@@ -99,7 +101,7 @@ const PaymentChannelTableView = () => {
       >
         <Input
           id="input-with-icon-search"
-          placeholder="Search Wallet"
+          placeholder="Search PaymentChannel"
           value={pagingParams.SearchTerm}
           onChange={(e) => {
             dispatch(
@@ -124,12 +126,16 @@ const PaymentChannelTableView = () => {
             gap: 3,
           }}
         >
-          <Button
-            startIcon={<AddCircleOutlineIcon />}
-            onClick={() => navigate(paths.paymentChannelCreate)} // Adjust path for wallet create page
-          >
-            Create
-          </Button>
+          {isSuperAdmin() || isAdmin() ? (
+            <Button
+              startIcon={<AddCircleOutlineIcon />}
+              onClick={() => navigate(paths.paymentChannelCreate)} // Adjust path for wallet create page
+            >
+              Create
+            </Button>
+          ) : (
+            <></>
+          )}
 
           <Button
             onClick={() => {
@@ -207,20 +213,15 @@ const PaymentChannelTableView = () => {
                           case "Description":
                             return value;
                           case "PaymentType":
-                            return (
-                              <Status
-                                status={value}
-                                lists={paymentTypeStatusLists}
-                              />
-                            );
+                            return value;
                           case "Action":
-                            return (
+                            return isSuperAdmin() || isAdmin() ? (
                               <UpAndDel
                                 url={`${paths.paymentChannel}/${row.id}`} // Adjust for wallet delete
                                 fn={loadingData}
                                 priority={true}
                               />
-                            );
+                            ) : null;
                           default:
                             return value; // Fallback case
                         }

@@ -48,7 +48,7 @@ import FilterComponent from "../../../components/FilterComponent";
 import { useNavigate } from "react-router";
 import useRoleValidator from "../../../helpers/roleValidator";
 
-export const DriverTableView = () => {
+export const DriverFixAmountTableView = () => {
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
   const [fromDate, setFromDate] = React.useState("");
@@ -119,7 +119,7 @@ export const DriverTableView = () => {
   };
   const loadingData = React.useCallback(async () => {
     setLoading(true);
-    await driverService.index(dispatch, pagingParams, notifications);
+    await driverService.fixAmount(dispatch, pagingParams, notifications);
     setLoading(false);
   }, [dispatch, pagingParams, notifications]);
 
@@ -345,4 +345,4 @@ export const DriverTableView = () => {
   );
 };
 
-export default DriverTableView;
+export default DriverFixAmountTableView;

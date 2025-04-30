@@ -38,6 +38,7 @@ import {
 import { useNotifications } from "@toolpad/core/useNotifications";
 import { formatDate } from "../../../helpers/common";
 import AdminResetPassword from "../../../components/AdminResetPassword";
+import useRoleValidator from "../../../helpers/roleValidator";
 
 const AdminTableView = () => {
   const [page, setPage] = React.useState(0);
@@ -54,6 +55,7 @@ const AdminTableView = () => {
 
   const navigate = useNavigate();
   const dispatch = useDispatch<AppDispatch>();
+  const { isSuperAdmin } = useRoleValidator();
 
   const handleChangePage = (event: unknown, newPage: number) => {
     setPage(newPage);
@@ -82,7 +84,7 @@ const AdminTableView = () => {
   const handleDownloadReport = async () => {
     try {
       const response = await fetch(
-        `https://localhost:7181/api/v1/Admin/admin-report?fromDate=${fromDate}&toDate=${toDate}`,
+        `http://4.145.92.57:81/api/v1/Admin/admin-report?fromDate=${fromDate}&toDate=${toDate}&status=${status}`,
         {
           method: "GET",
           headers: {
@@ -157,46 +159,54 @@ const AdminTableView = () => {
             gap: 3,
           }}
         >
-          <Button
-            startIcon={<AddCircleOutlineIcon />}
-            onClick={() => navigate(paths.adminCreate)}
-          >
-            Create
-          </Button>
-          <Box sx={{ my: "20px", px: "20px", display: "flex", gap: 3 }}>
-            <TextField
-              label="From Date"
-              type="date"
-              InputLabelProps={{ shrink: true }}
-              value={fromDate}
-              onChange={(e) => setFromDate(e.target.value)}
-            />
-            <TextField
-              label="To Date"
-              type="date"
-              InputLabelProps={{ shrink: true }}
-              value={toDate}
-              onChange={(e) => setToDate(e.target.value)}
-            />
-            <FormControl variant="filled" sx={{ minWidth: 150 }}>
-              <InputLabel>Status</InputLabel>
-              <Select
-                value={status}
-                onChange={(e) => setStatus(e.target.value)}
-                size="small"
-              >
-                <MenuItem value="">All</MenuItem>
-                <MenuItem value="Active">Active</MenuItem>
-                <MenuItem value="PENDING">PENDING</MenuItem>
-                <MenuItem value="DEACTIVE">DEACTIVE</MenuItem>
-                <MenuItem value="SUSPENDED">SUSPENDED</MenuItem>
-              </Select>
-            </FormControl>
-
-            <Button variant="contained" onClick={handleDownloadReport}>
-              Download Report
+          {isSuperAdmin() ? (
+            <Button
+              startIcon={<AddCircleOutlineIcon />}
+              onClick={() => navigate(paths.adminCreate)}
+            >
+              Create
             </Button>
-          </Box>
+          ) : (
+            <></>
+          )}
+          {isSuperAdmin() ? (
+            <Box sx={{ my: "20px", px: "20px", display: "flex", gap: 3 }}>
+              <TextField
+                label="From Date"
+                type="date"
+                InputLabelProps={{ shrink: true }}
+                value={fromDate}
+                onChange={(e) => setFromDate(e.target.value)}
+              />
+              <TextField
+                label="To Date"
+                type="date"
+                InputLabelProps={{ shrink: true }}
+                value={toDate}
+                onChange={(e) => setToDate(e.target.value)}
+              />
+              <FormControl variant="filled" sx={{ minWidth: 150 }}>
+                <InputLabel>Status</InputLabel>
+                <Select
+                  value={status}
+                  onChange={(e) => setStatus(e.target.value)}
+                  size="small"
+                >
+                  <MenuItem value="">All</MenuItem>
+                  <MenuItem value="ACTIVE">ACTIVE</MenuItem>
+                  <MenuItem value="PENDING">PENDING</MenuItem>
+                  <MenuItem value="DEACTIVE">DEACTIVE</MenuItem>
+                  <MenuItem value="SUSPENDED">SUSPENDED</MenuItem>
+                </Select>
+              </FormControl>
+
+              <Button variant="contained" onClick={handleDownloadReport}>
+                Download Report
+              </Button>
+            </Box>
+          ) : (
+            <></>
+          )}
           <Button
             onClick={() => {
               dispatch(setPaginate(adminPayload.pagingParams));
@@ -272,26 +282,31 @@ const AdminTableView = () => {
                               return formatDate(value);
                             case "Updated At":
                               return formatDate(value);
-                            case "Deleted At":
-                              return formatDate(value);
+                            case "Created By":
+                              return value;
+                            case "Updated By":
+                              return value;
                             case "Roles":
                               return value?.map((v: any) => v.name).join(", ");
                             case "Reset Password":
-                              return (
+                              return isSuperAdmin() ? (
                                 <AdminResetPassword
-                                  url={`${paths.admin}/${row.id}`}
+                                  url={`${paths.admin}/reset-password`}
                                   fn={loadingData}
                                   priority={true}
+                                  email={row.email}
                                 />
-                              );
+                              ) : null;
+
                             case "Action":
-                              return (
+                              return isSuperAdmin() ? (
                                 <UpAndDel
                                   url={`${paths.admin}/${row.id}`}
                                   fn={loadingData}
                                   priority={true}
                                 />
-                              );
+                              ) : null;
+
                             default:
                               return value; // Fallback case
                           }

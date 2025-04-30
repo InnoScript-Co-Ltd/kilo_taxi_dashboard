@@ -35,6 +35,7 @@ import {
 } from "../configsetting.payload";
 import { NavigateId } from "../../../shares/NavigateId";
 import { formatDate } from "../../../helpers/common";
+import useRoleValidator from "../../../helpers/roleValidator";
 
 const CommissionConfigTableView = () => {
   const [page, setPage] = React.useState(0);
@@ -47,6 +48,7 @@ const CommissionConfigTableView = () => {
   const notifications = useNotifications();
   const navigate = useNavigate();
   const [loading, setLoading] = React.useState(false);
+  const { isSuperAdmin, isAdmin } = useRoleValidator();
 
   const handleChangePage = (event: unknown, newPage: number) => {
     setPage(newPage);
@@ -97,7 +99,7 @@ const CommissionConfigTableView = () => {
       >
         <Input
           id="input-with-icon-search"
-          placeholder="Search State"
+          placeholder="Search ConfigSetting"
           value={pagingParams.SearchTerm}
           onChange={(e) => {
             dispatch(
@@ -198,7 +200,7 @@ const CommissionConfigTableView = () => {
                           case "Updated Date":
                             return formatDate(value);
                           case "Action":
-                            return (
+                            return isSuperAdmin() || isAdmin() ? (
                               <NavigateId
                                 url={`${`${paths.configSetting}/${row.id}`}`}
                                 value={
@@ -209,7 +211,7 @@ const CommissionConfigTableView = () => {
                                   </>
                                 }
                               />
-                            );
+                            ) : null;
                           default:
                             return value; // Fallback case
                         }

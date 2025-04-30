@@ -29,6 +29,11 @@ export const navigationList = [
         title: "List",
         icon: <FormatListBulletedIcon />,
       },
+      {
+        segment: "deletedList",
+        title: "Deleted List",
+        icon: <FormatListBulletedIcon />,
+      },
     ],
   },
   {
@@ -81,6 +86,11 @@ export const navigationList = [
         title: "List",
         icon: <FormatListBulletedIcon />,
       },
+      {
+        segment: "deletedList",
+        title: "Deleted List",
+        icon: <FormatListBulletedIcon />,
+      },
     ],
   },
   {
@@ -92,6 +102,11 @@ export const navigationList = [
       {
         segment: "list",
         title: "List",
+        icon: <FormatListBulletedIcon />,
+      },
+      {
+        segment: "deletedList",
+        title: "Deleted List",
         icon: <FormatListBulletedIcon />,
       },
     ],
@@ -117,7 +132,17 @@ export const navigationList = [
     children: [
       {
         segment: "list",
-        title: "List",
+        title: "Percentage List",
+        icon: <FormatListBulletedIcon />,
+      },
+      {
+        segment: "fixAmountList",
+        title: "Fix Amount List",
+        icon: <FormatListBulletedIcon />,
+      },
+      {
+        segment: "deletedList",
+        title: "Deleted List",
         icon: <FormatListBulletedIcon />,
       },
     ],
@@ -135,19 +160,19 @@ export const navigationList = [
       },
     ],
   },
-  {
-    segment: "vehicleType",
-    title: "VehicleType",
-    isParent: true,
-    icon: <DirectionsCarIcon />,
-    children: [
-      {
-        segment: "list",
-        title: "List",
-        icon: <FormatListBulletedIcon />,
-      },
-    ],
-  },
+  // {
+  //   segment: "vehicleType",
+  //   title: "VehicleType",
+  //   isParent: true,
+  //   icon: <DirectionsCarIcon />,
+  //   children: [
+  //     {
+  //       segment: "list",
+  //       title: "List",
+  //       icon: <FormatListBulletedIcon />,
+  //     },
+  //   ],
+  // },
   {
     segment: "wallet",
     title: "Wallet",
@@ -192,19 +217,19 @@ export const navigationList = [
       },
     ],
   },
-  {
-    segment: "travelRate",
-    title: "TravelRate",
-    isParent: true,
-    icon: <AdminPanelSettingsIcon />,
-    children: [
-      {
-        segment: "list",
-        title: "List",
-        icon: <FormatListBulletedIcon />,
-      },
-    ],
-  },
+  // {
+  //   segment: "travelRate",
+  //   title: "TravelRate",
+  //   isParent: true,
+  //   icon: <AdminPanelSettingsIcon />,
+  //   children: [
+  //     {
+  //       segment: "list",
+  //       title: "List",
+  //       icon: <FormatListBulletedIcon />,
+  //     },
+  //   ],
+  // },
   {
     segment: "sos",
     title: "Sos",
@@ -245,6 +270,11 @@ export const navigationList = [
       {
         segment: "list",
         title: "List",
+        icon: <FormatListBulletedIcon />,
+      },
+      {
+        segment: "deletedList",
+        title: "Deleted List",
         icon: <FormatListBulletedIcon />,
       },
     ],
@@ -301,29 +331,29 @@ export const navigationList = [
       },
     ],
   },
-  {
-    segment: "simulation",
-    title: "Simulation",
-    isParent: true,
-    icon: <DashboardIcon />,
-    children: [
-      {
-        segment: "order",
-        title: "Order Create",
-        icon: <FormatListBulletedIcon />,
-      },
-      {
-        segment: "order/map",
-        title: "Order Map Simulation",
-        icon: <Map />,
-      },
-      {
-        segment: "forget-password",
-        title: "Forget Password Simulation",
-        icon: <Password />,
-      },
-    ],
-  },
+  // {
+  //   segment: "simulation",
+  //   title: "Simulation",
+  //   isParent: true,
+  //   icon: <DashboardIcon />,
+  //   children: [
+  //     {
+  //       segment: "order",
+  //       title: "Order Create",
+  //       icon: <FormatListBulletedIcon />,
+  //     },
+  //     {
+  //       segment: "order/map",
+  //       title: "Order Map Simulation",
+  //       icon: <Map />,
+  //     },
+  //     {
+  //       segment: "forget-password",
+  //       title: "Forget Password Simulation",
+  //       icon: <Password />,
+  //     },
+  //   ],
+  // },
 
   {
     segment: "extraDemand",

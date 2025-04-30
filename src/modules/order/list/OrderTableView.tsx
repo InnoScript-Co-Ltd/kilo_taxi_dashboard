@@ -12,6 +12,11 @@ import {
   TableBody,
   TableContainer,
   TableHead,
+  TextField,
+  FormControl,
+  InputLabel,
+  Select,
+  MenuItem,
   TablePagination,
   TableRow,
   TableSortLabel,
@@ -46,7 +51,9 @@ const OrderTableView = () => {
   const navigate = useNavigate();
 
   const { isOrderAdmin } = useRoleValidator();
-
+  const [fromDate, setFromDate] = React.useState("");
+  const [toDate, setToDate] = React.useState("");
+  const [status, setStatus] = React.useState("");
   const handleChangePage = (event: unknown, newPage: number) => {
     setPage(newPage);
     dispatch(
@@ -69,6 +76,35 @@ const OrderTableView = () => {
         CurrentPage: 1,
       })
     );
+  };
+  const handleDownloadReport = async () => {
+    try {
+      const response = await fetch(
+        `http://4.145.92.57:81/api/v1/Order/order-report?fromDate=${fromDate}&toDate=${toDate}&status=${status}`,
+        {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+
+      if (!response.ok) {
+        throw new Error("Failed to download report");
+      }
+
+      const blob = await response.blob();
+      const url = window.URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = "OrderReport.xlsx";
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      window.URL.revokeObjectURL(url);
+    } catch (error) {
+      console.error("Error downloading report:", error);
+    }
   };
 
   const loadingData = React.useCallback(async () => {
@@ -130,7 +166,41 @@ const OrderTableView = () => {
           ) : (
             <></>
           )}
+          <Box sx={{ my: "20px", px: "20px", display: "flex", gap: 3 }}>
+            <TextField
+              label="From Date"
+              type="date"
+              InputLabelProps={{ shrink: true }}
+              value={fromDate}
+              onChange={(e) => setFromDate(e.target.value)}
+            />
+            <TextField
+              label="To Date"
+              type="date"
+              InputLabelProps={{ shrink: true }}
+              value={toDate}
+              onChange={(e) => setToDate(e.target.value)}
+            />
+            <FormControl variant="filled" sx={{ minWidth: 150 }}>
+              <InputLabel>Status</InputLabel>
+              <Select
+                value={status}
+                onChange={(e) => setStatus(e.target.value)}
+                size="small"
+              >
+                <MenuItem value="">All</MenuItem>
+                <MenuItem value="PENDING">PENDING</MenuItem>
+                <MenuItem value="COMPLETED">COMPLETED</MenuItem>
+                <MenuItem value="CANCELLED">CANCELLED</MenuItem>
+                <MenuItem value="CANCELLED">INPROGRESS</MenuItem>
+                <MenuItem value="CANCELLED">DRIVERACCEPTED</MenuItem>
+              </Select>
+            </FormControl>
 
+            <Button variant="contained" onClick={handleDownloadReport}>
+              Download Report
+            </Button>
+          </Box>
           <Button
             onClick={() => {
               dispatch(setPaginate(orderPayload.pagingParams)); // Reset the paginate

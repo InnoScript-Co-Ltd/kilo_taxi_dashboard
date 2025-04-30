@@ -29,6 +29,7 @@ import {
 } from "../../../components/TableCommon";
 import { useNotifications } from "@toolpad/core";
 import { formatDate } from "../../../helpers/common";
+import useRoleValidator from "../../../helpers/roleValidator";
 
 const ScheduleBookingTableView = () => {
   const [page, setPage] = React.useState(0);
@@ -39,6 +40,7 @@ const ScheduleBookingTableView = () => {
   );
   const notifications = useNotifications();
   const [loading, setLoading] = React.useState(false);
+  const { isSuperAdmin, isAdmin } = useRoleValidator();
 
   const handleChangePage = (event: unknown, newPage: number) => {
     setPage(newPage);
@@ -88,7 +90,7 @@ const ScheduleBookingTableView = () => {
       >
         <Input
           id="input-with-icon-search"
-          placeholder="Search State"
+          placeholder="Search Schedule"
           value={pagingParams.SearchTerm}
           onChange={(e) => {
             dispatch(
@@ -197,7 +199,7 @@ const ScheduleBookingTableView = () => {
                           case "Request Datetime":
                             return formatDate(value);
                           case "Action":
-                            return (
+                            return isSuperAdmin() || isAdmin() ? (
                               <NavigateId
                                 url={`${`${paths.scheduleBooking}/${"update"}/${row.id}`}`}
                                 value={
@@ -208,7 +210,7 @@ const ScheduleBookingTableView = () => {
                                   </>
                                 }
                               />
-                            );
+                            ) : null;
                           default:
                             return value; // Fallback for other columns
                         }

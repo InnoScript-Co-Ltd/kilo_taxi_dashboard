@@ -89,7 +89,7 @@ const ReviewTableView = () => {
       >
         <Input
           id="input-with-icon-search"
-          placeholder="Search State"
+          placeholder="Search Review"
           value={pagingParams.SearchTerm}
           onChange={(e) => {
             dispatch(

@@ -38,7 +38,7 @@ const OrderDetail = () => {
 
   return (
     <>
-      <h2>Driver Detail</h2>
+      <h2>Order Detail</h2>
       {loading === false && order ? (
         <div>
           <Accordion
@@ -132,7 +132,7 @@ const OrderDetail = () => {
               aria-controls="panel3-content"
               expandIcon={<ExpandmoreIcon />}
             >
-              <Typography>Order Extends Info</Typography>
+              <Typography>Order Extra Demand Info</Typography>
             </AccordionSummary>
             {order.orderExtraDemands?.map((orderExtD: any) => (
               <AccordionDetails>

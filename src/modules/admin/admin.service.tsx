@@ -31,6 +31,22 @@ export const adminService = {
     }
     return response.data;
   },
+  deleted: async (dispatch: Dispatch, params: any, notifications: any) => {
+    const response: any = await getRequest(
+      endpoints.admin + "/deletedList",
+      params,
+      dispatch
+    );
+    await httpServiceHandler(dispatch, response.data, notifications);
+    if (response.data?.statusCode === 200) {
+      dispatch(
+        index(
+          response.data.payload ? response.data.payload : response.data.payload
+        )
+      );
+    }
+    return response.data;
+  },
 
   update: async (
     dispatch: Dispatch,
@@ -46,6 +62,7 @@ export const adminService = {
     await httpServiceHandler(dispatch, response, notifications);
     if (response?.status === 200) {
       //'info' | 'success' | 'warning' | 'error'
+      console.log("admin update");
       notifications?.show("Admin is updated successfully", {
         severity: "success",
         autoHideDuration: 3000,

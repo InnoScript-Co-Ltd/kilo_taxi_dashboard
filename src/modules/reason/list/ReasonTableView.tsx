@@ -32,6 +32,7 @@ import {
 } from "../../../components/TableCommon";
 import Status from "../../../components/Status";
 import { useNotifications } from "@toolpad/core/useNotifications";
+import useRoleValidator from "../../../helpers/roleValidator";
 
 const ReasonTableView = () => {
   const [page, setPage] = React.useState(0);
@@ -44,6 +45,7 @@ const ReasonTableView = () => {
   const notifications = useNotifications();
   const navigate = useNavigate();
   const [loading, setLoading] = React.useState(false);
+  const { isSuperAdmin, isAdmin } = useRoleValidator();
 
   const handleChangePage = (event: unknown, newPage: number) => {
     setPage(newPage);
@@ -118,12 +120,16 @@ const ReasonTableView = () => {
             gap: 3,
           }}
         >
-          <Button
-            startIcon={<AddCircleOutlineIcon />}
-            onClick={() => navigate(paths.reasonCreate)} // Adjust path for reason create page
-          >
-            Create
-          </Button>
+          {isSuperAdmin() || isAdmin() ? (
+            <Button
+              startIcon={<AddCircleOutlineIcon />}
+              onClick={() => navigate(paths.reasonCreate)} // Adjust path for reason create page
+            >
+              Create
+            </Button>
+          ) : (
+            <></>
+          )}
 
           <Button
             onClick={() => {

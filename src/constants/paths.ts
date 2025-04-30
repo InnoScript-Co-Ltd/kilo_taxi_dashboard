@@ -1,3 +1,5 @@
+import DriverFixAmountList from "../modules/driver/view/DriverFixAmountList";
+
 export const paths = {
   dashboard: "/dashboard",
 
@@ -6,6 +8,7 @@ export const paths = {
 
   admin: "/admin",
   adminList: "/admin/list",
+  adminDeletedList: "/admin/deletedList",
   adminCreate: "/admin/new",
   adminDetail: "/admin/:id",
 
@@ -26,11 +29,13 @@ export const paths = {
 
   customer: "/customer",
   customerList: "/customer/list",
+  customerDeletedList: "/customer/deletedList",
   customerCreate: "/customer/new",
   customerDetail: "/customer/:id",
 
   promotion: "/promotion",
   promotionList: "/promotion/list",
+  promotionDeletedList: "/promotion/deletedList",
   promotionCreate: "/promotion/new",
   promotionDetail: "/promotion/:id",
 
@@ -51,6 +56,8 @@ export const paths = {
 
   driver: "/driver",
   driverList: "/driver/list",
+  driverFixAmountList: "/driver/fixAmountList",
+  driverDeletedList: "/driver/deletedList",
   driverDetail: "/driver/:id",
   driverCreate: "/driver/new",
   driverUpdate: "/driver/update/:id",
@@ -88,6 +95,7 @@ export const paths = {
 
   reason: "/reason",
   reasonList: "/reason/list",
+  reasonDeletedList: "/reason/deletedList",
   reasonCreate: "/reason/new",
   reasonDetail: "/reason/:id",
 

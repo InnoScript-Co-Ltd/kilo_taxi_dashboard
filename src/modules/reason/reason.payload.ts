@@ -19,11 +19,13 @@ export interface REASON {
   id: string;
   name: string;
   status: number;
+  createdBy: string;
+  updatedBy: string;
 }
 
 // Define columns for reason table
 interface ReasonColumn {
-  id: "id" | "name" | "status" | "action";
+  id: "id" | "name" | "status" | "createdBy" | "updatedBy" | "action";
   label: string;
   minWidth?: number;
   align?: "right";
@@ -56,6 +58,23 @@ export const reasonColumns: readonly ReasonColumn[] = [
   {
     id: "status",
     label: "Status",
+    minWidth: 50,
+    numeric: false,
+    disablePadding: false,
+    sort: true,
+  },
+
+  {
+    id: "createdBy",
+    label: "Created By",
+    minWidth: 50,
+    numeric: false,
+    disablePadding: false,
+    sort: true,
+  },
+  {
+    id: "updatedBy",
+    label: "Updated By",
     minWidth: 50,
     numeric: false,
     disablePadding: false,

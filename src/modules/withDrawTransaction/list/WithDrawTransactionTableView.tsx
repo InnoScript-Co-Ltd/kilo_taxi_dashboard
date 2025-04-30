@@ -103,7 +103,7 @@ const WalletTableView = () => {
       >
         <Input
           id="input-with-icon-search"
-          placeholder="Search Wallet"
+          placeholder="Search WithDrawTransaction"
           value={pagingParams.SearchTerm}
           onChange={(e) => {
             dispatch(
@@ -227,7 +227,7 @@ const WalletTableView = () => {
                           case "Action":
                             return (
                               <NavigateId
-                                url={`${`${paths.configSetting}/${row.id}`}`}
+                                url={`${`${paths.withDrawTransaction}/${row.id}`}`}
                                 value={
                                   <>
                                     <Button startIcon={<></>} color="secondary">

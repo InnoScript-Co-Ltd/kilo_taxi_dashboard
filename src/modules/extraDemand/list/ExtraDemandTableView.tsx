@@ -31,7 +31,8 @@ import {
   StyledTableRow,
 } from "../../../components/TableCommon";
 import { useNotifications } from "@toolpad/core/useNotifications";
-import { format } from "date-fns"; 
+import { format } from "date-fns";
+import useRoleValidator from "../../../helpers/roleValidator";
 
 const ExtraDemandTableView = () => {
   const [page, setPage] = React.useState(0);
@@ -44,6 +45,7 @@ const ExtraDemandTableView = () => {
   const notifications = useNotifications();
   const navigate = useNavigate();
   const [loading, setLoading] = React.useState(false);
+  const { isSuperAdmin, isAdmin } = useRoleValidator();
 
   const handleChangePage = (event: unknown, newPage: number) => {
     setPage(newPage);
@@ -71,10 +73,10 @@ const ExtraDemandTableView = () => {
   };
 
   const loadingData = React.useCallback(async () => {
-    console.log("fetching data:", data)
+    console.log("fetching data:", data);
     setLoading(true);
     await extraDemandService.index(dispatch, pagingParams, notifications);
-    console.log("data:", data)
+    console.log("data:", data);
     setLoading(false);
   }, [dispatch, pagingParams, notifications]);
 
@@ -120,12 +122,16 @@ const ExtraDemandTableView = () => {
             gap: 3,
           }}
         >
-          <Button
-            startIcon={<AddCircleOutlineIcon />}
-            onClick={() => navigate(paths.extraDemandCreate)} // Adjust path for wallet create page
-          >
-            Create
-          </Button>
+          {isSuperAdmin() || isAdmin() ? (
+            <Button
+              startIcon={<AddCircleOutlineIcon />}
+              onClick={() => navigate(paths.extraDemandCreate)} // Adjust path for wallet create page
+            >
+              Create
+            </Button>
+          ) : (
+            <></>
+          )}
 
           <Button
             onClick={() => {
@@ -204,19 +210,24 @@ const ExtraDemandTableView = () => {
                               />
                             );
                           case "Create Date":
-                          // Format dateTime to desired format
-                          const formattedDate = format(new Date(value), "dd MMM yyyy hh:mma");
-                          return formattedDate;  
+                            // Format dateTime to desired format
+                            const formattedDate = format(
+                              new Date(value),
+                              "dd MMM yyyy hh:mma"
+                            );
+                            return formattedDate;
                           case "Action":
-                            return (
+                            return isSuperAdmin() || isAdmin() ? (
                               <Button
                                 variant="contained"
                                 color="primary"
-                                onClick={() => navigate(`${paths.extraDemand}/${row.id}`)}
+                                onClick={() =>
+                                  navigate(`${paths.extraDemand}/${row.id}`)
+                                }
                               >
                                 Edit
                               </Button>
-                            );
+                            ) : null;
                           default:
                             return value; // Fallback case
                         }

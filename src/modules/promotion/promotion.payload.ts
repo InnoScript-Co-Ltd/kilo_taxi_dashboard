@@ -32,6 +32,8 @@ export interface PROMOTION {
   applicableTo: number;
   status: number;
   customerIds?: number[] | null;
+  createdBy: string;
+  updatedBy: string;
   action?: null;
 }
 
@@ -129,6 +131,24 @@ export const promotionColumns: readonly Promotion_Column[] = [
   {
     id: "status",
     label: "Status",
+    minWidth: 100,
+    maxWidth: 200,
+    numeric: false,
+    disablePadding: false,
+    sort: false,
+  },
+  {
+    id: "createdBy",
+    label: "Created By",
+    minWidth: 100,
+    maxWidth: 200,
+    numeric: false,
+    disablePadding: false,
+    sort: false,
+  },
+  {
+    id: "updatedBy",
+    label: "Updated By",
     minWidth: 100,
     maxWidth: 200,
     numeric: false,

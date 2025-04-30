@@ -6,14 +6,11 @@ import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TablePagination from "@mui/material/TablePagination";
 import TableRow from "@mui/material/TableRow";
-import {
-  topupTransactionColumns,
-  topupTransactionPayload,
-} from "../topupTransaction.payload"; // Replace with your topupTransaction columns and payload
+import { reasonColumns, reasonPayload } from "../reason.payload"; // Replace with your reason columns and payload
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, AppRootState } from "../../../stores";
-import { topupTransactionService } from "../topupTransaction.service";
-import { paginateOptions } from "../../../constants/config";
+import { reasonService } from "../reason.service";
+import { generalStatusLists, paginateOptions } from "../../../constants/config";
 import { NavigateId } from "../../../shares/NavigateId";
 import { paths } from "../../../constants/paths";
 import {
@@ -23,7 +20,7 @@ import {
   InputAdornment,
   TableSortLabel,
 } from "@mui/material";
-import { setPaginate } from "../topupTransaction.slice"; // Adjust the slice if needed
+import { setPaginate } from "../reason.slice"; // Adjust the slice if needed
 import SearchIcon from "@mui/icons-material/Search";
 import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
 import RestartAltIcon from "@mui/icons-material/RestartAlt";
@@ -33,23 +30,22 @@ import {
   StyledTableCell,
   StyledTableRow,
 } from "../../../components/TableCommon";
+import Status from "../../../components/Status";
 import { useNotifications } from "@toolpad/core/useNotifications";
-import { format } from "date-fns";
 import useRoleValidator from "../../../helpers/roleValidator";
 
-const TopupTransactionTableView = () => {
+const ReasonDeletedTableView = () => {
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
   const dispatch = useDispatch<AppDispatch>();
   const { data, pagingParams } = useSelector(
-    (state: AppRootState) => state.topUpTransaction
+    (state: AppRootState) => state.reason
   );
 
   const notifications = useNotifications();
   const navigate = useNavigate();
   const [loading, setLoading] = React.useState(false);
-
-  const { isTopUpAdmin, isSuperAdmin } = useRoleValidator();
+  const { isSuperAdmin, isAdmin } = useRoleValidator();
 
   const handleChangePage = (event: unknown, newPage: number) => {
     setPage(newPage);
@@ -78,12 +74,11 @@ const TopupTransactionTableView = () => {
 
   const loadingData = React.useCallback(async () => {
     setLoading(true);
-    await topupTransactionService.index(dispatch, pagingParams, notifications);
+    await reasonService.deleted(dispatch, pagingParams, notifications);
     setLoading(false);
   }, [dispatch, pagingParams, notifications]);
 
   React.useEffect(() => {
-    console.log("API Response:", data);
     loadingData();
   }, [loadingData]);
 
@@ -100,7 +95,7 @@ const TopupTransactionTableView = () => {
       >
         <Input
           id="input-with-icon-search"
-          placeholder="Search TopupTransaction"
+          placeholder="Search Reason"
           value={pagingParams.SearchTerm}
           onChange={(e) => {
             dispatch(
@@ -125,20 +120,9 @@ const TopupTransactionTableView = () => {
             gap: 3,
           }}
         >
-          {isTopUpAdmin() || isSuperAdmin() ? (
-            <Button
-              startIcon={<AddCircleOutlineIcon />}
-              onClick={() => navigate(paths.topupTransactionCreate)} // Adjust path for topupTransaction create page
-            >
-              Create
-            </Button>
-          ) : (
-            <></>
-          )}
-
           <Button
             onClick={() => {
-              dispatch(setPaginate(topupTransactionPayload.pagingParams)); // Adjust the reset payload
+              dispatch(setPaginate(reasonPayload.pagingParams)); // Adjust the reset payload
               setPage(0);
               setRowsPerPage(10);
             }}
@@ -154,7 +138,7 @@ const TopupTransactionTableView = () => {
         <Table stickyHeader aria-label="sticky table">
           <TableHead>
             <TableRow>
-              {topupTransactionColumns.map((column) => (
+              {reasonColumns.map((column) => (
                 <StyledTableCell
                   key={column.id}
                   style={{ minWidth: column.minWidth }}
@@ -197,37 +181,30 @@ const TopupTransactionTableView = () => {
             </TableRow>
           </TableHead>
           <TableBody>
-            {data.topUpTransactions?.map((row: any) => (
+            {data.reasons?.map((row: any) => (
               <StyledTableRow hover role="checkbox" tabIndex={-1} key={row.id}>
-                {topupTransactionColumns.map((column) => {
+                {reasonColumns.map((column) => {
                   const value = row[column.id];
                   return (
                     <StyledTableCell key={column.id} align={column.align}>
                       {(() => {
                         switch (column.label) {
-                          case "Datetime":
-                            // Format dateTime to desired format
-                            const formattedDate = format(
-                              new Date(value),
-                              "dd MMM yyyy hh:mma"
-                            );
-                            return formattedDate;
-                          case "Action":
+                          case "Name":
                             return (
-                              <Button
-                                variant="outlined"
-                                color="primary"
-                                onClick={() =>
-                                  navigate(
-                                    `${paths.topupTransaction}/${row.id}`
-                                  )
-                                } // Redirect to View Detail page
-                              >
-                                View Detail
-                              </Button>
+                              <NavigateId
+                                url={`${paths.reason}/${row.id}`} // Adjust the path for reason detail
+                                value={value}
+                              />
+                            );
+                          case "Status":
+                            return (
+                              <Status
+                                status={value}
+                                lists={generalStatusLists}
+                              />
                             );
                           default:
-                            return value;
+                            return value; // Fallback case
                         }
                       })()}
                     </StyledTableCell>
@@ -252,4 +229,4 @@ const TopupTransactionTableView = () => {
   );
 };
 
-export default TopupTransactionTableView;
+export default ReasonDeletedTableView;

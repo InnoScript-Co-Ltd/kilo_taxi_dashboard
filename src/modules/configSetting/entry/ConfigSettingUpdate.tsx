@@ -119,7 +119,7 @@ const ConfigSettingUpdate = () => {
                   type="number"
                   size="small"
                   id="commissionRate"
-                  {...register("commissionRate")}
+                  {...register("commissionRate", { valueAsNumber: true })}
                 />
                 <FormHelperText>
                   {errors.commissionRate?.message}
@@ -193,7 +193,7 @@ const ConfigSettingUpdate = () => {
                   type="number"
                   size="small"
                   id="minute"
-                  {...register("minute")}
+                  {...register("minute", { valueAsNumber: true })}
                 />
                 <FormHelperText>{errors.minute?.message}</FormHelperText>
               </FormControl>

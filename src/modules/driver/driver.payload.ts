@@ -136,6 +136,8 @@ export interface DRIVER {
   vehicle: VEHICLE[]; // Use the VEHICLE interface as an array
   walletUserMapping: WALLETUSERMAPPING[]; // Use the WALLET interface as an array
   wallet: WALLET;
+  createdBy: string;
+  updatedBy: string;
   action: any;
 }
 
@@ -164,6 +166,8 @@ interface DriverColumn {
     | "address"
     | "state"
     | "city"
+    | "createdBy"
+    | "updatedBy"
     | "townShip"
     | "status"
     | "kycStatus"
@@ -263,6 +267,22 @@ export const driverColumns: readonly DriverColumn[] = [
   {
     id: "createdDate",
     label: "Register DateTime",
+    minWidth: 100,
+    numeric: false,
+    disablePadding: false,
+    sort: true,
+  },
+  {
+    id: "createdBy",
+    label: "Created By",
+    minWidth: 100,
+    numeric: false,
+    disablePadding: false,
+    sort: true,
+  },
+  {
+    id: "updatedBy",
+    label: "Updated By",
     minWidth: 100,
     numeric: false,
     disablePadding: false,

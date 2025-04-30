@@ -6,15 +6,16 @@ import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TablePagination from "@mui/material/TablePagination";
 import TableRow from "@mui/material/TableRow";
-import {
-  topupTransactionColumns,
-  topupTransactionPayload,
-} from "../topupTransaction.payload"; // Replace with your topupTransaction columns and payload
+import { promotionColumns, promotionPayload } from "../promotion.payload";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, AppRootState } from "../../../stores";
-import { topupTransactionService } from "../topupTransaction.service";
-import { paginateOptions } from "../../../constants/config";
-import { NavigateId } from "../../../shares/NavigateId";
+import { promotionService } from "../promotion.service";
+import {
+  applicableToLists,
+  paginateOptions,
+  promoStatusLists,
+  promotionTypeLists,
+} from "../../../constants/config";
 import { paths } from "../../../constants/paths";
 import {
   Box,
@@ -23,7 +24,7 @@ import {
   InputAdornment,
   TableSortLabel,
 } from "@mui/material";
-import { setPaginate } from "../topupTransaction.slice"; // Adjust the slice if needed
+import { setPaginate } from "../promotion.slice";
 import SearchIcon from "@mui/icons-material/Search";
 import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
 import RestartAltIcon from "@mui/icons-material/RestartAlt";
@@ -33,23 +34,22 @@ import {
   StyledTableCell,
   StyledTableRow,
 } from "../../../components/TableCommon";
-import { useNotifications } from "@toolpad/core/useNotifications";
-import { format } from "date-fns";
+import { useNotifications } from "@toolpad/core";
+import { formatDate } from "../../../helpers/common";
+import Status from "../../../components/Status";
 import useRoleValidator from "../../../helpers/roleValidator";
 
-const TopupTransactionTableView = () => {
+const PromotionDeletedTableView = () => {
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
   const dispatch = useDispatch<AppDispatch>();
   const { data, pagingParams } = useSelector(
-    (state: AppRootState) => state.topUpTransaction
+    (state: AppRootState) => state.promotion
   );
-
   const notifications = useNotifications();
   const navigate = useNavigate();
   const [loading, setLoading] = React.useState(false);
-
-  const { isTopUpAdmin, isSuperAdmin } = useRoleValidator();
+  const { isSuperAdmin, isAdmin } = useRoleValidator();
 
   const handleChangePage = (event: unknown, newPage: number) => {
     setPage(newPage);
@@ -65,27 +65,27 @@ const TopupTransactionTableView = () => {
   const handleChangeRowsPerPage = (
     event: React.ChangeEvent<HTMLInputElement>
   ) => {
-    setRowsPerPage(+event.target.value);
-    setPage(0);
     dispatch(
       setPaginate({
         ...pagingParams,
-        RowsPerPage: +event.target.value,
         CurrentPage: 1,
+        PageSize: event.target.value,
       })
     );
+    setRowsPerPage(+event.target.value);
+    setPage(0);
   };
 
   const loadingData = React.useCallback(async () => {
     setLoading(true);
-    await topupTransactionService.index(dispatch, pagingParams, notifications);
+    await promotionService.deleted(dispatch, pagingParams, notifications);
     setLoading(false);
   }, [dispatch, pagingParams, notifications]);
 
   React.useEffect(() => {
-    console.log("API Response:", data);
     loadingData();
-  }, [loadingData]);
+  }, [pagingParams, loadingData]);
+  console.log("qweew", data);
 
   return (
     <Paper sx={{ width: "100%", overflow: "hidden" }}>
@@ -100,7 +100,7 @@ const TopupTransactionTableView = () => {
       >
         <Input
           id="input-with-icon-search"
-          placeholder="Search TopupTransaction"
+          placeholder="Search Promotion"
           value={pagingParams.SearchTerm}
           onChange={(e) => {
             dispatch(
@@ -125,20 +125,9 @@ const TopupTransactionTableView = () => {
             gap: 3,
           }}
         >
-          {isTopUpAdmin() || isSuperAdmin() ? (
-            <Button
-              startIcon={<AddCircleOutlineIcon />}
-              onClick={() => navigate(paths.topupTransactionCreate)} // Adjust path for topupTransaction create page
-            >
-              Create
-            </Button>
-          ) : (
-            <></>
-          )}
-
           <Button
             onClick={() => {
-              dispatch(setPaginate(topupTransactionPayload.pagingParams)); // Adjust the reset payload
+              dispatch(setPaginate(promotionPayload.pagingParams));
               setPage(0);
               setRowsPerPage(10);
             }}
@@ -154,7 +143,7 @@ const TopupTransactionTableView = () => {
         <Table stickyHeader aria-label="sticky table">
           <TableHead>
             <TableRow>
-              {topupTransactionColumns.map((column) => (
+              {promotionColumns.map((column) => (
                 <StyledTableCell
                   key={column.id}
                   style={{ minWidth: column.minWidth }}
@@ -197,37 +186,40 @@ const TopupTransactionTableView = () => {
             </TableRow>
           </TableHead>
           <TableBody>
-            {data.topUpTransactions?.map((row: any) => (
+            {data.promotions?.map((row: any) => (
               <StyledTableRow hover role="checkbox" tabIndex={-1} key={row.id}>
-                {topupTransactionColumns.map((column) => {
+                {promotionColumns.map((column) => {
                   const value = row[column.id];
+                  console.log(value);
                   return (
                     <StyledTableCell key={column.id} align={column.align}>
                       {(() => {
                         switch (column.label) {
-                          case "Datetime":
-                            // Format dateTime to desired format
-                            const formattedDate = format(
-                              new Date(value),
-                              "dd MMM yyyy hh:mma"
-                            );
-                            return formattedDate;
-                          case "Action":
-                            return (
-                              <Button
-                                variant="outlined"
-                                color="primary"
-                                onClick={() =>
-                                  navigate(
-                                    `${paths.topupTransaction}/${row.id}`
-                                  )
-                                } // Redirect to View Detail page
-                              >
-                                View Detail
-                              </Button>
-                            );
-                          default:
+                          case "Promo Code":
                             return value;
+                          case "Created Date":
+                            return formatDate(value);
+                          case "Expired Date":
+                            return formatDate(value);
+                          case "Status":
+                            return value;
+                          // return (
+                          //   <Status status={value} lists={promoStatusLists} />
+                          // );
+                          case "Unit":
+                            return value;
+                          case "Quantity":
+                            return value;
+                          case "Description":
+                            return value;
+                          case "Promotion Type":
+                            return value;
+
+                          case "Applicable To":
+                            return value;
+
+                          default:
+                            return value; // Fallback case
                         }
                       })()}
                     </StyledTableCell>
@@ -252,4 +244,4 @@ const TopupTransactionTableView = () => {
   );
 };
 
-export default TopupTransactionTableView;
+export default PromotionDeletedTableView;
