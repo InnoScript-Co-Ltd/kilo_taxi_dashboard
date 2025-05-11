@@ -38,6 +38,9 @@ const ReasonCreate = () => {
     formState: { errors },
   } = useForm<ReasonFormInputs>({
     resolver: zodResolver(reasonSchema),
+    defaultValues: {
+      status: generalStatusLists[0]?.id,
+    },
   });
 
   const submitReasonCreate = async (data: ReasonFormInputs) => {

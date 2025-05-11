@@ -229,7 +229,7 @@ export const driverColumns: readonly DriverColumn[] = [
   {
     id: "walletInfo",
     label: "Type",
-    minWidth: 70,
+    minWidth: 100,
     numeric: false,
     disablePadding: false,
     sort: true,
@@ -237,7 +237,7 @@ export const driverColumns: readonly DriverColumn[] = [
   {
     id: "phone",
     label: "Phone Number",
-    minWidth: 70,
+    minWidth: 100,
     numeric: false,
     disablePadding: false,
     sort: true,
@@ -253,7 +253,7 @@ export const driverColumns: readonly DriverColumn[] = [
   {
     id: "driverLicense",
     label: "Driver License No",
-    minWidth: 70,
+    minWidth: 200,
     numeric: false,
     disablePadding: false,
     sort: true,

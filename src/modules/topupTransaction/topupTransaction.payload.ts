@@ -109,7 +109,7 @@ export const topupTransactionColumns: readonly TopupTransactionColumn[] = [
   {
     id: "amount",
     label: "Top-up Amount",
-    minWidth: 125,
+    minWidth: 200,
     numeric: false,
     disablePadding: false,
     sort: true,
