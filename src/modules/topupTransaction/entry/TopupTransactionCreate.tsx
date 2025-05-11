@@ -13,6 +13,7 @@ import {
   Divider,
   Typography,
   CircularProgress,
+  Modal,
 } from "@mui/material";
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router";
@@ -33,7 +34,24 @@ import {
 import { topupTransactionService } from "../topupTransaction.service";
 import { formBuilder } from "../../../helpers/formBuilder";
 
+const style = {
+  position: "absolute",
+  top: "50%",
+  left: "50%",
+  transform: "translate(-50%, -50%)",
+  width: 400,
+  bgcolor: "background.paper",
+  border: "2px solid #000",
+  boxShadow: 24,
+  p: 4,
+};
+
 const TopupTransactionCreate = () => {
+  const [open, setOpen] = React.useState(false);
+  const handleOpen = () => setOpen(true);
+  const handleClose = () => setOpen(false);
+  const topupTransactionFormRef = React.useRef<HTMLFormElement>(null);
+
   const [loading, setLoading] = useState(false);
   const [paymentChannelNames, setPaymentChannelNames] = useState<
     Array<{ id: number; channelName: string }>
@@ -143,7 +161,10 @@ const TopupTransactionCreate = () => {
       <Card sx={{ padding: "20px" }}>
         <Typography variant="h6">Top-up Form</Typography>
 
-        <form onSubmit={handleSubmit(submitTopupTransactionCreate)}>
+        <form
+          onSubmit={handleSubmit(submitTopupTransactionCreate)}
+          ref={topupTransactionFormRef}
+        >
           <Grid container spacing={2} alignItems="center">
             <Grid item xs={5}>
               <FormControl fullWidth>
@@ -223,6 +244,7 @@ const TopupTransactionCreate = () => {
             </Grid>
             <Grid2 size={{ xs: 6, md: 3, xl: 3 }}>
               <FormControl
+                sx={{ marginTop: "20px", marginLeft: "20px" }}
                 variant="filled"
                 fullWidth
                 error={!!errors.file_transaction_screenshoot}
@@ -258,16 +280,55 @@ const TopupTransactionCreate = () => {
             </Grid2>
             <Grid item xs={12} textAlign="center">
               <Button
-                type="submit"
+                type="button"
+                onClick={handleOpen}
                 variant="contained"
                 fullWidth
                 sx={{ backgroundColor: "#FFC107", color: "black" }}
               >
-                {loading ? "Submitting..." : "Submit"}
+                Submit
               </Button>
             </Grid>
           </Grid>
         </form>
+        <Modal
+          open={open}
+          onClose={handleClose}
+          aria-labelledby="modal-modal-title"
+          aria-describedby="modal-modal-description"
+        >
+          <Box sx={style}>
+            <Typography id="modal-modal-title" variant="h6" component="h2">
+              Topup Transaction Comfirmation
+            </Typography>
+            <Typography id="modal-modal-description" sx={{ mt: 2, mb: 3 }}>
+              Are you sure to save the topupTransaction?
+            </Typography>
+            <Box
+              sx={{
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+                gap: "20px",
+                marginTop: "20px",
+              }}
+            >
+              <Button variant="outlined" onClick={handleClose}>
+                Cancel
+              </Button>
+              <Button
+                type="button"
+                onClick={() => {
+                  topupTransactionFormRef.current?.requestSubmit();
+                }}
+                variant="contained"
+                sx={{ backgroundColor: "#FFC107", color: "black" }}
+              >
+                {loading ? "Submitting..." : "Submit"}
+              </Button>
+            </Box>
+          </Box>
+        </Modal>
       </Card>
     </Box>
   );
