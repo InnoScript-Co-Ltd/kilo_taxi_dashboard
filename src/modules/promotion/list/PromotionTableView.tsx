@@ -37,6 +37,7 @@ import {
 import { useNotifications } from "@toolpad/core";
 import { formatDate } from "../../../helpers/common";
 import Status from "../../../components/Status";
+import useRoleValidator from "../../../helpers/roleValidator";
 
 const PromotionTableView = () => {
   const [page, setPage] = React.useState(0);
@@ -48,6 +49,7 @@ const PromotionTableView = () => {
   const notifications = useNotifications();
   const navigate = useNavigate();
   const [loading, setLoading] = React.useState(false);
+  const { isSuperAdmin, isAdmin } = useRoleValidator();
 
   const handleChangePage = (event: unknown, newPage: number) => {
     setPage(newPage);
@@ -98,7 +100,7 @@ const PromotionTableView = () => {
       >
         <Input
           id="input-with-icon-search"
-          placeholder="Search State"
+          placeholder="Search Promotion"
           value={pagingParams.SearchTerm}
           onChange={(e) => {
             dispatch(
@@ -123,12 +125,16 @@ const PromotionTableView = () => {
             gap: 3,
           }}
         >
-          <Button
-            startIcon={<AddCircleOutlineIcon />}
-            onClick={() => navigate(paths.promotionCreate)}
-          >
-            Create
-          </Button>
+          {isSuperAdmin() || isAdmin() ? (
+            <Button
+              startIcon={<AddCircleOutlineIcon />}
+              onClick={() => navigate(paths.promotionCreate)}
+            >
+              Create
+            </Button>
+          ) : (
+            <></>
+          )}
 
           <Button
             onClick={() => {
@@ -207,9 +213,10 @@ const PromotionTableView = () => {
                           case "Expired Date":
                             return formatDate(value);
                           case "Status":
-                            return (
-                              <Status status={value} lists={promoStatusLists} />
-                            );
+                            return value;
+                          // return (
+                          //   <Status status={value} lists={promoStatusLists} />
+                          // );
                           case "Unit":
                             return value;
                           case "Quantity":
@@ -217,26 +224,30 @@ const PromotionTableView = () => {
                           case "Description":
                             return value;
                           case "Promotion Type":
-                            return (
-                              <Status
-                                status={value}
-                                lists={promotionTypeLists}
-                              />
-                            );
+                            return value;
+
+                          // return (
+                          //   <Status
+                          //     status={value}
+                          //     lists={promotionTypeLists}
+                          //   />
+                          // );
                           case "Applicable To":
-                            return (
-                              <Status
-                                status={value}
-                                lists={applicableToLists}
-                              />
-                            );
+                            return value;
+
+                          // return (
+                          //   <Status
+                          //     status={value}
+                          //     lists={applicableToLists}
+                          //   />
+                          // );
                           case "Action":
-                            return (
+                            return isSuperAdmin() || isAdmin() ? (
                               <UpAndDel
                                 url={`${paths.promotion}/${row.id}`}
                                 fn={loadingData}
                               />
-                            );
+                            ) : null;
                           default:
                             return value; // Fallback case
                         }

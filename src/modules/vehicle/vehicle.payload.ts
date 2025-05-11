@@ -9,7 +9,7 @@ export const vehicleSchema = z.object({
   driverMode: z.number(),
   FuelType: z.string().min(1, { message: "Fuel type is required" }),
   Status: z.number(),
-  DriverId: z.number().min(1, { message: "Driver ID is required" }),
+  driverId: z.number().min(1, { message: "Driver ID is required" }),
   file_BusinessLicenseImage: z.any().nullable(),
   file_VehicleLicenseFront: z.any().nullable(),
   file_VehicleLicenseBack: z.any().nullable(),

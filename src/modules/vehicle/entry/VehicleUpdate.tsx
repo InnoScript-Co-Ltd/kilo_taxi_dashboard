@@ -50,6 +50,7 @@ const VehicleUpdate = () => {
       VehicleNo: "",
       VehicleType: "",
       driverMode: 0,
+      driverId: 0,
       Model: "",
       FuelType: "",
       Status: 0,
@@ -85,7 +86,7 @@ const VehicleUpdate = () => {
         "data" in driverResponse &&
         driverResponse.status === 200
       ) {
-        setDriversList(driverResponse.data.drivers);
+        setDriversList(driverResponse.data.payload.drivers);
       }
     } catch (error) {
       await httpErrorHandler(error, dispatch);
@@ -101,7 +102,7 @@ const VehicleUpdate = () => {
     if (vehicle) {
       console.log(vehicle.status);
       setValue("id", Number(vehicle.id) || 0);
-      setValue("DriverId", vehicle.driverId || 0);
+      setValue("driverId", vehicle.driverId || 0);
       setValue("VehicleNo", vehicle.vehicleNo || "");
       setValue("VehicleType", vehicle.vehicleType || "");
       setValue("Model", vehicle.model || "");
@@ -131,10 +132,10 @@ const VehicleUpdate = () => {
         <form onSubmit={handleSubmit(submitVehicleUpdate)}>
           <Grid2 container spacing={2}>
             <Grid2 size={{ xs: 6, md: 3 }}>
-              <FormControl variant="filled" fullWidth error={!!errors.DriverId}>
+              <FormControl variant="filled" fullWidth error={!!errors.driverId}>
                 <InputLabel htmlFor="driver_name">Driver</InputLabel>
                 <Controller
-                  name="DriverId"
+                  name="driverId"
                   control={control}
                   render={({ field }) => (
                     <Select
@@ -156,7 +157,7 @@ const VehicleUpdate = () => {
                   )}
                 />
 
-                <FormHelperText>{errors.DriverId?.message}</FormHelperText>
+                <FormHelperText>{errors.driverId?.message}</FormHelperText>
               </FormControl>
             </Grid2>
             {/* Vehicle Number */}

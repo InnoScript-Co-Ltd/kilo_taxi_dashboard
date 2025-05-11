@@ -6,10 +6,12 @@ import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TablePagination from "@mui/material/TablePagination";
 import TableRow from "@mui/material/TableRow";
+import { reasonColumns, reasonPayload } from "../reason.payload"; // Replace with your reason columns and payload
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, AppRootState } from "../../../stores";
-
-import { paginateOptions } from "../../../constants/config";
+import { reasonService } from "../reason.service";
+import { generalStatusLists, paginateOptions } from "../../../constants/config";
+import { NavigateId } from "../../../shares/NavigateId";
 import { paths } from "../../../constants/paths";
 import {
   Box,
@@ -18,6 +20,7 @@ import {
   InputAdornment,
   TableSortLabel,
 } from "@mui/material";
+import { setPaginate } from "../reason.slice"; // Adjust the slice if needed
 import SearchIcon from "@mui/icons-material/Search";
 import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
 import RestartAltIcon from "@mui/icons-material/RestartAlt";
@@ -27,22 +30,22 @@ import {
   StyledTableCell,
   StyledTableRow,
 } from "../../../components/TableCommon";
-import { useNotifications } from "@toolpad/core";
-import { setPaginate } from "../kiloamount.slice";
-import { kiloAmountService } from "../kiloamount.service";
-import { kiloAmountColumns, kiloAmountPayload } from "../kiloamount.payload";
-import { NavigateId } from "../../../shares/NavigateId";
+import Status from "../../../components/Status";
+import { useNotifications } from "@toolpad/core/useNotifications";
+import useRoleValidator from "../../../helpers/roleValidator";
 
-const KiloAmountTableView = () => {
+const ReasonDeletedTableView = () => {
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
   const dispatch = useDispatch<AppDispatch>();
   const { data, pagingParams } = useSelector(
-    (state: AppRootState) => state.kiloAmount
+    (state: AppRootState) => state.reason
   );
+
   const notifications = useNotifications();
   const navigate = useNavigate();
   const [loading, setLoading] = React.useState(false);
+  const { isSuperAdmin, isAdmin } = useRoleValidator();
 
   const handleChangePage = (event: unknown, newPage: number) => {
     setPage(newPage);
@@ -58,28 +61,27 @@ const KiloAmountTableView = () => {
   const handleChangeRowsPerPage = (
     event: React.ChangeEvent<HTMLInputElement>
   ) => {
+    setRowsPerPage(+event.target.value);
+    setPage(0);
     dispatch(
       setPaginate({
         ...pagingParams,
+        RowsPerPage: +event.target.value,
         CurrentPage: 1,
-        PageSize: event.target.value,
       })
     );
-    setRowsPerPage(+event.target.value);
-    setPage(0);
   };
 
   const loadingData = React.useCallback(async () => {
     setLoading(true);
-    await kiloAmountService.index(dispatch, pagingParams, notifications);
+    await reasonService.deleted(dispatch, pagingParams, notifications);
     setLoading(false);
   }, [dispatch, pagingParams, notifications]);
 
   React.useEffect(() => {
     loadingData();
-  }, [pagingParams, loadingData]);
+  }, [loadingData]);
 
-  console.log("data", data);
   return (
     <Paper sx={{ width: "100%", overflow: "hidden" }}>
       <Box
@@ -93,7 +95,7 @@ const KiloAmountTableView = () => {
       >
         <Input
           id="input-with-icon-search"
-          placeholder="Search State"
+          placeholder="Search Reason"
           value={pagingParams.SearchTerm}
           onChange={(e) => {
             dispatch(
@@ -120,7 +122,7 @@ const KiloAmountTableView = () => {
         >
           <Button
             onClick={() => {
-              dispatch(setPaginate(kiloAmountPayload.pagingParams));
+              dispatch(setPaginate(reasonPayload.pagingParams)); // Adjust the reset payload
               setPage(0);
               setRowsPerPage(10);
             }}
@@ -136,7 +138,7 @@ const KiloAmountTableView = () => {
         <Table stickyHeader aria-label="sticky table">
           <TableHead>
             <TableRow>
-              {kiloAmountColumns.map((column) => (
+              {reasonColumns.map((column) => (
                 <StyledTableCell
                   key={column.id}
                   style={{ minWidth: column.minWidth }}
@@ -179,29 +181,26 @@ const KiloAmountTableView = () => {
             </TableRow>
           </TableHead>
           <TableBody>
-            {data.kiloAmounts?.map((row: any) => (
+            {data.reasons?.map((row: any) => (
               <StyledTableRow hover role="checkbox" tabIndex={-1} key={row.id}>
-                {kiloAmountColumns.map((column) => {
+                {reasonColumns.map((column) => {
                   const value = row[column.id];
                   return (
                     <StyledTableCell key={column.id} align={column.align}>
                       {(() => {
                         switch (column.label) {
-                          case "Kilo":
-                            return value;
-                          case "Amount":
-                            return value;
-                          case "Action":
+                          case "Name":
                             return (
                               <NavigateId
-                                url={`${`${paths.kiloAmount}/${row.id}`}`}
-                                value={
-                                  <>
-                                    <Button startIcon={<></>} color="secondary">
-                                      Update Detail
-                                    </Button>
-                                  </>
-                                }
+                                url={`${paths.reason}/${row.id}`} // Adjust the path for reason detail
+                                value={value}
+                              />
+                            );
+                          case "Status":
+                            return (
+                              <Status
+                                status={value}
+                                lists={generalStatusLists}
                               />
                             );
                           default:
@@ -230,4 +229,4 @@ const KiloAmountTableView = () => {
   );
 };
 
-export default KiloAmountTableView;
+export default ReasonDeletedTableView;

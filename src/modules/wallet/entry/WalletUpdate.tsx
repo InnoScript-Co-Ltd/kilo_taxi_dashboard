@@ -40,12 +40,16 @@ const WalletUpdate = () => {
     resolver: zodResolver(walletSchema),
     defaultValues: {
       walletName: "",
+      kilo: 0,
+      downTownAmount: 0,
+      outTownAmount: 0,
     },
   });
 
   // Function to handle form submission and wallet update
   const submitWalletUpdate = async (data: WalletFormInputs) => {
     setLoading(true);
+
     const response: any = await walletService.update(
       dispatch,
       params.id,
@@ -77,6 +81,9 @@ const WalletUpdate = () => {
     if (wallet) {
       setValue("id", Number(wallet.id) || 0);
       setValue("walletName", wallet.walletName || "");
+      setValue("kilo", wallet.kilo || 0);
+      setValue("downTownAmount", wallet.downTownAmount || 0);
+      setValue("outTownAmount", wallet.outTownAmount || 0);
     }
   }, [wallet, setValue]);
 
@@ -101,6 +108,56 @@ const WalletUpdate = () => {
                   {...register("walletName")}
                 />
                 <FormHelperText>{errors.walletName?.message}</FormHelperText>
+              </FormControl>
+            </Grid2>
+
+            <Grid2 size={{ xs: 6, md: 3 }}>
+              <FormControl variant="filled" fullWidth error={!!errors.kilo}>
+                <InputLabel htmlFor="kilo">Kilo</InputLabel>
+                <FilledInput
+                  type="number"
+                  size="small"
+                  id="kilo"
+                  {...register("kilo", { valueAsNumber: true })}
+                />
+                <FormHelperText>{errors.kilo?.message}</FormHelperText>
+              </FormControl>
+            </Grid2>
+
+            <Grid2 size={{ xs: 6, md: 3 }}>
+              <FormControl
+                variant="filled"
+                fullWidth
+                error={!!errors.downTownAmount}
+              >
+                <InputLabel htmlFor="downTownAmount">
+                  DownTown Amount
+                </InputLabel>
+                <FilledInput
+                  type="number"
+                  size="small"
+                  id="downTownAmount"
+                  {...register("downTownAmount", { valueAsNumber: true })}
+                />
+                <FormHelperText>
+                  {errors.downTownAmount?.message}
+                </FormHelperText>
+              </FormControl>
+            </Grid2>
+            <Grid2 size={{ xs: 6, md: 3 }}>
+              <FormControl
+                variant="filled"
+                fullWidth
+                error={!!errors.outTownAmount}
+              >
+                <InputLabel htmlFor="outTownAmount">OutTown Amount</InputLabel>
+                <FilledInput
+                  type="number"
+                  size="small"
+                  id="outTownAmount"
+                  {...register("outTownAmount", { valueAsNumber: true })}
+                />
+                <FormHelperText>{errors.outTownAmount?.message}</FormHelperText>
               </FormControl>
             </Grid2>
           </Grid2>

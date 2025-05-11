@@ -3,14 +3,16 @@ import { endpoints } from "../../constants/endpoints";
 import { getRequest, postRequest } from "../../helpers/api";
 import { httpServiceHandler } from "../../helpers/handler";
 import { index, show } from "./order.slice";
+import { OrderFormInputs } from "./order.payload";
 
 export const orderService = {
   // Method to fetch the list of orders
   index: async (dispatch: Dispatch, params: any, notifications?: any) => {
     const response: any = await getRequest(endpoints.order, params, dispatch);
     await httpServiceHandler(dispatch, response.data);
+    console.log(response);
 
-    if (response.data.statusCode === 200) {
+    if (response?.data?.statusCode === 200) {
       //'info' | 'success' | 'warning' | 'error'
       notifications.show("Order list is successfully retrieved!", {
         severity: "info",
@@ -42,10 +44,11 @@ export const orderService = {
 
   store: async (payload: any, dispatch: Dispatch, notifications?: any) => {
     const response: any = await postRequest(endpoints.order, payload, dispatch);
-    await httpServiceHandler(dispatch, response.data);
 
-    if (response.data.statusCode === 200) {
-      notifications.show("Order created successfully", {
+    await httpServiceHandler(dispatch, response.data, notifications);
+
+    if (response?.data?.statusCode === 200) {
+      notifications?.show("Order created successfully", {
         severity: "success",
         autoHideDuration: 3000,
       });

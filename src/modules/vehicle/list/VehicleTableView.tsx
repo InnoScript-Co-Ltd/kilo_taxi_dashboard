@@ -33,6 +33,8 @@ import {
 } from "../../../components/TableCommon";
 import { useNotifications } from "@toolpad/core/useNotifications";
 import Status from "../../../components/Status";
+import useRoleValidator from "../../../helpers/roleValidator";
+import { useNavigate } from "react-router";
 
 const VehicleTableView = () => {
   const [page, setPage] = React.useState(0);
@@ -44,6 +46,8 @@ const VehicleTableView = () => {
 
   const notifications = useNotifications();
   const [loading, setLoading] = React.useState(false);
+  const { isSuperAdmin, isAdmin } = useRoleValidator();
+  const navigate = useNavigate();
 
   const handleChangePage = (event: unknown, newPage: number) => {
     setPage(newPage);
@@ -115,7 +119,7 @@ const VehicleTableView = () => {
             display: "flex",
             justifyContent: "start",
             alignItems: "center",
-            gap: 3,
+            gap: 2,
           }}
         >
           <Button
@@ -203,12 +207,23 @@ const VehicleTableView = () => {
                               />
                             );
                           case "Action":
-                            return (
-                              <UpAndDel
-                                url={`${paths.vehicle}/${row.id}`} // Path for vehicle deletion
-                                fn={loadingData}
-                              />
-                            );
+                            // return isSuperAdmin() || isAdmin() ? (
+                            //   <UpAndDel
+                            //     url={`${paths.vehicle}/${row.id}`} // Path for vehicle deletion
+                            //     fn={loadingData}
+                            //   />
+                            // ) : null;
+                            return isSuperAdmin() || isAdmin() ? (
+                              <Button
+                                variant="contained"
+                                color="primary"
+                                onClick={() =>
+                                  navigate(`${paths.vehicle}/${row.id}`)
+                                }
+                              >
+                                Edit
+                              </Button>
+                            ) : null;
                           default:
                             return value;
                         }

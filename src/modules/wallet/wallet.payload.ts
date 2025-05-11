@@ -7,6 +7,13 @@ export const walletSchema = z.object({
   walletName: z
     .string()
     .min(2, { message: "wallet Name must be at least 2 characters long" }),
+  kilo: z.number().min(1, { message: "kilo must be at least 1 number" }),
+  downTownAmount: z
+    .number()
+    .min(1, { message: "downTownAmount must be at least 1 number" }),
+  outTownAmount: z
+    .number()
+    .min(1, { message: "outTownAmount must be at least 1 number" }),
 });
 
 export type WalletFormInputs = z.infer<typeof walletSchema>;
@@ -17,13 +24,26 @@ export type WalletFormInputs = z.infer<typeof walletSchema>;
 export interface WALLET {
   id: string;
   walletName: string;
+  kilo: number;
+  downTownAmount: number;
+  outTownAmount: number;
   createDate: Date | null;
   updateDate?: Date | null;
+  updatedBy: string;
 }
 
 // Define columns for wallet table
 interface WalletColumn {
-  id: "id" | "walletName" | "createDate" | "updateDate" | "action";
+  id:
+    | "id"
+    | "walletName"
+    | "kilo"
+    | "downTownAmount"
+    | "outTownAmount"
+    | "createDate"
+    | "updateDate"
+    | "updatedBy"
+    | "action";
   label: string;
   minWidth?: number;
   align?: "right";
@@ -54,6 +74,30 @@ export const walletColumns: readonly WalletColumn[] = [
     sort: true,
   },
   {
+    id: "kilo",
+    label: "Kilo",
+    minWidth: 130,
+    numeric: false,
+    disablePadding: false,
+    sort: true,
+  },
+  {
+    id: "downTownAmount",
+    label: "DownTown Amount",
+    minWidth: 130,
+    numeric: false,
+    disablePadding: false,
+    sort: true,
+  },
+  {
+    id: "outTownAmount",
+    label: "OutTown Amount",
+    minWidth: 130,
+    numeric: false,
+    disablePadding: false,
+    sort: true,
+  },
+  {
     id: "createDate",
     label: "Create Date",
     minWidth: 125,
@@ -64,6 +108,14 @@ export const walletColumns: readonly WalletColumn[] = [
   {
     id: "updateDate",
     label: "Update Date",
+    minWidth: 125,
+    numeric: false,
+    disablePadding: false,
+    sort: true,
+  },
+  {
+    id: "updatedBy",
+    label: "Update By",
     minWidth: 125,
     numeric: false,
     disablePadding: false,

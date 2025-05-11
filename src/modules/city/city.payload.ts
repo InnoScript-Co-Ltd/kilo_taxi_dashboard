@@ -1,7 +1,6 @@
 import { z } from "zod";
 import { paginateOptions } from "../../constants/config"; // Assuming paginateOptions is available here
 
-// Define Wallet Schema
 export const citySchema = z.object({
   id: z.number().min(0, { message: "id" }).default(0),
   name: z
@@ -9,17 +8,31 @@ export const citySchema = z.object({
     .min(2, { message: "City Name must be at least 2 characters long" }),
 });
 
-export type CityFormInputs = z.infer<typeof citySchema>;
+export const cityUpdateSchema = z.object({
+  id: z.number().min(0, { message: "id" }).default(0),
+  name: z
+    .string()
+    .min(0, { message: "City Name must be at least 2 characters long" }),
+  // Status: z.string(),
+});
 
-/**
- * Interface representing the shape of a wallet object.
- */
+export const cityCreateSchema = z.object({
+  name: z
+    .string()
+    .min(0, { message: "City Name must be at least 2 characters long" }),
+  // Status: z.string()
+});
+
+export type CityFormInputs = z.infer<typeof citySchema>;
+export type CityUpdateFormInputs = z.infer<typeof cityUpdateSchema>;
+export type CityCreateFormInputs = z.infer<typeof cityCreateSchema>;
+
 export interface CITY {
-  id: string;
+  id: number;
   name: string;
+  // Status: string;
 }
 
-// Define columns for wallet table
 interface CityColumn {
   id: "id" | "name" | "action";
   label: string;
@@ -31,7 +44,6 @@ interface CityColumn {
   format?: (value: number) => string;
 }
 
-// Define Wallet Payload
 export interface CITY_PAYLOAD {
   pagingParams: {
     PageSize: number;
@@ -62,7 +74,6 @@ export const cityColumns: readonly CityColumn[] = [
   },
 ];
 
-// Wallet payload example
 export const cityPayload: CITY_PAYLOAD = {
   pagingParams: {
     PageSize: paginateOptions.rows,
@@ -72,3 +83,8 @@ export const cityPayload: CITY_PAYLOAD = {
     SearchTerm: "",
   },
 };
+
+export const cityStatuslists = [
+  { id: "active", value: "ACTIVE" },
+  { id: "disable", value: "DISABLE" },
+];

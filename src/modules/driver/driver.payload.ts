@@ -1,8 +1,49 @@
 import { z } from "zod";
 import { paginateOptions } from "../../constants/config"; // Assuming paginateOptions is available here
 import { VEHICLE } from "../vehicle/vehicle.payload";
+import { WALLET } from "../wallet/wallet.payload";
 
 // Define Driver Schema
+export const driverCreateSchema = z.object({
+  name: z
+    .string()
+    .min(2, { message: "Name must be at least 2 characters long" }),
+  phone: z.string().min(8, { message: "phone number is at least 8 digit" }),
+  role: z.string().nullable().default("Driver"),
+  password: z
+    .string()
+    .min(6, { message: "Password must be at least 6 characters long" }),
+  driverLicense: z
+    .string()
+    .min(6, { message: "Driver License must be at least 6 characters" }),
+  file_profile: z.any().nullable(),
+  file_driverImageLicenseFront: z.any().nullable(),
+  file_driverImageLicenseBack: z.any().nullable(),
+  nrc: z.string().min(6, { message: "NRC must be at least 6 characters" }),
+  city: z.string(),
+  townShip: z.string(),
+  address: z
+    .string()
+    .min(5, { message: "Address must be at least 5 characters" }),
+  propertyStatus: z.number(),
+  status: z.number(),
+  referralMobileNumber: z.string(),
+
+  availableStatus: z.number().nullable().default(6),
+  commissionType: z.number(),
+  kycStatus: z.number(),
+  vehicleNo: z.string(),
+  model: z.string(),
+  vehicleType: z.string(),
+  vehicleStatus: z.number(),
+  driverMode: z.number().nullable().default(0),
+  file_businessLicenseImage: z.any().nullable(),
+  file_vehicleLicenseFront: z.any().nullable(),
+  file_vehicleLicenseBack: z.any().nullable(),
+  fuelType: z.string(),
+  Gender: z.string().nullable().default("MALE"),
+});
+
 export const driverSchema = z.object({
   id: z.number().min(1, { message: "Invalid ID format" }),
   name: z
@@ -33,21 +74,17 @@ export const driverSchema = z.object({
   gender: z.number(),
   status: z.number(),
   availableStatus: z.number(),
+  commissionType: z.number(),
   kycStatus: z.number(),
   referralMobileNumber: z.string(),
   propertyStatus: z.number(),
   file_profile: z.any().nullable(),
-  // file_nrcImageFront: z.any().nullable(),
-  // file_nrcImageBack: z.any().nullable(),
   file_driverImageLicenseFront: z.any().nullable(),
   file_driverImageLicenseBack: z.any().nullable(),
-
-  // vehicle: z.array(vehicleSchema), // Use vehicleSchema as an array
-  // wallet: z.array(walletSchema), // Use walletSchema as an array
 });
 
 export type DriverFormInputs = z.infer<typeof driverSchema>;
-
+export type DriverCreateFormInputs = z.infer<typeof driverCreateSchema>;
 /**
  * Interface representing the shape of a driver object.
  */
@@ -66,6 +103,7 @@ export interface DRIVER {
   nrcImageBack: string;
   driverLicense: string;
   driverImageLicenseFront: string;
+  commissionType: number;
   driverImageLicenseBack: string;
   referralMobileNumber: string;
   availableStatus: number;
@@ -86,8 +124,20 @@ export interface DRIVER {
   file_nrcImageBack: string;
   file_driverImageLicenseFront: string;
   file_driverImageLicenseBack: string;
+  vehicleNo: string;
+  model: string;
+  vehicleType: string;
+  vehicleStatus: number;
+  driverMode: number;
+  file_BusinessLicenseImage: string;
+  file_VehicleLicenseFront: string;
+  file_VehicleLicenseBack: string;
+  fuelType: string;
   vehicle: VEHICLE[]; // Use the VEHICLE interface as an array
   walletUserMapping: WALLETUSERMAPPING[]; // Use the WALLET interface as an array
+  wallet: WALLET;
+  createdBy: string;
+  updatedBy: string;
   action: any;
 }
 
@@ -96,9 +146,9 @@ interface DriverColumn {
   id:
     | "id"
     | "name"
+    | "walletInfo"
     | "profile"
     | "mobilePrefix"
-    | "type"
     | "phone"
     | "email"
     | "createdDate"
@@ -116,6 +166,8 @@ interface DriverColumn {
     | "address"
     | "state"
     | "city"
+    | "createdBy"
+    | "updatedBy"
     | "townShip"
     | "status"
     | "kycStatus"
@@ -126,7 +178,7 @@ interface DriverColumn {
   numeric: boolean;
   disablePadding: boolean;
   sort?: boolean;
-  format?: (value: string) => string;
+  format?: (value: any) => string | number | object | null; // Allow object return type
 }
 export interface WALLETUSERMAPPING {
   id: string;
@@ -144,6 +196,14 @@ export interface DRIVER_PAYLOAD {
     SortField: any;
     SortDir: any;
     SearchTerm: string;
+    Id: string;
+    Name: string;
+    Phone: string;
+    RegisterFrom: string;
+    RegisterTo: string;
+    Township: string;
+    City: string;
+    Status: string;
   };
 }
 
@@ -157,9 +217,9 @@ export const driverColumns: readonly DriverColumn[] = [
     sort: true,
   },
   {
-    id: "type",
+    id: "walletInfo",
     label: "Type",
-    minWidth: 50,
+    minWidth: 70,
     numeric: false,
     disablePadding: false,
     sort: true,
@@ -213,6 +273,22 @@ export const driverColumns: readonly DriverColumn[] = [
     sort: true,
   },
   {
+    id: "createdBy",
+    label: "Created By",
+    minWidth: 100,
+    numeric: false,
+    disablePadding: false,
+    sort: true,
+  },
+  {
+    id: "updatedBy",
+    label: "Updated By",
+    minWidth: 100,
+    numeric: false,
+    disablePadding: false,
+    sort: true,
+  },
+  {
     id: "status",
     label: "Status",
     minWidth: 50,
@@ -237,5 +313,13 @@ export const driverPayload: DRIVER_PAYLOAD = {
     SortField: "name",
     SortDir: "asc",
     SearchTerm: "",
+    Id: "",
+    Name: "",
+    Phone: "",
+    RegisterFrom: "",
+    RegisterTo: "",
+    Township: "",
+    City: "",
+    Status: "",
   },
 };

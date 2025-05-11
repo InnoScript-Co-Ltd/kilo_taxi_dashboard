@@ -49,6 +49,28 @@ export const reasonService = {
     }
     return response.data;
   },
+  deleted: async (dispatch: Dispatch, params: any, notifications?: any) => {
+    const response: any = await getRequest(
+      endpoints.reason + "/deletedList",
+      params,
+      dispatch
+    );
+    await httpServiceHandler(dispatch, response.data);
+
+    if (response.data.statusCode === 200) {
+      //'info' | 'success' | 'warning' | 'error'
+      notifications.show("Reason list is successfully retrieved!", {
+        severity: "info",
+        autoHideDuration: 3000,
+      });
+      dispatch(
+        index(
+          response.data.payload ? response.data.payload : response.data.payload
+        )
+      );
+    }
+    return response.data;
+  },
 
   // Method to update an existing reason by ID
   update: async (

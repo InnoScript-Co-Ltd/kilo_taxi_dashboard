@@ -23,7 +23,10 @@ import { TravelRateRoute } from "./modules/travelrate/travelrate.route";
 import { VehicleTypeRoute } from "./modules/vehicleType/vehicleType.route";
 import Login from "./modules/auth/view/Login";
 import { ExtraDemandRoute } from "./modules/extraDemand/extraDemand.route";
-import { KiloAmountRoute } from "./modules/kiloamount/kiloamount.route";
+import { TownshipRoute } from "./modules/township/township.route";
+import { ConfigSettingRoute } from "./modules/configSetting/configsetting.route";
+import { WithDrawTransactionRoute } from "./modules/withDrawTransaction/withDrawTransaction.route";
+import { RoleRoute } from "./modules/role/role.route";
 export const routers = createBrowserRouter([
   {
     path: "/",
@@ -33,6 +36,7 @@ export const routers = createBrowserRouter([
       // ...AuthRoute,
       ...DashboardRoute,
       ...AdminRoute,
+      ...RoleRoute,
       ...CustomerRoute,
       ...PromotionRoute,
       ...ScheduleBookingRoute,
@@ -45,12 +49,14 @@ export const routers = createBrowserRouter([
       ...ReviewRoute,
       ...ReasonRoute,
       ...TopupTransactionRoute,
+      ...WithDrawTransactionRoute,
       ...SmsRoute,
       ...SimulationRoute,
       ...SosRoute,
       ...CityRoute,
+      ...TownshipRoute,
       ...TravelRateRoute,
-      ...KiloAmountRoute,
+      ...ConfigSettingRoute,
       ...ExtraDemandRoute,
     ],
   },

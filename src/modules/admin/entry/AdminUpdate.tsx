@@ -11,7 +11,7 @@ import {
   FilledInput,
 } from "@mui/material";
 import { useCallback, useEffect, useState } from "react";
-import { AdminFormInputs, adminSchema } from "../admin.payload";
+import { AdminUpdateFormInputs, adminUpdateSchema } from "../admin.payload";
 import { useNavigate, useParams } from "react-router";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, AppRootState } from "../../../stores";
@@ -20,20 +20,23 @@ import { Breadcrumb } from "../../../components/Breadcrumb";
 import { useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { paths } from "../../../constants/paths";
-import {
-  genderStatuslists,
-  customerStatusLists,
-} from "../../../constants/config";
+import { genderStatuslists } from "../../../constants/config";
 import Loading from "../../../components/Loading";
-import { getId } from "../../../helpers/updateHelper";
-import Password from "../../../components/Password";
+import { useNotifications } from "@toolpad/core";
+import { getRequest } from "../../../helpers/api";
+import { endpoints } from "../../../constants/endpoints";
+import { httpErrorHandler, httpServiceHandler } from "../../../helpers/handler";
 
 const AdminUpdate = () => {
   const [loading, setLoading] = useState(false);
+  const [roleLists, setRoleLists] = useState<Array<any>>([]);
+
   const params: any = useParams();
   const navigate = useNavigate();
   const dispatch = useDispatch<AppDispatch>();
   const { admin } = useSelector((state: AppRootState) => state.admin);
+
+  const notification = useNotifications();
 
   const {
     register,
@@ -41,22 +44,34 @@ const AdminUpdate = () => {
     setValue,
     control,
     formState: { errors },
-  } = useForm<AdminFormInputs>({
-    resolver: zodResolver(adminSchema),
+  } = useForm<AdminUpdateFormInputs>({
+    resolver: zodResolver(adminUpdateSchema),
     defaultValues: {
       Name: "",
       Email: "",
       Phone: "",
-      Password: "",
-      gender: 0,
-      role: "Admin",
-      status: 0,
-      // emailVerifiedAt: null,
-      // phoneVerifiedAt: null,
-      // flagIcon: undefined,
-      // zipCode: ""
+      Gender: "MALE",
+      roleIds: [],
     },
   });
+  const onSubmit = async (data: AdminUpdateFormInputs) => {
+    try {
+      setLoading(true);
+      const response = await adminService.update(
+        dispatch,
+        params.id,
+        data,
+        notification
+      );
+      if (response.statusCode === 200) {
+        setLoading(false);
+        navigate(`${paths.adminList}`);
+      }
+      setLoading(false);
+    } catch (error) {
+      console.error("Admin Update Error :", error);
+    }
+  };
 
   // Load data into form fields on component mount
   const loadingData = useCallback(async () => {
@@ -72,45 +87,43 @@ const AdminUpdate = () => {
   // Populate form values when country data is available
   useEffect(() => {
     if (admin) {
-      setValue("id", admin.id || 0);
+      console.log("admin:", admin.roleInfoDtos);
+      setValue("Id", admin.id);
       setValue("Name", admin.name || "");
       setValue("Phone", admin.phone || "");
       setValue("Email", admin.email || "");
-      // setValue(
-      //   "emailVerifiedAt",
-      //   new Date(admin.emailVerifiedAt) || new Date()
-      // );
-      // setValue(
-      //   "phoneVerifiedAt",
-      //   new Date(admin.phoneVerifiedAt) || new Date()
-      // );
-      setValue("Password", admin.password || "");
-      setValue("address", admin.address || "");
+      setValue("Address", admin.address || "");
+      setValue("Gender", admin.gender || "MALE");
       setValue(
-        "gender",
-        getId({ lists: genderStatuslists, value: admin.gender }) || 0
-      );
-      setValue(
-        "status",
-        getId({ lists: customerStatusLists, value: admin.status }) || 0
+        "roleIds",
+        (admin?.roleInfoDtos || []).map((r) => Number(r.id))
       );
     }
   }, [admin, setValue]);
 
-  // Submit form data
-  const onSubmit = async (data: AdminFormInputs) => {
+  const loadRoles = useCallback(async () => {
     try {
-      setLoading(true);
-      const response = await adminService.update(dispatch, params.id, data);
-      if (response.statusCode === 200) {
-        setLoading(false);
-        navigate(`${paths.adminList}`);
+      const roleRes: any = await getRequest(
+        `${endpoints?.role}`,
+        null,
+        dispatch
+      );
+
+      await httpServiceHandler(dispatch, roleRes.data);
+      if (roleRes && "data" in roleRes && roleRes.status === 200) {
+        console.log("roles :", roleRes.data.payload.roleInfoDtos[2].name);
+        setRoleLists(roleRes?.data?.payload?.roleInfoDtos);
       }
-      setLoading(false);
     } catch (error) {
-      console.error("Admin Update Error :", error);
+      await httpErrorHandler(error, dispatch);
     }
-  };
+  }, [dispatch]);
+
+  useEffect(() => {
+    loadRoles();
+  }, [loadRoles]);
+
+  // Submit form data
 
   return (
     <Box>
@@ -125,8 +138,11 @@ const AdminUpdate = () => {
           <Grid2 container spacing={2}>
             <Grid2 size={{ xs: 6, md: 3 }}>
               <FormControl variant="filled" fullWidth error={!!errors.Name}>
-                <InputLabel htmlFor="admin_name">Name</InputLabel>
+                <InputLabel htmlFor="admin_name" style={{ fontSize: "12px" }}>
+                  Name
+                </InputLabel>
                 <FilledInput
+                  style={{ paddingTop: "20px", fontSize: "14px" }}
                   disabled={loading}
                   size="small"
                   id="admin_name"
@@ -135,10 +151,14 @@ const AdminUpdate = () => {
                 <FormHelperText>{errors.Name?.message}</FormHelperText>
               </FormControl>
             </Grid2>
+
             <Grid2 size={{ xs: 6, md: 3 }}>
               <FormControl variant="filled" fullWidth error={!!errors.Email}>
-                <InputLabel htmlFor="email">Email</InputLabel>
+                <InputLabel htmlFor="email" style={{ fontSize: "12px" }}>
+                  Email
+                </InputLabel>
                 <FilledInput
+                  style={{ paddingTop: "20px", fontSize: "14px" }}
                   size="small"
                   disabled={loading}
                   id="email"
@@ -150,8 +170,11 @@ const AdminUpdate = () => {
 
             <Grid2 size={{ xs: 6, md: 3 }}>
               <FormControl variant="filled" fullWidth error={!!errors.Phone}>
-                <InputLabel htmlFor="phone">Phone</InputLabel>
+                <InputLabel htmlFor="phone" style={{ fontSize: "12px" }}>
+                  Phone
+                </InputLabel>
                 <FilledInput
+                  style={{ paddingTop: "20px", fontSize: "14px" }}
                   size="small"
                   disabled={loading}
                   id="phone"
@@ -162,83 +185,14 @@ const AdminUpdate = () => {
             </Grid2>
 
             <Grid2 size={{ xs: 6, md: 3 }}>
-              <Password register={register} loading={loading} errors={errors} />
-            </Grid2>
-
-            <Grid2 size={{ xs: 6, md: 3 }}>
-              <FormControl variant="filled" fullWidth error={!!errors.address}>
-                <InputLabel htmlFor="address">Address</InputLabel>
-                <FilledInput
-                  disabled={loading}
-                  size="small"
-                  id="address"
-                  {...register("address")}
-                />
-                <FormHelperText>{errors.address?.message}</FormHelperText>
-              </FormControl>
-            </Grid2>
-
-            {/* <Grid2 size={{ xs: 6, md: 3 }}>
-              <FormControl fullWidth error={!!errors.emailVerifiedAt}>
-                <Controller
-                  name="emailVerifiedAt"
-                  control={control}
-                  render={({ field }) => (
-                    <DatePicker
-                      label="Email verified at"
-                      value={field.value}
-                      defaultValue={field.value}
-                      onChange={(date) => field.onChange(date)}
-                      disabled={loading}
-                      slotProps={{
-                        textField: {
-                          error: !!errors.emailVerifiedAt,
-                          helperText: errors.emailVerifiedAt?.message,
-                        },
-                      }}
-                    />
-                  )}
-                />
-                <FormHelperText>
-                  {errors.emailVerifiedAt?.message}
-                </FormHelperText>
-              </FormControl>
-            </Grid2> */}
-
-            {/* <Grid2 size={{ xs: 6, md: 3 }}>
-              <FormControl fullWidth error={!!errors.phoneVerifiedAt}>
-                <Controller
-                  name="phoneVerifiedAt"
-                  control={control}
-                  render={({ field }) => (
-                    <DatePicker
-                      label="Phone verified at"
-                      value={field.value}
-                      onChange={(date) => field.onChange(date)}
-                      disabled={loading}
-                      slotProps={{
-                        textField: {
-                          error: !!errors.phoneVerifiedAt,
-                          helperText: errors.phoneVerifiedAt?.message,
-                        },
-                      }}
-                    />
-                  )}
-                />
-                <FormHelperText>
-                  {errors.phoneVerifiedAt?.message}
-                </FormHelperText>
-              </FormControl>
-            </Grid2> */}
-
-            <Grid2 size={{ xs: 6, md: 3 }}>
-              <FormControl variant="filled" fullWidth error={!!errors.gender}>
+              <FormControl variant="filled" fullWidth error={!!errors.Gender}>
                 <InputLabel htmlFor="gender">Gender</InputLabel>
                 <Controller
-                  name="gender"
+                  name="Gender"
                   control={control}
                   render={({ field }) => (
                     <Select
+                      style={{ paddingTop: "20px", fontSize: "14px" }}
                       id="gender"
                       aria-describedby="gender_text"
                       size="small"
@@ -249,7 +203,7 @@ const AdminUpdate = () => {
                       onChange={(event) => field.onChange(event.target.value)} // Ensure onChange value is a string
                     >
                       {genderStatuslists?.map((general: any) => (
-                        <MenuItem key={general.id} value={general.id}>
+                        <MenuItem key={general.id} value={general.value}>
                           {general.value}
                         </MenuItem>
                       ))}
@@ -257,37 +211,54 @@ const AdminUpdate = () => {
                   )}
                 />
 
-                <FormHelperText>{errors.gender?.message}</FormHelperText>
+                <FormHelperText>{errors.Gender?.message}</FormHelperText>
               </FormControl>
             </Grid2>
 
-            <Grid2 size={{ xs: 6, md: 3 }}>
-              <FormControl variant="filled" fullWidth error={!!errors.status}>
-                <InputLabel htmlFor="status">Status</InputLabel>
+            <Grid2 size={{ xs: 6, md: 4 }}>
+              <FormControl variant="filled" fullWidth error={!!errors.roleIds}>
+                <InputLabel htmlFor="role_name">Roles</InputLabel>
                 <Controller
-                  name="status"
+                  name="roleIds"
                   control={control}
                   render={({ field }) => (
                     <Select
-                      id="status"
-                      aria-describedby="status_text"
+                      style={{ paddingTop: "20px", fontSize: "14px" }}
                       size="small"
+                      id="role_name"
+                      aria-describedby="role_name_text"
                       disabled={loading}
-                      label="Status"
+                      label="Roles"
+                      multiple
                       {...field}
-                      value={field.value} // Convert field value to a string
-                      onChange={(event) => field.onChange(event.target.value)} // Ensure onChange value is a string
+                      value={field.value}
+                      onChange={(event) => field.onChange(event.target.value)}
                     >
-                      {customerStatusLists?.map((status: any) => (
-                        <MenuItem key={status.id} value={status.id}>
-                          {status.value}
+                      {roleLists.map((role: any) => (
+                        <MenuItem key={role.id} value={role.id}>
+                          {role.name}
                         </MenuItem>
                       ))}
                     </Select>
                   )}
                 />
+                <FormHelperText>{errors.roleIds?.message}</FormHelperText>
+              </FormControl>
+            </Grid2>
 
-                <FormHelperText>{errors.status?.message}</FormHelperText>
+            <Grid2 size={{ xs: 6, md: 8 }}>
+              <FormControl variant="filled" fullWidth error={!!errors.Address}>
+                <InputLabel htmlFor="address" style={{ fontSize: "12px" }}>
+                  Address
+                </InputLabel>
+                <FilledInput
+                  style={{ paddingTop: "20px", fontSize: "14px" }}
+                  disabled={loading}
+                  size="small"
+                  id="address"
+                  {...register("Address")}
+                />
+                <FormHelperText>{errors.Address?.message}</FormHelperText>
               </FormControl>
             </Grid2>
           </Grid2>

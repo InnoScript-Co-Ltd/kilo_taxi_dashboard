@@ -2,32 +2,43 @@ import { Dispatch } from "redux";
 import { endpoints } from "../../constants/endpoints";
 import { getRequest, postRequest, putRequest } from "../../helpers/api";
 import { httpServiceHandler } from "../../helpers/handler";
-import { AdminFormInputs } from "./admin.payload";
+import { AdminUpdateFormInputs } from "./admin.payload";
 import { index, show, update } from "./admin.slice";
 
 export const adminService = {
   store: async (payload: any, dispatch: Dispatch, notifications: any) => {
     const response: any = await postRequest(endpoints.admin, payload, dispatch);
-    await httpServiceHandler(dispatch, response);
-    if (response.data.statusCode === 201) {
-      //'info' | 'success' | 'warning' | 'error'
+    await httpServiceHandler(dispatch, response, notifications);
+    if (response.data?.statusCode === 201) {
       notifications.show("Admin is created successfully", {
         severity: "success",
         autoHideDuration: 3000,
       });
     }
+
     return response.data;
   },
 
   index: async (dispatch: Dispatch, params: any, notifications: any) => {
     const response: any = await getRequest(endpoints.admin, params, dispatch);
     await httpServiceHandler(dispatch, response.data, notifications);
-    if (response.data.statusCode === 200) {
-      //'info' | 'success' | 'warning' | 'error'
-      notifications.show("Admin list is successfully retrieved!", {
-        severity: "info",
-        autoHideDuration: 3000,
-      });
+    if (response.data?.statusCode === 200) {
+      dispatch(
+        index(
+          response.data.payload ? response.data.payload : response.data.payload
+        )
+      );
+    }
+    return response.data;
+  },
+  deleted: async (dispatch: Dispatch, params: any, notifications: any) => {
+    const response: any = await getRequest(
+      endpoints.admin + "/deletedList",
+      params,
+      dispatch
+    );
+    await httpServiceHandler(dispatch, response.data, notifications);
+    if (response.data?.statusCode === 200) {
       dispatch(
         index(
           response.data.payload ? response.data.payload : response.data.payload
@@ -40,7 +51,7 @@ export const adminService = {
   update: async (
     dispatch: Dispatch,
     id: number,
-    payload: AdminFormInputs,
+    payload: AdminUpdateFormInputs,
     notifications?: any
   ) => {
     const response: any = await putRequest(
@@ -48,10 +59,10 @@ export const adminService = {
       payload,
       dispatch
     );
-    await httpServiceHandler(dispatch, response.data);
-
-    if (response.data.statusCode === 200) {
+    await httpServiceHandler(dispatch, response, notifications);
+    if (response?.status === 200) {
       //'info' | 'success' | 'warning' | 'error'
+      console.log("admin update");
       notifications?.show("Admin is updated successfully", {
         severity: "success",
         autoHideDuration: 3000,
@@ -68,7 +79,7 @@ export const adminService = {
       dispatch
     );
     await httpServiceHandler(dispatch, response.data.payload);
-    if (response.data.statusCode === 200) {
+    if (response.data?.statusCode === 200) {
       dispatch(show(response.data.payload));
     }
 

@@ -30,12 +30,13 @@ export const scheduleBookingService = {
 
   index: async (dispatch: Dispatch, params: any, notifications?: any) => {
     const response: any = await getRequest(
-      endpoints.scheduleBooking,
+      endpoints.order + "/Schedule-Orders",
       params,
       dispatch
     );
     await httpServiceHandler(dispatch, response.data);
     if (response.data.statusCode === 200) {
+      console.log(response);
       //'info' | 'success' | 'warning' | 'error'
       notifications.show("SchehuleBooking list is successfully retrieved!", {
         severity: "info",
@@ -62,29 +63,29 @@ export const scheduleBookingService = {
     );
     await httpServiceHandler(dispatch, response);
 
-    if (response.status === 200) {
+    if (response.data.statusCode === 200) {
       notifications?.show("Schedule is updated successfully", {
         severity: "success",
         autoHideDuration: 3000,
       });
-      dispatch(update(response.data));
+      dispatch(update(response.data.payload));
     }
-    return response;
+    return response.data;
   },
 
   // Method to fetch details of a specific state by ID
   show: async (dispatch: Dispatch, id: number) => {
     const response: any = await getRequest(
-      `${endpoints.scheduleBooking}/${id}`,
+      `${endpoints.order}/${id}`,
       null,
       dispatch
     );
-    await httpServiceHandler(dispatch, response);
+    await httpServiceHandler(dispatch, response.data.payload);
 
     if (response.status === 200) {
-      dispatch(show(response.data));
+      dispatch(show(response.data.payload));
     }
 
-    return response;
+    return response.data.payload;
   },
 };

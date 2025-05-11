@@ -34,6 +34,8 @@ import {
   StyledTableRow,
 } from "../../../components/TableCommon";
 import { useNotifications } from "@toolpad/core/useNotifications";
+import { format } from "date-fns";
+import useRoleValidator from "../../../helpers/roleValidator";
 
 const TopupTransactionTableView = () => {
   const [page, setPage] = React.useState(0);
@@ -46,6 +48,8 @@ const TopupTransactionTableView = () => {
   const notifications = useNotifications();
   const navigate = useNavigate();
   const [loading, setLoading] = React.useState(false);
+
+  const { isTopUpAdmin, isSuperAdmin } = useRoleValidator();
 
   const handleChangePage = (event: unknown, newPage: number) => {
     setPage(newPage);
@@ -79,6 +83,7 @@ const TopupTransactionTableView = () => {
   }, [dispatch, pagingParams, notifications]);
 
   React.useEffect(() => {
+    console.log("API Response:", data);
     loadingData();
   }, [loadingData]);
 
@@ -120,12 +125,16 @@ const TopupTransactionTableView = () => {
             gap: 3,
           }}
         >
-          <Button
-            startIcon={<AddCircleOutlineIcon />}
-            onClick={() => navigate(paths.topupTransactionCreate)} // Adjust path for topupTransaction create page
-          >
-            Create
-          </Button>
+          {isTopUpAdmin() || isSuperAdmin() ? (
+            <Button
+              startIcon={<AddCircleOutlineIcon />}
+              onClick={() => navigate(paths.topupTransactionCreate)} // Adjust path for topupTransaction create page
+            >
+              Create
+            </Button>
+          ) : (
+            <></>
+          )}
 
           <Button
             onClick={() => {
@@ -188,7 +197,7 @@ const TopupTransactionTableView = () => {
             </TableRow>
           </TableHead>
           <TableBody>
-            {data.topupTransactions?.map((row: any) => (
+            {data.topUpTransactions?.map((row: any) => (
               <StyledTableRow hover role="checkbox" tabIndex={-1} key={row.id}>
                 {topupTransactionColumns.map((column) => {
                   const value = row[column.id];
@@ -196,27 +205,29 @@ const TopupTransactionTableView = () => {
                     <StyledTableCell key={column.id} align={column.align}>
                       {(() => {
                         switch (column.label) {
-                          case "TopupTransaction Name":
-                            return (
-                              <NavigateId
-                                url={`${paths.topupTransaction}/${row.id}`} // Adjust the path for topupTransaction detail
-                                value={value}
-                              />
+                          case "Datetime":
+                            // Format dateTime to desired format
+                            const formattedDate = format(
+                              new Date(value),
+                              "dd MMM yyyy hh:mma"
                             );
-                          case "Create Date":
-                            return value;
-                          case "Update Date":
-                            return value;
+                            return formattedDate;
                           case "Action":
                             return (
-                              <UpAndDel
-                                url={`${paths.topupTransaction}/${row.id}`} // Adjust for topupTransaction delete
-                                fn={loadingData}
-                                priority={true}
-                              />
+                              <Button
+                                variant="outlined"
+                                color="primary"
+                                onClick={() =>
+                                  navigate(
+                                    `${paths.topupTransaction}/${row.id}`
+                                  )
+                                } // Redirect to View Detail page
+                              >
+                                View Detail
+                              </Button>
                             );
                           default:
-                            return value; // Fallback case
+                            return value;
                         }
                       })()}
                     </StyledTableCell>

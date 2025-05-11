@@ -11,6 +11,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, AppRootState } from "../../../stores";
 import { driverService } from "../driver.service"; // Assuming you have a driver service
 import UpAndDel from "../../../components/UpAndDel";
+import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
 
 import {
   driverStatusLists,
@@ -26,6 +27,11 @@ import {
   Input,
   InputAdornment,
   TableSortLabel,
+  TextField,
+  FormControl,
+  InputLabel,
+  Select,
+  MenuItem,
 } from "@mui/material";
 import { setPaginate } from "../driver.slice"; // Your driver slice
 import SearchIcon from "@mui/icons-material/Search";
@@ -38,17 +44,26 @@ import { useNotifications } from "@toolpad/core/useNotifications";
 import Status from "../../../components/Status";
 import TAvatar from "../../../components/TAvatar";
 import { formatDate } from "../../../helpers/common";
+import FilterComponent from "../../../components/FilterComponent";
+import { useNavigate } from "react-router";
+import useRoleValidator from "../../../helpers/roleValidator";
 
-const DriverTableView = () => {
+export const DriverTableView = () => {
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
+  const [fromDate, setFromDate] = React.useState("");
+  const [toDate, setToDate] = React.useState("");
+  const [status, setStatus] = React.useState("");
   const dispatch = useDispatch<AppDispatch>();
   const { data, pagingParams } = useSelector(
     (state: AppRootState) => state.driver // Adjust to your driver slice state
   );
 
   const notifications = useNotifications();
+  const navigate = useNavigate();
+
   const [loading, setLoading] = React.useState(false);
+  const { isSuperAdmin, isAdmin } = useRoleValidator();
 
   const handleChangePage = (event: unknown, newPage: number) => {
     setPage(newPage);
@@ -73,7 +88,35 @@ const DriverTableView = () => {
       })
     );
   };
+  const handleDownloadReport = async () => {
+    try {
+      const response = await fetch(
+        `http://4.145.92.57:81/api/v1/Driver/driver-report?fromDate=${fromDate}&toDate=${toDate}&status=${status}`,
+        {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
 
+      if (!response.ok) {
+        throw new Error("Failed to download report");
+      }
+
+      const blob = await response.blob();
+      const url = window.URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = "DriverReport.xlsx";
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      window.URL.revokeObjectURL(url);
+    } catch (error) {
+      console.error("Error downloading report:", error);
+    }
+  };
   const loadingData = React.useCallback(async () => {
     setLoading(true);
     await driverService.index(dispatch, pagingParams, notifications);
@@ -122,6 +165,54 @@ const DriverTableView = () => {
             gap: 3,
           }}
         >
+          {isSuperAdmin() || isAdmin() ? (
+            <Button
+              startIcon={<AddCircleOutlineIcon />}
+              onClick={() => navigate(paths.driverCreate)}
+            >
+              Create
+            </Button>
+          ) : (
+            <></>
+          )}
+          {isSuperAdmin() || isAdmin() ? (
+            <Box sx={{ my: "20px", px: "20px", display: "flex", gap: 3 }}>
+              <TextField
+                label="From Date"
+                type="date"
+                InputLabelProps={{ shrink: true }}
+                value={fromDate}
+                onChange={(e) => setFromDate(e.target.value)}
+              />
+              <TextField
+                label="To Date"
+                type="date"
+                InputLabelProps={{ shrink: true }}
+                value={toDate}
+                onChange={(e) => setToDate(e.target.value)}
+              />
+              <FormControl variant="filled" sx={{ minWidth: 150 }}>
+                <InputLabel>Status</InputLabel>
+                <Select
+                  value={status}
+                  onChange={(e) => setStatus(e.target.value)}
+                  size="small"
+                >
+                  <MenuItem value="">All</MenuItem>
+                  <MenuItem value="PENDING">PENDING</MenuItem>
+                  <MenuItem value="ACTIVE">ACTIVE</MenuItem>
+                  <MenuItem value="DEACTIVATE">DEACTIVATE</MenuItem>
+                  <MenuItem value="SUSPENDED">SUSPENDED</MenuItem>
+                </Select>
+              </FormControl>
+
+              <Button variant="contained" onClick={handleDownloadReport}>
+                Download Report
+              </Button>
+            </Box>
+          ) : (
+            <></>
+          )}
           <Button
             onClick={() => {
               dispatch(setPaginate(driverPayload.pagingParams)); // Reset the paginate
@@ -135,6 +226,11 @@ const DriverTableView = () => {
           </Button>
         </Box>
       </Box>
+
+      {/* <FilterComponent
+        driverPayload={driverPayload}
+        setPaginate={setPaginate}
+      /> */}
 
       <TableContainer sx={{ maxHeight: 440 }}>
         <Table stickyHeader aria-label="sticky table">
@@ -179,17 +275,20 @@ const DriverTableView = () => {
               <StyledTableRow hover role="checkbox" tabIndex={-1} key={row.id}>
                 {driverColumns.map((column) => {
                   const value = row[column.id];
+                  console.log("value:", value);
                   return (
                     <StyledTableCell key={column.id} align={column.align}>
                       {(() => {
                         switch (column.label) {
-                          case "Driver Name":
+                          case "Name":
                             return (
                               <NavigateId
                                 url={`${paths.driver}/${row.id}`} // Driver detail path
                                 value={value}
                               />
                             );
+                          case "Type":
+                            return value?.walletName;
                           case "Register DateTime":
                             return formatDate(value);
                           case "Profile":
@@ -213,13 +312,13 @@ const DriverTableView = () => {
                               />
                             );
                           case "Action":
-                            return (
+                            return isSuperAdmin() || isAdmin() ? (
                               <UpAndDel
                                 url={`${paths.driver}/${row.id}`}
                                 fn={loadingData}
                                 priority={true}
                               />
-                            );
+                            ) : null;
                           default:
                             return value; // Fallback for other columns
                         }

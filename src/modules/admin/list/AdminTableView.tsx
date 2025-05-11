@@ -1,56 +1,61 @@
 import * as React from "react";
-import Paper from "@mui/material/Paper";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
-
 import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TablePagination from "@mui/material/TablePagination";
 import TableRow from "@mui/material/TableRow";
+import SearchIcon from "@mui/icons-material/Search";
+import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
+import RestartAltIcon from "@mui/icons-material/RestartAlt";
+import UpAndDel from "../../../components/UpAndDel";
+import Status from "../../../components/Status";
 import { columns, adminPayload } from "../admin.payload";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, AppRootState } from "../../../stores";
 import { adminService } from "../admin.service";
-import {
-  customerStatusLists,
-  genderStatuslists,
-  paginateOptions,
-} from "../../../constants/config";
-import { NavigateId } from "../../../shares/NavigateId";
+import { paginateOptions } from "../../../constants/config";
 import { paths } from "../../../constants/paths";
 import {
+  Paper,
   Box,
   Button,
   Input,
   InputAdornment,
   TableSortLabel,
+  TextField,
+  FormControl,
+  InputLabel,
+  Select,
+  MenuItem,
 } from "@mui/material";
 import { setPaginate } from "../admin.slice";
-import SearchIcon from "@mui/icons-material/Search";
-import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
-import RestartAltIcon from "@mui/icons-material/RestartAlt";
 import { useNavigate } from "react-router";
-import UpAndDel from "../../../components/UpAndDel";
 import {
   StyledTableCell,
   StyledTableRow,
 } from "../../../components/TableCommon";
-import TAvatar from "../../../components/TAvatar";
 import { useNotifications } from "@toolpad/core/useNotifications";
 import { formatDate } from "../../../helpers/common";
-import Status from "../../../components/Status";
+import AdminResetPassword from "../../../components/AdminResetPassword";
+import useRoleValidator from "../../../helpers/roleValidator";
 
 const AdminTableView = () => {
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
-  const dispatch = useDispatch<AppDispatch>();
+  const [loading, setLoading] = React.useState(false);
+  const [fromDate, setFromDate] = React.useState("");
+  const [toDate, setToDate] = React.useState("");
+  const [status, setStatus] = React.useState("");
+
   const { data, pagingParams } = useSelector(
     (state: AppRootState) => state.admin
   );
   const notifications = useNotifications();
 
   const navigate = useNavigate();
-  const [loading, setLoading] = React.useState(false);
+  const dispatch = useDispatch<AppDispatch>();
+  const { isSuperAdmin } = useRoleValidator();
 
   const handleChangePage = (event: unknown, newPage: number) => {
     setPage(newPage);
@@ -76,6 +81,35 @@ const AdminTableView = () => {
     setRowsPerPage(+event.target.value);
     setPage(0);
   };
+  const handleDownloadReport = async () => {
+    try {
+      const response = await fetch(
+        `http://4.145.92.57:81/api/v1/Admin/admin-report?fromDate=${fromDate}&toDate=${toDate}&status=${status}`,
+        {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+
+      if (!response.ok) {
+        throw new Error("Failed to download report");
+      }
+
+      const blob = await response.blob();
+      const url = window.URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = "AdminReport.xlsx";
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      window.URL.revokeObjectURL(url);
+    } catch (error) {
+      console.error("Error downloading report:", error);
+    }
+  };
 
   const loadingData = React.useCallback(async () => {
     setLoading(true);
@@ -86,9 +120,9 @@ const AdminTableView = () => {
   React.useEffect(() => {
     loadingData();
   }, [pagingParams, loadingData]);
-  console.log("data", data.admins);
+
   return (
-    <Paper sx={{ width: "100%", overflow: "hidden" }}>
+    <Paper sx={{ width: "100%", overflow: "hidden", marginTop: "10px" }}>
       <Box
         sx={{
           my: "20px",
@@ -100,7 +134,7 @@ const AdminTableView = () => {
       >
         <Input
           id="input-with-icon-search"
-          placeholder="Search Country"
+          placeholder="Search Admin"
           value={pagingParams.SearchTerm}
           onChange={(e) => {
             dispatch(
@@ -125,13 +159,54 @@ const AdminTableView = () => {
             gap: 3,
           }}
         >
-          <Button
-            startIcon={<AddCircleOutlineIcon />}
-            onClick={() => navigate(paths.adminCreate)}
-          >
-            Create
-          </Button>
+          {isSuperAdmin() ? (
+            <Button
+              startIcon={<AddCircleOutlineIcon />}
+              onClick={() => navigate(paths.adminCreate)}
+            >
+              Create
+            </Button>
+          ) : (
+            <></>
+          )}
+          {isSuperAdmin() ? (
+            <Box sx={{ my: "20px", px: "20px", display: "flex", gap: 3 }}>
+              <TextField
+                label="From Date"
+                type="date"
+                InputLabelProps={{ shrink: true }}
+                value={fromDate}
+                onChange={(e) => setFromDate(e.target.value)}
+              />
+              <TextField
+                label="To Date"
+                type="date"
+                InputLabelProps={{ shrink: true }}
+                value={toDate}
+                onChange={(e) => setToDate(e.target.value)}
+              />
+              <FormControl variant="filled" sx={{ minWidth: 150 }}>
+                <InputLabel>Status</InputLabel>
+                <Select
+                  value={status}
+                  onChange={(e) => setStatus(e.target.value)}
+                  size="small"
+                >
+                  <MenuItem value="">All</MenuItem>
+                  <MenuItem value="ACTIVE">ACTIVE</MenuItem>
+                  <MenuItem value="PENDING">PENDING</MenuItem>
+                  <MenuItem value="DEACTIVE">DEACTIVE</MenuItem>
+                  <MenuItem value="SUSPENDED">SUSPENDED</MenuItem>
+                </Select>
+              </FormControl>
 
+              <Button variant="contained" onClick={handleDownloadReport}>
+                Download Report
+              </Button>
+            </Box>
+          ) : (
+            <></>
+          )}
           <Button
             onClick={() => {
               dispatch(setPaginate(adminPayload.pagingParams));
@@ -195,43 +270,43 @@ const AdminTableView = () => {
                       <StyledTableCell key={column.id} align={column.align}>
                         {(() => {
                           switch (column.label) {
-                            case "Name":
-                              return (
-                                <NavigateId
-                                  url={`${paths.admin}/${row.id}`}
-                                  value={value}
-                                />
-                              );
-                            case "Phone":
-                              return value; // Render the mobile prefix as-is
-                            case "Email":
-                              return <TAvatar src={value} />; // Render the flag icon as-is
-                            case "Email Verified":
-                              return formatDate(value);
-                            case "Phone Verified":
-                              return formatDate(value);
-                            case "Status":
-                              return (
-                                <Status
-                                  status={value}
-                                  lists={customerStatusLists}
-                                />
-                              );
                             case "Gender":
-                              return (
-                                <Status
-                                  status={value}
-                                  lists={genderStatuslists}
+                              return value?.toUpperCase();
+                            case "Status":
+                              return <Status status={value} />;
+                            case "Email Verified At":
+                              return formatDate(value);
+                            case "Phone Verified At":
+                              return formatDate(value);
+                            case "Created At":
+                              return formatDate(value);
+                            case "Updated At":
+                              return formatDate(value);
+                            case "Created By":
+                              return value;
+                            case "Updated By":
+                              return value;
+                            case "Roles":
+                              return value?.map((v: any) => v.name).join(", ");
+                            case "Reset Password":
+                              return isSuperAdmin() ? (
+                                <AdminResetPassword
+                                  url={`${paths.admin}/reset-password`}
+                                  fn={loadingData}
+                                  priority={true}
+                                  email={row.email}
                                 />
-                              );
+                              ) : null;
+
                             case "Action":
-                              return (
+                              return isSuperAdmin() ? (
                                 <UpAndDel
                                   url={`${paths.admin}/${row.id}`}
                                   fn={loadingData}
                                   priority={true}
                                 />
-                              );
+                              ) : null;
+
                             default:
                               return value; // Fallback case
                           }

@@ -1,36 +1,67 @@
 import { paginateOptions } from "../../constants/config";
 import { z } from "zod";
+import { Role } from "../../helpers/roleValidator";
 
-export const adminSchema = z.object({
-  id: z.number().min(0, { message: "id" }).default(0),
+export const adminCreateSchema = z.object({
   Name: z
     .string()
     .min(2, { message: "Name must be at least 2 characters long" }),
-  // zipCode: z.string().min(2, { message: "Zip Code is required" }),
   Email: z.string().email(),
-  role: z.string().nullable().default("Admin"),
+  roleIds: z.array(
+    z.number().min(1, { message: "Role ID must be a positive number" })
+  ), // Ensure it's an array of positive numbers
   Phone: z.string().min(8, { message: "phone number is at least 8 digit" }),
-  Password: z
-    .string()
-    .min(8, { message: "Password must be at least 8 characters long" }) // Minimum length
-    .regex(/[A-Z]/, {
-      message: "Password must contain at least one uppercase letter",
-    }) // Uppercase letter
-    .regex(/[a-z]/, {
-      message: "Password must contain at least one lowercase letter",
-    }) // Lowercase letter
-    .regex(/[0-9]/, { message: "Password must contain at least one number" }) // Number
-    .regex(/[^a-zA-Z0-9]/, {
-      message: "Password must contain at least one special character",
-    }), // Special character
-  gender: z.number(),
-  status: z.number(),
-  address: z.string(),
-  // emailVerifiedAt: z.date().nullable(),
-  // phoneVerifiedAt: z.date().nullable()
+  Gender: z.string().default("MALE"),
+  Address: z.string(),
 });
 
-export type AdminFormInputs = z.infer<typeof adminSchema>;
+export const adminUpdateSchema = z.object({
+  Id: z.number().min(0, { message: "id" }).default(0),
+  Name: z
+    .string()
+    .min(2, { message: "Name must be at least 2 characters long" }),
+  Email: z.string().email(),
+  roleIds: z.array(
+    z.number().min(1, { message: "Role ID must be a positive number" })
+  ), // Ensure it's an array of positive numbers
+  Phone: z.string().min(8, { message: "phone number is at least 8 digit" }),
+  Gender: z.string(),
+  Address: z.string(),
+});
+
+export type AdminCreateFormInputs = z.infer<typeof adminCreateSchema>;
+export type AdminUpdateFormInputs = z.infer<typeof adminUpdateSchema>;
+
+// export const adminSchema = z.object({
+//   id: z.number().min(0, { message: "id" }).default(0),
+//   Name: z
+//     .string()
+//     .min(2, { message: "Name must be at least 2 characters long" }),
+//   // zipCode: z.string().min(2, { message: "Zip Code is required" }),
+//   Email: z.string().email(),
+//   role: z.string().nullable().default("Admin"),
+//   Phone: z.string().min(8, { message: "phone number is at least 8 digit" }),
+//   Password: z
+//     .string()
+//     .min(8, { message: "Password must be at least 8 characters long" }) // Minimum length
+//     .regex(/[A-Z]/, {
+//       message: "Password must contain at least one uppercase letter",
+//     }) // Uppercase letter
+//     .regex(/[a-z]/, {
+//       message: "Password must contain at least one lowercase letter",
+//     }) // Lowercase letter
+//     .regex(/[0-9]/, { message: "Password must contain at least one number" }) // Number
+//     .regex(/[^a-zA-Z0-9]/, {
+//       message: "Password must contain at least one special character",
+//     }), // Special character
+//   gender: z.string(),
+//   status: z.string(),
+//   address: z.string(),
+//   emailVerifiedAt: z.date().nullable(),
+//   phoneVerifiedAt: z.date().nullable()
+// });
+
+// export type AdminFormInputs = z.infer<typeof adminSchema>;
 
 /**
  * Interface representing the shape of a country object.
@@ -40,13 +71,19 @@ export interface ADMIN {
   name: string;
   phone: string;
   email: string;
-  role: string;
+  roleIds: number[];
+  roleInfoDtos: Role[];
+  gender: string;
+  address: string;
+  status: string;
   emailVerifiedAt: Date;
   phoneVerifiedAt: Date;
-  password: string;
-  gender: number;
-  address: string;
-  status: number;
+  createdDate: Date;
+  updatedDate: Date;
+  deletedDate: Date;
+  resetPassword: any;
+  createdBy: string;
+  updatedBy: string;
   action: any;
   // Add other country properties as necessary
 }
@@ -91,6 +128,19 @@ export interface ADMIN_PAYLOAD {
 }
 
 /**
+ * Default payload object for country operations.
+ */
+export const adminPayload: ADMIN_PAYLOAD = {
+  pagingParams: {
+    PageSize: paginateOptions.rows,
+    CurrentPage: 1,
+    SortField: "name",
+    SortDir: 0,
+    SearchTerm: "",
+  },
+};
+
+/**
  * An array of columns for displaying the country table.
  */
 export const columns: readonly Admin_Column[] = [
@@ -112,25 +162,9 @@ export const columns: readonly Admin_Column[] = [
   },
   {
     id: "email",
-    label: "email",
+    label: "Email",
     minWidth: 100,
     maxWidth: 150,
-    numeric: false,
-    disablePadding: false,
-  },
-  {
-    id: "emailVerifiedAt",
-    label: "Email Verified",
-    minWidth: 50,
-    maxWidth: 50,
-    numeric: false,
-    disablePadding: false,
-  },
-  {
-    id: "phoneVerifiedAt",
-    label: "Phone Verified",
-    minWidth: 50,
-    maxWidth: 50,
     numeric: false,
     disablePadding: false,
   },
@@ -143,6 +177,14 @@ export const columns: readonly Admin_Column[] = [
     disablePadding: false,
   },
   {
+    id: "roleInfoDtos",
+    label: "Roles",
+    minWidth: 300,
+    maxWidth: 500,
+    numeric: false,
+    disablePadding: false,
+  },
+  {
     id: "status",
     label: "Status",
     minWidth: 50,
@@ -151,23 +193,67 @@ export const columns: readonly Admin_Column[] = [
     disablePadding: false,
   },
   {
+    id: "emailVerifiedAt",
+    label: "Email Verified At",
+    minWidth: 200,
+    maxWidth: 200,
+    numeric: false,
+    disablePadding: false,
+  },
+  {
+    id: "phoneVerifiedAt",
+    label: "Phone Verified At",
+    minWidth: 200,
+    maxWidth: 200,
+    numeric: false,
+    disablePadding: false,
+  },
+  {
+    id: "createdBy",
+    label: "Created By",
+    minWidth: 200,
+    maxWidth: 200,
+    numeric: false,
+    disablePadding: false,
+  },
+  {
+    id: "updatedBy",
+    label: "Updated By",
+    minWidth: 200,
+    maxWidth: 200,
+    numeric: false,
+    disablePadding: false,
+  },
+  {
+    id: "createdDate",
+    label: "Created At",
+    minWidth: 200,
+    maxWidth: 200,
+    numeric: false,
+    disablePadding: false,
+  },
+  {
+    id: "updatedDate",
+    label: "Updated At",
+    minWidth: 200,
+    maxWidth: 200,
+    numeric: false,
+    disablePadding: false,
+  },
+  {
+    id: "resetPassword",
+    label: "Reset Password",
+    minWidth: 200,
+    maxWidth: 200,
+    numeric: false,
+    disablePadding: false,
+  },
+  {
     id: "action",
     label: "Action",
-    minWidth: 50,
-    maxWidth: 50,
+    minWidth: 200,
+    maxWidth: 200,
     numeric: false,
     disablePadding: false,
   },
 ];
-/**
- * Default payload object for country operations.
- */
-export const adminPayload: ADMIN_PAYLOAD = {
-  pagingParams: {
-    PageSize: paginateOptions.rows,
-    CurrentPage: 1,
-    SortField: "name",
-    SortDir: 0,
-    SearchTerm: "",
-  },
-};

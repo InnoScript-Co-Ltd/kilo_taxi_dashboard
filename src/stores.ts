@@ -10,15 +10,19 @@ import vehicleSlice from "./modules/vehicle/vehicle.slice";
 import vehicleTypeSlice from "./modules/vehicleType/vehicleType.slice";
 import walletSlice from "./modules/wallet/wallet.slice";
 import orderSlice from "./modules/order/order.slice";
+import driverTripSlice from "./modules/order/driverTrips.slice";
 import reasonSlice from "./modules/reason/reason.slice";
 import topupTransactionSlice from "./modules/topupTransaction/topupTransaction.slice";
 import paymentChannelSlice from "./modules/paymentchannel/paymentchannel.slice";
 import smsSlice from "./modules/sms/sms.slice";
 import sosSlice from "./modules/sos/sos.slice";
 import citySlice from "./modules/city/city.slice";
+import roleSlice from "./modules/role/role.slice";
+import townshipSlice from "./modules/township/township.slice";
 import travelRateSlice from "./modules/travelrate/travelrate.slice";
-import kiloAmountSlice from "./modules/kiloamount/kiloamount.slice";
+import configSettingSlice from "./modules/configSetting/configsetting.slice";
 import ExtraDemandSlice from "./modules/extraDemand/extraDemand.slice";
+import withDrawTransactionSlice from "./modules/withDrawTransaction/withDrawTransaction.slice";
 
 // interface RootState {
 //     share: SHARE_SLICE;
@@ -36,7 +40,9 @@ export const stores = configureStore({
   reducer: {
     share: shareSlice,
     admin: adminSlice,
+    role: roleSlice,
     city: citySlice,
+    township: townshipSlice,
     customer: customerSlice,
     promotion: promotionSlice,
     review: reviewSlice,
@@ -46,13 +52,15 @@ export const stores = configureStore({
     vehicleType: vehicleTypeSlice,
     wallet: walletSlice,
     order: orderSlice,
+    driverTrips: driverTripSlice,
     reason: reasonSlice,
     topUpTransaction: topupTransactionSlice,
+    withDrawTransaction: withDrawTransactionSlice,
     paymentChannel: paymentChannelSlice,
     sms: smsSlice,
     sos: sosSlice,
     travelRate: travelRateSlice,
-    kiloAmount: kiloAmountSlice,
+    configSetting: configSettingSlice,
     extraDemand: ExtraDemandSlice,
   },
 });

@@ -1,14 +1,14 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import {
-  KILOAMOUNT,
-  KILOAMOUNT_PAYLOAD,
-  kiloAmountPayload,
-} from "./kiloamount.payload";
+  CONFIGSETTING,
+  CONFIGSETTING_PAYLOAD,
+  configSettingPayload,
+} from "./configsetting.payload";
 
 // Define a type for the state slice, similar to CITY_SLICE
-export interface KILOAMOUNT_SLICE {
+export interface CONFIGSETTING_SLICE {
   data: {
-    kiloAmounts: KILOAMOUNT[];
+    configSettings: CONFIGSETTING[];
     paging: {
       totalCount: number;
       totalPages: number;
@@ -18,13 +18,13 @@ export interface KILOAMOUNT_SLICE {
       lastRowOnPage: number;
     };
   };
-  kiloAmount: null | KILOAMOUNT;
-  pagingParams: KILOAMOUNT_PAYLOAD["pagingParams"];
+  configSetting: null | CONFIGSETTING;
+  pagingParams: CONFIGSETTING_PAYLOAD["pagingParams"];
 }
 
-const initialState: KILOAMOUNT_SLICE = {
+const initialState: CONFIGSETTING_SLICE = {
   data: {
-    kiloAmounts: [],
+    configSettings: [],
     paging: {
       totalCount: 0,
       totalPages: 0,
@@ -34,30 +34,30 @@ const initialState: KILOAMOUNT_SLICE = {
       lastRowOnPage: 0,
     },
   },
-  kiloAmount: null,
-  pagingParams: kiloAmountPayload.pagingParams,
+  configSetting: null,
+  pagingParams: configSettingPayload.pagingParams,
 };
 
 // Create the state slice
-const kiloAmountSlice = createSlice({
-  name: "kiloAmount",
+const configSettingSlice = createSlice({
+  name: "configSetting",
   initialState: initialState,
   reducers: {
     index: (state, action) => {
       state.data = action.payload;
       return state;
     },
-    show: (state, action: PayloadAction<KILOAMOUNT>) => {
-      state.kiloAmount = action.payload;
+    show: (state, action: PayloadAction<CONFIGSETTING>) => {
+      state.configSetting = action.payload;
       return state;
     },
-    update: (state, action: PayloadAction<KILOAMOUNT>) => {
-      state.kiloAmount = action.payload;
+    update: (state, action: PayloadAction<CONFIGSETTING>) => {
+      state.configSetting = action.payload;
       return state;
     },
     setPaginate: (
       state,
-      action: PayloadAction<KILOAMOUNT_PAYLOAD["pagingParams"]>
+      action: PayloadAction<CONFIGSETTING_PAYLOAD["pagingParams"]>
     ) => {
       state.pagingParams = action.payload;
       return state;
@@ -66,7 +66,7 @@ const kiloAmountSlice = createSlice({
 });
 
 // Export actions for use in components
-export const { index, update, show, setPaginate } = kiloAmountSlice.actions;
+export const { index, update, show, setPaginate } = configSettingSlice.actions;
 
 // Export the reducer to be included in the store
-export default kiloAmountSlice.reducer;
+export default configSettingSlice.reducer;

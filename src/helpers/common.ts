@@ -16,14 +16,14 @@
 //   });
 // };
 export const formatDate = (dateString: string) => {
-  if (dateString === "0001-01-01T00:00:00") {
+  if (dateString === "0001-01-01T00:00:00" || dateString === null) {
     return "Not Verified"; // Handle the default placeholder date
   }
 
   const date = new Date(dateString);
 
   if (isNaN(date.getTime())) {
-    return "Invalid Date"; // Fallback for unexpected invalid dates
+    return "--"; // Fallback for unexpected invalid dates
   }
 
   // Format the date to "23 Jan 2023 12:12pm"

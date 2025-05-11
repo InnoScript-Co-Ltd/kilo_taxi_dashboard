@@ -148,9 +148,9 @@ export const httpErrorHandler = async (
  */
 export const httpResponseHandler = (result: any) => {
   const response: HTTPResponse = {
-    status: result.status,
-    statusText: result.statusText,
-    data: result.data,
+    status: result?.status,
+    statusText: result?.statusText,
+    data: result?.data,
   };
 
   return response;
@@ -167,27 +167,26 @@ export const httpServiceHandler = async (
   result: { status: number; notification?: string | any; error?: string },
   noti?: any
 ) => {
-  // console.log("result:", result);
-  await dispatch(updateError(null));
+  dispatch(updateError(null));
   if (
-    result.status === 400 ||
-    result.status === 0 ||
-    result.status === 500 ||
-    result.status === 404 ||
-    result.status === 403 ||
-    result.status === 405
+    result?.status === 400 ||
+    result?.status === 0 ||
+    result?.status === 500 ||
+    result?.status === 404 ||
+    result?.status === 403 ||
+    result?.status === 405
   ) {
-    noti?.show(result.notification?.msg, {
+    noti?.show(result?.notification?.msg, {
       severity: "error",
       autoHideDuration: 3000,
     });
   }
 
-  if (result.status === 422) {
-    await dispatch(updateError(result.error));
+  if (result?.status === 422) {
+    dispatch(updateError(result?.error));
   }
 
-  if (result.status === 204) {
+  if (result?.status === 204) {
     return null;
   }
 

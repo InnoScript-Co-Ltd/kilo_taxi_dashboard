@@ -1,4 +1,4 @@
-import { Alert, Box, Button, Slide } from "@mui/material";
+import { Alert, Box, Button, IconButton, Slide } from "@mui/material";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { useNavigate } from "react-router";
@@ -44,12 +44,16 @@ const UpAndDel = ({
   const navigate = useNavigate();
 
   const dele = useCallback(async () => {
-    const res: any = await delRequest(`${baseURL}${url}`, dispatch);
-    console.log(res);
-    if (res.data.statusCode === 204) {
-      fn();
+    try {
+      const res: any = await delRequest(`${baseURL}${url}`, dispatch);
+      if (res.data?.statusCode === 204 || res.status === 204) {
+        fn(); // Ensure fn is fetching the updated list
+      }
+    } catch (error) {
+      console.error("Error deleting:", error);
     }
   }, [url, fn, dispatch]);
+  
 
   useEffect(() => {
     if (confirm) {
@@ -91,22 +95,16 @@ const UpAndDel = ({
         </DialogActions>
       </Dialog>
 
-      <Button size="small" onClick={() => navigate(url)}>
+      <IconButton size="small" onClick={() => navigate(url)}>
         <EditIcon />
-      </Button>
-      <Button
-        size="small"
-        color="error"
-        onClick={() => {
-          if (priority) {
-            handleClickOpen();
-          } else {
-            dele();
-          }
+      </IconButton>
+
+      <IconButton size="small" color="error" onClick={() => {
+        priority ? handleClickOpen() : dele()
         }}
       >
         <DeleteIcon />
-      </Button>
+      </IconButton>
     </Box>
   );
 };

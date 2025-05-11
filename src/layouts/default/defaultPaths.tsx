@@ -9,7 +9,7 @@ import PersonIcon from "@mui/icons-material/Person";
 import AccountBalanceWalletIcon from "@mui/icons-material/AccountBalanceWallet";
 import NoteIcon from "@mui/icons-material/Note";
 import CreditCardIcon from "@mui/icons-material/CreditCard";
-import { Map } from "@mui/icons-material";
+import { Map, MapOutlined, Password } from "@mui/icons-material";
 
 export const navigationList = [
   {
@@ -21,6 +21,24 @@ export const navigationList = [
   {
     segment: "admin",
     title: "Admin",
+    isParent: true,
+    icon: <AdminPanelSettingsIcon />,
+    children: [
+      {
+        segment: "list",
+        title: "List",
+        icon: <FormatListBulletedIcon />,
+      },
+      {
+        segment: "deletedList",
+        title: "Deleted List",
+        icon: <FormatListBulletedIcon />,
+      },
+    ],
+  },
+  {
+    segment: "role",
+    title: "Role",
     isParent: true,
     icon: <AdminPanelSettingsIcon />,
     children: [
@@ -45,6 +63,19 @@ export const navigationList = [
     ],
   },
   {
+    segment: "township",
+    title: "Township",
+    isParent: true,
+    icon: <MapOutlined />,
+    children: [
+      {
+        segment: "list",
+        title: "List",
+        icon: <FormatListBulletedIcon />,
+      },
+    ],
+  },
+  {
     segment: "customer",
     title: "Customer",
     isParent: true,
@@ -53,6 +84,11 @@ export const navigationList = [
       {
         segment: "list",
         title: "List",
+        icon: <FormatListBulletedIcon />,
+      },
+      {
+        segment: "deletedList",
+        title: "Deleted List",
         icon: <FormatListBulletedIcon />,
       },
     ],
@@ -66,6 +102,11 @@ export const navigationList = [
       {
         segment: "list",
         title: "List",
+        icon: <FormatListBulletedIcon />,
+      },
+      {
+        segment: "deletedList",
+        title: "Deleted List",
         icon: <FormatListBulletedIcon />,
       },
     ],
@@ -91,7 +132,17 @@ export const navigationList = [
     children: [
       {
         segment: "list",
-        title: "List",
+        title: "Percentage List",
+        icon: <FormatListBulletedIcon />,
+      },
+      {
+        segment: "fixAmountList",
+        title: "Fix Amount List",
+        icon: <FormatListBulletedIcon />,
+      },
+      {
+        segment: "deletedList",
+        title: "Deleted List",
         icon: <FormatListBulletedIcon />,
       },
     ],
@@ -109,19 +160,19 @@ export const navigationList = [
       },
     ],
   },
-  {
-    segment: "vehicleType",
-    title: "VehicleType",
-    isParent: true,
-    icon: <DirectionsCarIcon />,
-    children: [
-      {
-        segment: "list",
-        title: "List",
-        icon: <FormatListBulletedIcon />,
-      },
-    ],
-  },
+  // {
+  //   segment: "vehicleType",
+  //   title: "VehicleType",
+  //   isParent: true,
+  //   icon: <DirectionsCarIcon />,
+  //   children: [
+  //     {
+  //       segment: "list",
+  //       title: "List",
+  //       icon: <FormatListBulletedIcon />,
+  //     },
+  //   ],
+  // },
   {
     segment: "wallet",
     title: "Wallet",
@@ -146,6 +197,11 @@ export const navigationList = [
         title: "List",
         icon: <FormatListBulletedIcon />,
       },
+      {
+        segment: "tripHistory",
+        title: "Drivers-Trips-Histories",
+        icon: <FormatListBulletedIcon />,
+      },
     ],
   },
   {
@@ -161,19 +217,19 @@ export const navigationList = [
       },
     ],
   },
-  {
-    segment: "travelRate",
-    title: "TravelRate",
-    isParent: true,
-    icon: <AdminPanelSettingsIcon />,
-    children: [
-      {
-        segment: "list",
-        title: "List",
-        icon: <FormatListBulletedIcon />,
-      },
-    ],
-  },
+  // {
+  //   segment: "travelRate",
+  //   title: "TravelRate",
+  //   isParent: true,
+  //   icon: <AdminPanelSettingsIcon />,
+  //   children: [
+  //     {
+  //       segment: "list",
+  //       title: "List",
+  //       icon: <FormatListBulletedIcon />,
+  //     },
+  //   ],
+  // },
   {
     segment: "sos",
     title: "Sos",
@@ -185,11 +241,11 @@ export const navigationList = [
         title: "List",
         icon: <FormatListBulletedIcon />,
       },
-      {
-        segment: "receive",
-        title: "Sos Receive",
-        icon: <FormatListBulletedIcon />,
-      },
+      // {
+      //   segment: "receive",
+      //   title: "Sos Receive",
+      //   icon: <FormatListBulletedIcon />,
+      // },
     ],
   },
   {
@@ -216,37 +272,29 @@ export const navigationList = [
         title: "List",
         icon: <FormatListBulletedIcon />,
       },
-    ],
-  },
-  {
-    segment: "sms",
-    title: "Sms",
-    isParent: true,
-    icon: <DashboardIcon />,
-    children: [
       {
-        segment: "list",
-        title: "List",
+        segment: "deletedList",
+        title: "Deleted List",
         icon: <FormatListBulletedIcon />,
       },
     ],
   },
+  // {
+  //   segment: "sms",
+  //   title: "Sms",
+  //   isParent: true,
+  //   icon: <DashboardIcon />,
+  //   children: [
+  //     {
+  //       segment: "list",
+  //       title: "List",
+  //       icon: <FormatListBulletedIcon />,
+  //     },
+  //   ],
+  // },
   {
     segment: "topupTransaction",
     title: "TopupTransaction",
-    isParent: true,
-    icon: <CreditCardIcon style={{ color: "red" }} />,
-    children: [
-      {
-        segment: "list",
-        title: "List",
-        icon: <FormatListBulletedIcon />,
-      },
-    ],
-  },
-  {
-    segment: "kiloAmount",
-    title: "KiloAmount",
     isParent: true,
     icon: <CreditCardIcon />,
     children: [
@@ -258,23 +306,54 @@ export const navigationList = [
     ],
   },
   {
-    segment: "simulation",
-    title: "Simulation",
+    segment: "withDrawTransaction",
+    title: "WithDrawTransaction",
     isParent: true,
-    icon: <DashboardIcon />,
+    icon: <CreditCardIcon />,
     children: [
       {
-        segment: "order",
-        title: "Order Create",
+        segment: "list",
+        title: "List",
         icon: <FormatListBulletedIcon />,
-      },
-      {
-        segment: "order/map",
-        title: "Order Map Simulation",
-        icon: <Map />,
       },
     ],
   },
+  {
+    segment: "configSetting",
+    title: "Config Setting",
+    isParent: true,
+    icon: <CreditCardIcon />,
+    children: [
+      {
+        segment: "list",
+        title: "List",
+        icon: <FormatListBulletedIcon />,
+      },
+    ],
+  },
+  // {
+  //   segment: "simulation",
+  //   title: "Simulation",
+  //   isParent: true,
+  //   icon: <DashboardIcon />,
+  //   children: [
+  //     {
+  //       segment: "order",
+  //       title: "Order Create",
+  //       icon: <FormatListBulletedIcon />,
+  //     },
+  //     {
+  //       segment: "order/map",
+  //       title: "Order Map Simulation",
+  //       icon: <Map />,
+  //     },
+  //     {
+  //       segment: "forget-password",
+  //       title: "Forget Password Simulation",
+  //       icon: <Password />,
+  //     },
+  //   ],
+  // },
 
   {
     segment: "extraDemand",

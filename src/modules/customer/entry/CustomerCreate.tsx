@@ -366,17 +366,18 @@ const CustomerCreate = () => {
                   control={control}
                   render={({ field }) => (
                     <Select
+                      style={{ paddingTop: "20px", fontSize: "14px" }}
                       id="gender"
                       aria-describedby="gender_text"
                       size="small"
                       disabled={loading}
                       label="Gender"
                       {...field}
-                      value={field.value || 0} // Convert field value to a string
+                      value={field.value || "MALE"} // Convert field value to a string
                       onChange={(event) => field.onChange(event.target.value)} // Ensure onChange value is a string
                     >
                       {genderStatuslists?.map((gender: any) => (
-                        <MenuItem key={gender.id} value={gender.id}>
+                        <MenuItem key={gender.id} value={gender.value}>
                           {gender.value}
                         </MenuItem>
                       ))}
@@ -384,7 +385,7 @@ const CustomerCreate = () => {
                   )}
                 />
 
-                <FormHelperText>{errors?.Gender?.message}</FormHelperText>
+                <FormHelperText>{errors.Gender?.message}</FormHelperText>
               </FormControl>
             </Grid2>
 

@@ -35,7 +35,7 @@ export const authService = {
   ) => {
     try {
       const response = await axios.post(
-        `https://localhost:7181/api/v1/Auth/refresh-token`,
+        `http://4.145.97.143:81/api/v1/Auth/refresh-token`,
         {
           accessToken: currentAccessToken,
           refreshToken: currentRefreshToken,

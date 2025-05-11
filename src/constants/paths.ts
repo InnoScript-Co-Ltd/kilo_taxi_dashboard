@@ -1,3 +1,5 @@
+import DriverFixAmountList from "../modules/driver/view/DriverFixAmountList";
+
 export const paths = {
   dashboard: "/dashboard",
 
@@ -6,25 +8,39 @@ export const paths = {
 
   admin: "/admin",
   adminList: "/admin/list",
+  adminDeletedList: "/admin/deletedList",
   adminCreate: "/admin/new",
   adminDetail: "/admin/:id",
+
+  role: "/role",
+  roleList: "/role/list",
+  roleCreate: "/role/new",
+  roleDetail: "/role/:id",
 
   city: "/city",
   cityList: "/city/list",
   cityCreate: "/city/new",
   cityDetail: "/city/:id",
 
+  township: "/township",
+  townshipList: "/township/list",
+  townshipCreate: "/township/new",
+  townshipDetail: "/township/:id",
+
   customer: "/customer",
   customerList: "/customer/list",
+  customerDeletedList: "/customer/deletedList",
   customerCreate: "/customer/new",
   customerDetail: "/customer/:id",
 
   promotion: "/promotion",
   promotionList: "/promotion/list",
+  promotionDeletedList: "/promotion/deletedList",
   promotionCreate: "/promotion/new",
   promotionDetail: "/promotion/:id",
 
   scheduleBooking: "/schedule",
+  scheduleBookingUpdate: "/schedule/update/:id",
   scheduleBookingList: "/schedule/list",
   scheduleBookingDetail: "/schedule/:id",
 
@@ -40,7 +56,10 @@ export const paths = {
 
   driver: "/driver",
   driverList: "/driver/list",
+  driverFixAmountList: "/driver/fixAmountList",
+  driverDeletedList: "/driver/deletedList",
   driverDetail: "/driver/:id",
+  driverCreate: "/driver/new",
   driverUpdate: "/driver/update/:id",
 
   vehicle: "/vehicle",
@@ -58,7 +77,10 @@ export const paths = {
   walletDetail: "/wallet/:id",
 
   order: "/order",
+  orderUpdate: "/order/update/:id",
+  orderCreate: "/order/new",
   orderList: "/order/list",
+  driverTrips: "/order/tripHistory",
   orderDetail: "/order/:id",
 
   paymentChannel: "/paymentchannel",
@@ -73,6 +95,7 @@ export const paths = {
 
   reason: "/reason",
   reasonList: "/reason/list",
+  reasonDeletedList: "/reason/deletedList",
   reasonCreate: "/reason/new",
   reasonDetail: "/reason/:id",
 
@@ -80,6 +103,10 @@ export const paths = {
   topupTransactionList: "/topupTransaction/list",
   topupTransactionCreate: "/topupTransaction/new",
   topupTransactionDetail: "/topupTransaction/:id",
+
+  withDrawTransaction: "/withDrawTransaction",
+  withDrawTransactionList: "/withDrawTransaction/list",
+  withDrawTransactionDetail: "/withDrawTransaction/:id",
 
   sms: "/sms",
   smsList: "/sms/list",
@@ -98,9 +125,14 @@ export const paths = {
   kiloAmountList: "/kiloamount/list",
   kiloAmountDetail: "/kiloamount/:id",
 
+  configSetting: "/configsetting",
+  configSettingList: "/configsetting/list",
+  configSettingDetail: "/configsetting/:id",
+
   simulation: "/simulation",
   simulationOrderCreate: "/simulation/order",
   simulationOrderMap: "/simulation/order/map",
+  simulationForgetPassword: "/simulation/forget-password",
 
   extraDemand: "/extraDemand",
   extraDemandList: "/extraDemand/list",

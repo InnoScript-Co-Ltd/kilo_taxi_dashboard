@@ -23,7 +23,13 @@ import {
   Input,
   InputAdornment,
   TableSortLabel,
+  TextField,
+  FormControl,
+  InputLabel,
+  Select,
+  MenuItem,
 } from "@mui/material";
+
 import { setPaginate } from "../customer.slice";
 import SearchIcon from "@mui/icons-material/Search";
 import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
@@ -38,10 +44,16 @@ import TAvatar from "../../../components/TAvatar";
 import { useNotifications } from "@toolpad/core/useNotifications";
 import { formatDate } from "../../../helpers/common";
 import Status from "../../../components/Status";
+import useRoleValidator from "../../../helpers/roleValidator";
 
 const CustomerTableView = () => {
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
+  const [fromDate, setFromDate] = React.useState("");
+  const [toDate, setToDate] = React.useState("");
+  const [status, setStatus] = React.useState("");
+  const { isSuperAdmin, isAdmin } = useRoleValidator();
+
   const dispatch = useDispatch<AppDispatch>();
   const { data, pagingParams } = useSelector(
     (state: AppRootState) => state.customer
@@ -75,6 +87,35 @@ const CustomerTableView = () => {
     setRowsPerPage(+event.target.value);
     setPage(0);
   };
+  const handleDownloadReport = async () => {
+    try {
+      const response = await fetch(
+        `http://4.145.92.57:81/api/v1/Customer/customer-report?fromDate=${fromDate}&toDate=${toDate}&status=${status}`,
+        {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+
+      if (!response.ok) {
+        throw new Error("Failed to download report");
+      }
+
+      const blob = await response.blob();
+      const url = window.URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = "CustomerReport.xlsx";
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      window.URL.revokeObjectURL(url);
+    } catch (error) {
+      console.error("Error downloading report:", error);
+    }
+  };
 
   const loadingData = React.useCallback(async () => {
     setLoading(true);
@@ -99,7 +140,7 @@ const CustomerTableView = () => {
       >
         <Input
           id="input-with-icon-search"
-          placeholder="Search Country"
+          placeholder="Search Customers"
           value={pagingParams.SearchTerm}
           onChange={(e) => {
             dispatch(
@@ -124,12 +165,54 @@ const CustomerTableView = () => {
             gap: 3,
           }}
         >
-          <Button
-            startIcon={<AddCircleOutlineIcon />}
-            onClick={() => navigate(paths.customerCreate)}
-          >
-            Create
-          </Button>
+          {isSuperAdmin() || isAdmin() ? (
+            <Button
+              startIcon={<AddCircleOutlineIcon />}
+              onClick={() => navigate(paths.customerCreate)}
+            >
+              Create
+            </Button>
+          ) : (
+            <></>
+          )}
+          {isSuperAdmin() || isAdmin() ? (
+            <Box sx={{ my: "20px", px: "20px", display: "flex", gap: 3 }}>
+              <TextField
+                label="From Date"
+                type="date"
+                InputLabelProps={{ shrink: true }}
+                value={fromDate}
+                onChange={(e) => setFromDate(e.target.value)}
+              />
+              <TextField
+                label="To Date"
+                type="date"
+                InputLabelProps={{ shrink: true }}
+                value={toDate}
+                onChange={(e) => setToDate(e.target.value)}
+              />
+              <FormControl variant="filled" sx={{ minWidth: 150 }}>
+                <InputLabel>Status</InputLabel>
+                <Select
+                  value={status}
+                  onChange={(e) => setStatus(e.target.value)}
+                  size="small"
+                >
+                  <MenuItem value="">All</MenuItem>
+                  <MenuItem value="ACTIVE">ACTIVE</MenuItem>
+                  <MenuItem value="PENDING">PENDING</MenuItem>
+                  <MenuItem value="DEACTIVE">DEACTIVE</MenuItem>
+                  <MenuItem value="SUSPENDED">SUSPENDED</MenuItem>
+                </Select>
+              </FormControl>
+
+              <Button variant="contained" onClick={handleDownloadReport}>
+                Download Report
+              </Button>
+            </Box>
+          ) : (
+            <></>
+          )}
 
           <Button
             onClick={() => {
@@ -205,12 +288,7 @@ const CustomerTableView = () => {
                             case "Registered Datetime":
                               return formatDate(value);
                             case "Gender":
-                              return (
-                                <Status
-                                  status={value}
-                                  lists={genderStatuslists}
-                                />
-                              );
+                              return value;
 
                             case "Status":
                               return (
@@ -224,13 +302,13 @@ const CustomerTableView = () => {
                                 <Status status={value} lists={kycStatusLists} />
                               );
                             case "Action":
-                              return (
+                              return isSuperAdmin() || isAdmin() ? (
                                 <UpAndDel
                                   url={`${paths.customer}/${row.id}`}
                                   fn={loadingData}
                                   priority={true}
                                 />
-                              );
+                              ) : null;
                             default:
                               return value; // Fallback case
                           }

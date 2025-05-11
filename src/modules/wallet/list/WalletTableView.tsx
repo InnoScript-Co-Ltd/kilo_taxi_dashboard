@@ -31,6 +31,7 @@ import {
   StyledTableRow,
 } from "../../../components/TableCommon";
 import { useNotifications } from "@toolpad/core/useNotifications";
+import useRoleValidator from "../../../helpers/roleValidator";
 
 const WalletTableView = () => {
   const [page, setPage] = React.useState(0);
@@ -43,6 +44,7 @@ const WalletTableView = () => {
   const notifications = useNotifications();
   const navigate = useNavigate();
   const [loading, setLoading] = React.useState(false);
+  const { isSuperAdmin, isAdmin } = useRoleValidator();
 
   const handleChangePage = (event: unknown, newPage: number) => {
     setPage(newPage);
@@ -117,12 +119,12 @@ const WalletTableView = () => {
             gap: 3,
           }}
         >
-          <Button
+          {/* <Button
             startIcon={<AddCircleOutlineIcon />}
             onClick={() => navigate(paths.walletCreate)} // Adjust path for wallet create page
           >
             Create
-          </Button>
+          </Button> */}
 
           <Button
             onClick={() => {
@@ -205,13 +207,17 @@ const WalletTableView = () => {
                           case "Update Date":
                             return value;
                           case "Action":
-                            return (
-                              <UpAndDel
-                                url={`${paths.wallet}/${row.id}`} // Adjust for wallet delete
-                                fn={loadingData}
-                                priority={true}
-                              />
-                            );
+                            return isSuperAdmin() || isAdmin() ? (
+                              <Button
+                                variant="contained"
+                                color="primary"
+                                onClick={() =>
+                                  navigate(`${paths.wallet}/${row.id}`)
+                                }
+                              >
+                                Edit
+                              </Button>
+                            ) : null;
                           default:
                             return value; // Fallback case
                         }

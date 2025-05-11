@@ -29,6 +29,7 @@ import {
   genderStatuslists,
   kycStatusLists,
   propertyStatusLists,
+  commissionTypeLists,
 } from "../../../constants/config";
 import FileUploadWithPreview from "../../../components/FileUploadWithPreview";
 import { getId } from "../../../helpers/updateHelper";
@@ -67,6 +68,7 @@ const DriverUpdate = () => {
       gender: 0,
       kycStatus: 0,
       referralMobileNumber: "",
+      commissionType: 0,
       propertyStatus: 0,
       dob: null,
       availableStatus: 0,
@@ -106,6 +108,10 @@ const DriverUpdate = () => {
       setValue("password", driver.password || "");
       setValue("address", driver.address || "");
       setValue("state", driver.state || "");
+      setValue(
+        "commissionType",
+        getId({ lists: commissionTypeLists, value: driver.commissionType }) || 0
+      );
       setValue("city", driver.city || "");
       setValue("townShip", driver.townShip || "");
       setValue("referralMobileNumber", driver.referralMobileNumber || "");
@@ -136,7 +142,7 @@ const DriverUpdate = () => {
     setLoading(true);
     const formData = formBuilder(data, driverSchema);
     const response = await driverService.update(dispatch, params.id, formData);
-    if (response.status === 200) {
+    if (response.statusCode === 200) {
       navigate(`${paths.driverList}`);
     }
     setLoading(false);
@@ -386,73 +392,6 @@ const DriverUpdate = () => {
               </FormControl>
             </Grid2>
 
-            {/* <Grid2 size={{ xs: 6, md: 3, xl: 3 }}>
-              <FormControl
-                variant="filled"
-                fullWidth
-                error={!!errors.file_nrcImageFront}
-              >
-                <Controller
-                  name="file_nrcImageFront"
-                  control={control}
-                  defaultValue={undefined} // Set initial state to null
-                  rules={{ required: "NRC Front is required" }} // Only use required here
-                  render={({ field: { onChange, value } }) => (
-                    <FileUploadWithPreview
-                      onFileChange={(file) => {
-                        onChange(file); // Update the field with the selected file
-                      }}
-                      error={
-                        errors.file_nrcImageFront
-                          ? typeof errors.file_nrcImageFront.message ===
-                            "string"
-                            ? errors.file_nrcImageFront.message
-                            : undefined
-                          : undefined
-                      }
-                      // Correctly extracting the error message
-                      field="NRC Front" // Label for the upload button
-                      src={driver?.nrcImageFront}
-                      disabled={loading}
-                    />
-                  )}
-                />
-              </FormControl>
-            </Grid2>
-
-            <Grid2 size={{ xs: 6, md: 3, xl: 3 }}>
-              <FormControl
-                variant="filled"
-                fullWidth
-                error={!!errors.file_nrcImageBack}
-              >
-                <Controller
-                  name="file_nrcImageBack"
-                  control={control}
-                  defaultValue={undefined} // Set initial state to null
-                  rules={{ required: "NRC Back is required" }} // Only use required here
-                  render={({ field: { onChange, value } }) => (
-                    <FileUploadWithPreview
-                      onFileChange={(file) => {
-                        onChange(file); // Update the field with the selected file
-                      }}
-                      error={
-                        errors.file_nrcImageBack
-                          ? typeof errors.file_nrcImageBack.message === "string"
-                            ? errors.file_nrcImageBack.message
-                            : undefined
-                          : undefined
-                      }
-                      // Correctly extracting the error message
-                      field="NRC Back" // Label for the upload button
-                      src={driver?.nrcImageBack}
-                      disabled={loading}
-                    />
-                  )}
-                />
-              </FormControl>
-            </Grid2> */}
-
             <Grid2 size={{ xs: 6, md: 3, xl: 3 }}>
               <FormControl
                 variant="filled"
@@ -548,6 +487,46 @@ const DriverUpdate = () => {
                 />
 
                 <FormHelperText>{errors.status?.message}</FormHelperText>
+              </FormControl>
+            </Grid2>
+            <Grid2 size={{ xs: 6, md: 3 }}>
+              <FormControl
+                variant="filled"
+                fullWidth
+                error={!!errors.commissionType}
+              >
+                <InputLabel htmlFor="commissionType">
+                  Commission Type
+                </InputLabel>
+                <Controller
+                  name="commissionType"
+                  control={control}
+                  render={({ field }) => (
+                    <Select
+                      size="small"
+                      id="commissionType"
+                      aria-describedby="status_text"
+                      disabled={loading}
+                      label="CommissionType"
+                      {...field}
+                      value={field.value || 0} // Convert field value to a string
+                      onChange={(event) => field.onChange(event.target.value)} // Ensure onChange value is a string
+                    >
+                      {commissionTypeLists?.map((commissionType: any) => (
+                        <MenuItem
+                          key={commissionType.id}
+                          value={commissionType.id}
+                        >
+                          {commissionType.value}
+                        </MenuItem>
+                      ))}
+                    </Select>
+                  )}
+                />
+
+                <FormHelperText>
+                  {errors.commissionType?.message}
+                </FormHelperText>
               </FormControl>
             </Grid2>
 

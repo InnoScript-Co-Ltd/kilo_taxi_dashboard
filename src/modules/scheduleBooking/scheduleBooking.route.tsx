@@ -1,6 +1,7 @@
 import { paths } from "../../constants/paths"; // Ensure this path is correct
-import ScheduleBookingDetail from "./view/ScheduleBookingDetail";
+// import ScheduleBookingDetail from "./view/ScheduleBookingDetail";
 import ScheduleBookingList from "./view/ScheduleBookingList"; // Adjust the import path as necessary
+import ScheduleBookingUpdate from "./entry/ScheduleBookingUpdate";
 
 export const ScheduleBookingRoute = [
   {
@@ -17,17 +18,30 @@ export const ScheduleBookingRoute = [
     },
   },
   {
-    id: "schedule-detail",
-    path: paths.scheduleBookingDetail, // Ensure this is defined in your paths constant
-    element: <ScheduleBookingDetail />,
+    id: "schedule-update",
+    path: paths.scheduleBookingUpdate,
+    element: <ScheduleBookingUpdate />,
     loader: () => {
       return {
         breadcrumbs: [
           { label: "Dashboard", url: paths.dashboard },
-          { label: "Bookings", url: paths.scheduleBookingList },
-          { label: "Detail", url: paths.scheduleBookingDetail },
+          { label: "Schedule", url: paths.scheduleBookingList },
         ],
       };
     },
   },
+  // {
+  //   id: "schedule-detail",
+  //   path: paths.scheduleBookingDetail, // Ensure this is defined in your paths constant
+  //   element: <ScheduleBookingDetail />,
+  //   loader: () => {
+  //     return {
+  //       breadcrumbs: [
+  //         { label: "Dashboard", url: paths.dashboard },
+  //         { label: "Bookings", url: paths.scheduleBookingList },
+  //         { label: "Detail", url: paths.scheduleBookingDetail },
+  //       ],
+  //     };
+  //   },
+  // },
 ];
