@@ -4,15 +4,14 @@ import { VEHICLE } from "../vehicle/vehicle.payload";
 import { WALLET } from "../wallet/wallet.payload";
 
 // Define Driver Schema
-export const driverCreateSchema = z.object({
+
+const BaseDriverSchema = z.object({
+  id: z.number().min(1, { message: "Invalid ID format" }),
   name: z
     .string()
     .min(2, { message: "Name must be at least 2 characters long" }),
   phone: z.string().min(8, { message: "phone number is at least 8 digit" }),
   role: z.string().nullable().default("Driver"),
-  password: z
-    .string()
-    .min(6, { message: "Password must be at least 6 characters long" }),
   driverLicense: z
     .string()
     .min(6, { message: "Driver License must be at least 6 characters" }),
@@ -32,6 +31,13 @@ export const driverCreateSchema = z.object({
   availableStatus: z.number().nullable().default(6),
   commissionType: z.number(),
   kycStatus: z.number(),
+  Gender: z.string().nullable().default("MALE"),
+});
+
+export const driverCreateSchema = BaseDriverSchema.extend({
+  password: z
+    .string()
+    .min(6, { message: "Password must be at least 6 characters long" }),
   vehicleNo: z.string(),
   model: z.string(),
   vehicleType: z.string(),
@@ -41,50 +47,54 @@ export const driverCreateSchema = z.object({
   file_vehicleLicenseFront: z.any().nullable(),
   file_vehicleLicenseBack: z.any().nullable(),
   fuelType: z.string(),
-  Gender: z.string().nullable().default("MALE"),
 });
 
-export const driverSchema = z.object({
-  id: z.number().min(1, { message: "Invalid ID format" }),
-  name: z
-    .string()
-    .min(2, { message: "Name must be at least 2 characters long" }),
-  // mobilePrefix: z.string().min(1, { message: "Mobile Prefix is required" }),
-  phone: z
-    .string()
-    .min(10, { message: "Phone number must be at least 10 digits long" }),
-  // email: z.string().email({ message: "Invalid email address" }),
+export const driverUpdateSchema = BaseDriverSchema.extend({
   dob: z.date().nullable(),
-  nrc: z.string().min(6, { message: "NRC must be at least 6 characters" }),
-  role: z.string().nullable().default("Driver"),
-  driverLicense: z
-    .string()
-    .min(6, { message: "Driver License must be at least 6 characters" }),
-  // emailVerifiedAt: z.string().optional(),
-  // phoneVerifiedAt: z.string().optional(),
-  password: z
-    .string()
-    .min(6, { message: "Password must be at least 6 characters long" }),
-  address: z
-    .string()
-    .min(5, { message: "Address must be at least 5 characters" }),
-  state: z.string(),
-  city: z.string(),
-  townShip: z.string(),
-  gender: z.number(),
-  status: z.number(),
-  availableStatus: z.number(),
-  commissionType: z.number(),
-  kycStatus: z.number(),
-  referralMobileNumber: z.string(),
-  propertyStatus: z.number(),
-  file_profile: z.any().nullable(),
-  file_driverImageLicenseFront: z.any().nullable(),
-  file_driverImageLicenseBack: z.any().nullable(),
+  state: z.string().nullable(),
+  gender: z.number().nullable(),
 });
 
-export type DriverFormInputs = z.infer<typeof driverSchema>;
+// export const driverSchema = z.object({
+//   id: z.number().min(1, { message: "Invalid ID format" }),
+//   name: z
+//     .string()
+//     .min(2, { message: "Name must be at least 2 characters long" }),
+//   // mobilePrefix: z.string().min(1, { message: "Mobile Prefix is required" }),
+//   phone: z
+//     .string()
+//     .min(10, { message: "Phone number must be at least 10 digits long" }),
+//   // email: z.string().email({ message: "Invalid email address" }),
+//   dob: z.date().nullable(),
+//   nrc: z.string().min(6, { message: "NRC must be at least 6 characters" }),
+//   role: z.string().nullable().default("Driver"),
+//   driverLicense: z
+//     .string()
+//     .min(6, { message: "Driver License must be at least 6 characters" }),
+//   // emailVerifiedAt: z.string().optional(),
+//   // phoneVerifiedAt: z.string().optional(),
+//   password: z
+//     .string()
+//     .min(6, { message: "Password must be at least 6 characters long" }),
+//   address: z
+//     .string()
+//     .min(5, { message: "Address must be at least 5 characters" }),
+//   state: z.string(),
+//   city: z.string(),
+//   townShip: z.string(),
+//   gender: z.number(),
+//   status: z.number(),
+//   availableStatus: z.number(),
+//   commissionType: z.number(),
+//   kycStatus: z.number(),
+//   referralMobileNumber: z.string(),
+//   propertyStatus: z.number(),
+//   file_profile: z.any().nullable(),
+//   file_driverImageLicenseFront: z.any().nullable(),
+//   file_driverImageLicenseBack: z.any().nullable(),
+// });
 export type DriverCreateFormInputs = z.infer<typeof driverCreateSchema>;
+export type DriverUpdateFormInputs = z.infer<typeof driverUpdateSchema>;
 /**
  * Interface representing the shape of a driver object.
  */
@@ -219,7 +229,7 @@ export const driverColumns: readonly DriverColumn[] = [
   {
     id: "walletInfo",
     label: "Type",
-    minWidth: 70,
+    minWidth: 100,
     numeric: false,
     disablePadding: false,
     sort: true,
@@ -227,7 +237,7 @@ export const driverColumns: readonly DriverColumn[] = [
   {
     id: "phone",
     label: "Phone Number",
-    minWidth: 70,
+    minWidth: 100,
     numeric: false,
     disablePadding: false,
     sort: true,
@@ -243,7 +253,7 @@ export const driverColumns: readonly DriverColumn[] = [
   {
     id: "driverLicense",
     label: "Driver License No",
-    minWidth: 70,
+    minWidth: 200,
     numeric: false,
     disablePadding: false,
     sort: true,
