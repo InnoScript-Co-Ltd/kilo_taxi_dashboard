@@ -380,15 +380,13 @@ const CustomerCreate = () => {
                       size="small"
                       disabled={loading}
                       label="Gender"
-                      defaultValue={genderStatuslists[0].value}
+                      // defaultValue={genderStatuslists[0].value}
                       {...field}
-                      value={
-                        field.value ? field.value : genderStatuslists[0].value
-                      } // Convert field value to a string
+                      value={field.value || 0} // Convert field value to a string
                       onChange={(event) => field.onChange(event.target.value)} // Ensure onChange value is a string
                     >
                       {genderStatuslists?.map((gender: any) => (
-                        <MenuItem key={gender.id} value={gender.value}>
+                        <MenuItem key={gender.id} value={gender.id}>
                           {gender.value}
                         </MenuItem>
                       ))}
