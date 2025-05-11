@@ -161,8 +161,12 @@ const PromotionUpdate = () => {
                 fullWidth
                 error={!!errors.PromoCode}
               >
-                <InputLabel htmlFor="promo_code">Promo Code</InputLabel>
+                <InputLabel htmlFor="promo_code" style={{ fontSize: "12px" }}>
+                  Promo Code
+                </InputLabel>
                 <FilledInput
+                  style={{ padding: "20px", fontSize: "14px" }}
+                  disabled={loading}
                   size="small"
                   id="promo_code"
                   {...register("PromoCode")}
@@ -220,15 +224,27 @@ const PromotionUpdate = () => {
 
             <Grid2 size={{ xs: 6, md: 3 }}>
               <FormControl variant="filled" fullWidth error={!!errors.Unit}>
-                <InputLabel htmlFor="Unit">Unit</InputLabel>
-                <FilledInput size="small" id="Unit" {...register("Unit")} />
+                <InputLabel htmlFor="Unit" style={{ fontSize: "12px" }}>
+                  Unit
+                </InputLabel>
+                <FilledInput
+                  style={{ padding: "20px", fontSize: "14px" }}
+                  disabled={loading}
+                  size="small"
+                  id="Unit"
+                  {...register("Unit")}
+                />
                 <FormHelperText>{errors.Unit?.message}</FormHelperText>
               </FormControl>
             </Grid2>
             <Grid2 size={{ xs: 6, md: 3 }}>
               <FormControl variant="filled" fullWidth error={!!errors.Quantity}>
-                <InputLabel htmlFor="Quantity">Quantity</InputLabel>
+                <InputLabel htmlFor="Quantity" style={{ fontSize: "12px" }}>
+                  Quantity
+                </InputLabel>
                 <FilledInput
+                  style={{ padding: "20px", fontSize: "14px" }}
+                  disabled={loading}
                   size="small"
                   id="Quantity"
                   {...register("Quantity")}
@@ -242,8 +258,12 @@ const PromotionUpdate = () => {
                 fullWidth
                 error={!!errors.Description}
               >
-                <InputLabel htmlFor="description">Description</InputLabel>
+                <InputLabel htmlFor="description" style={{ fontSize: "12px" }}>
+                  Description
+                </InputLabel>
                 <FilledInput
+                  style={{ padding: "20px", fontSize: "14px" }}
+                  disabled={loading}
                   size="small"
                   id="description"
                   {...register("Description")}
