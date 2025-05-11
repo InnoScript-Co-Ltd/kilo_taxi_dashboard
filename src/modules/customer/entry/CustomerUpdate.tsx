@@ -62,7 +62,7 @@ const CustomerUpdate = () => {
       Phone: "",
       Password: "",
       role: "Customer",
-      Gender: 0,
+      Gender: "",
       Status: 0,
       KycStatus: 0,
       Dob: null,
