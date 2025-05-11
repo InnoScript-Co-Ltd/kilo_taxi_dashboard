@@ -1,47 +1,47 @@
 import { paginateOptions } from "../../constants/config";
 import { z } from "zod";
 
-export const customerSchema = z.object({
+const BaseCustomerSchema = z.object({
   id: z.number().min(0, { message: "id" }).default(0),
   Name: z
     .string()
     .min(2, { message: "Country Name must be at least 2 characters long" }),
   Email: z.string().email(),
   Phone: z.string().min(8, { message: "phone number is at least 8 digit" }),
-  Password: z
-    .string()
-    .min(8, { message: "Password must be at least 8 characters long" }) // Minimum length
-    .regex(/[A-Z]/, {
-      message: "Password must contain at least one uppercase letter",
-    }) // Uppercase letter
-    .regex(/[a-z]/, {
-      message: "Password must contain at least one lowercase letter",
-    }) // Lowercase letter
-    .regex(/[0-9]/, { message: "Password must contain at least one number" }) // Number
-    .regex(/[^a-zA-Z0-9]/, {
-      message: "Password must contain at least one special character",
-    }), // Special character
   role: z.string().nullable().default("Customer"),
   MobilePrefix: z.string(),
-  Dob: z.date().nullable(), // Date validation
-
-  // Nrc: z.string().nullable(),
+  Dob: z.date().nullable(),
   Address: z.string(),
-  // State: z.string(),
   City: z.string(),
   Township: z.string(),
   Gender: z.number(),
   Status: z.number(),
   KycStatus: z.number(),
-  // file_NrcImageFront: z.instanceof(File).nullable(),
-  // file_NrcImageBack: z.instanceof(File).nullable(),
-  // file_Profile: z.instanceof(File).nullable(),
-  // file_NrcImageFront: z.any().nullable(),
-  // file_NrcImageBack: z.any().nullable(),
   file_Profile: z.any().nullable(),
 });
 
-export type CustomerFormInputs = z.infer<typeof customerSchema>;
+// 🟢 Schema for CREATE (includes Password)
+export const CreateCustomerSchema = BaseCustomerSchema.extend({
+  Password: z
+    .string()
+    .min(8, { message: "Password must be at least 8 characters long" })
+    .regex(/[A-Z]/, {
+      message: "Password must contain at least one uppercase letter",
+    })
+    .regex(/[a-z]/, {
+      message: "Password must contain at least one lowercase letter",
+    })
+    .regex(/[0-9]/, { message: "Password must contain at least one number" })
+    .regex(/[^a-zA-Z0-9]/, {
+      message: "Password must contain at least one special character",
+    }),
+});
+
+// 🟡 Schema for UPDATE (no Password field)
+export const UpdateCustomerSchema = BaseCustomerSchema;
+
+export type CustomerCreateFormInputs = z.infer<typeof CreateCustomerSchema>;
+export type CustomerUpdateFormInputs = z.infer<typeof UpdateCustomerSchema>;
 
 /**
  * Interface representing the shape of a country object.

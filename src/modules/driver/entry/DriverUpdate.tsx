@@ -13,7 +13,7 @@ import {
   Select,
 } from "@mui/material";
 import { useCallback, useEffect, useState } from "react";
-import { DriverFormInputs, driverSchema } from "../driver.payload"; // Similar to cityPayload but for states
+import { DriverUpdateFormInputs, driverUpdateSchema } from "../driver.payload"; // Similar to cityPayload but for states
 import { useNavigate, useParams } from "react-router";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, AppRootState } from "../../../stores";
@@ -37,17 +37,11 @@ import { formBuilder } from "../../../helpers/formBuilder";
 
 const DriverUpdate = () => {
   const [loading, setLoading] = useState(false);
-  const [showPassword, setShowPassword] = useState(false);
 
   const params: any = useParams();
   const navigate = useNavigate();
   const dispatch = useDispatch<AppDispatch>();
   const { driver } = useSelector((state: AppRootState) => state.driver); // Selecting state data from the store
-
-  const handleClickShowPassword = () => setShowPassword((show) => !show);
-  const handleMouseDownPassword = (
-    event: React.MouseEvent<HTMLButtonElement>
-  ) => event.preventDefault();
 
   // Set up React Hook Form with Zod schema
   const {
@@ -56,14 +50,13 @@ const DriverUpdate = () => {
     handleSubmit,
     setValue,
     formState: { errors },
-  } = useForm<DriverFormInputs>({
-    resolver: zodResolver(driverSchema),
+  } = useForm<DriverUpdateFormInputs>({
+    resolver: zodResolver(driverUpdateSchema),
     defaultValues: {
       name: "",
       // email: "",
       role: "Driver",
       phone: "",
-      password: "",
       status: 0,
       gender: 0,
       kycStatus: 0,
@@ -105,7 +98,6 @@ const DriverUpdate = () => {
 
       setValue("nrc", driver.nrc || "");
       setValue("driverLicense", driver.driverLicense || "");
-      setValue("password", driver.password || "");
       setValue("address", driver.address || "");
       setValue("state", driver.state || "");
       setValue(
@@ -138,9 +130,9 @@ const DriverUpdate = () => {
     }
   }, [driver, setValue]);
 
-  const onSubmit = async (data: DriverFormInputs) => {
+  const onSubmit = async (data: DriverUpdateFormInputs) => {
     setLoading(true);
-    const formData = formBuilder(data, driverSchema);
+    const formData = formBuilder(data, driverUpdateSchema);
     const response = await driverService.update(dispatch, params.id, formData);
     if (response.statusCode === 200) {
       navigate(`${paths.driverList}`);
@@ -303,36 +295,6 @@ const DriverUpdate = () => {
                   {...register("driverLicense")}
                 />
                 <FormHelperText>{errors.driverLicense?.message}</FormHelperText>
-              </FormControl>
-            </Grid2>
-
-            <Grid2 size={{ xs: 6, md: 3 }}>
-              <FormControl variant="filled" fullWidth error={!!errors.password}>
-                <InputLabel htmlFor="password" style={{ fontSize: "12px" }}>
-                  Password
-                </InputLabel>
-                <FilledInput
-                  style={{ padding: "20px", fontSize: "14px" }}
-                  size="small"
-                  id="password"
-                  disabled={loading}
-                  type={showPassword ? "text" : "password"}
-                  {...register("password")}
-                  endAdornment={
-                    <InputAdornment position="end">
-                      <IconButton
-                        aria-label="toggle password visibility"
-                        disabled={loading}
-                        onClick={handleClickShowPassword}
-                        onMouseDown={handleMouseDownPassword}
-                        edge="end"
-                      >
-                        {!showPassword ? <VisibilityOff /> : <Visibility />}
-                      </IconButton>
-                    </InputAdornment>
-                  }
-                />
-                <FormHelperText>{errors.password?.message}</FormHelperText>
               </FormControl>
             </Grid2>
 

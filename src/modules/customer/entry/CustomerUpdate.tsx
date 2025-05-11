@@ -9,11 +9,12 @@ import {
   Select,
   MenuItem,
   FilledInput,
-  InputAdornment,
-  IconButton,
 } from "@mui/material";
 import { useCallback, useEffect, useState } from "react";
-import { CustomerFormInputs, customerSchema } from "../customer.payload";
+import {
+  CustomerUpdateFormInputs,
+  UpdateCustomerSchema,
+} from "../customer.payload";
 import { useNavigate, useParams } from "react-router";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, AppRootState } from "../../../stores";
@@ -28,7 +29,6 @@ import {
   kycStatusLists,
   customerStatusLists,
 } from "../../../constants/config";
-import { Visibility, VisibilityOff } from "@mui/icons-material";
 import { DatePicker } from "@mui/x-date-pickers";
 import Loading from "../../../components/Loading";
 import { formBuilder } from "../../../helpers/formBuilder";
@@ -41,26 +41,18 @@ const CustomerUpdate = () => {
   const dispatch = useDispatch<AppDispatch>();
   const { customer } = useSelector((state: AppRootState) => state.customer);
 
-  const [showPassword, setShowPassword] = useState(false);
-
-  const handleClickShowPassword = () => setShowPassword((show) => !show);
-  const handleMouseDownPassword = (
-    event: React.MouseEvent<HTMLButtonElement>
-  ) => event.preventDefault();
-
   const {
     register,
     handleSubmit,
     setValue,
     control,
     formState: { errors },
-  } = useForm<CustomerFormInputs>({
-    resolver: zodResolver(customerSchema),
+  } = useForm<CustomerUpdateFormInputs>({
+    resolver: zodResolver(UpdateCustomerSchema),
     defaultValues: {
       Name: "",
       Email: "",
       Phone: "",
-      Password: "",
       role: "Customer",
       Gender: 0,
       Status: 0,
@@ -101,7 +93,6 @@ const CustomerUpdate = () => {
       setValue("Phone", customer.phone || "");
       // setValue("Nrc", customer.nrc || "");
       setValue("Email", customer.email || "");
-      setValue("Password", customer.password || "");
       setValue("MobilePrefix", customer.mobilePrefix || "");
       setValue("Dob", (customer?.dob && new Date(customer.dob)) || new Date());
       setValue("Address", customer.address || "");
@@ -127,9 +118,11 @@ const CustomerUpdate = () => {
   }, [customer, setValue]);
 
   // Submit form data
-  const onSubmit = async (data: CustomerFormInputs) => {
+  const onSubmit = async (data: CustomerUpdateFormInputs) => {
+    console.log(data);
+
     setLoading(true);
-    const formData = formBuilder(data, customerSchema);
+    const formData = formBuilder(data, UpdateCustomerSchema);
     const response = await customerService.update(
       dispatch,
       params.id,
@@ -221,7 +214,7 @@ const CustomerUpdate = () => {
               </FormControl>
             </Grid2>
 
-            <Grid2 size={{ xs: 6, md: 3 }}>
+            {/* <Grid2 size={{ xs: 6, md: 3 }}>
               <FormControl variant="filled" fullWidth error={!!errors.Password}>
                 <InputLabel htmlFor="password" style={{ fontSize: "12px" }}>
                   Password
@@ -249,7 +242,7 @@ const CustomerUpdate = () => {
                 />
                 <FormHelperText>{errors.Password?.message}</FormHelperText>
               </FormControl>
-            </Grid2>
+            </Grid2> */}
 
             <Grid2 size={{ xs: 6, md: 3 }}>
               <FormControl fullWidth error={!!errors.Dob}>
