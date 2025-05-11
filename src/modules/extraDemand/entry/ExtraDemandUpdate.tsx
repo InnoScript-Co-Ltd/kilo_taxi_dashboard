@@ -99,10 +99,15 @@ const ExtraDemandUpdate = () => {
           <Grid2 container spacing={2}>
             <Grid2 size={{ xs: 6, md: 3 }}>
               <FormControl variant="filled" fullWidth error={!!errors.title}>
-                <InputLabel htmlFor="ExtraDemand_name">
+                <InputLabel
+                  htmlFor="ExtraDemand_name"
+                  style={{ fontSize: "12px" }}
+                >
                   ExtraDemand Name
                 </InputLabel>
                 <FilledInput
+                  style={{ padding: "20px", fontSize: "14px" }}
+                  disabled={loading}
                   size="small"
                   id="ExtraDemand_name"
                   {...register("title")}
@@ -113,8 +118,15 @@ const ExtraDemandUpdate = () => {
 
             <Grid2 size={{ xs: 6, md: 3 }}>
               <FormControl variant="filled" fullWidth error={!!errors.amount}>
-                <InputLabel htmlFor="ExtraDemand_amount">Amount</InputLabel>
+                <InputLabel
+                  htmlFor="ExtraDemand_amount"
+                  style={{ fontSize: "12px" }}
+                >
+                  Amount
+                </InputLabel>
                 <FilledInput
+                  style={{ padding: "20px", fontSize: "14px" }}
+                  disabled={loading}
                   size="small"
                   id="ExtraDemand_amount"
                   type="number"
@@ -130,14 +142,17 @@ const ExtraDemandUpdate = () => {
                 fullWidth
                 error={!!errors.description}
               >
-                <InputLabel htmlFor="ExtraDemand_description">
+                <InputLabel
+                  htmlFor="ExtraDemand_description"
+                  style={{ fontSize: "12px" }}
+                >
                   Description
                 </InputLabel>
                 <FilledInput
+                  style={{ padding: "20px", fontSize: "14px" }}
+                  disabled={loading}
                   size="small"
                   id="ExtraDemand_description"
-                  multiline
-                  rows={4}
                   {...register("description")}
                 />
                 <FormHelperText>{errors.description?.message}</FormHelperText>

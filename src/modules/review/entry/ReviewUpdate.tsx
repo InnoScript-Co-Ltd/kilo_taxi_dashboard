@@ -200,8 +200,12 @@ const ReviewUpdate = () => {
 
             <Grid2 size={{ xs: 6, md: 3 }}>
               <FormControl variant="filled" fullWidth error={!!errors.Rating}>
-                <InputLabel htmlFor="rating">Rating</InputLabel>
+                <InputLabel htmlFor="rating" style={{ fontSize: "12px" }}>
+                  Rating
+                </InputLabel>
                 <FilledInput
+                  style={{ padding: "20px", fontSize: "14px" }}
+                  disabled={loading}
                   type="number"
                   size="small"
                   id="rating"
@@ -217,8 +221,15 @@ const ReviewUpdate = () => {
                 fullWidth
                 error={!!errors.ReviewContent}
               >
-                <InputLabel htmlFor="review_content">Review Content</InputLabel>
+                <InputLabel
+                  htmlFor="review_content"
+                  style={{ fontSize: "12px" }}
+                >
+                  Review Content
+                </InputLabel>
                 <FilledInput
+                  style={{ padding: "20px", fontSize: "14px" }}
+                  disabled={loading}
                   size="small"
                   id="review_content"
                   {...register("ReviewContent")}
