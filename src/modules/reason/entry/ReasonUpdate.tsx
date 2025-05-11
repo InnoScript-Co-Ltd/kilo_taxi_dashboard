@@ -100,8 +100,16 @@ const ReasonUpdate = () => {
           <Grid2 container spacing={2}>
             <Grid2 size={{ xs: 6, md: 3 }}>
               <FormControl variant="filled" fullWidth error={!!errors.name}>
-                <InputLabel htmlFor="name">Reason name</InputLabel>
-                <FilledInput size="small" id="name" {...register("name")} />
+                <InputLabel htmlFor="name" style={{ fontSize: "12px" }}>
+                  Reason name
+                </InputLabel>
+                <FilledInput
+                  style={{ padding: "20px", fontSize: "14px" }}
+                  disabled={loading}
+                  size="small"
+                  id="name"
+                  {...register("name")}
+                />
 
                 <FormHelperText>{errors.name?.message}</FormHelperText>
               </FormControl>

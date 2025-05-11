@@ -121,8 +121,12 @@ const PaymentChannelUpdate = () => {
                 fullWidth
                 error={!!errors.ChannelName}
               >
-                <InputLabel htmlFor="channel_name">Channel Name</InputLabel>
+                <InputLabel htmlFor="channel_name" style={{ fontSize: "12px" }}>
+                  Channel Name
+                </InputLabel>
                 <FilledInput
+                  style={{ padding: "20px", fontSize: "14px" }}
+                  disabled={loading}
                   size="small"
                   id="channel_name"
                   {...register("ChannelName")}
@@ -136,8 +140,12 @@ const PaymentChannelUpdate = () => {
                 fullWidth
                 error={!!errors.Description}
               >
-                <InputLabel htmlFor="description">Description</InputLabel>
+                <InputLabel htmlFor="description" style={{ fontSize: "12px" }}>
+                  Description
+                </InputLabel>
                 <FilledInput
+                  style={{ padding: "20px", fontSize: "14px" }}
+                  disabled={loading}
                   size="small"
                   id="description"
                   {...register("Description")}
