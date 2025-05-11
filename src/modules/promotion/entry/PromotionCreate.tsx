@@ -49,6 +49,8 @@ const PromotionCreate = () => {
     resolver: zodResolver(promotionSchema),
     defaultValues: {
       PromotionType: 0,
+      Quantity: "1",
+      Unit: "1",
       ApplicableTo: 0,
       Status: 0,
       CustomerIds: [],
@@ -136,7 +138,6 @@ const PromotionCreate = () => {
                     );
                   }}
                 />
-                <FormHelperText>{errors.CreatedDate?.message}</FormHelperText>
               </FormControl>
             </Grid2>
             <Grid2 size={{ xs: 6, md: 3 }}>
@@ -161,7 +162,6 @@ const PromotionCreate = () => {
                     );
                   }}
                 />
-                <FormHelperText>{errors.ExpiredDate?.message}</FormHelperText>
               </FormControl>
             </Grid2>
 
@@ -169,6 +169,7 @@ const PromotionCreate = () => {
               <FormControl variant="filled" fullWidth error={!!errors.Quantity}>
                 <InputLabel htmlFor="Quantity">Quantity</InputLabel>
                 <FilledInput
+                  type="number"
                   size="small"
                   id="Quantity"
                   {...register("Quantity")}
@@ -179,7 +180,12 @@ const PromotionCreate = () => {
             <Grid2 size={{ xs: 6, md: 3 }}>
               <FormControl variant="filled" fullWidth error={!!errors.Unit}>
                 <InputLabel htmlFor="Unit">Unit</InputLabel>
-                <FilledInput size="small" id="Unit" {...register("Unit")} />
+                <FilledInput 
+                  type="number"
+                  size="small" 
+                  id="Unit" 
+                  {...register("Unit")} 
+                />
                 <FormHelperText>{errors.Unit?.message}</FormHelperText>
               </FormControl>
             </Grid2>
