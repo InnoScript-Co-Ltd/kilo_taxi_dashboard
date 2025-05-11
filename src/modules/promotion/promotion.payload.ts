@@ -3,12 +3,12 @@ import { z } from "zod";
 
 export const promotionSchema = z.object({
   id: z.number().min(0, { message: "id" }).default(0),
-  PromoCode: z.string(),
+  PromoCode: z.string().min(1, { message: "Promo Code is required" }),
   CreatedDate: z.date(),
   ExpiredDate: z.date(),
-  Quantity: z.string().nullable(),
-  Unit: z.string(),
-  Description: z.string(),
+  Quantity: z.string().min(1, { message: "Quantity is required" }),
+  Unit: z.string().min(1, { message: "Unit is required" }),
+  Description: z.string().min(1, { message: "Description is required" }),
   PromotionType: z.number(),
   ApplicableTo: z.number(),
   Status: z.number().nullable(),
