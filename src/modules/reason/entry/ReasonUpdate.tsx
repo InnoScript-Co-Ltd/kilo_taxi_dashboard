@@ -45,7 +45,7 @@ const ReasonUpdate = () => {
     resolver: zodResolver(reasonSchema),
     defaultValues: {
       name: "",
-      status: 0,
+      status: generalStatusLists[0]?.id,
     },
   });
 
