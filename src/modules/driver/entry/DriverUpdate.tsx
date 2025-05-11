@@ -150,8 +150,12 @@ const DriverUpdate = () => {
           <Grid2 container spacing={2}>
             <Grid2 size={{ xs: 6, md: 3 }}>
               <FormControl variant="filled" fullWidth error={!!errors.name}>
-                <InputLabel htmlFor="driver_name">Name</InputLabel>
+                <InputLabel htmlFor="driver_name" style={{ fontSize: "12px" }}>
+                  Name
+                </InputLabel>
                 <FilledInput
+                  style={{ padding: "20px", fontSize: "14px" }}
+                  disabled={loading}
                   size="small"
                   id="driver_name"
                   {...register("name")}
@@ -180,8 +184,12 @@ const DriverUpdate = () => {
 
             <Grid2 size={{ xs: 6, md: 3 }}>
               <FormControl variant="filled" fullWidth error={!!errors.phone}>
-                <InputLabel htmlFor="driver_phone">Phone</InputLabel>
+                <InputLabel htmlFor="driver_phone" style={{ fontSize: "12px" }}>
+                  Phone
+                </InputLabel>
                 <FilledInput
+                  style={{ padding: "20px", fontSize: "14px" }}
+                  disabled={loading}
                   size="small"
                   id="driver_phone"
                   {...register("phone")}
@@ -195,10 +203,15 @@ const DriverUpdate = () => {
                 fullWidth
                 error={!!errors.referralMobileNumber}
               >
-                <InputLabel htmlFor="driver_referralMobileNumber">
+                <InputLabel
+                  htmlFor="driver_referralMobileNumber"
+                  style={{ fontSize: "12px" }}
+                >
                   ReferralMobileNumber
                 </InputLabel>
                 <FilledInput
+                  style={{ padding: "20px", fontSize: "14px" }}
+                  disabled={loading}
                   size="small"
                   id="driver_referralMobileNumber"
                   {...register("referralMobileNumber")}
@@ -248,8 +261,12 @@ const DriverUpdate = () => {
 
             <Grid2 size={{ xs: 6, md: 3 }}>
               <FormControl variant="filled" fullWidth error={!!errors.nrc}>
-                <InputLabel htmlFor="driver_nrc">Nrc</InputLabel>
+                <InputLabel htmlFor="driver_nrc" style={{ fontSize: "12px" }}>
+                  Nrc
+                </InputLabel>
                 <FilledInput
+                  style={{ padding: "20px", fontSize: "14px" }}
+                  disabled={loading}
                   size="small"
                   id="driver_nrc"
                   {...register("nrc")}
@@ -264,10 +281,15 @@ const DriverUpdate = () => {
                 fullWidth
                 error={!!errors.driverLicense}
               >
-                <InputLabel htmlFor="driver_driverLicense">
+                <InputLabel
+                  htmlFor="driver_driverLicense"
+                  style={{ fontSize: "12px" }}
+                >
                   Driver License
                 </InputLabel>
                 <FilledInput
+                  style={{ padding: "20px", fontSize: "14px" }}
+                  disabled={loading}
                   size="small"
                   id="driver_driverLicense"
                   {...register("driverLicense")}
@@ -278,8 +300,15 @@ const DriverUpdate = () => {
 
             <Grid2 size={{ xs: 6, md: 3 }}>
               <FormControl variant="filled" fullWidth error={!!errors.address}>
-                <InputLabel htmlFor="driver_address">Address</InputLabel>
+                <InputLabel
+                  htmlFor="driver_address"
+                  style={{ fontSize: "12px" }}
+                >
+                  Address
+                </InputLabel>
                 <FilledInput
+                  style={{ padding: "20px", fontSize: "14px" }}
+                  disabled={loading}
                   size="small"
                   id="driver_address"
                   {...register("address")}
@@ -290,8 +319,12 @@ const DriverUpdate = () => {
 
             <Grid2 size={{ xs: 6, md: 3 }}>
               <FormControl variant="filled" fullWidth error={!!errors.state}>
-                <InputLabel htmlFor="driver_state">State</InputLabel>
+                <InputLabel htmlFor="driver_state" style={{ fontSize: "12px" }}>
+                  State
+                </InputLabel>
                 <FilledInput
+                  style={{ padding: "20px", fontSize: "14px" }}
+                  disabled={loading}
                   size="small"
                   id="driver_state"
                   {...register("state")}
@@ -302,8 +335,12 @@ const DriverUpdate = () => {
 
             <Grid2 size={{ xs: 6, md: 3 }}>
               <FormControl variant="filled" fullWidth error={!!errors.city}>
-                <InputLabel htmlFor="driver_city">City</InputLabel>
+                <InputLabel htmlFor="driver_city" style={{ fontSize: "12px" }}>
+                  City
+                </InputLabel>
                 <FilledInput
+                  style={{ padding: "20px", fontSize: "14px" }}
+                  disabled={loading}
                   size="small"
                   id="driver_city"
                   {...register("city")}
@@ -314,8 +351,15 @@ const DriverUpdate = () => {
 
             <Grid2 size={{ xs: 6, md: 3 }}>
               <FormControl variant="filled" fullWidth error={!!errors.townShip}>
-                <InputLabel htmlFor="driver_townShip">TownShip</InputLabel>
+                <InputLabel
+                  htmlFor="driver_townShip"
+                  style={{ fontSize: "12px" }}
+                >
+                  TownShip
+                </InputLabel>
                 <FilledInput
+                  style={{ padding: "20px", fontSize: "14px" }}
+                  disabled={loading}
                   size="small"
                   id="driver_townShip"
                   {...register("townShip")}

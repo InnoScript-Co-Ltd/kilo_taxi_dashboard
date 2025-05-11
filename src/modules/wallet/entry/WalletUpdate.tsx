@@ -101,8 +101,12 @@ const WalletUpdate = () => {
                 fullWidth
                 error={!!errors.walletName}
               >
-                <InputLabel htmlFor="wallet_name">Wallet Name</InputLabel>
+                <InputLabel htmlFor="wallet_name" style={{ fontSize: "12px" }}>
+                  Wallet Name
+                </InputLabel>
                 <FilledInput
+                  style={{ padding: "20px", fontSize: "14px" }}
+                  disabled={loading}
                   size="small"
                   id="wallet_name"
                   {...register("walletName")}
@@ -113,8 +117,12 @@ const WalletUpdate = () => {
 
             <Grid2 size={{ xs: 6, md: 3 }}>
               <FormControl variant="filled" fullWidth error={!!errors.kilo}>
-                <InputLabel htmlFor="kilo">Kilo</InputLabel>
+                <InputLabel htmlFor="kilo" style={{ fontSize: "12px" }}>
+                  Kilo
+                </InputLabel>
                 <FilledInput
+                  style={{ padding: "20px", fontSize: "14px" }}
+                  disabled={loading}
                   type="number"
                   size="small"
                   id="kilo"
@@ -130,10 +138,15 @@ const WalletUpdate = () => {
                 fullWidth
                 error={!!errors.downTownAmount}
               >
-                <InputLabel htmlFor="downTownAmount">
+                <InputLabel
+                  htmlFor="downTownAmount"
+                  style={{ fontSize: "12px" }}
+                >
                   DownTown Amount
                 </InputLabel>
                 <FilledInput
+                  style={{ padding: "20px", fontSize: "14px" }}
+                  disabled={loading}
                   type="number"
                   size="small"
                   id="downTownAmount"
@@ -150,8 +163,15 @@ const WalletUpdate = () => {
                 fullWidth
                 error={!!errors.outTownAmount}
               >
-                <InputLabel htmlFor="outTownAmount">OutTown Amount</InputLabel>
+                <InputLabel
+                  htmlFor="outTownAmount"
+                  style={{ fontSize: "12px" }}
+                >
+                  OutTown Amount
+                </InputLabel>
                 <FilledInput
+                  style={{ padding: "20px", fontSize: "14px" }}
+                  disabled={loading}
                   type="number"
                   size="small"
                   id="outTownAmount"

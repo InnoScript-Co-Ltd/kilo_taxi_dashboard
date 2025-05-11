@@ -149,8 +149,12 @@ const CustomerUpdate = () => {
           <Grid2 container spacing={2}>
             <Grid2 size={{ xs: 6, md: 3 }}>
               <FormControl variant="filled" fullWidth error={!!errors.Name}>
-                <InputLabel htmlFor="admin_name">Name</InputLabel>
+                <InputLabel htmlFor="admin_name" style={{ fontSize: "12px" }}>
+                  Name
+                </InputLabel>
                 <FilledInput
+                  style={{ padding: "20px", fontSize: "14px" }}
+                  disabled={loading}
                   size="small"
                   id="admin_name"
                   {...register("Name")}
@@ -160,10 +164,13 @@ const CustomerUpdate = () => {
             </Grid2>
             <Grid2 size={{ xs: 6, md: 3 }}>
               <FormControl variant="filled" fullWidth error={!!errors.Email}>
-                <InputLabel htmlFor="email">Email</InputLabel>
+                <InputLabel htmlFor="email" style={{ fontSize: "12px" }}>
+                  Email
+                </InputLabel>
                 <FilledInput
-                  size="small"
+                  style={{ padding: "20px", fontSize: "14px" }}
                   disabled={loading}
+                  size="small"
                   id="email"
                   {...register("Email")}
                 />
@@ -173,8 +180,11 @@ const CustomerUpdate = () => {
 
             <Grid2 size={{ xs: 6, md: 3 }}>
               <FormControl variant="filled" fullWidth error={!!errors.Phone}>
-                <InputLabel htmlFor="phone">Phone</InputLabel>
+                <InputLabel htmlFor="phone" style={{ fontSize: "12px" }}>
+                  Phone
+                </InputLabel>
                 <FilledInput
+                  style={{ padding: "20px", fontSize: "14px" }}
                   size="small"
                   disabled={loading}
                   id="phone"
@@ -190,8 +200,11 @@ const CustomerUpdate = () => {
                 fullWidth
                 error={!!errors.MobilePrefix}
               >
-                <InputLabel htmlFor="MobilePrefix">Mobile Prefix</InputLabel>
+                <InputLabel htmlFor="MobilePrefix" style={{ fontSize: "12px" }}>
+                  Mobile Prefix
+                </InputLabel>
                 <FilledInput
+                  style={{ padding: "20px", fontSize: "14px" }}
                   size="small"
                   id="MobilePrefix"
                   disabled={loading}
@@ -203,8 +216,11 @@ const CustomerUpdate = () => {
 
             {/* <Grid2 size={{ xs: 6, md: 3 }}>
               <FormControl variant="filled" fullWidth error={!!errors.Password}>
-                <InputLabel htmlFor="password">Password</InputLabel>
+                <InputLabel htmlFor="password" style={{ fontSize: "12px" }}>
+                  Password
+                </InputLabel>
                 <FilledInput
+                  style={{ padding: "20px", fontSize: "14px" }}
                   size="small"
                   id="password"
                   disabled={loading}
@@ -369,8 +385,11 @@ const CustomerUpdate = () => {
 
             <Grid2 size={{ xs: 6, md: 3 }}>
               <FormControl variant="filled" fullWidth error={!!errors.Address}>
-                <InputLabel htmlFor="address">Address</InputLabel>
+                <InputLabel htmlFor="address" style={{ fontSize: "12px" }}>
+                  Address
+                </InputLabel>
                 <FilledInput
+                  style={{ padding: "20px", fontSize: "14px" }}
                   size="small"
                   id="address"
                   disabled={loading}
@@ -395,8 +414,11 @@ const CustomerUpdate = () => {
 
             <Grid2 size={{ xs: 6, md: 3 }}>
               <FormControl variant="filled" fullWidth error={!!errors.City}>
-                <InputLabel htmlFor="city">City</InputLabel>
+                <InputLabel htmlFor="city" style={{ fontSize: "12px" }}>
+                  City
+                </InputLabel>
                 <FilledInput
+                  style={{ padding: "20px", fontSize: "14px" }}
                   size="small"
                   disabled={loading}
                   id="city"
@@ -408,8 +430,11 @@ const CustomerUpdate = () => {
 
             <Grid2 size={{ xs: 6, md: 3 }}>
               <FormControl variant="filled" fullWidth error={!!errors.Township}>
-                <InputLabel htmlFor="township">Township</InputLabel>
+                <InputLabel htmlFor="township" style={{ fontSize: "12px" }}>
+                  Township
+                </InputLabel>
                 <FilledInput
+                  style={{ padding: "20px", fontSize: "14px" }}
                   size="small"
                   id="township"
                   disabled={loading}

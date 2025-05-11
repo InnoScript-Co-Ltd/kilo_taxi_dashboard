@@ -1,6 +1,7 @@
 // export const env = [process.env.REACT_APP_BASE_URL];
 // export const env = ["https://localhost:7181/api/v1"];
 // export const env = ["http://localhost:5112/api/v1"];
+export const env = ["http://4.145.92.57:81/api/v1"];
 
 // export const hadUrl =
 // process.env.REACT_APP_HAD_URL || "https://localhost:7044/dashboard";
@@ -183,9 +184,9 @@ export const promotionTypeLists = [
 ];
 
 export const promoStatusLists = [
-  { id: 0, value: "EXPIRED", color: "error" },
+  { id: 0, value: "ACTIVE", color: "success" },
   { id: 1, value: "USED", color: "info" },
-  { id: 2, value: "ACTIVE", color: "success" },
+  { id: 2, value: "EXPIRED", color: "error" },
   { id: 3, value: "REJECT", color: "error" },
 ];
 export const applicableToLists = [

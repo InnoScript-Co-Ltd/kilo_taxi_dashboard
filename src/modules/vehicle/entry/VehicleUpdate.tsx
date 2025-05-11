@@ -167,8 +167,11 @@ const VehicleUpdate = () => {
                 fullWidth
                 error={!!errors.VehicleNo}
               >
-                <InputLabel htmlFor="vehicle_no">Vehicle Number</InputLabel>
+                <InputLabel htmlFor="vehicle_no" style={{ fontSize: "12px" }}>
+                  Vehicle Number
+                </InputLabel>
                 <FilledInput
+                  style={{ padding: "20px", fontSize: "14px" }}
                   size="small"
                   disabled={loading}
                   id="vehicle_no"
@@ -185,8 +188,11 @@ const VehicleUpdate = () => {
                 fullWidth
                 error={!!errors.VehicleType}
               >
-                <InputLabel htmlFor="vehicle_type">Vehicle Type</InputLabel>
+                <InputLabel htmlFor="vehicle_type" style={{ fontSize: "12px" }}>
+                  Vehicle Type
+                </InputLabel>
                 <FilledInput
+                  style={{ padding: "20px", fontSize: "14px" }}
                   size="small"
                   disabled={loading}
                   id="vehicle_type"
@@ -199,8 +205,11 @@ const VehicleUpdate = () => {
             {/* Model */}
             <Grid2 size={{ xs: 6, md: 3 }}>
               <FormControl variant="filled" fullWidth error={!!errors.Model}>
-                <InputLabel htmlFor="Model">Model</InputLabel>
+                <InputLabel htmlFor="Model" style={{ fontSize: "12px" }}>
+                  Model
+                </InputLabel>
                 <FilledInput
+                  style={{ padding: "20px", fontSize: "14px" }}
                   size="small"
                   disabled={loading}
                   id="Model"
@@ -213,8 +222,11 @@ const VehicleUpdate = () => {
             {/* Fuel Type */}
             <Grid2 size={{ xs: 6, md: 3 }}>
               <FormControl variant="filled" fullWidth error={!!errors.FuelType}>
-                <InputLabel htmlFor="FuelType">Fuel Type</InputLabel>
+                <InputLabel htmlFor="FuelType" style={{ fontSize: "12px" }}>
+                  Fuel Type
+                </InputLabel>
                 <FilledInput
+                  style={{ padding: "20px", fontSize: "14px" }}
                   size="small"
                   disabled={loading}
                   id="FuelType"
