@@ -20,7 +20,10 @@ import { Breadcrumb } from "../../../components/Breadcrumb";
 import { paths } from "../../../constants/paths";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Controller, useForm } from "react-hook-form";
-import { CustomerFormInputs, customerSchema } from "../customer.payload";
+import {
+  CustomerCreateFormInputs,
+  CreateCustomerSchema,
+} from "../customer.payload";
 import { formBuilder } from "../../../helpers/formBuilder";
 import { useNotifications } from "@toolpad/core/useNotifications";
 import { useState } from "react";
@@ -53,13 +56,18 @@ const CustomerCreate = () => {
     handleSubmit,
     control,
     formState: { errors },
-  } = useForm<CustomerFormInputs>({
-    resolver: zodResolver(customerSchema),
+  } = useForm<CustomerCreateFormInputs>({
+    resolver: zodResolver(CreateCustomerSchema),
+    defaultValues: {
+      Gender: genderStatuslists[0].id,
+      KycStatus: kycStatusLists[0].id,
+      Status: customerStatusLists[0].id,
+    },
   });
 
-  const onSubmit = async (data: CustomerFormInputs) => {
+  const onSubmit = async (data: CustomerCreateFormInputs) => {
     try {
-      const formData = formBuilder(data, customerSchema);
+      const formData = formBuilder(data, CreateCustomerSchema);
       const response = await customerService.store(
         formData,
         dispatch,
@@ -372,8 +380,11 @@ const CustomerCreate = () => {
                       size="small"
                       disabled={loading}
                       label="Gender"
+                      defaultValue={genderStatuslists[0].value}
                       {...field}
-                      value={field.value || "MALE"} // Convert field value to a string
+                      value={
+                        field.value ? field.value : genderStatuslists[0].value
+                      } // Convert field value to a string
                       onChange={(event) => field.onChange(event.target.value)} // Ensure onChange value is a string
                     >
                       {genderStatuslists?.map((gender: any) => (
