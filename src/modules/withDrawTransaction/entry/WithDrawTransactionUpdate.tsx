@@ -72,7 +72,7 @@ const WithDrawTransactionUpdate = () => {
     try {
       await withDrawTransactionService.show(dispatch, params.id);
       const driverResponse: any = await getRequest(
-        endpoints.driver,
+        endpoints.driver + "/DriverListAll",
         null,
         dispatch
       );
@@ -83,6 +83,7 @@ const WithDrawTransactionUpdate = () => {
         "data" in driverResponse &&
         driverResponse.status === 200
       ) {
+        console.log("driver list:", driverResponse.data.payload.drivers);
         setDriversList(driverResponse.data.payload.drivers);
       }
     } catch (error) {

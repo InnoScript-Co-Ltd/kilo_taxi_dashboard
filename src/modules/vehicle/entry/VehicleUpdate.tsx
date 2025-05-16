@@ -74,7 +74,7 @@ const VehicleUpdate = () => {
     try {
       await vehicleService.show(dispatch, params.id); // Fetch vehicle data to populate the form
       const driverResponse: any = await getRequest(
-        endpoints.driver,
+        endpoints.driver + "/DriverListAll",
         null,
         dispatch
       );
@@ -100,7 +100,7 @@ const VehicleUpdate = () => {
 
   useEffect(() => {
     if (vehicle) {
-      console.log(vehicle.status);
+      console.log("driver Id:" + vehicle.driverId);
       setValue("id", Number(vehicle.id) || 0);
       setValue("driverId", vehicle.driverId || 0);
       setValue("VehicleNo", vehicle.vehicleNo || "");

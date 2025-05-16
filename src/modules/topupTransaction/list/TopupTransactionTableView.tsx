@@ -22,6 +22,11 @@ import {
   Input,
   InputAdornment,
   TableSortLabel,
+  TextField,
+  FormControl,
+  InputLabel,
+  Select,
+  MenuItem,
 } from "@mui/material";
 import { setPaginate } from "../topupTransaction.slice"; // Adjust the slice if needed
 import SearchIcon from "@mui/icons-material/Search";
@@ -40,6 +45,9 @@ import useRoleValidator from "../../../helpers/roleValidator";
 const TopupTransactionTableView = () => {
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
+  const [fromDate, setFromDate] = React.useState("");
+  const [toDate, setToDate] = React.useState("");
+
   const dispatch = useDispatch<AppDispatch>();
   const { data, pagingParams } = useSelector(
     (state: AppRootState) => state.topUpTransaction
@@ -75,7 +83,37 @@ const TopupTransactionTableView = () => {
       })
     );
   };
+  const handleDownloadReport = async () => {
+    try {
+      const response = await fetch(
+        `http://app.bestkilotaxi.com/api/v1/TopUpTransaction/topup-report?fromDate=${fromDate}&toDate=${toDate}`,
+        {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
 
+      if (!response.ok) {
+        throw new Error("Failed to download report");
+      }
+
+      const blob = await response.blob();
+      const url = window.URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = "TopUpReport.xlsx";
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      window.URL.revokeObjectURL(url);
+      setFromDate("");
+      setToDate("");
+    } catch (error) {
+      console.error("Error downloading report:", error);
+    }
+  };
   const loadingData = React.useCallback(async () => {
     setLoading(true);
     await topupTransactionService.index(dispatch, pagingParams, notifications);
@@ -135,7 +173,30 @@ const TopupTransactionTableView = () => {
           ) : (
             <></>
           )}
+          {isTopUpAdmin() || isSuperAdmin() ? (
+            <Box sx={{ my: "20px", px: "20px", display: "flex", gap: 3 }}>
+              <TextField
+                label="From Date"
+                type="date"
+                InputLabelProps={{ shrink: true }}
+                value={fromDate}
+                onChange={(e) => setFromDate(e.target.value)}
+              />
+              <TextField
+                label="To Date"
+                type="date"
+                InputLabelProps={{ shrink: true }}
+                value={toDate}
+                onChange={(e) => setToDate(e.target.value)}
+              />
 
+              <Button variant="contained" onClick={handleDownloadReport}>
+                Download Report
+              </Button>
+            </Box>
+          ) : (
+            <></>
+          )}
           <Button
             onClick={() => {
               dispatch(setPaginate(topupTransactionPayload.pagingParams)); // Adjust the reset payload

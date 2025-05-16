@@ -2,13 +2,16 @@ import { Dispatch } from "redux";
 import { endpoints } from "../../constants/endpoints";
 import { getRequest, postRequest, putRequest } from "../../helpers/api";
 import { httpServiceHandler } from "../../helpers/handler";
-import { WithDrawTransactionFormInputs } from "./withDrawTransaction.payload";
+import {
+  WithDrawTransactionFormInputs,
+  WithDrawTransactionCreateFormInputs,
+} from "./withDrawTransaction.payload";
 import { index, show, update } from "./withDrawTransaction.slice";
 
 export const withDrawTransactionService = {
   // Method to create a new wallet
   store: async (
-    payload: WithDrawTransactionFormInputs,
+    payload: WithDrawTransactionCreateFormInputs,
     dispatch: Dispatch,
     notifications?: any
   ) => {

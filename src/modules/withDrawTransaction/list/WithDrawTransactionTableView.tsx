@@ -22,6 +22,10 @@ import {
   Input,
   InputAdornment,
   TableSortLabel,
+  TextField,
+  FormControl,
+  InputLabel,
+  Select,
 } from "@mui/material";
 import { setPaginate } from "../withDrawTransaction.slice"; // Adjust the slice if needed
 import SearchIcon from "@mui/icons-material/Search";
@@ -40,6 +44,8 @@ import useRoleValidator from "../../../helpers/roleValidator";
 const WalletTableView = () => {
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
+  const [fromDate, setFromDate] = React.useState("");
+  const [toDate, setToDate] = React.useState("");
   const dispatch = useDispatch<AppDispatch>();
   const { data, pagingParams } = useSelector(
     (state: AppRootState) => state.withDrawTransaction
@@ -49,7 +55,7 @@ const WalletTableView = () => {
   const navigate = useNavigate();
   const [loading, setLoading] = React.useState(false);
 
-  const { isWithdrawAdmin } = useRoleValidator();
+  const { isWithdrawAdmin, isSuperAdmin } = useRoleValidator();
 
   const handleChangePage = (event: unknown, newPage: number) => {
     setPage(newPage);
@@ -75,7 +81,37 @@ const WalletTableView = () => {
       })
     );
   };
+  const handleDownloadReport = async () => {
+    try {
+      const response = await fetch(
+        `http://4.145.92.57:81/api/v1/WithDrawTransaction/withDrawl-report?fromDate=${fromDate}&toDate=${toDate}`,
+        {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
 
+      if (!response.ok) {
+        throw new Error("Failed to download report");
+      }
+
+      const blob = await response.blob();
+      const url = window.URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = "WithDrawlReport.xlsx";
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      window.URL.revokeObjectURL(url);
+      setFromDate("");
+      setToDate("");
+    } catch (error) {
+      console.error("Error downloading report:", error);
+    }
+  };
   const loadingData = React.useCallback(async () => {
     setLoading(true);
     await withDrawTransactionService.index(
@@ -128,13 +164,40 @@ const WalletTableView = () => {
             gap: 3,
           }}
         >
-          {/* <Button
-            startIcon={<AddCircleOutlineIcon />}
-            onClick={() => navigate(paths.walletCreate)} // Adjust path for wallet create page
-          >
-            Create
-          </Button> */}
+          {isWithdrawAdmin() || isSuperAdmin() ? (
+            <Button
+              startIcon={<AddCircleOutlineIcon />}
+              onClick={() => navigate(paths.withDrawTransactionCreate)}
+            >
+              Create
+            </Button>
+          ) : (
+            <></>
+          )}
+          {isWithdrawAdmin() || isSuperAdmin() ? (
+            <Box sx={{ my: "20px", px: "20px", display: "flex", gap: 3 }}>
+              <TextField
+                label="From Date"
+                type="date"
+                InputLabelProps={{ shrink: true }}
+                value={fromDate}
+                onChange={(e) => setFromDate(e.target.value)}
+              />
+              <TextField
+                label="To Date"
+                type="date"
+                InputLabelProps={{ shrink: true }}
+                value={toDate}
+                onChange={(e) => setToDate(e.target.value)}
+              />
 
+              <Button variant="contained" onClick={handleDownloadReport}>
+                Download Report
+              </Button>
+            </Box>
+          ) : (
+            <></>
+          )}
           <Button
             onClick={() => {
               dispatch(setPaginate(withDrawTransactionPayload.pagingParams)); // Adjust the reset payload

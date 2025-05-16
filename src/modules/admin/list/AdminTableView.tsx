@@ -84,7 +84,7 @@ const AdminTableView = () => {
   const handleDownloadReport = async () => {
     try {
       const response = await fetch(
-        `http://4.145.92.57:81/api/v1/Admin/admin-report?fromDate=${fromDate}&toDate=${toDate}&status=${status}`,
+        `http://app.bestkilotaxi.com/api/v1/Admin/admin-report?fromDate=${fromDate}&toDate=${toDate}&status=${status}`,
         {
           method: "GET",
           headers: {
@@ -106,6 +106,8 @@ const AdminTableView = () => {
       a.click();
       document.body.removeChild(a);
       window.URL.revokeObjectURL(url);
+      setFromDate("");
+      setToDate("");
     } catch (error) {
       console.error("Error downloading report:", error);
     }

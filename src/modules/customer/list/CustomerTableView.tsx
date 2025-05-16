@@ -112,6 +112,8 @@ const CustomerTableView = () => {
       a.click();
       document.body.removeChild(a);
       window.URL.revokeObjectURL(url);
+      setFromDate("");
+      setToDate("");
     } catch (error) {
       console.error("Error downloading report:", error);
     }

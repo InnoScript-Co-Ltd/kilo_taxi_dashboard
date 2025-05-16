@@ -6,7 +6,7 @@ import { WALLET } from "../wallet/wallet.payload";
 // Define Driver Schema
 
 const BaseDriverSchema = z.object({
-  id: z.number().min(1, { message: "Invalid ID format" }),
+  id: z.number().nullable().default(0),
   name: z
     .string()
     .min(2, { message: "Name must be at least 2 characters long" }),

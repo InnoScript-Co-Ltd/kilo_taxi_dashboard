@@ -106,6 +106,7 @@ export const paths = {
 
   withDrawTransaction: "/withDrawTransaction",
   withDrawTransactionList: "/withDrawTransaction/list",
+  withDrawTransactionCreate: "/withDrawTransaction/new",
   withDrawTransactionDetail: "/withDrawTransaction/:id",
 
   sms: "/sms",

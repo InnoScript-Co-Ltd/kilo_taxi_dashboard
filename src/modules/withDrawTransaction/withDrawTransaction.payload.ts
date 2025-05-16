@@ -12,14 +12,30 @@ export const withDrawtransactionSchema = z.object({
   transactionDate: z.date().nullable(),
   transactionScreenShoot: z.string(),
   file_transactionScreenShoot: z.any().nullable(),
-  driverId: z.number().min(0, { message: "id" }).default(0),
+  driverId: z.number().min(0, { message: "Driver id is required" }).default(0),
   adminId: z.number().min(0, { message: "id" }).default(0),
-
   status: z.number(),
+});
+export const withDrawtransactionCreateSchema = z.object({
+  amount: z
+    .number()
+    .min(2, { message: "amount must be at least 2 characters long" }),
+  driverId: z.number().min(0, { message: "Driver id is required" }).default(0),
+  phoneNumber: z
+    .string()
+    .min(8, { message: "phone number is at least 8 digit" }),
+  driverName: z.string().min(1, { message: "Driver Name is required" }),
+  walletBalance: z
+    .number()
+    .min(0, { message: "Wallet balance cannot be negative" })
+    .max(9999999.99, { message: "Wallet balance must not exceed 9999999.99" }),
 });
 
 export type WithDrawTransactionFormInputs = z.infer<
   typeof withDrawtransactionSchema
+>;
+export type WithDrawTransactionCreateFormInputs = z.infer<
+  typeof withDrawtransactionCreateSchema
 >;
 
 /**

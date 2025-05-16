@@ -54,7 +54,7 @@ const CustomerUpdate = () => {
       Email: "",
       Phone: "",
       role: "Customer",
-      Gender: "",
+      Gender: 0,
       Status: 0,
       KycStatus: 0,
       Dob: null,

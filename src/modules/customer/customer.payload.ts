@@ -14,7 +14,7 @@ const BaseCustomerSchema = z.object({
   Address: z.string(),
   City: z.string(),
   Township: z.string(),
-  Gender: z.string(),
+  Gender: z.number(),
   Status: z.number(),
   KycStatus: z.number(),
   file_Profile: z.any().nullable(),
