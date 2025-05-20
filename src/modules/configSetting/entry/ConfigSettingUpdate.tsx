@@ -81,7 +81,7 @@ const ConfigSettingUpdate = () => {
       setValue("commissionAmount", configSetting.commissionAmount);
       setValue("defaultTime", configSetting.defaultTime || "00:00:00");
       setValue("matchDistance", configSetting.matchDistance);
-      setValue("maxMatchDistance", configSetting.matchDistance);
+      setValue("maxMatchDistance", configSetting.maxMatchDistance);
       setValue("minute", configSetting.minute);
       setValue("minutePerRate", configSetting.minutePerRate);
     }
@@ -113,7 +113,7 @@ const ConfigSettingUpdate = () => {
                 error={!!errors.commissionRate}
               >
                 <InputLabel htmlFor="commissionRate">
-                  Commission Rate
+                  Commission Rate(%)
                 </InputLabel>
                 <FilledInput
                   type="number"
@@ -134,7 +134,7 @@ const ConfigSettingUpdate = () => {
                 error={!!errors.commissionAmount}
               >
                 <InputLabel htmlFor="commissionAmount">
-                  Commission Amount
+                  Commission Amount(MMK)
                 </InputLabel>
                 <FilledInput
                   type="number"
@@ -154,7 +154,9 @@ const ConfigSettingUpdate = () => {
                 fullWidth
                 error={!!errors.matchDistance}
               >
-                <InputLabel htmlFor="matchDistance">Match Distance</InputLabel>
+                <InputLabel htmlFor="matchDistance">
+                  Match Distance(Kilo)
+                </InputLabel>
                 <FilledInput
                   type="number"
                   size="small"
@@ -172,13 +174,13 @@ const ConfigSettingUpdate = () => {
                 error={!!errors.maxMatchDistance}
               >
                 <InputLabel htmlFor="maxMatchDistance">
-                  Max Match Distance
+                  Max Match Distance(Kilo)
                 </InputLabel>
                 <FilledInput
                   type="number"
                   size="small"
                   id="maxMatchDistance"
-                  {...register("maxMatchDistance")}
+                  {...register("maxMatchDistance", { valueAsNumber: true })}
                 />
                 <FormHelperText>
                   {errors.maxMatchDistance?.message}
@@ -205,7 +207,9 @@ const ConfigSettingUpdate = () => {
                 fullWidth
                 error={!!errors.minutePerRate}
               >
-                <InputLabel htmlFor="minutePerRate">Minute Per Rate</InputLabel>
+                <InputLabel htmlFor="minutePerRate">
+                  Minute Per Rate(MMK)
+                </InputLabel>
                 <FilledInput
                   type="number"
                   size="small"

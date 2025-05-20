@@ -58,7 +58,7 @@ export const orderCreateSchema = z.object({
   orderType: z.string().min(1, { message: "Order Type is required" }),
   walletId: z.number().min(1, { message: "Wallet ID is required" }),
   customerId: z.number().min(1, { message: "Customer ID is required" }),
-  status: z.number(),
+  status: z.number().nullable().default(0),
 });
 
 export type OrderFormInputs = z.infer<typeof orderCreateSchema>;

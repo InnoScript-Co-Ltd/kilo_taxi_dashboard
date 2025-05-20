@@ -62,7 +62,7 @@ export interface CONFIGSETTING_PAYLOAD {
 export const configSettingColumns: readonly ConfigSetting_Column[] = [
   {
     id: "matchDistance",
-    label: "Match Distance",
+    label: "Match Distance(Kilo)",
     minWidth: 130,
     numeric: false,
     disablePadding: false,
@@ -70,7 +70,7 @@ export const configSettingColumns: readonly ConfigSetting_Column[] = [
   },
   {
     id: "defaultTime",
-    label: "Default Time",
+    label: "Default Time(hh:mm:ss)",
     minWidth: 130,
     numeric: false,
     disablePadding: false,
@@ -86,7 +86,7 @@ export const configSettingColumns: readonly ConfigSetting_Column[] = [
   },
   {
     id: "minutePerRate",
-    label: "Minute Per Rate",
+    label: "Minute Per Rate(MMK)",
     minWidth: 130,
     numeric: false,
     disablePadding: false,
@@ -94,7 +94,7 @@ export const configSettingColumns: readonly ConfigSetting_Column[] = [
   },
   {
     id: "maxMatchDistance",
-    label: "Max Match Distance",
+    label: "Max Match Distance(Kilo)",
     minWidth: 130,
     numeric: false,
     disablePadding: false,
@@ -102,7 +102,7 @@ export const configSettingColumns: readonly ConfigSetting_Column[] = [
   },
   {
     id: "commissionRate",
-    label: "Commission Rate",
+    label: "Commission Rate(%)",
     minWidth: 100,
     numeric: false,
     disablePadding: false,
@@ -110,7 +110,7 @@ export const configSettingColumns: readonly ConfigSetting_Column[] = [
   },
   {
     id: "commissionAmount",
-    label: "Commission Amount",
+    label: "Commission Amount(MMK)",
     minWidth: 100,
     numeric: false,
     disablePadding: false,
