@@ -30,9 +30,13 @@ const OrderCreate = () => {
   const [loading, setLoading] = useState(false);
   const [selectingPickup, setSelectingPickup] = useState(true);
   const selectingPickupRef = useRef(true);
+  const [selectedWallet, setSelectedWallet] = useState<any | null>(null);
+  const [totalAmount, setTotalAmount] = useState<number | null>(null);
 
   const [customerLists, setCustomerLists] = useState<any[]>([]);
   const [walletLists, setWalletLists] = useState<any[]>([]);
+  const [extraDemandLists, setextraDemandLists] = useState<any[]>([]);
+
   const [distance, setDistance] = useState<number | null>(null);
 
   const mapRef = useRef<L.Map | null>(null);
@@ -99,9 +103,10 @@ const OrderCreate = () => {
   const loadData = useCallback(async () => {
     setLoading(true);
     try {
-      const [customerRes, walletRes] = await Promise.all([
-        getRequest(endpoints.customer, null, dispatch),
+      const [customerRes, walletRes, extraDemandRes] = await Promise.all([
+        getRequest(endpoints.customer + "/CustomerList", null, dispatch),
         getRequest(endpoints.wallet, null, dispatch),
+        getRequest(endpoints.extraDemand, null, dispatch),
       ]);
       if (
         customerRes &&
@@ -119,6 +124,14 @@ const OrderCreate = () => {
         "data" in walletRes
       ) {
         setWalletLists(walletRes.data.payload?.wallets || []);
+      }
+      if (
+        extraDemandRes &&
+        "status" in extraDemandRes &&
+        extraDemandRes.status === 200 &&
+        "data" in extraDemandRes
+      ) {
+        setextraDemandLists(extraDemandRes.data.payload?.extraDemands || []);
       }
     } catch (error) {
       console.error("Failed to load customer or wallet data:", error);
@@ -228,7 +241,6 @@ const OrderCreate = () => {
 
   const onSubmit = async (data: OrderFormInputs) => {
     setLoading(true);
-    console.log("order", data);
     try {
       const response = await orderService.store(data, dispatch);
       if (response?.statusCode === 201) {
@@ -240,6 +252,26 @@ const OrderCreate = () => {
       setLoading(false);
     }
   };
+  const handleWalletChange = (walletId: string) => {
+    const wallet = walletLists.find((w) => String(w.id) == walletId);
+
+    const configSettingList = setSelectedWallet(wallet);
+
+    if (distance && wallet?.downTownAmount) {
+      const km = distance / 1000;
+      const amount = km * wallet.downTownAmount + extraDemandLists[0].amount;
+      setTotalAmount(parseFloat(amount.toFixed(0))); // Round to 2 decimals
+    }
+  };
+  useEffect(() => {
+    if (distance && selectedWallet?.downTownAmount) {
+      const km = distance / 1000;
+      const amount =
+        km * selectedWallet.downTownAmount + extraDemandLists[0].amount;
+
+      setTotalAmount(parseFloat(amount.toFixed(0)));
+    }
+  }, [distance, selectedWallet]);
 
   return (
     <Box>
@@ -306,30 +338,35 @@ const OrderCreate = () => {
                           drawLineAndDistance();
                           return; // skip API call when empty
                         }
-
-                        const results = await provider.search({ query: value });
-                        const yangonResults = results.filter((r) =>
-                          r.label.toLowerCase().includes("yangon")
-                        );
-
-                        if (yangonResults.length > 0) {
-                          const { x, y, label } = yangonResults[0];
-                          setValue("pickUpLat", y.toString());
-                          setValue("pickUpLong", x.toString());
-                          setValue("pickUpLocation", label);
-
-                          if (pickupMarkerRef.current) {
-                            mapRef.current?.removeLayer(
-                              pickupMarkerRef.current
-                            );
-                          }
-
-                          const marker = L.marker([y, x]).addTo(
-                            mapRef.current!
+                        try {
+                          const results = await provider.search({
+                            query: value,
+                          });
+                          const yangonResults = results.filter((r) =>
+                            r.label.toLowerCase().includes("yangon")
                           );
-                          pickupMarkerRef.current = marker;
 
-                          drawLineAndDistance();
+                          if (yangonResults.length > 0) {
+                            const { x, y, label } = yangonResults[0];
+                            setValue("pickUpLat", y.toString());
+                            setValue("pickUpLong", x.toString());
+                            setValue("pickUpLocation", label);
+
+                            if (pickupMarkerRef.current) {
+                              mapRef.current?.removeLayer(
+                                pickupMarkerRef.current
+                              );
+                            }
+
+                            const marker = L.marker([y, x]).addTo(
+                              mapRef.current!
+                            );
+                            pickupMarkerRef.current = marker;
+
+                            drawLineAndDistance();
+                          }
+                        } catch (error) {
+                          console.log(error);
                         }
                       }}
                     />
@@ -398,7 +435,7 @@ const OrderCreate = () => {
                             drawLineAndDistance();
                           }
                         } catch (error) {
-                          console.error("Error fetching location:", error);
+                          console.error("Error fetching location :", error);
                         }
                       }}
                     />
@@ -421,7 +458,10 @@ const OrderCreate = () => {
                       label="Wallet"
                       {...field}
                       value={field.value || ""}
-                      onChange={(event) => field.onChange(event.target.value)}
+                      onChange={(event) => {
+                        field.onChange(event.target.value);
+                        handleWalletChange(event.target.value as string);
+                      }}
                     >
                       {walletLists?.map((wallet: any) => (
                         <MenuItem key={wallet.id} value={wallet.id}>
@@ -477,6 +517,18 @@ const OrderCreate = () => {
                 Distance: {(distance / 1000).toFixed(2)} km
               </Typography>
             )}
+            {totalAmount !== null && (
+              <Typography variant="h6" color="primary" sx={{ mb: 2 }}>
+                Estimated Cost: {totalAmount} MMK
+              </Typography>
+            )}
+
+            {/* <Grid2 size={{ xs: 6, md: 3 }}>
+              <Typography variant="h6">
+                Total Amount:{" "}
+                {totalAmount !== null ? `${totalAmount.toFixed(2)} MMK` : "N/A"}
+              </Typography>
+            </Grid2> */}
 
             <Grid2>
               <Button type="submit" variant="contained" disabled={loading}>
