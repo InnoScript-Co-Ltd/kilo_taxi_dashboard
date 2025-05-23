@@ -10,6 +10,7 @@ import {
   MenuItem,
   Typography,
   Grid2,
+  debounce,
 } from "@mui/material";
 import { useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -51,6 +52,67 @@ const OrderCreate = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const provider = new OpenStreetMapProvider();
+  const debouncedSearch = useCallback(
+    debounce(async (value: string) => {
+      try {
+        const results = await provider.search({ query: value });
+        const yangonResults = results.filter((r) =>
+          r.label.toLowerCase().includes("yangon")
+        );
+
+        if (yangonResults.length > 0) {
+          const { x, y, label } = yangonResults[0];
+          setValue("pickUpLat", y.toString());
+          setValue("pickUpLong", x.toString());
+          setValue("pickUpLocation", label);
+
+          if (pickupMarkerRef.current) {
+            mapRef.current?.removeLayer(pickupMarkerRef.current);
+          }
+
+          const marker = L.marker([y, x]).addTo(mapRef.current!);
+          pickupMarkerRef.current = marker;
+
+          drawLineAndDistance();
+        }
+      } catch (error) {
+        console.error("Search failed:", error);
+        // Optionally show user feedback
+      }
+    }, 500),
+    []
+  );
+
+  const debouncedDestinationSearch = useCallback(
+    debounce(async (value: string) => {
+      try {
+        const results = await provider.search({ query: value });
+        const yangonResults = results.filter((r) =>
+          r.label.toLowerCase().includes("yangon")
+        );
+
+        if (yangonResults.length > 0) {
+          const { x, y, label } = yangonResults[0];
+          setValue("destinationLat", y.toString());
+          setValue("destinationLong", x.toString());
+          setValue("destinationLocation", label);
+
+          if (destinationMarkerRef.current) {
+            mapRef.current?.removeLayer(destinationMarkerRef.current);
+          }
+
+          const marker = L.marker([y, x]).addTo(mapRef.current!);
+          destinationMarkerRef.current = marker;
+
+          drawLineAndDistance();
+        }
+      } catch (error) {
+        console.error("Search failed:", error);
+        // Optionally show user feedback
+      }
+    }, 500),
+    []
+  );
 
   const {
     control,
@@ -317,13 +379,12 @@ const OrderCreate = () => {
                       type="text"
                       placeholder="Search Pickup Location"
                       value={field.value || ""}
-                      onChange={async (e) => {
+                      onChange={(e) => {
                         const value = e.target.value;
                         field.onChange(value);
 
-                        // Prevent searching if input is empty
                         if (!value.trim()) {
-                          // When input is empty, clear lat/long and remove marker
+                          // Clear lat/long and marker
                           setValue("pickUpLat", "");
                           setValue("pickUpLong", "");
                           setValue("pickUpLocation", "");
@@ -336,38 +397,10 @@ const OrderCreate = () => {
                           }
 
                           drawLineAndDistance();
-                          return; // skip API call when empty
+                          return;
                         }
-                        try {
-                          const results = await provider.search({
-                            query: value,
-                          });
-                          const yangonResults = results.filter((r) =>
-                            r.label.toLowerCase().includes("yangon")
-                          );
 
-                          if (yangonResults.length > 0) {
-                            const { x, y, label } = yangonResults[0];
-                            setValue("pickUpLat", y.toString());
-                            setValue("pickUpLong", x.toString());
-                            setValue("pickUpLocation", label);
-
-                            if (pickupMarkerRef.current) {
-                              mapRef.current?.removeLayer(
-                                pickupMarkerRef.current
-                              );
-                            }
-
-                            const marker = L.marker([y, x]).addTo(
-                              mapRef.current!
-                            );
-                            pickupMarkerRef.current = marker;
-
-                            drawLineAndDistance();
-                          }
-                        } catch (error) {
-                          console.log(error);
-                        }
+                        debouncedSearch(value);
                       }}
                     />
                   </FormControl>
@@ -386,12 +419,11 @@ const OrderCreate = () => {
                       type="text"
                       placeholder="Search Destination Location"
                       value={field.value || ""}
-                      onChange={async (e) => {
-                        const value = e.target.value.trimStart(); // optional: avoid leading spaces
+                      onChange={(e) => {
+                        const value = e.target.value.trimStart();
                         field.onChange(value);
 
                         if (!value) {
-                          // If input is empty (after trimming), skip search and clear related state
                           setValue("destinationLat", "");
                           setValue("destinationLong", "");
                           setValue("destinationLocation", "");
@@ -407,36 +439,7 @@ const OrderCreate = () => {
                           return;
                         }
 
-                        try {
-                          const results = await provider.search({
-                            query: value,
-                          });
-                          const yangonResults = results.filter((r) =>
-                            r.label.toLowerCase().includes("yangon")
-                          );
-
-                          if (yangonResults.length > 0) {
-                            const { x, y, label } = yangonResults[0];
-                            setValue("destinationLat", y.toString());
-                            setValue("destinationLong", x.toString());
-                            setValue("destinationLocation", label);
-
-                            if (destinationMarkerRef.current) {
-                              mapRef.current?.removeLayer(
-                                destinationMarkerRef.current
-                              );
-                            }
-
-                            const marker = L.marker([y, x]).addTo(
-                              mapRef.current!
-                            );
-                            destinationMarkerRef.current = marker;
-
-                            drawLineAndDistance();
-                          }
-                        } catch (error) {
-                          console.error("Error fetching location :", error);
-                        }
+                        debouncedDestinationSearch(value);
                       }}
                     />
                   </FormControl>
